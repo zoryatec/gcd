@@ -28,6 +28,30 @@ jobs:
       
     - name: Check dir
       run: dir
+      
+    - name: Make PATH change permanent (for subsequent steps)
+      shell: pwsh
+      run: |
+        # Define the path to add
+        $newPath = "C:\Program Files\National Instruments\NI Package Manager"
+        
+        # Add the new path to the user-level PATH variable
+        [System.Environment]::SetEnvironmentVariable("PATH", $env:PATH, [System.EnvironmentVariableTarget]::User)
+  
+        # Optionally verify the update
+        Write-Host "User-level PATH updated: $env:PATH"
+
+    - name: Run Command from New PATH Directory
+      shell: pwsh
+      run: |
+        # Running a command that should now work with the new PATH
+        Write-Host "Running a command from the new PATH"
+        # For example, checking the version of a tool in C:\tools
+        if (Test-Path "$newPath\nipkg.exe") {
+          & "$newPath\nipkg.exe" --version
+        } else {
+          Write-Host "Executable not found!"
+        }
 
     - name: Check NIPKG version
       run: nipkg --version
