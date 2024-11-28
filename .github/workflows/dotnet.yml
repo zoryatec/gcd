@@ -41,6 +41,9 @@ jobs:
         # Define the path to add
         $newPath = "C:\Program Files\National Instruments\NI Package Manager"
         
+        # Add the new path to the current PATH
+        $updatedPath = "$env:PATH;$newPath"
+        
         # Add the new path to the user-level PATH variable
         [System.Environment]::SetEnvironmentVariable("PATH", $env:PATH, [System.EnvironmentVariableTarget]::User)
   
