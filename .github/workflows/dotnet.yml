@@ -29,8 +29,24 @@ jobs:
     - name: Wait for x seconds (Windows)
       shell: pwsh  # PowerShell shell
       run: |
-        Write-Host "Waiting for 30 seconds..."
-        Start-Sleep -Seconds 360  # PowerShell sleep for 360 seconds
+        Write-Host "Waiting for 240 seconds..."
+        Start-Sleep -Seconds 240  # PowerShell sleep for 240 seconds
+        
+    - name: Check dir
+      run: dir
+
+
+    - name: Run Command Prompt command
+      shell: cmd
+      run: |
+        /wait NIPackageManager21.3.0_online.exe --quiet --accept-eulas --prevent-reboot
+      
+    - name: Wait for x seconds (Windows)
+      shell: pwsh  # PowerShell shell
+      run: |
+        Write-Host "Waiting for 240 seconds..."
+        Start-Sleep -Seconds 240  # PowerShell sleep for 240 seconds
+      
       
     - name: Check dir
       run: dir "C:\Program Files\National Instruments\NI Package Manager"
