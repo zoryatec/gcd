@@ -21,8 +21,10 @@ jobs:
       with:
         dotnet-version: 8.0.x
         
-    - name: Download NIPKG
-      run: Invoke-WebRequest -Uri ${{ vars.NIPKG_URL}} -OutFile nipkg-installer.exe
+    - name: Run PowerShell script
+      shell: pwsh  
+      run: |
+        ./install-nipkg.ps1
       
     - name: Check dir
       run: dir
