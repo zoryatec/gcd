@@ -81,4 +81,10 @@ jobs:
       shell: pwsh  
       run: |
         ./build-nipkg.ps1
+
+    - name: Upload Published Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: gcd-nipkg
+        path: ./package # Path to the published output director
   
