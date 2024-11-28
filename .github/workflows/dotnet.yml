@@ -34,6 +34,23 @@ jobs:
         
     - name: Check dir
       run: dir
+      
+    - name: Make PATH change permanent (for subsequent steps)
+      shell: pwsh
+      run: |
+        # Define the path to add
+        $newPath = "C:\Program Files\National Instruments\NI Package Manager\"
+        $currentPath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
+
+        # Add the new path to the current PATH
+        $updatedPath = "$currentPath;$newPath"
+        
+        # Add the new path to the user-level PATH variable
+        [System.Environment]::SetEnvironmentVariable("PATH", $updatedPath, [System.EnvironmentVariableTarget]::User)
+        
+        # Optionally verify the update
+        Write-Host "User-level PATH updated: $updatedPath"
+        Write-Host "User-level PATH updated: $env:PATH"
 
 
     - name: Run Command Prompt command
@@ -56,15 +73,18 @@ jobs:
       run: |
         # Define the path to add
         $newPath = "C:\Program Files\National Instruments\NI Package Manager\"
-        
+        $currentPath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
+
         # Add the new path to the current PATH
-        $env:PATH = "$env:PATH;$newPath"
+        $updatedPath = "$currentPath;$newPath"
         
         # Add the new path to the user-level PATH variable
-        [System.Environment]::SetEnvironmentVariable("PATH", $env:PATH, [System.EnvironmentVariableTarget]::User)
-  
+        [System.Environment]::SetEnvironmentVariable("PATH", $updatedPath, [System.EnvironmentVariableTarget]::User)
+        
         # Optionally verify the update
+        Write-Host "User-level PATH updated: $updatedPath"
         Write-Host "User-level PATH updated: $env:PATH"
+        
 
     - name: Run Command from New PATH Directory
       shell: pwsh
