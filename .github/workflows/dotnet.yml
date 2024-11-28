@@ -39,7 +39,7 @@ jobs:
     - name: Run Command Prompt command
       shell: cmd
       run: |
-        /wait NIPackageManager21.3.0_online.exe --quiet --accept-eulas --prevent-reboot
+        start /wait NIPackageManager21.3.0_online.exe --quiet --accept-eulas --prevent-reboot
       
     - name: Wait for x seconds (Windows)
       shell: pwsh  # PowerShell shell
