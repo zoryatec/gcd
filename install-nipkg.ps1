@@ -41,6 +41,6 @@ $env:PATH = "$env:PATH;C:\Program Files\National Instruments\NI Package Manager"
 
 
 # check if nipkg is installed
-$process = Start-Process -FilePath nipkg.exe -ArgumentList ('--version') -Wait -PassThru
-$exitCode = $process.ExitCode
-$exitCode
+#$process = Start-Process -FilePath nipkg.exe -ArgumentList ('--version') -Wait -PassThru
+#$exitCode = $process.ExitCode
+#$exitCode
