@@ -37,6 +37,7 @@ if($nipkgIsInPath -eq 0)
 
 
 ## Add some kind of reloading here so that path variable gets updated and nipkg is in path
+$env:PATH = "$env:PATH;C:\Program Files\National Instruments\NI Package Manager"
 
 
 # check if nipkg is installed
