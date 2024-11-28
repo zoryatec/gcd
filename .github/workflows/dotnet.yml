@@ -23,6 +23,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build src/Gcd/Gcd.csproj  --no-restore
     - name: Publish
-      run: ddotnet publish -c Release -r win-x64 --self-contained true --single-file true 
+      run: dotnet publish src/Gcd/Gcd.csproj  -c Release -r win-x64 --self-contained true --single-file true 
