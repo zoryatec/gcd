@@ -24,6 +24,9 @@ jobs:
     - name: Download NIPKG
       run: Invoke-WebRequest -Uri ${{ vars.NIPKG_URL}} -OutFile nipkg-installer.exe
       
+    - name: Check dir
+      run: dir
+      
     - name: Restore dependencies
       run: dotnet restore
       
