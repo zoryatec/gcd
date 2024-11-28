@@ -1,4 +1,7 @@
 
+#extra info
+# https://knowledge.ni.com/KnowledgeArticleDetails?id=kA00Z000000g18jSAA&l=pl-PL
+
 # add NIPKG to path in case it was installed and not adde
 # if it is not installed yet, it can be added in advance
 $nipkgPath = "C:\Program Files\National Instruments\NI Package Manager";
