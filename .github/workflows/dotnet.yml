@@ -25,6 +25,12 @@ jobs:
       shell: pwsh  
       run: |
         ./install-nipkg.ps1
+
+    - name: Wait for x seconds (Windows)
+      shell: pwsh  # PowerShell shell
+      run: |
+        Write-Host "Waiting for 30 seconds..."
+        Start-Sleep -Seconds 240  # PowerShell sleep for 240 seconds
       
     - name: Check dir
       run: dir "C:\Program Files\National Instruments\NI Package Manager"
