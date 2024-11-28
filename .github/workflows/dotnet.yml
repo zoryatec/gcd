@@ -55,7 +55,7 @@ jobs:
       shell: pwsh
       run: |
         # Define the path to add
-        $newPath = "C:\Program Files\National Instruments\NI Package Manager"
+        $newPath = "C:\Program Files\National Instruments\NI Package Manager\"
         
         # Add the new path to the current PATH
         $env:PATH = "$env:PATH;$newPath"
