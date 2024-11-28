@@ -37,9 +37,9 @@ jobs:
         [System.Environment]::SetEnvironmentVariable("PATH", $updatedMachinePath, [System.EnvironmentVariableTarget]::Machine)
         
         # Optionally verify the update
-        Write-Host "User-level PATH updated: $updatedUserPath"
-        Write-Host "User-level PATH updated: $updatedMachinePath"
-        Write-Host "User-level PATH updated: $env:PATH"
+        Write-Host "user-level PATH updated: $updatedUserPath"
+        Write-Host "machine-level PATH updated: $updatedMachinePath"
+        Write-Host "env:Path PATH updated: $env:PATH"
         
     - name: Run PowerShell script
       shell: pwsh  
