@@ -133,7 +133,7 @@ jobs:
         }
 
     - name: Check NIPKG version
-      run: nipkg --version
+      run: &"C:\Program Files\National Instruments\NI Package Manager\nipkg.exe" --version
       
     - name: Restore dependencies
       run: dotnet restore
