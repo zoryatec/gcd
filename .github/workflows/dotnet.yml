@@ -133,7 +133,9 @@ jobs:
         }
 
     - name: Check NIPKG version
-      run: &"C:\Program Files\National Instruments\NI Package Manager\nipkg.exe" --version
+      run: |
+          $execPath = "C:\Program Files\National Instruments\NI Package Manager\nipkg.exe"
+          & "$execPath" --version
       
     - name: Restore dependencies
       run: dotnet restore
