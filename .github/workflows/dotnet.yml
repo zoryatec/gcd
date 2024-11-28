@@ -25,7 +25,7 @@ jobs:
     - name: Build
       run: dotnet build src/Gcd/Gcd.csproj  --no-restore
     - name: Publish
-      run: dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true --single-file true --output ./publish
+      run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true --output ./publish
 
     - name: Upload Published Artifacts
       uses: actions/upload-artifact@v3
