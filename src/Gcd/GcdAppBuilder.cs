@@ -1,9 +1,10 @@
+using Gcd.CommandHandlers;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Gcd;
 
-public class GcdAppBuilder
+public class GcdAppBuilder()
 {
     public CommandLineApplication Build(IServiceProvider services)
     {
@@ -19,6 +20,16 @@ public class GcdAppBuilder
 
         var console = services.GetRequiredService<IConsole>();
         app.HelpOption(inherited: true);
+        
+        app.Command("versionize", versionizeCommand =>
+        {
+            versionizeCommand.OnExecute(() =>
+            {
+                var handler = services.GetRequiredService<IVersionizeCommandHandler>();
+                handler.Handle();
+            });
+        });
+        
         app.Command("config", configCmd =>
         {
             configCmd.OnExecute(() =>
