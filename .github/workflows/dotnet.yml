@@ -28,9 +28,12 @@ jobs:
         $newPath = "C:\Program Files\National Instruments\NI Package Manager\"
         $currentUserPath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
         $currentMachinePath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::Machine)
+
+        
         # Add the new path to the current PATH
         $updatedUserPath = "$currentUserPath;$newPath"
         $updatedMachinePath = "$currentMachinePath;$newPath"
+        $env:PATH = "$env:PATH;$newPath"
         
         # Add the new path to the user-level PATH variable
         [System.Environment]::SetEnvironmentVariable("PATH", $updatedUserPath, [System.EnvironmentVariableTarget]::User)
@@ -40,6 +43,17 @@ jobs:
         Write-Host "user-level PATH updated: $updatedUserPath"
         Write-Host "machine-level PATH updated: $updatedMachinePath"
         Write-Host "env:Path PATH updated: $env:PATH"
+
+    - name: Check paths
+      shell: pwsh
+      run: |
+        # Check paths
+        $currentUserPath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
+        $currentMachinePath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::Machine)
+        
+        Write-Host "user-level PATH current: $currentUserPath"
+        Write-Host "machine-level PATH current: $currentMachinePath"
+        Write-Host "env:Path PATH current: $env:PATH"
         
     - name: Run PowerShell script
       shell: pwsh  
