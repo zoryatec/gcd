@@ -1,4 +1,4 @@
-﻿
+﻿param($version  = "0.2.0.1", $buildNumber="4")
 
 
 function UpdateCtrFile{
