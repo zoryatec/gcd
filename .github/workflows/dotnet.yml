@@ -21,6 +21,26 @@ jobs:
       with:
         dotnet-version: 8.0.x
         
+    - name: Make PATH change permanent (for subsequent steps)
+      shell: pwsh
+      run: |
+        # Define the path to add
+        $newPath = "C:\Program Files\National Instruments\NI Package Manager\"
+        $currentUserPath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
+        $currentMachinePath = [System.Environment]::GetEnvironmentVariable("PATH",System.EnvironmentVariableTarget::Machine)
+        # Add the new path to the current PATH
+        $updatedUserPath = "$currentUserPath;$newPath"
+        $updatedMachinePath = "$currentMachinePath;$newPath"
+        
+        # Add the new path to the user-level PATH variable
+        [System.Environment]::SetEnvironmentVariable("PATH", $updatedUserPath, [System.EnvironmentVariableTarget]::User)
+        [System.Environment]::SetEnvironmentVariable("PATH", $updatedMachinePath, [System.EnvironmentVariableTarget]::Machine)
+        
+        # Optionally verify the update
+        Write-Host "User-level PATH updated: $updatedUserPath"
+        Write-Host "User-level PATH updated: $updatedMachinePath"
+        Write-Host "User-level PATH updated: $env:PATH"
+        
     - name: Run PowerShell script
       shell: pwsh  
       run: |
