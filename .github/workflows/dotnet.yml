@@ -27,7 +27,7 @@ jobs:
         ./install-nipkg.ps1
       
     - name: Check dir
-      run: dir
+      run: dir "C:\Program Files\National Instruments\NI Package Manager"
       
     - name: Make PATH change permanent (for subsequent steps)
       shell: pwsh
