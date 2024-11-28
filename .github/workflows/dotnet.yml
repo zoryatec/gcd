@@ -28,6 +28,9 @@ jobs:
       
     - name: Check dir
       run: dir
+
+    - name: Check NIPKG version
+      run: nipkg --version
       
     - name: Restore dependencies
       run: dotnet restore
