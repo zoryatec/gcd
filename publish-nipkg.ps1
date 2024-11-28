@@ -1,5 +1,6 @@
 ﻿
 
+$nipkgExec = "C:\Program Files\National Instruments\NI Package Manager\nipkg.exe"
 
 
 
@@ -27,11 +28,11 @@ function NIPKGPublishPkg
         Write-Debug "Feed ${feed} does exist. Package will be added."
     }else{
         Write-Debug "Feed ${feed} does not exist. Creating one."
-        nipkg feed-create $feed -r
+        & "$nipkgExec"  feed-create $feed -r
     }
 
     Copy-Item -Path $pkgSrcFilesDir -Destination $feed 
-    nipkg feed-add-pkg $feed $pkgDstFilesDir
+    & "$nipkgExec"  feed-add-pkg $feed $pkgDstFilesDir
 }
 
 # sync feed from blob storage
