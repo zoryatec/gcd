@@ -41,6 +41,9 @@ jobs:
         # Define the path to add
         $newPath = "C:\Program Files\National Instruments\NI Package Manager"
         
+        # Add the new path to the current PATH
+        $updatedPath = "$env:PATH;$newPath"
+        
         # Add the new path to the user-level PATH variable
         [System.Environment]::SetEnvironmentVariable("PATH", $env:PATH, [System.EnvironmentVariableTarget]::User)
   
@@ -81,4 +84,10 @@ jobs:
       shell: pwsh  
       run: |
         ./build-nipkg.ps1
+
+    - name: Upload Published Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: gcd-nipkg
+        path: ./package # Path to the published output director
   
