@@ -1,6 +1,8 @@
+using System.Text.Json;
 using Gcd.CommandHandlers;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
+using Gcd.LabViewProject;
 
 namespace Gcd;
 
@@ -14,11 +16,14 @@ public class GcdAppBuilder()
             Description = "CI/CD tool for G programmers with OCDddd",
         };
             
+        var maybyProject = LabViewProject.LabViewProject.Create("");
+        var project = maybyProject;
         app.Conventions
             .UseDefaultConventions()
             .UseConstructorInjection(services);
 
         var console = services.GetRequiredService<IConsole>();
+        var projectService = services.GetRequiredService<IProjectService>();
         app.HelpOption(inherited: true);
         
         app.Command("versionize", versionizeCommand =>
@@ -30,27 +35,41 @@ public class GcdAppBuilder()
             });
         });
         
-        app.Command("config", configCmd =>
+        #region project
+        app.Command("project", projectCmd =>
         {
-            configCmd.OnExecute(() =>
+            projectCmd.OnExecute(() =>
             {
                 console.WriteLine("Specify a subcommand");
-                configCmd.ShowHelp();
+                projectCmd.ShowHelp();
                 return 1;
             });
 
-            configCmd.Command("set", setCmd =>
+            projectCmd.Command("build-spec", buildSpecCmd =>
             {
-                setCmd.Description = "Set config value";
-                var key = setCmd.Argument("key", "Name of the config").IsRequired();
-                var val = setCmd.Argument("value", "Value of the config").IsRequired();
-                setCmd.OnExecute(() =>
+                buildSpecCmd.OnExecute(() =>
                 {
-                    console.WriteLine($"Setting config {key.Value} = {val.Value}");
+                    console.WriteLine("Specify a subcommand");
+                    buildSpecCmd.ShowHelp();
+                    return 1;
+                });
+                
+                buildSpecCmd.Description = "Related to build specifications";
+                buildSpecCmd.Command("list", listCmd =>
+                {
+                    listCmd.Description = "List build specificatnions";
+                    var projectPath = listCmd.Option("--project-path", "Json output", CommandOptionType.SingleValue)
+                        .IsRequired();
+                    listCmd.OnExecute(() =>
+                    {
+                        var projectListDto = projectService.GetBuildSpecList(projectPath.Value());
+                        string jsonString = JsonSerializer.Serialize(projectListDto);
+                        console.WriteLine(jsonString);
+                    });
                 });
             });
 
-            configCmd.Command("list", listCmd =>
+            projectCmd.Command("list-build-spec", listCmd =>
             {
                 var json = listCmd.Option("--json", "Json output", CommandOptionType.NoValue);
                 listCmd.OnExecute(() =>
@@ -66,6 +85,7 @@ public class GcdAppBuilder()
                 });
             });
         });
+        #endregion
 
         app.OnExecute(() =>
         {

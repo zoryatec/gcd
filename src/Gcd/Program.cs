@@ -19,6 +19,7 @@ namespace Gcd
         public static int Main(string[] args)
         {
             var services = new ServiceCollection()
+                .AddSingleton<IProjectService, ProjectService>()
                 .AddSingleton<IVersionizeCommandHandler, VersionizeCommandHandler>()
                 .AddSingleton<IConsole>(PhysicalConsole.Singleton)
                 .BuildServiceProvider();

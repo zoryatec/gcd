@@ -12,23 +12,6 @@ namespace Gcd.Tests;
 public  class AppTests
 {
     
-
-    [Fact]
-    public  void RunTest()
-    {
-        // Arrange
-        var console = new FakeConsole();
-   
-        var app = BuildTestApp(console);
-        var args = new[] { "config", "list" };
-        
-        // Act
-        int result = app.Execute(args);
-        
-        // Asssert
-        result.Should().Be(0);
-        console.Out.ToString().Should().Contain("coreclationTest");
-    }
     
     
     [Fact]
@@ -47,11 +30,28 @@ public  class AppTests
         result.Should().Be(0);
         console.Out.ToString().Should().Contain("versionize!!!");
     }
-
+    
+    [Fact]
+    public  void ProjectTest()
+    {
+        // Arrange
+        var console = new FakeConsole();
+   
+        var app = BuildTestApp(console);
+        var args = new[] { "project", "build-spec", "list", "--project-path","dddd"};
+        
+        // Act
+        int result = app.Execute(args);
+        
+        // Assert
+        result.Should().Be(0);
+        console.Out.ToString().Should().Contain("[{\"BuildSpecName\":\"testName\",\"Target\":\"testTarget\",\"version\":\"1.0.0\"}]");
+    }
     private CommandLineApplication BuildTestApp(IConsole console)
     {
 
         var services = new ServiceCollection()
+            .AddSingleton<IProjectService, ProjectService>()
             .AddSingleton<IVersionizeCommandHandler, VersionizeCommandHandler>()
             .AddSingleton<IConsole>(console)
             .BuildServiceProvider();
