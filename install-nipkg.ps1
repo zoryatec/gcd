@@ -11,6 +11,7 @@ $exist = Test-Path -Path $fullNipkgPath -PathType Leaf
 
 if($exist -eq 0)
 {
+    Write-Host "Downloading and installing NIPG"
 
     $nipkgPath = "C:\Program Files\National Instruments\NI Package Manager";
 
@@ -26,6 +27,7 @@ $pathElements = ($env:path).split(";");
 $nipkgIsInPath = $pathElements.Contains($nipkgPath);
 if($nipkgIsInPath -eq 0)
 {
+    Write-Host "seting up path"
     #add to the path pernamently (but it is not availible in current session, ps must be restarted)
     $oldpath = (Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).path
     $newpath = "$oldpath;$nipkgPath"
