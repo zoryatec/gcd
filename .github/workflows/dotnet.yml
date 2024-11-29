@@ -18,127 +18,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-        
-    - name: Make PATH change permanent (for subsequent steps)
-      shell: pwsh
-      run: |
-        # Define the path to add
-        $newPath = "C:\Program Files\National Instruments\NI Package Manager\"
-        $currentUserPath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
-        $currentMachinePath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::Machine)
-
-        
-        # Add the new path to the current PATH
-        $updatedUserPath = "$currentUserPath;$newPath"
-        $updatedMachinePath = "$currentMachinePath;$newPath"
-        $env:PATH = "$env:PATH;$newPath"
-        
-        # Add the new path to the user-level PATH variable
-        [System.Environment]::SetEnvironmentVariable("PATH", $updatedUserPath, [System.EnvironmentVariableTarget]::User)
-        [System.Environment]::SetEnvironmentVariable("PATH", $updatedMachinePath, [System.EnvironmentVariableTarget]::Machine)
-        
-        # Optionally verify the update
-        Write-Host "user-level PATH updated: $updatedUserPath"
-        Write-Host "machine-level PATH updated: $updatedMachinePath"
-        Write-Host "env:Path PATH updated: $env:PATH"
-
-    - name: Check paths
-      shell: pwsh
-      run: |
-        # Check paths
-        $currentUserPath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
-        $currentMachinePath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::Machine)
-        
-        Write-Host "user-level PATH current: $currentUserPath"
-        Write-Host "machine-level PATH current: $currentMachinePath"
-        Write-Host "env:Path PATH current: $env:PATH"
-        
-    - name: Run PowerShell script
-      shell: pwsh  
-      run: |
-        ./install-nipkg.ps1
-
-    - name: Wait for x seconds (Windows)
-      shell: pwsh  # PowerShell shell
-      run: |
-        Write-Host "Waiting for 240 seconds..."
-        Start-Sleep -Seconds 240  # PowerShell sleep for 240 seconds
-        
-    - name: Check dir
-      run: dir
-      
-    - name: Make PATH change permanent (for subsequent steps)
-      shell: pwsh
-      run: |
-        # Define the path to add
-        $newPath = "C:\Program Files\National Instruments\NI Package Manager\"
-        $currentPath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
-
-        # Add the new path to the current PATH
-        $updatedPath = "$currentPath;$newPath"
-        
-        # Add the new path to the user-level PATH variable
-        [System.Environment]::SetEnvironmentVariable("PATH", $updatedPath, [System.EnvironmentVariableTarget]::User)
-        
-        # Optionally verify the update
-        Write-Host "User-level PATH updated: $updatedPath"
-        Write-Host "User-level PATH updated: $env:PATH"
-
-
-    - name: Run Command Prompt command
-      shell: cmd
-      run: |
-        start /wait NIPackageManager21.3.0_online.exe --quiet --accept-eulas --prevent-reboot
-      
-    - name: Wait for x seconds (Windows)
-      shell: pwsh  # PowerShell shell
-      run: |
-        Write-Host "Waiting for 240 seconds..."
-        Start-Sleep -Seconds 240  # PowerShell sleep for 240 seconds
-      
-      
-    - name: Check dir
-      run: dir "C:\Program Files\National Instruments\NI Package Manager"
-      
-    - name: Make PATH change permanent (for subsequent steps)
-      shell: pwsh
-      run: |
-        # Define the path to add
-        $newPath = "C:\Program Files\National Instruments\NI Package Manager\"
-        $currentPath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
-
-        # Add the new path to the current PATH
-        $updatedPath = "$currentPath;$newPath"
-        
-        # Add the new path to the user-level PATH variable
-        [System.Environment]::SetEnvironmentVariable("PATH", $updatedPath, [System.EnvironmentVariableTarget]::User)
-        
-        # Optionally verify the update
-        Write-Host "User-level PATH updated: $updatedPath"
-        Write-Host "User-level PATH updated: $env:PATH"
-        
-
-    - name: Run Command from New PATH Directory
-      shell: pwsh
-      run: |
-        # Running a command that should now work with the new PATH
-        Write-Host "Running a command from the new PATH"
-        # For example, checking the version of a tool in C:\tools
-        if (Test-Path "$newPath\nipkg.exe") {
-          & "$newPath\nipkg.exe" --version
-        } else {
-          Write-Host "Executable not found!"
-        }
-
-    - name: Check NIPKG version
-      run: |
-          $execPath = "C:\Program Files\National Instruments\NI Package Manager\nipkg.exe"
-          & "$execPath" --version
-      
+       
     - name: Restore dependencies
       run: dotnet restore
       
@@ -154,41 +39,10 @@ jobs:
         name: gcd-published-artifacts
         path: "./package/data/BootVolume/Program Files/gcd" # Path to the published output director
         
-    - name: Run PowerShell script
-      shell: pwsh  
-      run: |
-        ./build-nipkg.ps1 -version "0.5.0" -buildNumber  "${{github.run_number}}"
-
-    - name: Upload Published Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: gcd-nipkg
-        path: ./package # Path to the published output director
-
-    - name: Publish PKG
-      shell: pwsh  
-      run: |
-        ./publish-nipkg.ps1
-
-    - name: Upload Published Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: gcd-nipkg-feed
-        path: ./feed # Path to the published output director
-        
-    - name: Delaty to finish operations
-      shell: pwsh  # PowerShell shell
-      run: |
-        Write-Host "Waiting for 60 seconds..."
-        Start-Sleep -Seconds 60 
-        
-    - name: Publish to blob storage
-      run: |
-            azcopy copy "./feed/Packages" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages?${{ secrets.SAS_TOKEN }}"--overwrite=true
-            azcopy copy "./feed/Packages.gz" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.gz?${{ secrets.SAS_TOKEN }}"--overwrite=true
-            azcopy copy "./feed/Packages.stamps" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.stamps?${{ secrets.SAS_TOKEN }}"--overwrite=true 
-            azcopy copy "./feed/gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg?${{ secrets.SAS_TOKEN }}"--overwrite=true
-
-  call-build:
+  test-end-to-end:
     uses: ./.github/workflows/test-integration.yml  # Reference the reusable build workflow
+    secrets: inherit
+    
+  publish-nipkg:
+    uses: ./.github/workflows/publish-nipkg.yml  # Reference the reusable build workflow
     secrets: inherit
