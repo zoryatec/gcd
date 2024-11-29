@@ -51,5 +51,6 @@ $pkgName = $existingPackages[0].Name
 $pkgPath = "$PWD\package\${pkgName}"
 Write-Host "package directory"
 dir $pkgPath
+$nipkgFeed = "$PWD\feed"
 NIPKGPublishPkg -feed $nipkgFeed  -pkgSrcFilesDir $pkgPath
 
