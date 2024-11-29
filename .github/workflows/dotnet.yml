@@ -181,5 +181,5 @@ jobs:
             azcopy copy "./feed/Packages" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages"--overwrite=true --account-key ${{ secrets.AZ_STORAGE_ACCOUNT_KEY }}
             azcopy copy "./feed/Packages.gz" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.gz"--overwrite=true --account-key ${{ secrets.AZ_STORAGE_ACCOUNT_KEY }}
             azcopy copy "./feed/Packages.stamps" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.stamps"--overwrite=true --account-key ${{ secrets.AZ_STORAGE_ACCOUNT_KEY }}
-            azcopy copy "./feed/gcd_${{VERSION}}-${{github.run_id}}_windows_x64.nipkg" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/gcd_${{VERSION}}-${{github.run_id}}_windows_x64.nipkg"--overwrite=true --account-key ${{secrets.AZ_STORAGE_ACCOUNT_KEY}}
+            azcopy copy "./feed/gcd_0.5.0-${{github.run_id}}_windows_x64.nipkg" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/gcd_0.5.0-${{github.run_id}}_windows_x64.nipkg"--overwrite=true --account-key ${{secrets.AZ_STORAGE_ACCOUNT_KEY}}
 
