@@ -8,6 +8,7 @@
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
         <RootNamespace>Gcd.Tests</RootNamespace>
+        <AssemblyVersion>1.2.3.4</AssemblyVersion>
     </PropertyGroup>
 
     <ItemGroup>

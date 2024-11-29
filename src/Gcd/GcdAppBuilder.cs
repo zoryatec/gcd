@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json;
 using Gcd.CommandHandlers;
 using McMaster.Extensions.CommandLineUtils;
@@ -15,17 +16,18 @@ public class GcdAppBuilder()
             Name = "gcd",
             Description = "CI/CD tool for G programmers with OCDddd",
         };
-            
-        var maybyProject = LabViewProject.LabViewProject.Create("");
-        var project = maybyProject;
+        app.VersionOption("-v|--version", GetVersion());
+        
         app.Conventions
             .UseDefaultConventions()
             .UseConstructorInjection(services);
-
-        var console = services.GetRequiredService<IConsole>();
-        var projectService = services.GetRequiredService<IProjectService>();
         app.HelpOption(inherited: true);
         
+        var console = services.GetRequiredService<IConsole>();
+        var projectService = services.GetRequiredService<IProjectService>();
+        
+
+        #region versionize
         app.Command("versionize", versionizeCommand =>
         {
             versionizeCommand.OnExecute(() =>
@@ -34,6 +36,7 @@ public class GcdAppBuilder()
                 handler.Handle();
             });
         });
+        #endregion
         
         #region project
         app.Command("project", projectCmd =>
@@ -68,22 +71,6 @@ public class GcdAppBuilder()
                     });
                 });
             });
-
-            projectCmd.Command("list-build-spec", listCmd =>
-            {
-                var json = listCmd.Option("--json", "Json output", CommandOptionType.NoValue);
-                listCmd.OnExecute(() =>
-                {
-                    if (json.HasValue())
-                    {
-                        console.WriteLine("{\"dummy\": \"value\"}");
-                    }
-                    else
-                    {
-                        console.WriteLine("coreclationTest");
-                    }
-                });
-            });
         });
         #endregion
 
@@ -96,4 +83,5 @@ public class GcdAppBuilder()
 
         return app;
     }
+    private static string GetVersion() => typeof(Program).Assembly.GetName().Version?.ToString() ?? "";
 }

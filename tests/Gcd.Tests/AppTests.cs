@@ -32,6 +32,24 @@ public  class AppTests
     }
     
     [Fact]
+    public  void VersionTest()
+    {
+        // Arrange
+        var console = new FakeConsole();
+   
+        var app = BuildTestApp(console);
+        var args = new[] { "--version" };
+        
+        // Act
+        int result = app.Execute(args);
+        
+        // Asssert
+        result.Should().Be(0);
+        // does not work in test
+        var output = console.Out.ToString();
+    }
+    
+    [Fact]
     public  void ProjectTest()
     {
         // Arrange
