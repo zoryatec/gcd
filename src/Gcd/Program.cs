@@ -1,4 +1,5 @@
 ﻿using Gcd.CommandHandlers;
+using Gcd.Extensions;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,8 +25,13 @@ namespace Gcd
                 .AddSingleton<IConsole>(PhysicalConsole.Singleton)
                 .BuildServiceProvider();
             
-            var builder = new GcdAppBuilder();
-            var app = builder.Build(services);
+            var app = new CommandLineApplication<Program>()
+            {
+                Name = "gcd",
+                Description = "CI/CD tool for G programmers with OCDddd",
+            };
+            
+            app.UseGcdCmd(services);
             
             return app.Execute(args);
         }
