@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Gcd.CommandHandlers;
+using Gcd.Extensions;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
@@ -74,8 +75,13 @@ public  class AppTests
             .AddSingleton<IConsole>(console)
             .BuildServiceProvider();
         
-        var builder = new GcdAppBuilder();
-        var app = builder.Build(services);
+        var app = new CommandLineApplication<Program>()
+        {
+            Name = "gcd",
+            Description = "CI/CD tool for G programmers with OCDddd",
+        };
+            
+        app.UseGcdCmd(services);
         return app; 
     }
 }
