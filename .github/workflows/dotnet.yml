@@ -187,5 +187,5 @@ jobs:
             azcopy copy "./feed/Packages" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages?${{ secrets.SAS_TOKEN }}"--overwrite=true
             azcopy copy "./feed/Packages.gz" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.gz?${{ secrets.SAS_TOKEN }}"--overwrite=true --account-key
             azcopy copy "./feed/Packages.stamps" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.stamps?${{ secrets.SAS_TOKEN }}"--overwrite=true 
-            azcopy copy "./feed/gcd_0.5.0-${{github.run_number}_windows_x64.nipkg" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg?${{ secrets.SAS_TOKEN }}"--overwrite=true
+            azcopy copy "./feed/gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg?${{ secrets.SAS_TOKEN }}"--overwrite=true
 
