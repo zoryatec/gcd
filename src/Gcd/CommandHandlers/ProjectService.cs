@@ -13,7 +13,7 @@ public class ProjectService : IProjectService
     {
         return new List<BuildSpecDto>()
         {
-            new BuildSpecDto(BuildSpecName: "testName", Target: "testTarget", version: "1.0.0")
+            new BuildSpecDto(BuildSpecName: "testNameq", Target: "testTarget", version: "1.0.0")
         };
     }
 }
