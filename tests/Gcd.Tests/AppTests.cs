@@ -69,11 +69,17 @@ public  class AppTests
     private CommandLineApplication BuildTestApp(IConsole console)
     {
 
+        var assembly = typeof(Program).Assembly;
         var services = new ServiceCollection()
             .AddSingleton<IProjectService, ProjectService>()
             .AddSingleton<IVersionizeCommandHandler, VersionizeCommandHandler>()
             .AddSingleton<IConsole>(console)
-            .BuildServiceProvider();
+            .AddMediatR(config =>
+            {
+                config.RegisterServicesFromAssembly(assembly);
+            });
+            
+        var serviceProvider = services.BuildServiceProvider();
         
         var app = new CommandLineApplication<Program>()
         {
@@ -81,7 +87,7 @@ public  class AppTests
             Description = "CI/CD tool for G programmers with OCDddd",
         };
             
-        app.UseGcdCmd(services);
+        app.UseGcdCmd(serviceProvider);
         return app; 
     }
 }

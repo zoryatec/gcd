@@ -2,6 +2,8 @@
 using Gcd.Extensions;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
+using MediatR;
+
 
 namespace Gcd
 {
@@ -19,11 +21,18 @@ namespace Gcd
         }
         public static int Main(string[] args)
         {
+            var assembly = typeof(Program).Assembly;
             var services = new ServiceCollection()
                 .AddSingleton<IProjectService, ProjectService>()
                 .AddSingleton<IVersionizeCommandHandler, VersionizeCommandHandler>()
                 .AddSingleton<IConsole>(PhysicalConsole.Singleton)
-                .BuildServiceProvider();
+                .AddMediatR(config =>
+                {
+                    config.RegisterServicesFromAssembly(assembly);
+                });
+            
+            var serviceProvider = services.BuildServiceProvider();
+            
             
             var app = new CommandLineApplication<Program>()
             {
@@ -31,7 +40,7 @@ namespace Gcd
                 Description = "CI/CD tool for G programmers with OCDddd",
             };
             
-            app.UseGcdCmd(services);
+            app.UseGcdCmd(serviceProvider);
             
             return app.Execute(args);
         }

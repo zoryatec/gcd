@@ -1,6 +1,8 @@
 using System.Text.Json;
 using Gcd.CommandHandlers;
+using Gcd.Handlers;
 using McMaster.Extensions.CommandLineUtils;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Gcd.Extensions;
@@ -47,17 +49,18 @@ public static class UseProjectCmdExtensions
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var projectService = serviceProvider.GetRequiredService<IProjectService>();
+        var mediator = serviceProvider.GetRequiredService<IMediator>();
         app.Description = "Related to build specifications";
         app.Command("list", listCmd =>
         {
             listCmd.Description = "List build specificatnions";
             var projectPath = listCmd.Option("--project-path", "Json output", CommandOptionType.SingleValue)
                 .IsRequired();
-            listCmd.OnExecute(() =>
+            listCmd.OnExecute(async () =>
             {
-                var projectListDto = projectService.GetBuildSpecList(projectPath.Value());
-                string jsonString = JsonSerializer.Serialize(projectListDto);
-                console.WriteLine(jsonString);
+                var request = new BuildSpecListRequest(projectPath.Value());
+                var response =  await mediator.Send(request);
+                console.WriteLine(response.ProjectPaht);
             });
         });
         return app;
