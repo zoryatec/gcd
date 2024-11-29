@@ -146,13 +146,13 @@ jobs:
       run: dotnet build src/Gcd/Gcd.csproj  --no-restore
       
     - name: Publish
-      run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true --output ./package/data/BootVolume/Zoryatec/gcd
+      run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true --output "./package/data/BootVolume/Program Files/gcd"
 
     - name: Upload Published Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: gcd-published-artifacts
-        path: ./package/data/BootVolume/Zoryatec/gcd  # Path to the published output director
+        path: "./package/data/BootVolume/Program Files/gcd" # Path to the published output director
         
     - name: Run PowerShell script
       shell: pwsh  
