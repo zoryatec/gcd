@@ -38,9 +38,9 @@ function NIPKGPublishPkg
 # sync feed from blob storage
 
 mkdir feed
-(New-Object System.Net.WebClient).DownloadFile("https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages", ".feed\Packages")
-(New-Object System.Net.WebClient).DownloadFile("https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.gz", ".feed\Packages.gz")
-(New-Object System.Net.WebClient).DownloadFile("https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.stamps", ".feed\Packages.stamps")
+(New-Object System.Net.WebClient).DownloadFile("https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages", "$PWD\feed\Packages")
+(New-Object System.Net.WebClient).DownloadFile("https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.gz", "$PWD\feed\Packages.gz")
+(New-Object System.Net.WebClient).DownloadFile("https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.stamps", "$PWD\feed\Packages.stamps")
 
 
 #publish to feed
