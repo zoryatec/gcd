@@ -16,6 +16,14 @@ jobs:
       with:
         dotnet-version: 8.0.x
         
+    - name: Download gcd binary
+      uses: actions/download-artifact@v4.1.8
+      with:
+        # Name of the artifact to download. If unspecified, all artifacts for the run are downloaded.
+        name: gcd-bin
+        # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
+        path: "./package/data/BootVolume/Program Files/gcd"
+           
     - name: Make PATH change permanent (for subsequent steps)
       shell: pwsh
       run: |
@@ -132,20 +140,6 @@ jobs:
           $execPath = "C:\Program Files\National Instruments\NI Package Manager\nipkg.exe"
           & "$execPath" --version
       
-    - name: Restore dependencies
-      run: dotnet restore
-      
-    - name: Build
-      run: dotnet build src/Gcd/Gcd.csproj  --no-restore
-      
-    - name: Publish
-      run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true --output "./package/data/BootVolume/Program Files/gcd"
-
-    - name: Upload Published Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: gcd-published-artifacts
-        path: "./package/data/BootVolume/Program Files/gcd" # Path to the published output director
         
     - name: Run PowerShell script
       shell: pwsh  
