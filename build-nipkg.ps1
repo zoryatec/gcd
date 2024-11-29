@@ -14,7 +14,7 @@ function UpdateCtrFile{
 }
 
 
-UpdateCtrFile -ctrFilePath ".\package\control\control" -shortVersion "0.3.0.1" -buildNumber 3
+UpdateCtrFile -ctrFilePath ".\package\control\control" -shortVersion $version -buildNumber $buildNumber
 
 $execPath = "C:\Program Files\National Instruments\NI Package Manager\nipkg.exe"
 & "$execPath" pack ".\package" ".\package"
