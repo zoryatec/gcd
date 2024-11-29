@@ -176,6 +176,12 @@ jobs:
         name: gcd-nipkg-feed
         path: ./feed # Path to the published output director
         
+    - name: Delaty to finish operations
+      shell: pwsh  # PowerShell shell
+      run: |
+        Write-Host "Waiting for 60 seconds..."
+        Start-Sleep -Seconds 60 
+        
     - name: Publish to blob storage
       run: |
             azcopy copy "./feed/Packages" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages"--overwrite=true --account-key ${{ secrets.AZ_STORAGE_ACCOUNT_KEY }}
