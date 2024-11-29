@@ -46,10 +46,10 @@ jobs:
         
   test-end-to-end:
     uses: ./.github/workflows/test-integration.yml  # Reference the reusable build workflow
-    needs: publish-nipkg
+    needs: build
     secrets: inherit
     
   publish-nipkg:
     uses: ./.github/workflows/publish-nipkg.yml  # Reference the reusable build workflow
-    needs: build
+    needs: test-end-to-end
     secrets: inherit
