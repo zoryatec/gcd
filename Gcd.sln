@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gcd.LabViewProject", "src\G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gcd.Common", "src\Gcd.Common\Gcd.Common.csproj", "{3738EFD6-0298-4EC7-B57F-9323925DCA07}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gcd.Tests.EndToEnd", "Gcd.Tests.EndToEnd\Gcd.Tests.EndToEnd.csproj", "{D0B983A1-903F-4A40-B357-38396258C8C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{3738EFD6-0298-4EC7-B57F-9323925DCA07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3738EFD6-0298-4EC7-B57F-9323925DCA07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3738EFD6-0298-4EC7-B57F-9323925DCA07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0B983A1-903F-4A40-B357-38396258C8C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0B983A1-903F-4A40-B357-38396258C8C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0B983A1-903F-4A40-B357-38396258C8C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0B983A1-903F-4A40-B357-38396258C8C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
