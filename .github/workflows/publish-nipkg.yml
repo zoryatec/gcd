@@ -4,7 +4,7 @@ on:
   workflow_call: # This allows this workflow to be called by other workflows
 
 jobs:
-  build:
+  publish:
     runs-on: windows-latest
     env:
       VERSION: "0.5.0"

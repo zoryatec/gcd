@@ -4,7 +4,7 @@ on:
   workflow_call: # This allows this workflow to be called by other workflows
 
 jobs:
-  build:
+  test-end-to-end:
     runs-on: windows-latest
     steps:
       - name: Checkout repository
