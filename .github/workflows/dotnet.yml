@@ -157,7 +157,7 @@ jobs:
     - name: Run PowerShell script
       shell: pwsh  
       run: |
-        ./build-nipkg.ps1 --version  $VERSION --buildNumber  $github.run_id
+        ./build-nipkg.ps1 -version "0.5.0" -buildNumber  $github.run_id
 
     - name: Upload Published Artifacts
       uses: actions/upload-artifact@v3
