@@ -31,7 +31,7 @@ jobs:
       run: dotnet build src/Gcd/Gcd.csproj  --no-restore
       
     - name: Test
-      run: dotnet build tests/Gcd.Tests/Gcd.Tests.csproj
+      run: dotnet test tests/Gcd.Tests/Gcd.Tests.csproj
   
       
     - name: Publish
