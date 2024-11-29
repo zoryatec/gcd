@@ -1,0 +1,16 @@
+name: Integration Test Stage
+
+on:
+  workflow_call: # This allows this workflow to be called by other workflows
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x'
