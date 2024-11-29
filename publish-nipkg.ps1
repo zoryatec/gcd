@@ -36,17 +36,20 @@ function NIPKGPublishPkg
 }
 
 # sync feed from blob storage
-
+dir $pwd
 mkdir feed
 (New-Object System.Net.WebClient).DownloadFile("https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages", "$PWD\feed\Packages")
 (New-Object System.Net.WebClient).DownloadFile("https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.gz", "$PWD\feed\Packages.gz")
 (New-Object System.Net.WebClient).DownloadFile("https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.stamps", "$PWD\feed\Packages.stamps")
-
+Write-Host "After creation"
+dir $pwd
 
 #publish to feed
 
-$existingPackages = Get-ChildItem -Path ".\package" -Filter *.nipkg -Recurse
+$existingPackages = Get-ChildItem -Path "$PWD\package" -Filter *.nipkg -Recurse
 $pkgName = $existingPackages[0].Name
-$pkgPath = ".\package\${pkgName}"
+$pkgPath = "$PWD\package\${pkgName}"
+Write-Host "package directory"
+dir $pkgPath
 NIPKGPublishPkg -feed $nipkgFeed  -pkgSrcFilesDir $pkgPath
 
