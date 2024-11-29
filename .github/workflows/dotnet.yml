@@ -190,5 +190,5 @@ jobs:
             azcopy copy "./feed/gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg?${{ secrets.SAS_TOKEN }}"--overwrite=true
 
   call-build:
-    uses: ./.github/workflows/integration-test.yml  # Reference the reusable build workflow
+    uses: ./.github/workflows/test-integration.yml  # Reference the reusable build workflow
     secrets: inherit
