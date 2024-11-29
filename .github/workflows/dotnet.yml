@@ -13,6 +13,8 @@ jobs:
   build:
 
     runs-on: windows-latest
+    env:
+      VERSION: "0.5.0"
 
     steps:
     - uses: actions/checkout@v4
@@ -155,7 +157,7 @@ jobs:
     - name: Run PowerShell script
       shell: pwsh  
       run: |
-        ./build-nipkg.ps1 --version  "0.5.0.0" --buildNumber  ${{ github.run_id }}
+        ./build-nipkg.ps1 --version  $VERSION --buildNumber  $github.run_id
 
     - name: Upload Published Artifacts
       uses: actions/upload-artifact@v3
@@ -173,4 +175,11 @@ jobs:
       with:
         name: gcd-nipkg-feed
         path: ./feed # Path to the published output director
-  
+        
+    - name: Publish to blob storage
+      run: |
+            azcopy copy "./feed/Packages" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages"--overwrite=true --account-key ${{ secrets.AZ_STORAGE_ACCOUNT_KEY }}
+            azcopy copy "./feed/Packages.gz" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.gz"--overwrite=true --account-key ${{ secrets.AZ_STORAGE_ACCOUNT_KEY }}
+            azcopy copy "./feed/Packages.stamps" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.stamps"--overwrite=true --account-key ${{ secrets.AZ_STORAGE_ACCOUNT_KEY }}
+            azcopy copy "./feed/gcd_${{ VERSION }}-${{ github.run_id }}_windows_x64.nipkg" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/gcd_${{ VERSION }}-${{ github.run_id }}_windows_x64.nipkg"--overwrite=true --account-key ${{ secrets.AZ_STORAGE_ACCOUNT_KEY }}
+
