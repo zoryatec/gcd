@@ -48,16 +48,44 @@ public static class UseProjectCmdExtensions
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
-        app.Description = "Related to build specifications";
         app.Command("list", listCmd =>
         {
             listCmd.Description = "List build specificatnions";
-            var projectPath = listCmd.Option("--project-path", "Json output", CommandOptionType.SingleValue)
+            var projectPath = listCmd.Option("--project-path", "Absolute path to a project", CommandOptionType.SingleValue)
                 .IsRequired();
             listCmd.OnExecute(async () =>
             {
                 var request = new BuildSpecListRequest(projectPath.Value());
                 var response =  await mediator.Send(request);
+                console.WriteLine(response.ProjectPaht);
+            });
+        });
+        return app;
+    }
+
+    public static CommandLineApplication UseBuildSpecSetVersionCmd(this CommandLineApplication app,
+    IServiceProvider serviceProvider)
+    {
+        var console = serviceProvider.GetRequiredService<IConsole>();
+        var mediator = serviceProvider.GetRequiredService<IMediator>();
+        app.Command("list", listCmd =>
+        {
+            listCmd.Description = "Set version of build specification";
+            var projectPath = listCmd.Option("--project-path", "Absolute path to a project", CommandOptionType.SingleValue)
+                .IsRequired();
+            var buildSpecName = listCmd.Option("--build-spec-name", "Build specification name", CommandOptionType.SingleValue)
+                .IsRequired();
+            var buildSpecType = listCmd.Option("--build-spec-type", "Build specification type", CommandOptionType.SingleValue)
+                .IsRequired();
+            var buildSpecTarget = listCmd.Option("--build-spec-target", "Build specification target", CommandOptionType.SingleValue)
+                .IsRequired();
+            var version = listCmd.Option("--version", "Version to be set", CommandOptionType.SingleValue)
+                .IsRequired();
+
+            listCmd.OnExecute(async () =>
+            {
+                var request = new BuildSpecSetVersiotRequest(projectPath.Value(), buildSpecName.Value(), buildSpecType.Value(), buildSpecTarget.Value());
+                var response = await mediator.Send(request);
                 console.WriteLine(response.ProjectPaht);
             });
         });
