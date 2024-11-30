@@ -2,5 +2,6 @@ namespace Gcd.LabViewProject;
 
 public interface ILabViewBuildSpec
 {
-    public void SetVersion(BuildSpecVersion version);
+    public string Name { get; set; }
+    public string Type { get; set; }
 }

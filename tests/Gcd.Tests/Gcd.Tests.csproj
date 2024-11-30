@@ -28,4 +28,8 @@
       <ProjectReference Include="..\..\src\Gcd\Gcd.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="sample\sample.lvproj" />
+    </ItemGroup>
+
 </Project>
