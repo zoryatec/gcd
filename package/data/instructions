@@ -1,5 +1,6 @@
 <instructions>
 	<targetAttributes readOnly="allWritable"/>
     <customExecutes>
+        <customExecute root="BootVolume\Program Files\gcd" step="install" schedule="post" exeName="set-path.bat"/>
     </customExecutes>
 </instructions>
