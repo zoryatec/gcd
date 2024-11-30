@@ -5,14 +5,23 @@ namespace Gcd.LabViewProject;
 
 public record BuildSpecVersion
 {
-    private readonly int _build;
+    public int Build { get; }
     public int Major { get; }
     public int Minor { get; }
     public int Fix { get; }
 
+
     public static Result<BuildSpecVersion> Create(string version)
     {
-        return Result.Success(new BuildSpecVersion(1, 1, 1, 1));
+        string[] parts = version.Split('.');
+
+        // Parse each part as an integer
+        int major = int.Parse(parts[0]);
+        int minor = int.Parse(parts[1]);
+        int fix = int.Parse(parts[2]);
+        int build = int.Parse(parts[3]);
+
+        return Result.Success(new BuildSpecVersion(major, minor, fix, build));
     }
     public static Result<BuildSpecVersion> Create(int major, int minor, int fix, int build)
     {
@@ -20,10 +29,10 @@ public record BuildSpecVersion
     }
 
 
-    
+  
     private BuildSpecVersion(int major, int minor, int fix, int build)
     {
-        _build = build;
+        Build = build;
         Major = major;
         Minor = minor;
         Fix = fix;

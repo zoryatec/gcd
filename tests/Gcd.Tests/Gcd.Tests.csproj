@@ -33,7 +33,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <sample Include="sample\**\*.*" />
+		<sample Include="sample\**\*.*" >
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</sample>
     </ItemGroup>
 
     <Target Name="CopyDirectoryToBuildOutput" AfterTargets="Build">

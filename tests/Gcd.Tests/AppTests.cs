@@ -67,6 +67,27 @@ public  class AppTests
         result.Should().Be(0);
         console.Out.ToString().Should().Contain("[{\"Name\":\"My Packed Library\",\"Type\":\"Packed Library\",\"Target\":\"target\",\"Version\":\"version\"},{\"Name\":\"sample application\",\"Type\":\"EXE\",\"Target\":\"target\",\"Version\":\"1.0.0.1\"},{\"Name\":\"Sample Package\",\"Type\":\"{E661DAE2-7517-431F-AC41-30807A3BDA38}\",\"Target\":\"target\",\"Version\":\"version\"}]");
     }
+    [Fact]
+    public void ProjectSetVersionTest()
+    {
+        // Arrange
+        var console = new FakeConsole();
+
+        var app = BuildTestApp(console);
+        var args = new[] { "project", "build-spec", "set-version", 
+            "--project-path", "sample.lvproj",
+            "--build-spec-name", "sample application",
+            "--build-spec-type", "sample.lvproj",
+            "--build-spec-target", "sample.lvproj",
+            "--version", "99.88.77.66"};
+
+
+        // Act
+       // int result = app.Execute(args);
+
+        // Assert
+       // result.Should().Be(0);
+    }
     private CommandLineApplication BuildTestApp(IConsole console)
     {
 

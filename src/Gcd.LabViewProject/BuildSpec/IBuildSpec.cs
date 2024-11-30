@@ -6,4 +6,6 @@ public interface IBuildSpec
     public string Type { get; }
     public string Target { get;}
     public string Version { get;}
+
+    public void SetVersion(BuildSpecVersion version);
 }

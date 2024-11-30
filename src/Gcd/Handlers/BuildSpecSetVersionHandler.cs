@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Text.Json;
 using System.Xml;
+using CSharpFunctionalExtensions;
 using Gcd.CommandHandlers;
 using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
@@ -8,23 +9,25 @@ using MediatR;
 
 namespace Gcd.Handlers;
 
-public record BuildSpecSetVersiotRequest(string projectPath, string buildSpecName, string buildSpecType, string buildSpecTarget) : IRequest<BuildSpecListResponse>;
-public record BuildSpecSetVersioResponse(string ProjectPaht);
+public record BuildSpecSetVersionRequest(string projectPath, string buildSpecName, string buildSpecType, string buildSpecTarget, string versionToSet) : IRequest<BuildSpecSetVersioResponse>;
+public record BuildSpecSetVersioResponse(string result);
 
 public class BuildSpecSetVersionHandler(ILabViewProjectProvider _labViewProjectProvider)
-    : IRequestHandler<BuildSpecListRequest, BuildSpecListResponse>
+    : IRequestHandler<BuildSpecSetVersionRequest, BuildSpecSetVersioResponse>
 {
-    public async Task<BuildSpecListResponse> Handle(BuildSpecListRequest request, CancellationToken cancellationToken)
+    public async Task<BuildSpecSetVersioResponse> Handle(BuildSpecSetVersionRequest request, CancellationToken cancellationToken)
     {
-        var maybeProject = _labViewProjectProvider.GetProject(request.projectPaht);
+        var maybeProject = _labViewProjectProvider.GetProject(request.projectPath);
         var project = maybeProject.Value;
 
-        List<BuildSpecDto> specs = new List<BuildSpecDto>();
-        foreach (var buildSpec in project.BuildSpecifications)
-        {
-            specs.Add(new BuildSpecDto(buildSpec.Name, buildSpec.Type, buildSpec.Target, buildSpec.Version));
-        }
-        string jsonString = JsonSerializer.Serialize(specs);
-        return new BuildSpecListResponse(jsonString);
+
+        var buildSpecMaybe =  project.GetBuildSpec(request.buildSpecName, request.buildSpecType, request.buildSpecTarget);
+        var buildSpec = buildSpecMaybe.Value;
+
+        var version = BuildSpecVersion.Create(request.versionToSet);
+
+        buildSpec.SetVersion(version.Value);
+        _labViewProjectProvider.Save(project);
+        return new BuildSpecSetVersioResponse("result");
     }
 }

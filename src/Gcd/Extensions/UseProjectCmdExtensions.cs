@@ -38,6 +38,7 @@ public static class UseProjectCmdExtensions
                 return 1;
             });
             buildSpecCmd.UseBuildSpecListCmd(serviceProvider);
+            buildSpecCmd.UseBuildSpecSetVersionCmd(serviceProvider);
         });
 
         return app;
@@ -68,7 +69,7 @@ public static class UseProjectCmdExtensions
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
-        app.Command("list", listCmd =>
+        app.Command("set-version", listCmd =>
         {
             listCmd.Description = "Set version of build specification";
             var projectPath = listCmd.Option("--project-path", "Absolute path to a project", CommandOptionType.SingleValue)
@@ -84,9 +85,9 @@ public static class UseProjectCmdExtensions
 
             listCmd.OnExecute(async () =>
             {
-                var request = new BuildSpecSetVersiotRequest(projectPath.Value(), buildSpecName.Value(), buildSpecType.Value(), buildSpecTarget.Value());
+                var request = new BuildSpecSetVersionRequest(projectPath.Value(), buildSpecName.Value(), buildSpecType.Value(), buildSpecTarget.Value(),version.Value());
                 var response = await mediator.Send(request);
-                console.WriteLine(response.ProjectPaht);
+                console.WriteLine(response.result);
             });
         });
         return app;

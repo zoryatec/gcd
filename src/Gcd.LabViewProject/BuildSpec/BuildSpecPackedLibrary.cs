@@ -14,6 +14,10 @@ public class BuildSpecPackedLibrary : IBuildSpec
     {
         _node = node;
     }
+    public void SetVersion(BuildSpecVersion version)
+    {
+        throw new NotImplementedException();
+    }
 
     public string Name { get => _node.Attributes["Name"]?.Value; }
     public string Type { get => _node.Attributes["Type"]?.Value; }

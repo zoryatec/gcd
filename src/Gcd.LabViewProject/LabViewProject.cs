@@ -39,6 +39,15 @@ public class LabViewProject
         get => _buildSpecifications;
     }
 
+    public Result<IBuildSpec> GetBuildSpec(string name, string type, string target)
+    {
+        foreach (var spec in _buildSpecifications)
+        { 
+            if (spec.Name == name) return Result.Success<IBuildSpec>(spec);
+        }
+        return Result.Failure<IBuildSpec>("Specification with name not found");
+    }
+
     public Result SetBuildSpecVersion(string name, string type)
     {
         return Result.Success();
