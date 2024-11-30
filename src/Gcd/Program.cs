@@ -1,5 +1,6 @@
 ﻿using Gcd.CommandHandlers;
 using Gcd.Extensions;
+using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
@@ -23,8 +24,8 @@ namespace Gcd
         {
             var assembly = typeof(Program).Assembly;
             var services = new ServiceCollection()
-                .AddSingleton<IProjectService, ProjectService>()
                 .AddSingleton<IVersionizeCommandHandler, VersionizeCommandHandler>()
+                .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddSingleton<IConsole>(PhysicalConsole.Singleton)
                 .AddMediatR(config =>
                 {

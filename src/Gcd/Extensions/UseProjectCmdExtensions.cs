@@ -29,7 +29,6 @@ public static class UseProjectCmdExtensions
     public static CommandLineApplication UseBuildSpecCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
-        var projectService = serviceProvider.GetRequiredService<IProjectService>();
         app.Command("build-spec", buildSpecCmd =>
         {
             buildSpecCmd.OnExecute(() =>
@@ -48,7 +47,6 @@ public static class UseProjectCmdExtensions
         IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
-        var projectService = serviceProvider.GetRequiredService<IProjectService>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
         app.Description = "Related to build specifications";
         app.Command("list", listCmd =>

@@ -6,7 +6,7 @@ public class LabViewProjectTests
     [Fact]
     public void LabViewProjectTest()
     {
-	    var maybeLvProj = LabViewProject.Create(GetSample());
+	    var maybeLvProj = LabViewProject.Create(GetSample(), "LabViewProject");
 		var lvproj = maybeLvProj.Value;
 		List<LabViewBuildSpec> buildSpecs = lvproj.BuildSpecifications;
 		

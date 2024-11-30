@@ -4,24 +4,26 @@ using CSharpFunctionalExtensions;
 
 namespace Gcd.LabViewProject;
 
-public class LabViewProject
+public class LabViewProject 
 {
-    private string _fileContent;
+    public string Path { get; }
+    public string Content { get => _xmlDocument.OuterXml; }
     private readonly List<LabViewBuildSpec> _buildSpecifications;
     private List<LabViewBuildSpec> _buildSpecsCopy;
+    private XmlDocument _xmlDocument;
 
-    public static Result<LabViewProject> Create(string fileContent)
+    public static Result<LabViewProject> Create(string projectContent, string projectPath)
     {
-        return new LabViewProject(fileContent);
+        return new LabViewProject(projectContent, projectPath);
     }
     
-    private LabViewProject(string fileContent)
+    private LabViewProject(string projectContent, string path)
     {
-        _fileContent = fileContent;
-        XmlDocument doc = new XmlDocument();
-        doc.LoadXml(_fileContent);
+        Path = path;
+        _xmlDocument = new XmlDocument();
+        _xmlDocument.LoadXml(projectContent);
 
-        XmlNode buildSpecsNode = doc.SelectSingleNode("//Item[@Name='Build Specifications' and @Type='Build']");
+        XmlNode buildSpecsNode = _xmlDocument.SelectSingleNode("//Item[@Name='Build Specifications' and @Type='Build']");
 
         _buildSpecifications = new List<LabViewBuildSpec>();
         // Extract and print all build specification names
@@ -38,5 +40,10 @@ public class LabViewProject
     public List<LabViewBuildSpec> BuildSpecifications
     {
         get => _buildSpecifications;
+    }
+
+    public Result SetBuildSpecVersion(string name, string type)
+    {
+        return Result.Success();
     }
 }
