@@ -65,7 +65,7 @@ public  class AppTests
         
         // Assert
         result.Should().Be(0);
-        console.Out.ToString().Should().Contain("[{\"BuildSpecName\":\"My Packed Library\",\"Type\":\"Packed Library\",\"version\":\"\"},{\"BuildSpecName\":\"sample application\",\"Type\":\"EXE\",\"version\":\"\"},{\"BuildSpecName\":\"Sample Package\",\"Type\":\"{E661DAE2-7517-431F-AC41-30807A3BDA38}\",\"version\":\"\"}]");
+        console.Out.ToString().Should().Contain("[{\"Name\":\"My Packed Library\",\"Type\":\"Packed Library\",\"Target\":\"target\",\"Version\":\"version\"},{\"Name\":\"sample application\",\"Type\":\"EXE\",\"Target\":\"target\",\"Version\":\"version\"},{\"Name\":\"Sample Package\",\"Type\":\"{E661DAE2-7517-431F-AC41-30807A3BDA38}\",\"Target\":\"target\",\"Version\":\"version\"}]");
     }
     private CommandLineApplication BuildTestApp(IConsole console)
     {

@@ -8,7 +8,7 @@ public class LabViewProjectTests
     {
 	    var maybeLvProj = LabViewProject.Create(GetSample(), "LabViewProject");
 		var lvproj = maybeLvProj.Value;
-		List<LabViewBuildSpec> buildSpecs = lvproj.BuildSpecifications;
+		List<IBuildSpec> buildSpecs = lvproj.BuildSpecifications;
 		
     }
 

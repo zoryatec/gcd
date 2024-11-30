@@ -8,8 +8,7 @@ public class LabViewProject
 {
     public string Path { get; }
     public string Content { get => _xmlDocument.OuterXml; }
-    private readonly List<LabViewBuildSpec> _buildSpecifications;
-    private List<LabViewBuildSpec> _buildSpecsCopy;
+    private readonly List<IBuildSpec> _buildSpecifications;
     private XmlDocument _xmlDocument;
 
     public static Result<LabViewProject> Create(string projectContent, string projectPath)
@@ -25,19 +24,17 @@ public class LabViewProject
 
         XmlNode buildSpecsNode = _xmlDocument.SelectSingleNode("//Item[@Name='Build Specifications' and @Type='Build']");
 
-        _buildSpecifications = new List<LabViewBuildSpec>();
+        _buildSpecifications = new List<IBuildSpec>();
         // Extract and print all build specification names
+        var buildSpecFactory = new BuildSpecFactory();
         foreach (XmlNode item in buildSpecsNode.SelectNodes("Item"))
         {
-            string innerText = item.InnerText;
-            var buildSpec = LabViewBuildSpec.Create(item);
-            string name = buildSpec.GetName();
-            string type = buildSpec.GetType();
-            _buildSpecifications.Add(buildSpec);
+            var buildSpec = buildSpecFactory.Create(item);
+            _buildSpecifications.Add(buildSpec.Value);
         }
     }
 
-    public List<LabViewBuildSpec> BuildSpecifications
+    public List<IBuildSpec> BuildSpecifications
     {
         get => _buildSpecifications;
     }

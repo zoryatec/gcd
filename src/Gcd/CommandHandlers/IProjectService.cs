@@ -1,3 +1,5 @@
+using Gcd.Handlers;
+
 namespace Gcd.CommandHandlers;
 
 public interface IProjectService
