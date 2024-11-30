@@ -2,7 +2,7 @@ using System.Xml;
 
 namespace Gcd.LabViewProject;
 
-public class BuildSpecPackage
+public class BuildSpecPackage : IBuildSpec
 {
     private readonly XmlNode _node;
 

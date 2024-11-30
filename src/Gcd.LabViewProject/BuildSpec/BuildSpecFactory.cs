@@ -11,12 +11,12 @@ public class BuildSpecFactory
 
         switch (type)
         {
-            case "Exe":
+            case "EXE":
                 return BuildSpecExe.Create(specNode);
             case "Packed Library":
-                return BuildSpecExe.Create(specNode);
+                return BuildSpecPackedLibrary.Create(specNode);
             case "{E661DAE2-7517-431F-AC41-30807A3BDA38}":
-                return BuildSpecExe.Create(specNode);
+                return BuildSpecPackage.Create(specNode);
             default:
                 return BuildSpec.Create(specNode);
         }
