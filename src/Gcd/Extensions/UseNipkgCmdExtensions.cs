@@ -73,7 +73,7 @@ namespace Gcd.Extensions
         public static CommandLineApplication UseTemplatedCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
         {
             var console = serviceProvider.GetRequiredService<IConsole>();
-            app.Command("template", template =>
+            app.Command("package-builder", template =>
             {
                 template.OnExecute(() =>
                 {
@@ -81,13 +81,14 @@ namespace Gcd.Extensions
                     template.ShowHelp();
                     return 1;
                 });
-                template.UseTemplatedCreateCmd(serviceProvider);
+                template.UsePackageBuilderCreateCmd(serviceProvider);
+                template.UsePackageBuilderSetVersionCmd(serviceProvider);
             });
 
             return app;
         }
 
-        public static CommandLineApplication UseTemplatedCreateCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+        public static CommandLineApplication UsePackageBuilderCreateCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
         {
             var console = serviceProvider.GetRequiredService<IConsole>();
             var mediator = serviceProvider.GetRequiredService<IMediator>();
@@ -106,6 +107,30 @@ namespace Gcd.Extensions
                 create.OnExecute(async () =>
                 {
                     var request = new TemplateCreateRequest(packagePath.Value(), packageName.Value(), packageVersion.Value(), packageDestinationDir.Value());
+                    var response = await mediator.Send(request);
+                    console.WriteLine(response.result);
+                });
+            });
+
+            return app;
+        }
+
+        public static CommandLineApplication UsePackageBuilderSetVersionCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+        {
+            var console = serviceProvider.GetRequiredService<IConsole>();
+            var mediator = serviceProvider.GetRequiredService<IMediator>();
+            app.Command("set-version", create =>
+            {
+                create.Description = "Create package template";
+                var packagePath = create.Option("--package-path", "Directory where package will be created", CommandOptionType.SingleValue)
+                    .IsRequired();
+                var packageVersion = create.Option("--package-version", "Package version.", CommandOptionType.SingleValue)
+                    .IsRequired();
+
+
+                create.OnExecute(async () =>
+                {
+                    var request = new PackageBuilderSetVersionRequest(packagePath.Value(), packageVersion.Value());
                     var response = await mediator.Send(request);
                     console.WriteLine(response.result);
                 });
