@@ -36,7 +36,7 @@ public class InstallNinpkgHandler(IMediator _mediator)
 
         //var procesName = RunProgramWithArguments(tempPath, "--quiet --accept-eulas --prevent-reboot");
         //WaitForProcessToExit(procesName);
-        string cmd = $"start /wait \"{tempPath}\" --quiet --accept-eulas --prevent-reboot";
+        string cmd = $"start /wait {tempPath} --quiet --accept-eulas --prevent-reboot";
         RunCommand(cmd);
 
 
