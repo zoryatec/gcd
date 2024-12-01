@@ -15,6 +15,22 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+
+    - name: Download gcd binary
+      uses: actions/download-artifact@v4.1.8
+      with:
+        # Name of the artifact to download. If unspecified, all artifacts for the run are downloaded.
+        name: gcd-bin
+        # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
+        path: "./gcd-bootstrap"
+
+    - name: Get Version of gcd
+      run: |
+        ./gcd-bootstrap/gcd.exe --version  
+
+    - name: Set NIPKG into path
+      run: |
+        ./gcd-bootstrap/gcd.exe system add-to-user-path --path "C:\Program Files\National Instruments\NI Package Manager"
         
     - name: Download gcd binary
       uses: actions/download-artifact@v4.1.8
