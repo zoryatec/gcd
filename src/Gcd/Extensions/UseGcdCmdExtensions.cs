@@ -18,6 +18,7 @@ public static class UseGcdCmdExtensions
         app.HelpOption(inherited: true);
         
         app.UseProjectCmd(serviceProvider);
+        app.UseNipkgCmd(serviceProvider);
         app.UseVersionizeCmd(serviceProvider);
         
         app.OnExecute(() =>

@@ -1,0 +1,76 @@
+﻿using Gcd.Handlers;
+using McMaster.Extensions.CommandLineUtils;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Gcd.Extensions
+{
+    public static class UseNipkgCmdExtensions
+    {
+        public static CommandLineApplication UseNipkgCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+        {
+            var console = serviceProvider.GetRequiredService<IConsole>();
+
+            app.Command("nipkg", nipkg =>
+            {
+                nipkg.OnExecute(() =>
+                {
+                    console.WriteLine("Specify a subcommand");
+                    nipkg.ShowHelp();
+                    return 1;
+                });
+                nipkg.UseTemplatedCmd(serviceProvider);
+            });
+            return app;
+        }
+
+        public static CommandLineApplication UseTemplatedCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+        {
+            var console = serviceProvider.GetRequiredService<IConsole>();
+            app.Command("template", template =>
+            {
+                template.OnExecute(() =>
+                {
+                    console.WriteLine("Specify a subcommand");
+                    template.ShowHelp();
+                    return 1;
+                });
+                template.UseTemplatedCreateCmd(serviceProvider);
+            });
+
+            return app;
+        }
+
+        public static CommandLineApplication UseTemplatedCreateCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+        {
+            var console = serviceProvider.GetRequiredService<IConsole>();
+            var mediator = serviceProvider.GetRequiredService<IMediator>();
+            app.Command("create", create =>
+            {
+                create.Description = "Create package template";
+                var packagePath = create.Option("--package-path", "Directory where package will be created", CommandOptionType.SingleValue)
+                    .IsRequired();
+                var packageName = create.Option("--package-name", "Package name.", CommandOptionType.SingleValue)
+                    .IsRequired();
+                var packageVersion = create.Option("--package-version", "Package version.", CommandOptionType.SingleValue)
+                    .IsRequired();
+                var packageDestinationDir = create.Option("--package-destination-dir", "Destination dir version.", CommandOptionType.SingleValue)
+                    .IsRequired();
+
+                create.OnExecute(async () =>
+                {
+                    var request = new TemplateCreateRequest(packagePath.Value(), packageName.Value(), packageVersion.Value(), packageDestinationDir.Value());
+                    var response = await mediator.Send(request);
+                    console.WriteLine(response.result);
+                });
+            });
+
+            return app;
+        }
+    }
+}

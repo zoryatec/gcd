@@ -88,6 +88,27 @@ public  class AppTests
         // Assert
        // result.Should().Be(0);
     }
+
+    [Fact]
+    public void NipkgTemplateCreate()
+    {
+        // Arrange
+        var console = new FakeConsole();
+
+        var app = BuildTestApp(console);
+        var args = new[] { "project", "build-spec", "set-version",
+            "--package-path", "package-template",
+            "--package-name", "sample-package",
+            "--package-version", "1.0.0.1",
+            "--package-destination-dir", "BootVolume/Zoryatec/sample-package"};
+
+
+        // Act
+        // int result = app.Execute(args);
+
+        // Assert
+        // result.Should().Be(0);
+    }
     private CommandLineApplication BuildTestApp(IConsole console)
     {
 
