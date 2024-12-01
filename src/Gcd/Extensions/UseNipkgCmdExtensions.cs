@@ -25,6 +25,7 @@ namespace Gcd.Extensions
                     return 1;
                 });
                 nipkg.UseTemplatedCmd(serviceProvider);
+                nipkg.UsePackageCmd(serviceProvider);
             });
             return app;
         }
@@ -65,6 +66,50 @@ namespace Gcd.Extensions
                 create.OnExecute(async () =>
                 {
                     var request = new TemplateCreateRequest(packagePath.Value(), packageName.Value(), packageVersion.Value(), packageDestinationDir.Value());
+                    var response = await mediator.Send(request);
+                    console.WriteLine(response.result);
+                });
+            });
+
+            return app;
+        }
+
+        public static CommandLineApplication UsePackageCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+        {
+            var console = serviceProvider.GetRequiredService<IConsole>();
+            app.Command("package", template =>
+            {
+                template.OnExecute(() =>
+                {
+                    console.WriteLine("Specify a subcommand");
+                    template.ShowHelp();
+                    return 1;
+                });
+                template.UsePackageCreateCmd(serviceProvider);
+            });
+
+            return app;
+        }
+
+        public static CommandLineApplication UsePackageCreateCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+        {
+            var console = serviceProvider.GetRequiredService<IConsole>();
+            var mediator = serviceProvider.GetRequiredService<IMediator>();
+            app.Command("create", create =>
+            {
+                create.Description = "Create package template";
+                var packageSoureDir = create.Option("--package-sourec-dir", "Directory where package will be taken from", CommandOptionType.SingleValue)
+                    .IsRequired();
+                var packageName = create.Option("--package-name", "Package name.", CommandOptionType.SingleValue)
+                    .IsRequired();
+                var packageVersion = create.Option("--package-version", "Package version.", CommandOptionType.SingleValue)
+                    .IsRequired();
+                var packageDestinationDir = create.Option("--package-destination-dir", "Destination dir version.", CommandOptionType.SingleValue)
+                    .IsRequired();
+
+                create.OnExecute(async () =>
+                {
+                    var request = new PackageCreateRequest(packageSoureDir.Value(), packageName.Value(), packageVersion.Value(), packageDestinationDir.Value());
                     var response = await mediator.Send(request);
                     console.WriteLine(response.result);
                 });

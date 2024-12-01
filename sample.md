@@ -3,3 +3,10 @@
     --package-name "sample-package" `
     --package-version "1.2.3.4" `
     --package-destination-dir "BootVolume/Zoryatec/sample-package"
+
+
+.\Gcd.exe nipkg package create `
+    --package-sourec-dir "package-template" `
+    --package-name "sample-package" `
+    --package-version "1.2.3.4" `
+    --package-destination-dir "BootVolume/Zoryatec/sample-package"

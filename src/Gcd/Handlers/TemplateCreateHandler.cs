@@ -33,6 +33,10 @@ public class TemplateCreateHandler(ILabViewProjectProvider _labViewProjectProvid
         string dataDirectoryPath = Path.Combine(packageDirectoryPath, "data");
         Directory.CreateDirectory(dataDirectoryPath);
 
+        string windPath = request.PackageDestinationDir.Replace('/', '\\');
+        string destinationDirectory = Path.Combine(dataDirectoryPath, windPath);
+        Directory.CreateDirectory(destinationDirectory);
+
         string controlDirectoryPath = Path.Combine(packageDirectoryPath, "control");
         Directory.CreateDirectory(controlDirectoryPath);
 

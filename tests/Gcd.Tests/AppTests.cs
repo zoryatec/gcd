@@ -83,10 +83,12 @@ public  class AppTests
 
 
         // Act
-       // int result = app.Execute(args);
+        //int result = app.Execute(args);
 
         // Assert
-       // result.Should().Be(0);
+        var output = console.Out.ToString();
+        var error = console.Out.ToString();
+        //result.Should().Be(0);
     }
 
     [Fact]
@@ -96,7 +98,7 @@ public  class AppTests
         var console = new FakeConsole();
 
         var app = BuildTestApp(console);
-        var args = new[] { "project", "build-spec", "set-version",
+        var args = new[] { "nipkg", "template", "create",
             "--package-path", "package-template",
             "--package-name", "sample-package",
             "--package-version", "1.0.0.1",
@@ -104,10 +106,37 @@ public  class AppTests
 
 
         // Act
-        // int result = app.Execute(args);
+        int result = app.Execute(args);
 
         // Assert
-        // result.Should().Be(0);
+        var output = console.Out.ToString();
+        var error = console.Out.ToString();
+
+        result.Should().Be(0);
+    }
+
+    [Fact]
+    public void NipkgPackageCreate()
+    {
+        // Arrange
+        var console = new FakeConsole();
+
+        var app = BuildTestApp(console);
+        var args = new[] { "nipkg", "package", "create",
+            "--package-sourec-dir", "package-template",
+            "--package-name", "sample-package",
+            "--package-version", "1.0.0.1",
+            "--package-destination-dir", "BootVolume/Zoryatec/sample-package"};
+
+
+        // Act
+        int result = app.Execute(args);
+
+        // Assert
+        var output = console.Out.ToString();
+        var error = console.Out.ToString();
+
+        result.Should().Be(0);
     }
     private CommandLineApplication BuildTestApp(IConsole console)
     {
