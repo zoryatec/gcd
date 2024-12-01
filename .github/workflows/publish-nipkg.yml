@@ -82,8 +82,7 @@ jobs:
 
     - name: Check NIPKG using env path
       run: |
-          $execPath = "nipkg"
-          & "$execPath" --version
+            nipkg.exe --version
       
         
     - name: Run PowerShell script
