@@ -62,10 +62,11 @@ public class PackageCreateHandler(IMediator _mediator)
     private void RunCommand(string temporaryDirectory, string pckgDirectory)
     {
         // Initialize the ProcessStartInfo with the command
+        string nipkg = @"C:\Program Files\National Instruments\NI Package Manager\nipkg.exe";
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
             FileName = "cmd.exe",       // Use "cmd.exe" to run a command
-            Arguments = $"/c nipkg pack {temporaryDirectory} {pckgDirectory} ", // "/c" tells cmd to run the command and then terminate
+            Arguments = $"/c {nipkg} pack {temporaryDirectory} {pckgDirectory} ", // "/c" tells cmd to run the command and then terminate
             RedirectStandardOutput = true, // Redirect the output of the command
             RedirectStandardError = true,  // Redirect any errors
             UseShellExecute = false,      // Don't use the shell to execute the command
