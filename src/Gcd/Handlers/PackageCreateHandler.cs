@@ -63,6 +63,7 @@ public class PackageCreateHandler(IMediator _mediator)
     {
         // Initialize the ProcessStartInfo with the command
         string nipkg = @"C:\Program Files\National Instruments\NI Package Manager\nipkg.exe";
+        nipkg = $"\"{nipkg}\"";
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
             FileName = "cmd.exe",       // Use "cmd.exe" to run a command
