@@ -27,13 +27,17 @@ public class InstallNinpkgHandler(IMediator _mediator)
         var nipkgInstaller = "NIPackageManager21.3.0_online.exe";
         var url = $"https://download.ni.com/support/nipkg/products/ni-package-manager/installers/{nipkgInstaller}";
         var tempPath = $@"C:\Projects\{nipkgInstaller}";
+        //var tempPath = Path.Combine("C:", "Projects", nipkgInstaller);
+        //var stringPath = tempPath.ToString();
 
         if (File.Exists(tempPath)) File.Delete(tempPath);
 
         DownloadNipkg(url, tempPath);
 
-        var procesName = RunProgramWithArguments(tempPath, "--quiet --accept-eulas --prevent-reboot");
-        WaitForProcessToExit(procesName);
+        //var procesName = RunProgramWithArguments(tempPath, "--quiet --accept-eulas --prevent-reboot");
+        //WaitForProcessToExit(procesName);
+        string cmd = $"start /wait \"{tempPath}\" --quiet --accept-eulas --prevent-reboot";
+        RunCommand(cmd);
 
 
         var nipkgPath = @"C:\Program Files\National Instruments\NI Package Manager";
@@ -106,6 +110,48 @@ public class InstallNinpkgHandler(IMediator _mediator)
         }
 
         return procName;
+    }
+
+    static void RunCommand(string command)
+    {
+        // Initialize the ProcessStartInfo with the command and arguments
+        ProcessStartInfo startInfo = new ProcessStartInfo
+        {
+            FileName = "cmd.exe",         // Use "cmd.exe" to run a command
+            Arguments = command, // "/c" tells cmd to run the command and then terminate
+            RedirectStandardOutput = false,  // Redirect the output of the command
+            RedirectStandardError = false,   // Redirect any errors
+            UseShellExecute = true,       // Don't use the shell to execute the command
+            CreateNoWindow = true         // Don't create a command window
+        };
+
+        try
+        {
+            using (Process process = Process.Start(startInfo))
+            {
+                // Read the standard output and error
+
+
+                // Wait for the command to finish
+                process.WaitForExit();
+                string output = process.StandardOutput.ReadToEnd();
+                string errors = process.StandardError.ReadToEnd();
+
+                // Print the output and errors (if any)
+                Console.WriteLine("Output:");
+                Console.WriteLine(output);
+
+                if (!string.IsNullOrEmpty(errors))
+                {
+                    Console.WriteLine("Errors:");
+                    Console.WriteLine(errors);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error running command: {ex.Message}");
+        }
     }
 
 
