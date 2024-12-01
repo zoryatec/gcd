@@ -60,9 +60,20 @@ Package: {request.PackageName}
 Version: {request.PackageVersion}
 Depends: 
 ";
-
         string controlFilePath = Path.Combine(controlDirectoryPath, "control");
         File.WriteAllText(controlFilePath, controlFileContent);
+
+        var instructionFileContent =
+ @"<instructions>
+	<targetAttributes readOnly=""allWritable""/>
+    <customExecutes>
+        <customExecute root=""BootVolume"" step=""install"" schedule=""post"" exeName=""Program Files\gcd\gcd.exe system add-to-user-path --path ""C:\Program Files\gcd""/>
+    </customExecutes>
+</instructions>
+";
+        string instructionFilePath = Path.Combine(dataDirectoryPath, "instructions");
+        File.WriteAllText(instructionFilePath, instructionFileContent);
+
 
         return new TemplateCreateResponse("result");
     }
