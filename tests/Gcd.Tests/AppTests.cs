@@ -164,7 +164,9 @@ public class AppTests
             "--package-sourec-dir", "package-template",
             "--package-name", "sample-package",
             "--package-version", "1.0.0.1",
-            "--package-destination-dir", "BootVolume/Zoryatec/sample-package"};
+            "--package-instalation-dir", "BootVolume/Zoryatec/sample-package",
+            "--package-destination-dir", "publish"
+        };
 
 
         // Act

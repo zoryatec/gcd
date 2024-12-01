@@ -104,12 +104,14 @@ namespace Gcd.Extensions
                     .IsRequired();
                 var packageVersion = create.Option("--package-version", "Package version.", CommandOptionType.SingleValue)
                     .IsRequired();
+                var packageInstalationDir = create.Option("--package-instalation-dir", "Instalation dir version.", CommandOptionType.SingleValue)
+                     .IsRequired();
                 var packageDestinationDir = create.Option("--package-destination-dir", "Destination dir version.", CommandOptionType.SingleValue)
                     .IsRequired();
 
                 create.OnExecute(async () =>
                 {
-                    var request = new PackageCreateRequest(packageSoureDir.Value(), packageName.Value(), packageVersion.Value(), packageDestinationDir.Value());
+                    var request = new PackageCreateRequest(packageSoureDir.Value(), packageName.Value(), packageVersion.Value(), packageInstalationDir.Value(), packageDestinationDir.Value());
                     var response = await mediator.Send(request);
                     console.WriteLine(response.result);
                 });

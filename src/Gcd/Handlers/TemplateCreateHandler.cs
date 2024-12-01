@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Text.Json;
 using System.Xml;
@@ -29,6 +30,11 @@ public class TemplateCreateHandler(ILabViewProjectProvider _labViewProjectProvid
 
 
         Directory.CreateDirectory(packageDirectoryPath);
+
+
+        string debianbinaryFilePath = Path.Combine(packageDirectoryPath, "debian-binary");
+        File.WriteAllText(debianbinaryFilePath, "2.0");
+
 
         string dataDirectoryPath = Path.Combine(packageDirectoryPath, "data");
         Directory.CreateDirectory(dataDirectoryPath);
