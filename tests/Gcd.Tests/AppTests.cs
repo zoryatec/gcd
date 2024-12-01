@@ -185,11 +185,11 @@ public class AppTests
         // Arrange
         var console = new FakeConsole();
 
-        //var app = BuildTestApp(console);
-        //var args = new[] { "nipkg", "install-nipkg" };
+        var app = BuildTestApp(console);
+        var args = new[] { "nipkg", "install-nipkg" };
 
 
-        //// Act
+        // Act
         //int result = app.Execute(args);
 
         //// Assert

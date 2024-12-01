@@ -32,7 +32,10 @@ public class InstallNinpkgHandler(IMediator _mediator)
 
         DownloadNipkg(url, tempPath);
 
-        RunProgramWithArguments(tempPath, "--quiet --accept-eulas --prevent-reboot");
+        var procesName = RunProgramWithArguments(tempPath, "--quiet --accept-eulas --prevent-reboot");
+        WaitForProcessToExit(procesName);
+
+
         var nipkgPath = @"C:\Program Files\National Instruments\NI Package Manager";
         var requestToAddPath = new SystemAddToUserPathRequest(nipkgPath);
         var response = await _mediator.Send(requestToAddPath);
@@ -58,8 +61,10 @@ public class InstallNinpkgHandler(IMediator _mediator)
         }
     }
 
-    private void RunProgramWithArguments(string programPath, string arguments)
+    private string RunProgramWithArguments(string programPath, string arguments)
     {
+
+        string procName = "";
         try
         {
             // Initialize ProcessStartInfo to specify the program and arguments
@@ -67,21 +72,23 @@ public class InstallNinpkgHandler(IMediator _mediator)
             {
                 FileName = programPath,        // Path to the program
                 Arguments = arguments,         // Arguments to pass to the program
-                UseShellExecute = true,       // will run as current user
-                RedirectStandardOutput = true, // Redirect the output so we can capture it
-                RedirectStandardError = true,  // Redirect errors if there are any
-                CreateNoWindow = true          // Don't create a new window
+                UseShellExecute = true,       // Set to false to use the ProcessStartInfo directly
+                RedirectStandardOutput = false, // Redirect the output so we can capture it
+                RedirectStandardError = false,  // Redirect errors if there are any
+                CreateNoWindow = false          // Don't create a new window
             };
 
             // Start the process
             using (Process process = Process.Start(startInfo))
             {
                 // Capture and display output
-                string output = process.StandardOutput.ReadToEnd();
-                string errors = process.StandardError.ReadToEnd();
+
 
                 process.WaitForExit();  // Wait for the process to exit
 
+                string output = process.StandardOutput.ReadToEnd();
+                string errors = process.StandardError.ReadToEnd();
+                procName = process.ProcessName;
                 // Display the output and errors
                 Console.WriteLine("Output:");
                 Console.WriteLine(output);
@@ -96,6 +103,27 @@ public class InstallNinpkgHandler(IMediator _mediator)
         catch (Exception ex)
         {
             Console.WriteLine($"Error: {ex.Message}");
+        }
+
+        return procName;
+    }
+
+
+    static void WaitForProcessToExit(string processName)
+    {
+        while (true)
+        {
+            // Check if the process is running
+            var process = Process.GetProcessesByName(processName).FirstOrDefault();
+
+            if (process == null)
+            {
+                // Process has exited
+                break;
+            }
+
+            // Wait a bit before checking again
+            Thread.Sleep(1000); // 1 second delay
         }
     }
 }
