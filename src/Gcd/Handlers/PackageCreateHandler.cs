@@ -20,8 +20,17 @@ public class PackageCreateHandler(IMediator _mediator)
     public async Task<PackageCreateResponse> Handle(PackageCreateRequest request, CancellationToken cancellationToken)
     {
 
-        string temporaryDirectory = "C:\\Projects\\AAAATESTPKG";
-        string pckgDirectory = "C:\\Projects\\";
+        string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()); 
+        string pckgDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
+
+        if (!Directory.Exists(pckgDirectory))
+        {
+            // Delete the directory
+            Directory.CreateDirectory(pckgDirectory);
+        }
+
+
         var subRequest = new TemplateCreateRequest(temporaryDirectory, request.PackageName, request.PackageVersion, request.PackageDestinationDir);
         var subResponse = await _mediator.Send(subRequest);
 
@@ -41,7 +50,11 @@ public class PackageCreateHandler(IMediator _mediator)
 
 
         string packageDestinationFilePath = Path.Combine(packageDestinationDir, packageFileName);
-        File.Copy(packageFilePath, packageDestinationFilePath);
+        File.Copy(packageFilePath, packageDestinationFilePath,overwrite: true);
+
+        Directory.Delete(temporaryDirectory, true);
+
+        Directory.Delete(pckgDirectory, true);
 
         return new PackageCreateResponse("result");
     }
