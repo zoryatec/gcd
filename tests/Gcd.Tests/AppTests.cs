@@ -68,7 +68,26 @@ public class AppTests
         var error = console.Out.ToString();
         result.Should().Be(0);
         console.Out.ToString();
-    } 
+    }
+
+    [Fact]
+    public void SystemAddToSystemPath()
+    {
+        // Arrange
+        var console = new FakeConsole();
+
+        var app = BuildTestApp(console);
+        var args = new[] { "system", "add-to-system-path", "--path", "C:\\sample path" };
+
+        // Act
+        int result = app.Execute(args);
+
+        // Assert
+        var output = console.Out.ToString();
+        var error = console.Out.ToString();
+        result.Should().Be(0);
+        console.Out.ToString();
+    }
 
     [Fact]
     public  void ProjectTest()

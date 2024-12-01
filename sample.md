@@ -10,3 +10,9 @@
     --package-name "sample-package" `
     --package-version "1.2.3.4" `
     --package-destination-dir "BootVolume/Zoryatec/sample-package"
+
+
+.\Gcd.exe system add-to-user-path --path "C:\sample path"
+
+
+.\Gcd.exe system add-to-system-path --path "C:\sample path"
