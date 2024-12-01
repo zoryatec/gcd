@@ -67,7 +67,7 @@ Depends:
  @"<instructions>
 	<targetAttributes readOnly=""allWritable""/>
     <customExecutes>
-        <customExecute root=""BootVolume"" step=""install"" schedule=""post"" exeName=""Program Files\gcd\gcd.exe system add-to-user-path --path ""C:\Program Files\gcd""/>
+        <customExecute root=""BootVolume"" step=""install"" schedule=""post"" exeName=""Program Files\gcd\gcd.exe"" arguments=""system add-to-user-path --path C:\PROGRA~1\gcd"" />
     </customExecutes>
 </instructions>
 ";
