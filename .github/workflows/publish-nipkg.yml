@@ -39,41 +39,7 @@ jobs:
         name: gcd-bin
         # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
         path: "./package/data/BootVolume/Program Files/gcd"
-           
-    - name: Make PATH change permanent (for subsequent steps)
-      shell: pwsh
-      run: |
-        # Define the path to add
-        $newPath = "C:\Program Files\National Instruments\NI Package Manager\"
-        $currentUserPath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
-        $currentMachinePath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::Machine)
-
-        
-        # Add the new path to the current PATH
-        $updatedUserPath = "$currentUserPath;$newPath"
-        $updatedMachinePath = "$currentMachinePath;$newPath"
-        $env:PATH = "$env:PATH;$newPath"
-        
-        # Add the new path to the user-level PATH variable
-        [System.Environment]::SetEnvironmentVariable("PATH", $updatedUserPath, [System.EnvironmentVariableTarget]::User)
-        [System.Environment]::SetEnvironmentVariable("PATH", $updatedMachinePath, [System.EnvironmentVariableTarget]::Machine)
-        
-        # Optionally verify the update
-        Write-Host "user-level PATH updated: $updatedUserPath"
-        Write-Host "machine-level PATH updated: $updatedMachinePath"
-        Write-Host "env:Path PATH updated: $env:PATH"
-
-    - name: Check paths
-      shell: pwsh
-      run: |
-        # Check paths
-        $currentUserPath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
-        $currentMachinePath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::Machine)
-        
-        Write-Host "user-level PATH current: $currentUserPath"
-        Write-Host "machine-level PATH current: $currentMachinePath"
-        Write-Host "env:Path PATH current: $env:PATH"
-        
+               
     - name: Run PowerShell script
       shell: pwsh  
       run: |
@@ -88,23 +54,6 @@ jobs:
     - name: Check dir
       run: dir
       
-    - name: Make PATH change permanent (for subsequent steps)
-      shell: pwsh
-      run: |
-        # Define the path to add
-        $newPath = "C:\Program Files\National Instruments\NI Package Manager\"
-        $currentPath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
-
-        # Add the new path to the current PATH
-        $updatedPath = "$currentPath;$newPath"
-        
-        # Add the new path to the user-level PATH variable
-        [System.Environment]::SetEnvironmentVariable("PATH", $updatedPath, [System.EnvironmentVariableTarget]::User)
-        
-        # Optionally verify the update
-        Write-Host "User-level PATH updated: $updatedPath"
-        Write-Host "User-level PATH updated: $env:PATH"
-
 
     - name: Run Command Prompt command
       shell: cmd
@@ -118,42 +67,18 @@ jobs:
         Start-Sleep -Seconds 240  # PowerShell sleep for 240 seconds
       
       
-    - name: Check dir
+    - name: Check NIPKG instalation dir
       run: dir "C:\Program Files\National Instruments\NI Package Manager"
       
-    - name: Make PATH change permanent (for subsequent steps)
-      shell: pwsh
-      run: |
-        # Define the path to add
-        $newPath = "C:\Program Files\National Instruments\NI Package Manager\"
-        $currentPath = [System.Environment]::GetEnvironmentVariable("PATH", [System.EnvironmentVariableTarget]::User)
-
-        # Add the new path to the current PATH
-        $updatedPath = "$currentPath;$newPath"
-        
-        # Add the new path to the user-level PATH variable
-        [System.Environment]::SetEnvironmentVariable("PATH", $updatedPath, [System.EnvironmentVariableTarget]::User)
-        
-        # Optionally verify the update
-        Write-Host "User-level PATH updated: $updatedPath"
-        Write-Host "User-level PATH updated: $env:PATH"
-        
-
-    - name: Run Command from New PATH Directory
-      shell: pwsh
-      run: |
-        # Running a command that should now work with the new PATH
-        Write-Host "Running a command from the new PATH"
-        # For example, checking the version of a tool in C:\tools
-        if (Test-Path "$newPath\nipkg.exe") {
-          & "$newPath\nipkg.exe" --version
-        } else {
-          Write-Host "Executable not found!"
-        }
 
     - name: Check NIPKG version
       run: |
           $execPath = "C:\Program Files\National Instruments\NI Package Manager\nipkg.exe"
+          & "$execPath" --version
+
+    - name: Check NIPKG using env path
+      run: |
+          $execPath = "nipkg"
           & "$execPath" --version
       
         
