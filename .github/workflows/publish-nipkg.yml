@@ -34,7 +34,7 @@ jobs:
 
     - name: Set NIPKG into system path
       run: |
-        ./gcd-bootstrap/gcd.exe system add-to-user-path --path "C:\Program Files\National Instruments\NI Package Manager"
+        ./gcd-bootstrap/gcd.exe system add-to-system-path --path "C:\Program Files\National Instruments\NI Package Manager"
         
     - name: Download gcd binary
       uses: actions/download-artifact@v4.1.8
