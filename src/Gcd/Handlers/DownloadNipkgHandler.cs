@@ -14,7 +14,7 @@ using MediatR;
 
 namespace Gcd.Handlers;
 
-public record DownloadNipkgRequest(string DownloadDirectory) : IRequest<DownloadNipkgResponse>;
+public record DownloadNipkgRequest(string DownloadPath) : IRequest<DownloadNipkgResponse>;
 public record DownloadNipkgResponse(string Result);
 
 public class DownloadNipkgHandler(IMediator _mediator)
@@ -24,11 +24,14 @@ public class DownloadNipkgHandler(IMediator _mediator)
     {
         var nipkgInstaller = "NIPackageManager21.3.0_online.exe";
         var url = $"https://download.ni.com/support/nipkg/products/ni-package-manager/installers/{nipkgInstaller}";
-        var tempPath = $@"{request.DownloadDirectory}\nipkg-installer.exe";
 
-        if (File.Exists(tempPath)) File.Delete(tempPath);
+        string currentDirectoryPath = Environment.CurrentDirectory;
+        string packageDownloadPath = Path.Combine(currentDirectoryPath, request.DownloadPath);
 
-        DownloadNipkg(url, tempPath);
+
+        if (File.Exists(packageDownloadPath)) File.Delete(packageDownloadPath);
+
+        DownloadNipkg(url, packageDownloadPath);
 
 
         return new DownloadNipkgResponse("result");

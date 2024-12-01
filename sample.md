@@ -18,3 +18,6 @@
 .\Gcd.exe system add-to-system-path --path "C:\sample path"
 
  .\Gcd.exe system add-to-user-path --path "C:\Program Files\National Instruments\NI Package Manager"
+
+.\Gcd.exe  nipkg download-nipkg --download-path nipkg-installer.exe
+
