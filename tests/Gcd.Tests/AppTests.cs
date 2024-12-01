@@ -11,46 +11,65 @@ using Xunit.Sdk;
 
 namespace Gcd.Tests;
 
-public  class AppTests
+public class AppTests
 {
-    
-    
-    
+
+
+
     [Fact]
-    public  void VersionizeTest()
+    public void VersionizeTest()
     {
         // Arrange
         var console = new FakeConsole();
-   
+
         var app = BuildTestApp(console);
         var args = new[] { "versionize" };
-        
+
         // Act
         int result = app.Execute(args);
-        
+
         // Asssert
         result.Should().Be(0);
         console.Out.ToString().Should().Contain("versionize!!!");
     }
-    
+
     [Fact]
-    public  void VersionTest()
+    public void VersionTest()
     {
         // Arrange
         var console = new FakeConsole();
-   
+
         var app = BuildTestApp(console);
         var args = new[] { "--version" };
-        
+
         // Act
         int result = app.Execute(args);
-        
+
         // Asssert
         result.Should().Be(0);
         // does not work in test
         var output = console.Out.ToString();
     }
-    
+
+    [Fact]
+    public void SystemAddToUserPath()
+    {
+        // Arrange
+        var console = new FakeConsole();
+
+        var app = BuildTestApp(console);
+        var args = new[] { "system", "add-to-user-path","--path", "C:\\sample path" };
+
+        // Act
+        int result = app.Execute(args);
+
+        // Assert
+        var output = console.Out.ToString();
+        var error = console.Out.ToString();
+        result.Should().Be(0);
+        console.Out.ToString();
+    } 
+
     [Fact]
     public  void ProjectTest()
     {

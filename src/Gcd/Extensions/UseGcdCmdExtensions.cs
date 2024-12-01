@@ -20,7 +20,9 @@ public static class UseGcdCmdExtensions
         app.UseProjectCmd(serviceProvider);
         app.UseNipkgCmd(serviceProvider);
         app.UseVersionizeCmd(serviceProvider);
-        
+        app.UseSystemCmd(serviceProvider);
+
+
         app.OnExecute(() =>
         {
             console.WriteLine("Specify a subcommand");
