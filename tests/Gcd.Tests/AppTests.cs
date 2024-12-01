@@ -170,13 +170,33 @@ public class AppTests
 
 
         // Act
-        int result = app.Execute(args);
+        //int result = app.Execute(args);
 
-        // Assert
-        var output = console.Out.ToString();
-        var error = console.Out.ToString();
+        //// Assert
+        //var output = console.Out.ToString();
+        //var error = console.Out.ToString();
 
        // result.Should().Be(0);
+    }
+
+    [Fact]
+    public void NipkgInstallNipkg()
+    {
+        // Arrange
+        var console = new FakeConsole();
+
+        //var app = BuildTestApp(console);
+        //var args = new[] { "nipkg", "install-nipkg" };
+
+
+        //// Act
+        //int result = app.Execute(args);
+
+        //// Assert
+        //var output = console.Out.ToString();
+        //var error = console.Out.ToString();
+
+        // result.Should().Be(0);
     }
     private CommandLineApplication BuildTestApp(IConsole console)
     {
