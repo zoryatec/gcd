@@ -80,9 +80,9 @@ jobs:
           $execPath = "C:\Program Files\National Instruments\NI Package Manager\nipkg.exe"
           & "$execPath" --version
 
-    - name: Check NIPKG using env path
-      run: |
-            nipkg.exe --version
+    # - name: Check NIPKG using env path
+    #   run: |
+    #         nipkg.exe --version
       
         
     - name: Run PowerShell script
