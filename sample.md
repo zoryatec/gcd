@@ -1,4 +1,4 @@
-.\Gcd.exe nipkg template create `
+.\Gcd.exe nipkg package-builder create `
     --package-path "package-template" `
     --package-name "sample-package" `
     --package-version "1.2.3.4" `
@@ -9,7 +9,9 @@
     --package-sourec-dir "package-template" `
     --package-name "sample-package" `
     --package-version "1.2.3.4" `
+    --package-instalation-dir "BootVolume/Zoryatec/sample-package" `
     --package-destination-dir "BootVolume/Zoryatec/sample-package"
+
 
 
 .\Gcd.exe system add-to-user-path --path "C:\sample path"
