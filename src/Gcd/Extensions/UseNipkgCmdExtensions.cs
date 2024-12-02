@@ -28,6 +28,7 @@ namespace Gcd.Extensions
                 nipkg.UseDownloadlNipkg(serviceProvider);
                 nipkg.UseTemplatedCmd(serviceProvider);
                 nipkg.UsePackageCmd(serviceProvider);
+                nipkg.UseNIPKGAddPackageToAzureBlobFeed(serviceProvider);
             });
             return app;
         }
@@ -43,6 +44,27 @@ namespace Gcd.Extensions
                     var request = new InstallNinpkgRequest();
                     var response = await mediator.Send(request);
                     console.WriteLine(response.result);
+                });
+
+            });
+
+            return app;
+        }
+
+        public static CommandLineApplication UseNIPKGAddPackageToAzureBlobFeed(this CommandLineApplication app, IServiceProvider serviceProvider)
+        {
+            var console = serviceProvider.GetRequiredService<IConsole>();
+            var mediator = serviceProvider.GetRequiredService<IMediator>();
+            app.Command("add-package-blob-feed", subCmd =>
+            {
+                subCmd.Description = "Create package template";
+                var packagePath = subCmd.Option("--package-path", "File path must en", CommandOptionType.SingleValue).IsRequired();
+                var feedUrl = subCmd.Option("--feed-url", "File path must en", CommandOptionType.SingleValue).IsRequired();
+                subCmd.OnExecute(async () =>
+                {
+                    var request = new AddPackageToFeedRequest(feedUrl.Value(), packagePath.Value());
+                    var response = await mediator.Send(request);
+                    console.WriteLine(response.Result);
                 });
 
             });

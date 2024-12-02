@@ -34,6 +34,28 @@ public class AppTests
     }
 
     [Fact]
+    public void AddBlobTestTest()
+    {
+        // Arrange
+        var console = new FakeConsole();
+
+        var app = BuildTestApp(console);
+        var args = new[] { "nipkg", "add-package-blob-feed",
+            "--package-path", "C:\\Projects\\gcd_0.5.0.123_windows_x64.nipkg",
+            "--feed-url", ""
+        };
+
+
+        // Act
+        //int result = app.Execute(args);
+
+        //// Assert
+        //var output = console.Out.ToString();
+        //var error = console.Out.ToString();
+        //result.Should().Be(0);
+    }
+
+    [Fact]
     public void VersionTest()
     {
         // Arrange
