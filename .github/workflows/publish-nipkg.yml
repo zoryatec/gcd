@@ -84,33 +84,9 @@ jobs:
         --package-instalation-dir "BootVolume/Program Files/gcd" `
         --package-destination-dir "package"
 
+    - name: Publish NIPKG package
+      run:  |
+        ./gcd-bootstrap/gcd.exe nipkg add-package-blob-feed `
+        --package-path "./feed/gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" `
+        --feed-url "https://zoryatecartifacts.blob.core.windows.net/gcd-feed?${{ secrets.SAS_TOKEN }}"
 
-    - name: Upload NIPKG
-      uses: actions/upload-artifact@v3
-      with:
-        name: gcd-nipkg
-        path: ./package # Path to the published output director
-
-    - name: Publish PKG
-      shell: pwsh  
-      run: |
-        ./publish-nipkg.ps1
-
-    - name: Upload NIPKG feed
-      uses: actions/upload-artifact@v3
-      with:
-        name: gcd-nipkg-feed
-        path: ./feed # Path to the published output director
-        
-    - name: Delaty to finish operations
-      shell: pwsh  # PowerShell shell
-      run: |
-        Write-Host "Waiting for 60 seconds..."
-        Start-Sleep -Seconds 60 
-        
-    - name: Publish to blob storage
-      run: |
-            azcopy copy "./feed/Packages" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages?${{ secrets.SAS_TOKEN }}"--overwrite=true
-            azcopy copy "./feed/Packages.gz" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.gz?${{ secrets.SAS_TOKEN }}"--overwrite=true
-            azcopy copy "./feed/Packages.stamps" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/Packages.stamps?${{ secrets.SAS_TOKEN }}"--overwrite=true 
-            azcopy copy "./feed/gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" "https://zoryatecartifacts.blob.core.windows.net/gcd-feed/gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg?${{ secrets.SAS_TOKEN }}"--overwrite=true
