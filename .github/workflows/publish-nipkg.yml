@@ -75,13 +75,13 @@ jobs:
     #         nipkg.exe --version
       
         
-    - name: Run PowerShell script
+    - name: Build NIPKG package
       run:  |
         ./gcd-bootstrap/gcd.exe nipkg package create `
         --package-sourec-dir "package" `
-        --package-name "sample-package" `
+        --package-name "gcd" `
         --package-version "0.5.0-${{github.run_number}}" `
-        --package-instalation-dir "BootVolume/Zoryatec/sample-package" `
+        --package-instalation-dir "BootVolume/Program Files/gcd" `
         --package-destination-dir "package"
 
 
