@@ -87,6 +87,6 @@ jobs:
     - name: Publish NIPKG package
       run:  |
         ./gcd-bootstrap/gcd.exe nipkg add-package-blob-feed `
-        --package-path "./feed/gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" `
+        --package-path "./package/gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" `
         --feed-url "https://zoryatecartifacts.blob.core.windows.net/gcd-feed?${{ secrets.SAS_TOKEN }}"
 
