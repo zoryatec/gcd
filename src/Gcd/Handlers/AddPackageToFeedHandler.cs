@@ -35,8 +35,9 @@ public class AddPackageToFeedHandler(IMediator mediator)
         var downloadResult = await mediator.Send(downloadReq);
 
         File.Copy(request.PathToPackage, packageDestinationPath, true);
+        Console.WriteLine("Package copied to temp feed:");
         AddPackageToLcalFeed(localFeedPath, packageDestinationPath);
-
+        Console.WriteLine("Package added to temp feed:");
 
         Uri uri = new Uri(request.FeedUri);
         string feedBaseUr = uri.GetLeftPart(UriPartial.Path);
