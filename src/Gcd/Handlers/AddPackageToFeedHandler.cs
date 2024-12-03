@@ -40,7 +40,7 @@ public class AddPackageToFeedHandler(IMediator mediator)
         File.Copy(request.PathToPackage, packageDestinationPath, true);
         Console.WriteLine("Package copied to temp feed:");
 
-        var relativePackagePath = Path.Combine(tempPckDirName, packageName);
+        var relativePackagePath = $".\\{tempPckDirName}\\{packageName}";
         AddPackageToLcalFeed(localFeedPath, relativePackagePath);
         Console.WriteLine("Package added to temp feed:");
 
@@ -49,14 +49,14 @@ public class AddPackageToFeedHandler(IMediator mediator)
         string queryString = uri.Query;
 
         string packageUrl = CreateSubUrl(feedBaseUr, "Packages", queryString);
-        await Upload(packageUrl, Path.Combine(localFeedPath, "Packages"));
+        await Upload(packageUrl, $"{localFeedPath}\\Packages");
         string packageGzUrl = CreateSubUrl(feedBaseUr, "Packages.gz", queryString);
-        await Upload(packageGzUrl, Path.Combine(localFeedPath, "Packages.gz"));
+        await Upload(packageGzUrl, $"{localFeedPath}\\Packages.gz");
         string packageStampsUrl = CreateSubUrl(feedBaseUr, "Packages.stamps", queryString);
-        await Upload(packageStampsUrl, Path.Combine(localFeedPath, "Packages.stamps"));
+        await Upload(packageStampsUrl, $"{localFeedPath}\\Packages.stamps");
 
         string nipkgUrl = CreateSubUrl(feedBaseUr, packageName, queryString);
-        await Upload(nipkgUrl, Path.Combine(localFeedPath, packageName));
+        await Upload(nipkgUrl, $"{localFeedPath}\\{packageName}");
 
         Directory.Delete(temporaryDirectory,true);
 
