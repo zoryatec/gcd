@@ -89,6 +89,11 @@ jobs:
       with:
         name: gcd-pckg-temp
         path: "package"
+        
+    - name: Publish NIPKG package
+      run:  |
+        mkdir tempfeed `
+        copy "package\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" "tempfeed\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg"
 
     - name: Publish NIPKG package
       run:  |
