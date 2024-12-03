@@ -37,9 +37,9 @@ public class  DownloadFeedMetadataHandler()
         string packageUrl = CreateSubUrl(feedBaseUr, "Packages", queryString);
         DownloadFile(packageUrl, Path.Combine(request.FeedLocalDir, "Packages"));
         string packageGzUrl = CreateSubUrl(feedBaseUr, "Packages.gz", queryString);
-        DownloadFile(packageUrl, Path.Combine(request.FeedLocalDir, "Packages.gz"));
+        DownloadFile(packageGzUrl, Path.Combine(request.FeedLocalDir, "Packages.gz"));
         string packageStampsUrl = CreateSubUrl(feedBaseUr, "Packages.stamps", queryString);
-        DownloadFile(packageUrl, Path.Combine(request.FeedLocalDir, "Packages.stamps"));
+        DownloadFile(packageStampsUrl, Path.Combine(request.FeedLocalDir, "Packages.stamps"));
 
 
 
