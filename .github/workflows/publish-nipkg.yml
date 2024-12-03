@@ -24,11 +24,6 @@ jobs:
         # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
         path: "./gcd-bootstrap"
 
-    - name: Use PowerShell
-      shell: pwsh
-      run: |
-        Write-Host "Current directory is $PWD"
-        Write-Host "Repository root is $env:GITHUB_WORKSPACE"
         
     - name: Get Version of gcd
       run: |
