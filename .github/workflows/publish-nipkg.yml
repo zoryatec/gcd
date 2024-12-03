@@ -89,4 +89,12 @@ jobs:
         ./gcd-bootstrap/gcd.exe nipkg add-package-blob-feed `
         --package-path "${{ github.workspace }}\package\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" `
         --feed-url "https://zoryatecartifacts.blob.core.windows.net/gcd-feed?${{ secrets.SAS_TOKEN }}"
+        
+    - name: Upload feed
+      uses: actions/upload-artifact@v4.4.3
+      with:
+        name: gcd-feed-temp
+        path: "C:\\tempfeed"
+
+
 
