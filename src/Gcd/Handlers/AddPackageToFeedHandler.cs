@@ -25,7 +25,8 @@ public class AddPackageToFeedHandler(IMediator mediator)
 {
     public async Task<AddPackageToFeedResponse> Handle(AddPackageToFeedRequest request, CancellationToken cancellationToken)
     {
-        string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        //string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        var temporaryDirectory = "C:\\tempfeed";
         var localFeedPath = temporaryDirectory;
         var downloadReq = new DownloadFeedMetadataRequest(request.FeedUri, localFeedPath);
         string packageName = System.IO.Path.GetFileName(request.PathToPackage);
