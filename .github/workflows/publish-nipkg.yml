@@ -88,12 +88,12 @@ jobs:
       uses: actions/upload-artifact@v4.4.3
       with:
         name: gcd-pckg-temp
-        path: "package"
+        path: "${{github.workspace }}\\package"
         
     - name: Copy package
       run:  |
-        mkdir tempFeed 
-        copy "package\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" "tempFeed\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg"
+        mkdir {{github.workspace }}\tempFeed 
+        copy "{{github.workspace }}\\package\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" "{{github.workspace }}\\tempFeed\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg"
 
     - name: Publish NIPKG package
       run:  |
