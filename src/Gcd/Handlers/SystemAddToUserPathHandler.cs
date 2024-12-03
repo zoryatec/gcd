@@ -12,16 +12,15 @@ using MediatR;
 
 namespace Gcd.Handlers;
 
-public record SystemAddToUserPathRequest(string PathToAdd) : IRequest<SystemAddToUserPathResponse>;
-public record SystemAddToUserPathResponse(string Result);
+public record SystemAddToUserPathRequest(string PathToAdd) : IRequest<Result>;
+
 
 public class SystemAddToUserPathHandler()
-    : IRequestHandler<SystemAddToUserPathRequest, SystemAddToUserPathResponse>
+    : IRequestHandler<SystemAddToUserPathRequest, Result>
 {
-    public async Task<SystemAddToUserPathResponse> Handle(SystemAddToUserPathRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(SystemAddToUserPathRequest request, CancellationToken cancellationToken)
     {
         string newPath = request.PathToAdd;
-        string result = "";
 
         // Get the current user's PATH environment variable
         string currentPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User);
@@ -35,14 +34,12 @@ public class SystemAddToUserPathHandler()
             // Set the new PATH value for the user (this affects the current user only)
             Environment.SetEnvironmentVariable("PATH", updatedPath, EnvironmentVariableTarget.User);
 
-            result = $"Added to PATH: {newPath}";
+            return Result.Success();
         }
         else
         {
-            result = $"Path {newPath} already exists in PATH.";
+            return Result.Failure($"Path {newPath} already exists in PATH.");
         }
-
-        return new SystemAddToUserPathResponse(result);
     }
 }
 

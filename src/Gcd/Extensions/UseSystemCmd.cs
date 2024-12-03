@@ -1,4 +1,6 @@
-﻿using Gcd.CommandHandlers;
+﻿using CSharpFunctionalExtensions;
+using CSharpFunctionalExtensions.ValueTasks;
+using Gcd.CommandHandlers;
 using Gcd.Handlers;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
@@ -35,30 +37,19 @@ public static class UseSystemExtensions
         {
             addToUserPath.Description = "adds to user path";
 
-            var pathToAdd = addToUserPath.Option("--path", "Path to be added to user path enviromental variable",CommandOptionType.SingleValue).IsRequired();
-            addToUserPath.OnExecute(async () =>
+            var pathToAdd = addToUserPath.Argument("path", "Path to be added to user path enviromental variable").IsRequired();
+
+            addToUserPath.OnExecuteAsync( async cancelationToken =>
             {
-                console.WriteLine(pathToAdd.Value());
-                string newPath = pathToAdd.Value(); 
+                string newPath = pathToAdd.Value;
 
-                // Get the current user's PATH environment variable
-                string currentPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User);
+                var requestToAddPath = new SystemAddToUserPathRequest(newPath);
+                var response = await mediator.Send(requestToAddPath);
 
-                // Check if the new path is already in the PATH to avoid duplicates
-                if (!currentPath.Contains(newPath))
-                {
-                    // Add the new path to the user's PATH
-                    string updatedPath = currentPath + ";" + newPath;
-
-                    // Set the new PATH value for the user (this affects the current user only)
-                    Environment.SetEnvironmentVariable("PATH", updatedPath, EnvironmentVariableTarget.User);
-
-                    console.WriteLine($"Added to PATH: {newPath}");
-                }
-                else
-                {
-                    console.WriteLine($"Path {newPath} already exists in PATH.");
-                }
+                return response
+                    .Tap(() => console.Write("Path added sucessfully"))
+                    .TapError(error => console.Error.Write(error))
+                    .Finally(x => x.IsFailure ? 1: 0);
             });
         });
         return app;

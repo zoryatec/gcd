@@ -45,7 +45,7 @@ public class InstallNinpkgHandler(IMediator _mediator)
         var response = await _mediator.Send(requestToAddPath);
 
 
-        return new InstallNinpkgResponse(response.Result);
+        return new InstallNinpkgResponse("");
     }
 
     private void DownloadNipkg(string fileUrl, string downloadPath)
