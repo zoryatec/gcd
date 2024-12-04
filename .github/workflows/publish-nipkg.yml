@@ -31,7 +31,7 @@ jobs:
 
     - name: Set NIPKG into user path
       run: |
-        ./gcd-bootstrap/gcd.exe system add-to-user-path --path "C:\Program Files\National Instruments\NI Package Manager"
+        ./gcd-bootstrap/gcd.exe system add-to-user-path "C:\Program Files\National Instruments\NI Package Manager"
 
     - name: Set NIPKG into system path
       run: |
