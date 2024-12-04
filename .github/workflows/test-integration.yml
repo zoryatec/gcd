@@ -9,6 +9,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Download gcd binary
+        uses: actions/download-artifact@v4.1.8
+        with:
+          # Name of the artifact to download. If unspecified, all artifacts for the run are downloaded.
+          name: gcd-bin
+          # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
+          path: "./gcd-bin"
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
