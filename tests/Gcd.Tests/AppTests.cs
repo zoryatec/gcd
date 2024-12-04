@@ -13,6 +13,11 @@ namespace Gcd.Tests;
 
 public class AppTests
 {
+    IGcdProcess _gcd;
+    public AppTests()
+    {
+        _gcd = new GcdProcessApp();
+    }
 
 
 
@@ -59,18 +64,14 @@ public class AppTests
     public void VersionTest()
     {
         // Arrange
-        var console = new FakeConsole();
-
-        var app = BuildTestApp(console);
-        var args = new[] { "--version" };
+        var args = new [] { "--version" };
 
         // Act
-        int result = app.Execute(args);
+        var result = _gcd.Run(args);
 
         // Asssert
-        result.Should().Be(0);
-        // does not work in test
-        var output = console.Out.ToString();
+        result.Return.Should().Be(0);
+        result.Error.Should().BeEmpty();
     }
 
     [Fact]

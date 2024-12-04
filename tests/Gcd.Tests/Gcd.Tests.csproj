@@ -9,6 +9,7 @@
         <IsTestProject>true</IsTestProject>
         <RootNamespace>Gcd.Tests</RootNamespace>
         <AssemblyVersion>1.2.3.4</AssemblyVersion>
+        <FileVersion>4.3.2.1</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
