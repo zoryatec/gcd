@@ -46,5 +46,20 @@ namespace Gcd.Tests.EndToEnd
             result.Error.Should().BeEmpty();
         }
 
+        [Fact]
+        public void ProjectListBuildSpecList_ShouldReturnCorrectList_WhenValidProjectSpecified()
+        {
+            // Arrange
+            var args = new[] { "project", "build-spec", "list", "--project-path", "sample.lvproj" };
+
+            // Act
+            var result = _gcd.Run(args);
+
+            // Asssert
+            result.Return.Should().Be(0);
+            result.Error.Should().BeEmpty();
+            result.Out.ToString().Should().Contain("[{\"Name\":\"My Packed Library\",\"Type\":\"Packed Library\",\"Target\":\"target\",\"Version\":\"version\"},{\"Name\":\"sample application\",\"Type\":\"EXE\",\"Target\":\"target\",\"Version\":\"1.0.0.1\"},{\"Name\":\"Sample Package\",\"Type\":\"{E661DAE2-7517-431F-AC41-30807A3BDA38}\",\"Target\":\"target\",\"Version\":\"version\"}]");
+        }
+
     }
 }
