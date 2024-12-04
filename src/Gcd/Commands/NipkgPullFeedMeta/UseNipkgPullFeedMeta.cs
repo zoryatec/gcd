@@ -19,8 +19,8 @@ namespace Gcd.Commands.NipkgDownloadFeedMetaData
 
             app.Command("pull-feed-meta", subCmd =>
             {
-                var feedPath = subCmd.Option("--feed-path", "Path to local directory with feed", CommandOptionType.SingleValue).IsRequired();
-                var feedUrl = subCmd.Option("--feed-url", "Link to remote feed", CommandOptionType.SingleValue).IsRequired();
+                var feedPath = subCmd.Option("--feed-local-path", "Path to local directory with feed", CommandOptionType.SingleValue).IsRequired();
+                var feedUrl = subCmd.Option("--feed-uri", "Link to remote feed", CommandOptionType.SingleValue).IsRequired();
                 subCmd.OnExecute(async () =>
                 {
                     var request = new DownloadFeedMetadataRequest(feedUrl.Value(), feedPath.Value());

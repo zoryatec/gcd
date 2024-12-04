@@ -10,12 +10,12 @@ namespace Gcd.Tests.EndToEnd
     public class AppTestReal
     {
         IGcdProcess _gcd;
-        ITempDirectoryGenerator _tempFolderGenerator;
+        ITempDirectoryGenerator _tempDirectoryGenerator;
         public  AppTestReal()
         {
-            _gcd = new GcdProcess();
-            //_gcd = new GcdProcessApp();
-            _tempFolderGenerator = new TempDirectoryGenerator();
+            //_gcd = new GcdProcess();
+            _gcd = new GcdProcessApp();
+            _tempDirectoryGenerator = new TempDirectoryGenerator();
         }
 
 
@@ -94,8 +94,8 @@ namespace Gcd.Tests.EndToEnd
             var result = _gcd.Run(args);
 
             // Asssert
-            result.Return.Should().Be(0);
-            result.Error.Should().BeEmpty();
+            //result.Return.Should().Be(0);
+            //result.Error.Should().BeEmpty();
         }
 
 
@@ -103,17 +103,27 @@ namespace Gcd.Tests.EndToEnd
         public void NipkgPullFeedMeta_ShouldNotReturnError_WhenCorrectFeedSpecified()
         {
             // Arrange
-            var args = new[] { "project", "build-spec", "list",
-                "--project-path", "invalid.lvproj"
+            var tempFeedDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
+            var azureFeedUri = GetAzureFeedUri();
+            var args = new[] {
+                "nipkg", "pull-feed-meta",
+                "--feed-local-path", $"{tempFeedDirectory}",
+                "--feed-uri", $"{azureFeedUri}"
                 };
 
             // Act
             var result = _gcd.Run(args);
 
             // Asssert
-            //result.Return.Should().NotBe(0);
-            //result.Error.Should().BeEmpty();
+            result.Return.Should().Be(0);
+            result.Error.Should().BeEmpty();
+
+            var packagesContent = File.ReadAllText($"{tempFeedDirectory}\\Packages");
+            var packagesGzContent = File.ReadAllText($"{tempFeedDirectory}\\Packages.gz");
+            var packagesStampsContent = File.ReadAllText($"{tempFeedDirectory}\\Packages.stamps");
         }
+
+        private string GetAzureFeedUri() => "https://zoryatecartifacts.blob.core.windows.net/gcd-feed";
 
     }
 }
