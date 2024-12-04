@@ -11,6 +11,7 @@ using System.Xml;
 using Azure.Storage.Blobs;
 using CSharpFunctionalExtensions;
 using Gcd.CommandHandlers;
+using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;

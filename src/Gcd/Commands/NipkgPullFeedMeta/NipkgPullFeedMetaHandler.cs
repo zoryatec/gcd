@@ -12,15 +12,15 @@ using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
-namespace Gcd.Handlers;
+namespace Gcd.Commands.NipkgDownloadFeedMetaData;
 
-public record  DownloadFeedMetadataRequest(string FeedUrl, string FeedLocalDir) : IRequest< DownloadFeedMetadataResponse>;
-public record  DownloadFeedMetadataResponse(string Result);
+public record DownloadFeedMetadataRequest(string FeedUrl, string FeedLocalDir) : IRequest<DownloadFeedMetadataResponse>;
+public record DownloadFeedMetadataResponse(string Result);
 
-public class  DownloadFeedMetadataHandler()
-    : IRequestHandler< DownloadFeedMetadataRequest,  DownloadFeedMetadataResponse>
+public class NipkgPullFeedMetaHandler()
+    : IRequestHandler<DownloadFeedMetadataRequest, DownloadFeedMetadataResponse>
 {
-    public async Task< DownloadFeedMetadataResponse> Handle( DownloadFeedMetadataRequest request, CancellationToken cancellationToken)
+    public async Task<DownloadFeedMetadataResponse> Handle(DownloadFeedMetadataRequest request, CancellationToken cancellationToken)
     {
         Uri uri = new Uri(request.FeedUrl);
         string feedBaseUr = uri.GetLeftPart(UriPartial.Path);
@@ -44,10 +44,10 @@ public class  DownloadFeedMetadataHandler()
 
 
 
-        return new  DownloadFeedMetadataResponse("");
+        return new DownloadFeedMetadataResponse("");
     }
 
-    private string CreateSubUrl(string baseUrl,string subPath, string queryParam)
+    private string CreateSubUrl(string baseUrl, string subPath, string queryParam)
     {
         return $"{baseUrl}/{subPath}{queryParam}";
     }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Gcd.Commands.NipkgDownloadFeedMetaData;
 
 namespace Gcd.Extensions
 {
@@ -29,6 +30,7 @@ namespace Gcd.Extensions
                 nipkg.UseTemplatedCmd(serviceProvider);
                 nipkg.UsePackageCmd(serviceProvider);
                 nipkg.UseNIPKGAddPackageToAzureBlobFeed(serviceProvider);
+                nipkg.UseNipkgPullFeedMetaCmd(serviceProvider);
             });
             return app;
         }
