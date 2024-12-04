@@ -84,13 +84,11 @@ public class AppTests
         var args = new[] { "system", "add-to-user-path", "C:\\sample path1" };
 
         // Act
-        //int result = app.Execute(args);
+        //var result = _gcd.Run(args);
 
-        //// Assert
-        //var output = console.Out.ToString();
-        //var error = console.Error.ToString();
-        //result.Should().Be(0);
-        //console.Out.ToString();
+        //// Asssert
+        //result.Return.Should().Be(0);
+        //result.Error.Should().BeEmpty();
     }
 
     [Fact]

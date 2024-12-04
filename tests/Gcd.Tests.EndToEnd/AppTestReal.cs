@@ -10,9 +10,11 @@ namespace Gcd.Tests.EndToEnd
     public class AppTestReal
     {
         IGcdProcess _gcd;
+        ITempDirectoryGenerator _tempFolderGenerator;
         public  AppTestReal()
         {
             _gcd = new GcdProcess();
+            _tempFolderGenerator = new TempDirectoryGenerator();
         }
 
 
@@ -27,7 +29,21 @@ namespace Gcd.Tests.EndToEnd
 
             // Asssert
             result.Return.Should().Be(0);
-            result.Error.Should().BeEmpty("0.");
+            result.Error.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void SystemAddToUserPath()
+        {
+            // Arrange
+            var args = new[] { "system", "add-to-user-path", $"C:\\{Guid.NewGuid().ToString()}" };
+
+            // Act
+            var result = _gcd.Run(args);
+
+            // Asssert
+            result.Return.Should().Be(0);
+            result.Error.Should().BeEmpty();
         }
 
     }
