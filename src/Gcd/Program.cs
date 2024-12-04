@@ -33,8 +33,8 @@ namespace Gcd
                 });
             
             var serviceProvider = services.BuildServiceProvider();
-            
-            
+            var console = serviceProvider.GetRequiredService<IConsole>();
+
             var app = new CommandLineApplication<Program>()
             {
                 Name = "gcd",
@@ -42,8 +42,16 @@ namespace Gcd
             };
             
             app.UseGcdCmd(serviceProvider);
-            
-            return app.Execute(args);
+
+            try
+            {
+                return app.Execute(args);
+            }
+            catch (Exception ex)
+            {
+                console.Error.WriteLine($"Unhandled exception: {ex.Message}");
+                return 11; // Return a global error code
+            }
         }
         
         private void OnExecuteVersionizeCommand()
