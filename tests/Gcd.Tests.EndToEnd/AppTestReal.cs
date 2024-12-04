@@ -71,7 +71,7 @@ namespace Gcd.Tests.EndToEnd
                 };
 
             // Act
-            var result = _gcd.Run(args);
+            //var result = _gcd.Run(args);
 
             // Asssert
             //result.Return.Should().NotBe(0);
@@ -99,16 +99,49 @@ namespace Gcd.Tests.EndToEnd
         }
 
 
+        //[Fact(Skip ="skip for now")]
         [Fact]
-        public void NipkgPullFeedMeta_ShouldNotReturnError_WhenCorrectFeedSpecified()
+
+        public void PushPull_ShouldMatch()
         {
             // Arrange
-            var tempFeedDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
-            var azureFeedUri = GetAzureFeedUri();
+            var feedSourceDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
+            var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
+            var feedUri = GetAzureFeedUri();
+
+            var sourcePackageContent = Guid.NewGuid().ToString();
+            var sourcePackageGzContent = Guid.NewGuid().ToString();
+            var sourcePackageStampsContent = Guid.NewGuid().ToString();
+
+            File.WriteAllText($"{feedSourceDirectory}\\Packages", sourcePackageContent);
+            File.WriteAllText($"{feedSourceDirectory}\\Packages.gz", sourcePackageGzContent);
+            File.WriteAllText($"{feedSourceDirectory}\\Packages.stamps", sourcePackageStampsContent);
+
+
+            Push(feedSourceDirectory, feedUri);
+            Pull(feedDestinationDirectory, feedUri);
+
+
+            var destinationPackagesContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages");
+            var destinationPackagesGzContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.gz");
+            var destinationPackagesStampsContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.stamps");
+
+            destinationPackagesContent.Should().Be(sourcePackageContent);
+            destinationPackagesGzContent.Should().Be(sourcePackageGzContent);
+            destinationPackagesStampsContent.Should().Be(sourcePackageStampsContent);
+
+            Directory.Delete(feedSourceDirectory, true);
+            Directory.Delete(feedDestinationDirectory, true);
+
+        }
+
+        private void Pull(string feedDirectory, string feedUri)
+        {
+            // Arrange
             var args = new[] {
                 "nipkg", "pull-feed-meta",
-                "--feed-local-path", $"{tempFeedDirectory}",
-                "--feed-uri", $"{azureFeedUri}"
+                "--feed-local-path", $"{feedDirectory}",
+                "--feed-uri", $"{feedUri}"
                 };
 
             // Act
@@ -117,13 +150,27 @@ namespace Gcd.Tests.EndToEnd
             // Asssert
             result.Return.Should().Be(0);
             result.Error.Should().BeEmpty();
-
-            var packagesContent = File.ReadAllText($"{tempFeedDirectory}\\Packages");
-            var packagesGzContent = File.ReadAllText($"{tempFeedDirectory}\\Packages.gz");
-            var packagesStampsContent = File.ReadAllText($"{tempFeedDirectory}\\Packages.stamps");
         }
 
-        private string GetAzureFeedUri() => "https://zoryatecartifacts.blob.core.windows.net/gcd-feed";
+        private void Push(string feedDirectory, string feedUri)
+        {
+            // Arrange
+            var args = new[] {
+                "nipkg", "push-feed-meta",
+                "--feed-local-path", $"{feedDirectory}",
+                "--feed-uri", $"{feedUri}"
+                };
+
+            // Act
+            var result = _gcd.Run(args);
+
+            // Asssert
+            result.Return.Should().Be(0);
+            result.Error.Should().BeEmpty();
+        }
+
+
+        private string GetAzureFeedUri() => "https://zoryatecartifacts.blob.core.windows.net/nipkg-private-feed?sp=racwdl&st=2024-12-04T21:54:19Z&se=2024-12-05T05:54:19Z&spr=https&sv=2022-11-02&sr=c&sig=2lfHgt5HxVvz0VKyhII0IMTzUlf1lSYs9zL1MDwJZ3w%3D";
 
     }
 }

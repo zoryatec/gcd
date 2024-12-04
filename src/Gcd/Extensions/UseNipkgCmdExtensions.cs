@@ -31,6 +31,7 @@ namespace Gcd.Extensions
                 nipkg.UsePackageCmd(serviceProvider);
                 nipkg.UseNIPKGAddPackageToAzureBlobFeed(serviceProvider);
                 nipkg.UseNipkgPullFeedMetaCmd(serviceProvider);
+                nipkg.UseNipkgPushAzBlobFeedMetaCmd(serviceProvider);
             });
             return app;
         }
@@ -62,7 +63,7 @@ namespace Gcd.Extensions
                 subCmd.Description = "Create package template";
                 var packagePath = subCmd.Option("--package-path", "File path must en", CommandOptionType.SingleValue).IsRequired();
                 var feedUrl = subCmd.Option("--feed-url", "File path must en", CommandOptionType.SingleValue).IsRequired();
-                subCmd.OnExecute(async () =>
+                subCmd.OnExecuteAsync(async cancelationToken =>
                 {
                     var request = new AddPackageToFeedRequest(feedUrl.Value(), packagePath.Value());
                     var response = await mediator.Send(request);

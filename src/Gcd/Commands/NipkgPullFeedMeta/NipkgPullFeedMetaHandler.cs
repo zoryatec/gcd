@@ -14,13 +14,13 @@ using MediatR;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData;
 
-public record DownloadFeedMetadataRequest(string FeedUrl, string FeedLocalDir) : IRequest<DownloadFeedMetadataResponse>;
-public record DownloadFeedMetadataResponse(string Result);
+public record NipkgPullFeedMetaRequest(string FeedUrl, string FeedLocalDir) : IRequest<NipkgPullFeedMetaRespons>;
+public record NipkgPullFeedMetaRespons(string Result);
 
 public class NipkgPullFeedMetaHandler()
-    : IRequestHandler<DownloadFeedMetadataRequest, DownloadFeedMetadataResponse>
+    : IRequestHandler<NipkgPullFeedMetaRequest, NipkgPullFeedMetaRespons>
 {
-    public async Task<DownloadFeedMetadataResponse> Handle(DownloadFeedMetadataRequest request, CancellationToken cancellationToken)
+    public async Task<NipkgPullFeedMetaRespons> Handle(NipkgPullFeedMetaRequest request, CancellationToken cancellationToken)
     {
         Uri uri = new Uri(request.FeedUrl);
         string feedBaseUr = uri.GetLeftPart(UriPartial.Path);
@@ -44,7 +44,7 @@ public class NipkgPullFeedMetaHandler()
 
 
 
-        return new DownloadFeedMetadataResponse("");
+        return new NipkgPullFeedMetaRespons("");
     }
 
     private string CreateSubUrl(string baseUrl, string subPath, string queryParam)

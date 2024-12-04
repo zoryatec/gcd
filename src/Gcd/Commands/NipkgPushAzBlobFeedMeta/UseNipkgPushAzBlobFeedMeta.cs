@@ -10,20 +10,20 @@ using System.Threading.Tasks;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData
 {
-    public static class UseNipkgPullFeedMetaCmdExtensions
+    public static class UUseNipkgPushAzBlobFeedMetaaCmdExtensions
     {
-        public static CommandLineApplication UseNipkgPullFeedMetaCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+        public static CommandLineApplication UseNipkgPushAzBlobFeedMetaCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
         {
             var console = serviceProvider.GetRequiredService<IConsole>();
             var mediator = serviceProvider.GetRequiredService<IMediator>();
 
-            app.Command("pull-feed-meta", subCmd =>
+            app.Command("push-feed-meta", subCmd =>
             {
                 var feedPath = subCmd.Option("--feed-local-path", "Path to local directory with feed", CommandOptionType.SingleValue).IsRequired();
                 var feedUrl = subCmd.Option("--feed-uri", "Link to remote feed", CommandOptionType.SingleValue).IsRequired();
-                subCmd.OnExecute(async () =>
+                subCmd.OnExecuteAsync(async cancelationToken =>
                 {
-                    var request = new NipkgPullFeedMetaRequest(feedUrl.Value(), feedPath.Value());
+                    var request = new NipkgPushAzBlobFeedMetaRequest(feedUrl.Value(), feedPath.Value());
                     var response = await mediator.Send(request);
                     console.WriteLine(response.Result);
                 });
