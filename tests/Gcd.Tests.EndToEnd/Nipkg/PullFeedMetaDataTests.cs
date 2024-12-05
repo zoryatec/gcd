@@ -27,7 +27,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg
         {
             // Arrange
             var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
-            var feedUri = _config.GetAzurePublicFeedUri();
+            var feedUri = _config.GetAzurePullTestFeedUri();
 
             var args = (new PullFeedMetaArgBuilder())
                 .WithFeedLocalPath(feedDestinationDirectory)
@@ -44,6 +44,14 @@ namespace Gcd.Tests.EndToEnd.Nipkg
             File.Exists($"{feedDestinationDirectory}\\Packages").Should().BeTrue();
             File.Exists($"{feedDestinationDirectory}\\Packages.gz").Should().BeTrue();
             File.Exists($"{feedDestinationDirectory}\\Packages.stamps").Should().BeTrue();
+
+            var destinationPackagesContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages");
+            var destinationPackagesGzContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.gz");
+            var destinationPackagesStampsContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.stamps");
+
+            destinationPackagesContent.Should().Be("packages_content");
+            destinationPackagesGzContent.Should().Be("packages_gz_content");
+            destinationPackagesStampsContent.Should().Be("packages_stamps_content");
         }
 
         [Fact]

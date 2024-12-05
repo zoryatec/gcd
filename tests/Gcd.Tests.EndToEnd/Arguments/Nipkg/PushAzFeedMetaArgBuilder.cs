@@ -1,20 +1,20 @@
 ﻿namespace Gcd.Tests.EndToEnd.Arguments.Nipkg
 {
-    public class PullFeedMetaArgBuilder : ArgumentsBuilder
+    public class PushAzFeedMetaArgBuilder : ArgumentsBuilder
     {
-        public PullFeedMetaArgBuilder()
+        public PushAzFeedMetaArgBuilder()
         {
             WithArg("nipkg");
-            WithArg("pull-feed-meta");
+            WithArg("push-feed-meta");
         }
 
-        public PullFeedMetaArgBuilder WithFeedLocalPath(string feedLocalPath)
+        public PushAzFeedMetaArgBuilder WithFeedLocalPath(string feedLocalPath)
         {
             WithOption("--feed-local-path",feedLocalPath);
             return this;
         }
 
-        public PullFeedMetaArgBuilder WithFeedUri(string feedUri)
+        public PushAzFeedMetaArgBuilder WithFeedUri(string feedUri)
         {
             WithOption("--feed-uri", feedUri);
             return this;
