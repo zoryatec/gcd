@@ -26,10 +26,10 @@ public class AddPackageToFeedHandler(IMediator mediator)
 {
     public async Task<AddPackageToFeedResponse> Handle(AddPackageToFeedRequest request, CancellationToken cancellationToken)
     {
-        //string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         string currentDirectoryPath = Environment.CurrentDirectory;
-        string tempPckDirName = "tempFeed";
-        string temporaryDirectory = Path.Combine(currentDirectoryPath, tempPckDirName);
+        //string tempPckDirName = "tempFeed";
+        //string temporaryDirectory = Path.Combine(currentDirectoryPath, tempPckDirName);
 
         var localFeedPath = temporaryDirectory;
         var downloadReq = new NipkgPullFeedMetaRequest(request.FeedUri, localFeedPath);
@@ -41,8 +41,7 @@ public class AddPackageToFeedHandler(IMediator mediator)
         File.Copy(request.PathToPackage, packageDestinationPath, true);
         Console.WriteLine("Package copied to temp feed:");
 
-        var relativePackagePath = $".\\{tempPckDirName}\\{packageName}";
-        AddPackageToLcalFeed(localFeedPath, relativePackagePath);
+        AddPackageToLcalFeed(localFeedPath, packageDestinationPath);
         Console.WriteLine("Package added to temp feed:");
 
         Uri uri = new Uri(request.FeedUri);

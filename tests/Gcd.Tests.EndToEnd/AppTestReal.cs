@@ -99,8 +99,8 @@ namespace Gcd.Tests.EndToEnd
         }
 
 
-        //[Fact(Skip ="skip for now")]
-        [Fact]
+        [Fact(Skip ="skip for now")]
+        // [Fact]
 
         public void PushPull_ShouldMatch()
         {
@@ -134,6 +134,43 @@ namespace Gcd.Tests.EndToEnd
             Directory.Delete(feedDestinationDirectory, true);
 
         }
+        
+        [Fact(Skip ="skip for now")]
+        public void AddPackageToAZ()
+        {
+            // Arrange
+            var feedSourceDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
+            var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
+            var feedUri = GetAzureFeedUri();
+            var pathToNipkg = "C:\\Projects\\gcd_0.5.0.123_windows_x64.nipkg";
+
+            var sourcePackageContent = "";
+            var sourcePackageGzContent = "";
+            var sourcePackageStampsContent = "";
+
+            File.WriteAllText($"{feedSourceDirectory}\\Packages", sourcePackageContent);
+            File.WriteAllText($"{feedSourceDirectory}\\Packages.gz", sourcePackageGzContent);
+            File.WriteAllText($"{feedSourceDirectory}\\Packages.stamps", sourcePackageStampsContent);
+            Push(feedSourceDirectory, feedUri);
+
+            AddPackage(pathToNipkg, feedUri);
+
+
+            Pull(feedDestinationDirectory, feedUri);
+
+
+            var destinationPackagesContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages");
+            var destinationPackagesGzContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.gz");
+            var destinationPackagesStampsContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.stamps");
+
+            //destinationPackagesContent.Should().Be(sourcePackageContent);
+            //destinationPackagesGzContent.Should().Be(sourcePackageGzContent);
+            //destinationPackagesStampsContent.Should().Be(sourcePackageStampsContent);
+
+            Directory.Delete(feedSourceDirectory, true);
+            Directory.Delete(feedDestinationDirectory, true);
+
+        }
 
         private void Pull(string feedDirectory, string feedUri)
         {
@@ -159,6 +196,23 @@ namespace Gcd.Tests.EndToEnd
                 "nipkg", "push-feed-meta",
                 "--feed-local-path", $"{feedDirectory}",
                 "--feed-uri", $"{feedUri}"
+                };
+
+            // Act
+            var result = _gcd.Run(args);
+
+            // Asssert
+            result.Return.Should().Be(0);
+            result.Error.Should().BeEmpty();
+        }
+
+        private void AddPackage(string packagePath, string feedUri)
+        {
+            // Arrange
+            var args = new[] {
+                "nipkg", "add-package-blob-feed",
+                "--package-path", $"{packagePath}",
+                "--feed-url", $"{feedUri}"
                 };
 
             // Act

@@ -34,6 +34,8 @@ public class PackageCreateHandler(IMediator _mediator)
         var subRequest = new TemplateCreateRequest(temporaryDirectory, request.PackageName, request.PackageVersion, request.PackageDestinationDir);
         var subResponse = await _mediator.Send(subRequest);
 
+        var contnetDestinationPaht = $"{temporaryDirectory}\\data\\{request.InstalationDir}";
+        CopyDirectoryContents(request.PackagePath, contnetDestinationPaht);
 
         RunCommand(temporaryDirectory, pckgDirectory);
         string packageFileName = $"{request.PackageName}_{request.PackageVersion}_windows_x64.nipkg";
@@ -57,6 +59,34 @@ public class PackageCreateHandler(IMediator _mediator)
         Directory.Delete(pckgDirectory, true);
 
         return new PackageCreateResponse("result");
+    }
+
+    static void CopyDirectoryContents(string sourceDir, string destinationDir)
+    {
+        // Ensure the source directory exists
+        if (!Directory.Exists(sourceDir))
+        {
+            throw new DirectoryNotFoundException($"Source directory does not exist: {sourceDir}");
+        }
+
+        // Create the destination directory if it does not exist
+        Directory.CreateDirectory(destinationDir);
+
+        // Copy all files from source to destination
+        foreach (string file in Directory.GetFiles(sourceDir))
+        {
+            string fileName = Path.GetFileName(file);
+            string destFile = Path.Combine(destinationDir, fileName);
+            File.Copy(file, destFile, overwrite: true);
+        }
+
+        // Recursively copy all subdirectories
+        foreach (string directory in Directory.GetDirectories(sourceDir))
+        {
+            string directoryName = Path.GetFileName(directory);
+            string destDir = Path.Combine(destinationDir, directoryName);
+            CopyDirectoryContents(directory, destDir);
+        }
     }
 
     private void RunCommand(string temporaryDirectory, string pckgDirectory)
