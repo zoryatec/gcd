@@ -18,13 +18,13 @@ using MediatR;
 
 namespace Gcd.Handlers;
 
-public record AddPackageToFeedRequest( string FeedUri, string PathToPackage) : IRequest<AddPackageToFeedResponse>;
+public record AddPackageToFeedRequest( string FeedUri, string PathToPackage) : IRequest<Result<AddPackageToFeedResponse>>;
 public record AddPackageToFeedResponse(string Result);
 
 public class AddPackageToFeedHandler(IMediator mediator)
-    : IRequestHandler<AddPackageToFeedRequest, AddPackageToFeedResponse>
+    : IRequestHandler<AddPackageToFeedRequest, Result<AddPackageToFeedResponse>>
 {
-    public async Task<AddPackageToFeedResponse> Handle(AddPackageToFeedRequest request, CancellationToken cancellationToken)
+    public async Task<Result<AddPackageToFeedResponse>> Handle(AddPackageToFeedRequest request, CancellationToken cancellationToken)
     {
         string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         string currentDirectoryPath = Environment.CurrentDirectory;
@@ -49,14 +49,14 @@ public class AddPackageToFeedHandler(IMediator mediator)
         string queryString = uri.Query;
 
         var pushRequest = new NipkgPushAzBlobFeedMetaRequest(request.FeedUri, localFeedPath);
-        await mediator.Send(pushRequest);
+        var pushResult = await mediator.Send(pushRequest);
 
         string nipkgUrl = CreateSubUrl(feedBaseUr, packageName, queryString);
         await Upload(nipkgUrl, $"{localFeedPath}\\{packageName}");
 
         Directory.Delete(temporaryDirectory,true);
 
-        return new AddPackageToFeedResponse("result");
+        return Result.Success<AddPackageToFeedResponse>(new AddPackageToFeedResponse("result"));
     }
 
     private string CreateSubUrl(string baseUrl, string subPath, string queryParam)

@@ -1,4 +1,5 @@
-﻿using Gcd.Handlers;
+﻿using CSharpFunctionalExtensions;
+using Gcd.Handlers;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,11 @@ namespace Gcd.Commands.NipkgDownloadFeedMetaData
                 {
                     var request = new NipkgPushAzBlobFeedMetaRequest(feedUrl.Value(), feedPath.Value());
                     var response = await mediator.Send(request);
-                    console.WriteLine(response.Result);
+
+                    return response
+                        .Tap(() => console.Write("Pushed sucessfuly"))
+                        .TapError(error => console.Error.Write(error))
+                        .Finally(x => x.IsFailure ? 1 : 0);
                 });
             });
             return app;

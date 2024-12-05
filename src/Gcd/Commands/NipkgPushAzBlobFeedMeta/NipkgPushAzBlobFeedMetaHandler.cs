@@ -15,29 +15,30 @@ using MediatR;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData;
 
-public record NipkgPushAzBlobFeedMetaRequest(string FeedUri, string FeedLocalDir) : IRequest<NipkgPushAzBlobFeedMetaRespons>;
+public record NipkgPushAzBlobFeedMetaRequest(string FeedUri, string FeedLocalDir) : IRequest<Result<NipkgPushAzBlobFeedMetaRespons>>;
 public record NipkgPushAzBlobFeedMetaRespons(string Result);
 
 public class NipkgPushAzBlobFeedMetaHandler()
-    : IRequestHandler<NipkgPushAzBlobFeedMetaRequest, NipkgPushAzBlobFeedMetaRespons>
+    : IRequestHandler<NipkgPushAzBlobFeedMetaRequest, Result<NipkgPushAzBlobFeedMetaRespons>>
 {
-    public async Task<NipkgPushAzBlobFeedMetaRespons> Handle(NipkgPushAzBlobFeedMetaRequest request, CancellationToken cancellationToken)
+    public async Task<Result<NipkgPushAzBlobFeedMetaRespons>> Handle(NipkgPushAzBlobFeedMetaRequest request, CancellationToken cancellationToken)
     {
         var localFeedPath = request.FeedLocalDir;
         Uri uri = new Uri(request.FeedUri);
         string feedBaseUr = uri.GetLeftPart(UriPartial.Path);
         string queryString = uri.Query;
 
-
+        
         string packageUrl = CreateSubUrl(feedBaseUr, "Packages", queryString);
-        await Upload(packageUrl, $"{localFeedPath}\\Packages");
+        var result = await Upload(packageUrl, $"{localFeedPath}\\Packages");
         string packageGzUrl = CreateSubUrl(feedBaseUr, "Packages.gz", queryString);
-        await Upload(packageGzUrl, $"{localFeedPath}\\Packages.gz");
+        result = await Upload(packageGzUrl, $"{localFeedPath}\\Packages.gz");
         string packageStampsUrl = CreateSubUrl(feedBaseUr, "Packages.stamps", queryString);
-        await Upload(packageStampsUrl, $"{localFeedPath}\\Packages.stamps");
+        result = await Upload(packageStampsUrl, $"{localFeedPath}\\Packages.stamps");
 
+        if (result.IsFailure) return Result.Failure<NipkgPushAzBlobFeedMetaRespons>("ERRORR !!!!");
 
-        return new NipkgPushAzBlobFeedMetaRespons("");
+        return Result.Success<NipkgPushAzBlobFeedMetaRespons>(new NipkgPushAzBlobFeedMetaRespons(""));
     }
 
     private string CreateSubUrl(string baseUrl, string subPath, string queryParam)
@@ -45,7 +46,7 @@ public class NipkgPushAzBlobFeedMetaHandler()
         return $"{baseUrl}/{subPath}{queryParam}";
     }
 
-    private async Task Upload(string fileUrl, string fileToUploadPath)
+    private async Task<Result> Upload(string fileUrl, string fileToUploadPath)
     {
         // Blob URL with SAS token (including the full query string)
         string blobUrlWithSas = fileUrl;
@@ -63,11 +64,11 @@ public class NipkgPushAzBlobFeedMetaHandler()
             // Upload the file
             await blobClient.UploadAsync(filePath, overwrite: true);
 
-            Console.WriteLine("Blob uploaded successfully.");
+            return Result.Success();
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error: {ex.Message}");
+            return Result.Failure($"Error: {ex.Message}");
         }
     }
 }

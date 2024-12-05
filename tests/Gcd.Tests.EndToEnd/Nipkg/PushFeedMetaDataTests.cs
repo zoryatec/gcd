@@ -21,15 +21,13 @@ namespace Gcd.Tests.EndToEnd.Nipkg
             _config = new TestConfiguration();
         }
 
-        [Fact(Skip = "skip for now")]
-        // [Fact]
-
+        [Fact]
         public void PushPull_ShouldMatch()
         {
             // Arrange
             var feedSourceDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
             var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
-            var feedUri = _config.GetAzureFeedUri();
+            var feedUri = _config.GetAzureAddPkgTestFeedUri();
 
             var sourcePackageContent = Guid.NewGuid().ToString();
             var sourcePackageGzContent = Guid.NewGuid().ToString();

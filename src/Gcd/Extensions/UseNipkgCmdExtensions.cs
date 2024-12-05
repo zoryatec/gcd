@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
+using CSharpFunctionalExtensions;
 
 namespace Gcd.Extensions
 {
@@ -67,7 +68,11 @@ namespace Gcd.Extensions
                 {
                     var request = new AddPackageToFeedRequest(feedUrl.Value(), packagePath.Value());
                     var response = await mediator.Send(request);
-                    console.WriteLine(response.Result);
+
+                    return response
+                        .Tap(() => console.Write("Added sucessfuly"))
+                        .TapError(error => console.Error.Write(error))
+                        .Finally(x => x.IsFailure ? 1 : 0);
                 });
 
             });
