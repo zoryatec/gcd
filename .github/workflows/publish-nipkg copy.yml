@@ -1,0 +1,117 @@
+name: Publish to NIPKG
+
+on:
+  workflow_call: # This allows this workflow to be called by other workflows
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    env:
+      VERSION: "0.5.0"
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Download gcd binary
+      uses: actions/download-artifact@v4.1.8
+      with:
+        # Name of the artifact to download. If unspecified, all artifacts for the run are downloaded.
+        name: gcd-bin
+        # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
+        path: "./gcd-bootstrap"
+
+        
+    - name: Get Version of gcd
+      run: |
+        ./gcd-bootstrap/gcd.exe --version  
+
+    - name: Set NIPKG into user path
+      run: |
+        ./gcd-bootstrap/gcd.exe system add-to-user-path --path "C:\Program Files\National Instruments\NI Package Manager"
+
+    - name: Set NIPKG into system path
+      run: |
+        ./gcd-bootstrap/gcd.exe system add-to-system-path --path "C:\Program Files\National Instruments\NI Package Manager"
+        
+    - name: Download gcd binary
+      uses: actions/download-artifact@v4.1.8
+      with:
+        # Name of the artifact to download. If unspecified, all artifacts for the run are downloaded.
+        name: gcd-bin
+        # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
+        path: "./package/data/BootVolume/Program Files/gcd"
+               
+    - name: Download NIPKG
+      run: |
+         ./gcd-bootstrap/gcd.exe nipkg download-nipkg --download-path nipkg-installer.exe
+      
+
+    - name: Run Command Prompt command
+      shell: cmd
+      run: |
+        start /wait nipkg-installer.exe --quiet --accept-eulas --prevent-reboot
+      
+    - name: Wait for x seconds (Windows)
+      shell: pwsh  # PowerShell shell
+      run: |
+        Write-Host "Waiting for 240 seconds..."
+        Start-Sleep -Seconds 240  # PowerShell sleep for 240 seconds
+      
+      
+    - name: Check NIPKG instalation dir
+      run: dir "C:\Program Files\National Instruments\NI Package Manager"
+      
+
+    - name: Check NIPKG version
+      run: |
+          $execPath = "C:\Program Files\National Instruments\NI Package Manager\nipkg.exe"
+          & "$execPath" --version
+
+    # - name: Check NIPKG using env path
+    #   run: |
+    #         nipkg.exe --version
+      
+        
+    - name: Build NIPKG package
+      run:  |
+        ./gcd-bootstrap/gcd.exe nipkg package create `
+        --package-sourec-dir "package" `
+        --package-name "gcd" `
+        --package-version "0.5.0-${{github.run_number}}" `
+        --package-instalation-dir "BootVolume/Program Files/gcd" `
+        --package-destination-dir "package"
+
+    - name: Upload package
+      uses: actions/upload-artifact@v4.4.3
+      with:
+        name: gcd-pckg-temp
+        path: "D:\\a\\gcd\\gcd\\package"
+        
+    - name: Copy package
+      run:  |
+        mkdir "D:\\a\\gcd\\gcd\\tempFeed"
+        copy "D:\\a\\gcd\\gcd\\package\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" "D:\\a\\gcd\\gcd\\tempFeed\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg"
+
+    - name: Publish PKG
+      shell: pwsh  
+      run: |
+        ./publish-nipkg.ps1
+
+    - name: Push package
+      run:  |
+        ./gcd-bootstrap/gcd.exe nipkg push-feed-meta `
+        --feed-local-path "D:\\a\\gcd\\gcd\\package\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" `
+        --feed-uri "https://zoryatecartifacts.blob.core.windows.net/gcd-feed?${{ secrets.SAS_TOKEN }}"
+        
+    - name: Upload feed
+      uses: actions/upload-artifact@v4.4.3
+      with:
+        name: gcd-feed-temp
+        path: "D:\\a\\gcd\\gcd\\feed"
+
+
+
