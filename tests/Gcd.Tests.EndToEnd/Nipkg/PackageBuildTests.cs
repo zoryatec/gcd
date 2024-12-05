@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Gcd.Tests.EndToEnd.Arguments.Nipkg;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,17 +22,24 @@ namespace Gcd.Tests.EndToEnd.Nipkg
             _config = new TestConfiguration();
         }
 
-        [Fact(Skip = "for now")]
+        [Fact]
         public void NipkgBuildPackageTest()
         {
             // Arrange
-            var currentDir = Directory.GetCurrentDirectory();
-            var packageContentDirectory = Path.Combine(currentDir, "testdata", "nipkg", "test-pkg-content");
+            var packageName = "sample-package";
+            var packageVersion = "99.88.77.66";
+            var packageInstalationDir = "BootVolume/Zoryatec/sample-package";
+
+            var packageContentDirectory = GetPackageContentDir();
             var packageDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
 
-            var args = _args.NipkgPackageCreate(
-                packageDestinationDirectory: packageDestinationDirectory,
-                packageContentDirectory: packageContentDirectory);
+            var args = (new PackageBuildArgBuilder())
+                .WithPackageContentDirectory(packageContentDirectory)
+                .WithPackageName(packageName)
+                .WithPackageVersion(packageVersion)
+                .WithPackageInstalationDir(packageInstalationDir)
+                .WithPackageDestinationDir(packageDestinationDirectory)
+                .Build();
 
             // Act
             var result = _gcd.Run(args);
@@ -39,7 +47,14 @@ namespace Gcd.Tests.EndToEnd.Nipkg
             // Asssert
             result.Return.Should().Be(0);
             result.Error.Should().BeEmpty();
-            File.Exists($"{packageDestinationDirectory}\\sample-package_99.88.77.66_windows_x64.nipkg");
+            File.Exists($"{packageDestinationDirectory}\\{packageName}_{packageVersion}_windows_x64.nipkg");
+        }
+
+        private string GetPackageContentDir()
+        {
+            var currentDir = Directory.GetCurrentDirectory();
+            var packageContentDirectory = Path.Combine(currentDir, "testdata", "nipkg", "test-pkg-content");
+            return packageContentDirectory;
         }
     }
 
