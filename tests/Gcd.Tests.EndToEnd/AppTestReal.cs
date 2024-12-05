@@ -54,7 +54,9 @@ namespace Gcd.Tests.EndToEnd
         public void ProjectBuildSpecList_ShouldReturnCorrectList_WhenValidProjectSpecified()
         {
             // Arrange
-            var args = new[] { "project", "build-spec", "list", "--project-path", "sample.lvproj" };
+            var currentDir = Directory.GetCurrentDirectory();
+            var sampleProjectPath = $"{currentDir}\\testdata\\labview\\sample.lvproj";
+            var args = new[] { "project", "build-spec", "list", "--project-path", $"{sampleProjectPath}" };
 
             // Act
             var result = _gcd.Run(args);
