@@ -11,7 +11,7 @@ using MediatR;
 
 namespace Gcd.Handlers;
 
-public record PackageCreateRequest(string PackagePath, string PackageName, string PackageVersion, string InstalationDir, string PackageDestinationDir) : IRequest<PackageCreateResponse>;
+public record PackageCreateRequest(string PackageContentPath, string PackageName, string PackageVersion, string PackageInstalationDir, string PackageDestinationDir) : IRequest<PackageCreateResponse>;
 public record PackageCreateResponse(string result);
 
 public class PackageCreateHandler(IMediator _mediator)
@@ -34,8 +34,8 @@ public class PackageCreateHandler(IMediator _mediator)
         var subRequest = new TemplateCreateRequest(temporaryDirectory, request.PackageName, request.PackageVersion, request.PackageDestinationDir);
         var subResponse = await _mediator.Send(subRequest);
 
-        var contnetDestinationPaht = $"{temporaryDirectory}\\data\\{request.InstalationDir}";
-        CopyDirectoryContents(request.PackagePath, contnetDestinationPaht);
+        var contnetDestinationPaht = $"{temporaryDirectory}\\data\\{request.PackageInstalationDir}";
+        CopyDirectoryContents(request.PackageContentPath, contnetDestinationPaht);
 
         RunCommand(temporaryDirectory, pckgDirectory);
         string packageFileName = $"{request.PackageName}_{request.PackageVersion}_windows_x64.nipkg";

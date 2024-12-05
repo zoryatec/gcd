@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Gcd.LabViewProject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,11 +83,13 @@ namespace Gcd.Tests.EndToEnd
         [Fact]
         public void ProjectBuildSpecSetVersion_ShouldExecuteWithoutErrors_WhenValidVersionProvided()
         {
+            var currentDir = Directory.GetCurrentDirectory();
+            var sampleProjectPath = $"{currentDir}\\testdata\\labview\\sample.lvproj";
             // Arrange
             var args = new[] { "project", "build-spec", "set-version",
             "--project-path", "sample.lvproj",
             "--build-spec-name", "sample application",
-            "--build-spec-type", "sample.lvproj",
+            "--build-spec-type", $"{sampleProjectPath}",
             "--build-spec-target", "sample.lvproj",
             "--version", "99.88.77.66"};
 
@@ -170,6 +173,43 @@ namespace Gcd.Tests.EndToEnd
             Directory.Delete(feedSourceDirectory, true);
             Directory.Delete(feedDestinationDirectory, true);
 
+        }
+
+        [Fact]
+        public void BuildPackageTest()
+        {
+            // Arrange
+            var currentDir = Directory.GetCurrentDirectory();
+            var packageContentDirectory = Path.Combine(currentDir, "testdata", "nipkg", "test-pkg-content");
+            var packageDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
+            BuildSpecPackage(
+                packageDestinationDirectory: packageDestinationDirectory,
+                packageContentDirectory: packageContentDirectory);
+
+            File.Exists($"{packageDestinationDirectory}\\sample-package_99.88.77.66_windows_x64.nipkg");
+
+
+        }
+
+        private void BuildSpecPackage(
+            string packageContentDirectory = ".\\test-pkg-content", 
+            string packageName = "sample-package",
+            string packageVersion = "99.88.77.66",
+            string packageInstalationDir = "BootVolume/Zoryatec/sample-package",
+            string packageDestinationDirectory = "publish" )
+        {
+            var args = new[] { "nipkg", "package", "create",
+            "--package-sourec-dir", $"{packageContentDirectory}",
+            "--package-name",  $"{packageName}",
+            "--package-version",  $"{packageVersion}",
+            "--package-instalation-dir",  $"{packageInstalationDir}",
+            "--package-destination-dir",  $"{packageDestinationDirectory}"
+            };
+            var result = _gcd.Run(args);
+
+            // Asssert
+            result.Return.Should().Be(0);
+            result.Error.Should().BeEmpty();
         }
 
 

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <Content Include="testdata\labview\sample.lvproj" />
+      <Content Include="testdata\nipkg\test-pkg\data\BootVolume\Program Files\test-package\test-purpose-package-file.txt" />
     </ItemGroup>
 
     <ItemGroup>
@@ -33,6 +34,7 @@
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</testdata>
 	</ItemGroup>
+
 
 	<Target Name="CopyDirectoryToBuildOutput" AfterTargets="Build">
 		<Copy SourceFiles="@(testdata)" DestinationFolder="$(OutDir)testdata\%(RecursiveDir)" SkipUnchangedFiles="false" />
