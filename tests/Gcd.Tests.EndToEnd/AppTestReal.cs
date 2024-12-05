@@ -87,10 +87,10 @@ namespace Gcd.Tests.EndToEnd
             var sampleProjectPath = $"{currentDir}\\testdata\\labview\\sample.lvproj";
             // Arrange
             var args = new[] { "project", "build-spec", "set-version",
-            "--project-path", "sample.lvproj",
+            "--project-path", $"{sampleProjectPath}",
             "--build-spec-name", "sample application",
-            "--build-spec-type", $"{sampleProjectPath}",
-            "--build-spec-target", "sample.lvproj",
+            "--build-spec-type", "",
+            "--build-spec-target", "",
             "--version", "99.88.77.66"};
 
             // Act
@@ -176,41 +176,20 @@ namespace Gcd.Tests.EndToEnd
         }
 
         [Fact]
-        public void BuildPackageTest()
+        public void NipkgBuildPackageTest()
         {
             // Arrange
             var currentDir = Directory.GetCurrentDirectory();
             var packageContentDirectory = Path.Combine(currentDir, "testdata", "nipkg", "test-pkg-content");
             var packageDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
-            BuildSpecPackage(
+            NipkgBuildPackage(
                 packageDestinationDirectory: packageDestinationDirectory,
                 packageContentDirectory: packageContentDirectory);
 
             File.Exists($"{packageDestinationDirectory}\\sample-package_99.88.77.66_windows_x64.nipkg");
-
-
         }
 
-        private void BuildSpecPackage(
-            string packageContentDirectory = ".\\test-pkg-content", 
-            string packageName = "sample-package",
-            string packageVersion = "99.88.77.66",
-            string packageInstalationDir = "BootVolume/Zoryatec/sample-package",
-            string packageDestinationDirectory = "publish" )
-        {
-            var args = new[] { "nipkg", "package", "create",
-            "--package-sourec-dir", $"{packageContentDirectory}",
-            "--package-name",  $"{packageName}",
-            "--package-version",  $"{packageVersion}",
-            "--package-instalation-dir",  $"{packageInstalationDir}",
-            "--package-destination-dir",  $"{packageDestinationDirectory}"
-            };
-            var result = _gcd.Run(args);
 
-            // Asssert
-            result.Return.Should().Be(0);
-            result.Error.Should().BeEmpty();
-        }
 
 
 
@@ -265,6 +244,29 @@ namespace Gcd.Tests.EndToEnd
             result.Error.Should().BeEmpty();
         }
 
+
+        #region api calls
+        private void NipkgBuildPackage(
+            string packageContentDirectory = ".\\test-pkg-content",
+            string packageName = "sample-package",
+            string packageVersion = "99.88.77.66",
+            string packageInstalationDir = "BootVolume/Zoryatec/sample-package",
+            string packageDestinationDirectory = "publish")
+        {
+            var args = new[] { "nipkg", "package", "create",
+            "--package-sourec-dir", $"{packageContentDirectory}",
+            "--package-name",  $"{packageName}",
+            "--package-version",  $"{packageVersion}",
+            "--package-instalation-dir",  $"{packageInstalationDir}",
+            "--package-destination-dir",  $"{packageDestinationDirectory}"
+            };
+            var result = _gcd.Run(args);
+
+            // Asssert
+            result.Return.Should().Be(0);
+            result.Error.Should().BeEmpty();
+        }
+        #endregion
 
         private string GetAzureFeedUri() => "https://zoryatecartifacts.blob.core.windows.net/nipkg-private-feed?sp=racwdl&st=2024-12-04T21:54:19Z&se=2024-12-05T05:54:19Z&spr=https&sv=2022-11-02&sr=c&sig=2lfHgt5HxVvz0VKyhII0IMTzUlf1lSYs9zL1MDwJZ3w%3D";
 
