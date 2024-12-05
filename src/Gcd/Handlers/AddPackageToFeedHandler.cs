@@ -49,6 +49,7 @@ public class AddPackageToFeedHandler(IMediator mediator)
         string queryString = uri.Query;
 
         var pushRequest = new NipkgPushAzBlobFeedMetaRequest(request.FeedUri, localFeedPath);
+        await mediator.Send(pushRequest);
 
         string nipkgUrl = CreateSubUrl(feedBaseUr, packageName, queryString);
         await Upload(nipkgUrl, $"{localFeedPath}\\{packageName}");

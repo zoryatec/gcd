@@ -12,6 +12,7 @@ namespace Gcd.Tests.EndToEnd
         public string GetAzurePublicFeedUri() => "https://zoryatecartifacts.blob.core.windows.net/gcd-feed";
         public string GetAzurePushTestFeedUri() => "https://zoryatecartifacts.blob.core.windows.net/gcd-feed";
         public string GetAzurePullTestFeedUri() => "https://zoryatecartifacts.blob.core.windows.net/pull-test-feed";
+        public string GetAzureAddPkgTestFeedUri() => "https://zoryatecartifacts.blob.core.windows.net/add-pkg-test-feed?sp=racwdl&st=2024-12-05T21:37:17Z&se=2024-12-06T05:37:17Z&spr=https&sv=2022-11-02&sr=c&sig=eT4Pnbhbrj2C1SWG9dc2UKJr3833owUxAespWJktjfs%3D";
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Gcd.Tests.EndToEnd.Arguments.Nipkg;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,25 +21,19 @@ namespace Gcd.Tests.EndToEnd.Nipkg
             _tempDirectoryGenerator = new TempDirectoryGenerator();
             _config = new TestConfiguration();
         }
-        [Fact(Skip = "skip for now")]
+        [Fact]
         public void AddPackageToAZ()
         {
             // Arrange
-            var feedSourceDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
             var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
-            var feedUri = _config.GetAzureFeedUri();
-            var pathToNipkg = "C:\\Projects\\gcd_0.5.0.123_windows_x64.nipkg";
+            var feedUri = _config.GetAzureAddPkgTestFeedUri();
 
-            var sourcePackageContent = "";
-            var sourcePackageGzContent = "";
-            var sourcePackageStampsContent = "";
+            // Act
+            ClearFeed(feedUri);
 
-            File.WriteAllText($"{feedSourceDirectory}\\Packages", sourcePackageContent);
-            File.WriteAllText($"{feedSourceDirectory}\\Packages.gz", sourcePackageGzContent);
-            File.WriteAllText($"{feedSourceDirectory}\\Packages.stamps", sourcePackageStampsContent);
-            Push(feedSourceDirectory, feedUri);
+            var packagePath = BuildPackage();
 
-            AddPackage(pathToNipkg, feedUri);
+            AddPackage(packagePath, feedUri);
 
 
             Pull(feedDestinationDirectory, feedUri);
@@ -52,12 +47,60 @@ namespace Gcd.Tests.EndToEnd.Nipkg
             //destinationPackagesGzContent.Should().Be(sourcePackageGzContent);
             //destinationPackagesStampsContent.Should().Be(sourcePackageStampsContent);
 
-            Directory.Delete(feedSourceDirectory, true);
             Directory.Delete(feedDestinationDirectory, true);
 
         }
 
+        public void ClearFeed(string feedUri)
+        {
+            var feedSourceDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
 
+
+            var sourcePackageContent = "";
+            var sourcePackageGzContent = "";
+            var sourcePackageStampsContent = "";
+
+            File.WriteAllText($"{feedSourceDirectory}\\Packages", sourcePackageContent);
+            File.WriteAllText($"{feedSourceDirectory}\\Packages.gz", sourcePackageGzContent);
+            File.WriteAllText($"{feedSourceDirectory}\\Packages.stamps", sourcePackageStampsContent);
+            Push(feedSourceDirectory, feedUri);
+        }
+
+        public string BuildPackage()
+        {
+            // Arrange
+            var packageName = "sample-package";
+            var packageVersion = "99.88.77.66";
+            var packageInstalationDir = "BootVolume/Zoryatec/sample-package";
+
+            var packageContentDirectory = GetPackageContentDir();
+            var packageDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
+
+            var args = (new PackageBuildArgBuilder())
+                .WithPackageContentDirectory(packageContentDirectory)
+                .WithPackageName(packageName)
+                .WithPackageVersion(packageVersion)
+                .WithPackageInstalationDir(packageInstalationDir)
+                .WithPackageDestinationDir(packageDestinationDirectory)
+                .Build();
+
+            // Act
+            var result = _gcd.Run(args);
+
+            // Asssert
+            result.Return.Should().Be(0);
+            result.Error.Should().BeEmpty();
+            var packagePath = $"{packageDestinationDirectory}\\{packageName}_{packageVersion}_windows_x64.nipkg";
+            File.Exists(packagePath);
+            return packagePath;
+        }
+
+        private string GetPackageContentDir()
+        {
+            var currentDir = Directory.GetCurrentDirectory();
+            var packageContentDirectory = Path.Combine(currentDir, "testdata", "nipkg", "test-pkg-content");
+            return packageContentDirectory;
+        }
 
 
 

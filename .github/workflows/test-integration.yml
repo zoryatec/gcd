@@ -9,11 +9,31 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download gcd binary
+      - name: Download gcd for bootstraping
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: gcd-bin
+          path: "./gcd-bootstrap"
+
+      - name: Get version of gcd
+        run: |
+          ./gcd-bootstrap/gcd.exe --version  
+
+      - name: Download NIPKG
+        run: |
+          ./gcd-bootstrap/gcd.exe nipkg download-nipkg --download-path nipkg-installer.exe
+        
+      - name: Run Command Prompt command
+        shell: cmd
+        run: |
+          start /wait nipkg-installer.exe --quiet --accept-eulas --prevent-reboot
+
+      - name: Download gcd binary for testing (might need one in the furture)
         uses: actions/download-artifact@v4.1.8
         with:
           name: gcd-bin
           path: "./gcd-bin"
+          
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
