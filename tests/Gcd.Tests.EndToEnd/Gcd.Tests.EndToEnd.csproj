@@ -35,6 +35,10 @@
 		</testdata>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Nipkg\" />
+	</ItemGroup>
+
 
 	<Target Name="CopyDirectoryToBuildOutput" AfterTargets="Build">
 		<Copy SourceFiles="@(testdata)" DestinationFolder="$(OutDir)testdata\%(RecursiveDir)" SkipUnchangedFiles="false" />
