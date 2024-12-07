@@ -23,10 +23,6 @@ public class NipkgPullFeedMetaHandler(IDownloadAzBlobService downloadService)
 {
     public async Task<UnitResult<Error>> Handle(NipkgPullFeedMetaRequest request, CancellationToken cancellationToken)
     {
-        string feedBaseUr = request.FeedUri.BaseUri;
-        string queryString = request.FeedUri.Query;
-
-
 
         if (!Directory.Exists(request.FeedLocalDir.Value))
         {
@@ -34,23 +30,11 @@ public class NipkgPullFeedMetaHandler(IDownloadAzBlobService downloadService)
             Directory.CreateDirectory(request.FeedLocalDir.Value);
         }
 
-        //string packageUrl = CreateSubUrl(feedBaseUr, "Packages", queryString);
-        //DownloadFile(packageUrl, Path.Combine(request.FeedLocalDir.Value, "Packages"));
-        //string packageGzUrl = CreateSubUrl(feedBaseUr, "Packages.gz", queryString);
-        //DownloadFile(packageGzUrl, Path.Combine(request.FeedLocalDir.Value, "Packages.gz"));
-        //string packageStampsUrl = CreateSubUrl(feedBaseUr, "Packages.stamps", queryString);
-        //DownloadFile(packageStampsUrl, Path.Combine(request.FeedLocalDir.Value, "Packages.stamps"));
-
         return await DownloadMany(request.FeedUri, request.FeedLocalDir,
             "Packages",
             "Packages.gz",
             "Packages.stamps");
-
-
-
-        //return new NipkgPullFeedMetaRespons("");
     }
-
 
     private async Task<UnitResult<Error>> DownloadMany(FeedUri feedUri, FeedPath feedLocalDir, params string[] fileNames)
     {
@@ -69,23 +53,6 @@ public class NipkgPullFeedMetaHandler(IDownloadAzBlobService downloadService)
     private string CreateSubUrl(string baseUrl, string subPath, string queryParam)
     {
         return $"{baseUrl}/{subPath}{queryParam}";
-    }
-
-    private void DownloadFile(string fileUrl, string downloadPath)
-    {
-        try
-        {
-            using (WebClient client = new WebClient())
-            {
-                // Download the file asynchronously
-                client.DownloadFile(fileUrl, downloadPath);
-                Console.WriteLine($"File downloaded successfully to {downloadPath}");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error downloading file: {ex.Message}");
-        }
     }
 }
 

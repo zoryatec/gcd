@@ -25,10 +25,6 @@ namespace Gcd.Commands.NipkgDownloadFeedMetaData
                 var feedUrl = subCmd.Option("--feed-uri", "Link to remote feed", CommandOptionType.SingleValue).IsRequired();
                 subCmd.OnExecuteAsync(async cancelationToken =>
                 {
-                    //var request = new NipkgPullFeedMetaRequest(feedUrl.Value(), feedPath.Value());
-                    //var response = await mediator.Send(request);
-                    //console.WriteLine("");
-
                     var feedUri = FeedUri.Create(feedUrl.Value());
                     var feedPath = FeedPath.Create(feedPatht.Value());
 

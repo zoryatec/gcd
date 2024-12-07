@@ -35,6 +35,8 @@ namespace Gcd.Tests.EndToEnd.Nipkg
 
             AddPackage(packagePath, feedUri);
 
+            string packageName =  Path.GetFileName(packagePath);
+
 
             Pull(feedDestinationDirectory, feedUri);
 
@@ -42,6 +44,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg
             var destinationPackagesContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages");
             var destinationPackagesGzContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.gz");
             var destinationPackagesStampsContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.stamps");
+            //File.Exists($"{feedDestinationDirectory}\\{packageName}").Should().BeTrue();
 
             //destinationPackagesContent.Should().Be(sourcePackageContent);
             //destinationPackagesGzContent.Should().Be(sourcePackageGzContent);

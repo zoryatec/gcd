@@ -1,21 +1,10 @@
 ﻿
-
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Text.Json;
-using System.Xml;
-using Azure.Storage.Blobs;
+using Azure.Core;
 using CSharpFunctionalExtensions;
-using Gcd.CommandHandlers;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Common;
-using Gcd.LabViewProject;
 using Gcd.Services;
-using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
 namespace Gcd.Commands.NipkgAddPackageToAzFeed;
@@ -38,7 +27,6 @@ public record AddPackageToFeedResponse(string Result);
 
 public class AddPackageToFeedHandler(
     IMediator mediator,
-    IDownloadAzBlobService downloadService,
     IUploadAzBlobService uploadService)
     : IRequestHandler<AddPackageToFeedRequest, UnitResult<Error>>
 {
@@ -46,8 +34,7 @@ public class AddPackageToFeedHandler(
     {
         string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         string currentDirectoryPath = Environment.CurrentDirectory;
-        //string tempPckDirName = "tempFeed";
-        //string temporaryDirectory = Path.Combine(currentDirectoryPath, tempPckDirName);
+
 
         var localFeedPath = temporaryDirectory;
         var localFeedPath1 = FeedPath.Create(localFeedPath);
@@ -58,80 +45,86 @@ public class AddPackageToFeedHandler(
         var downloadResult = await mediator.Send(downloadReq);
 
         File.Copy(request.PackagePath.Value, packageDestinationPath, true);
-        Console.WriteLine("Package copied to temp feed:");
 
-        AddPackageToLcalFeed(localFeedPath, packageDestinationPath);
-        Console.WriteLine("Package added to temp feed:");
-
-        string feedBaseUr = request.FeedUri.BaseUri;
-        string queryString = request.FeedUri.Query;
+        var addPakcgResult = await AddPackageToLcalFeed(localFeedPath, packageDestinationPath);
 
         var pushRequest = new NipkgPushAzBlobFeedMetaRequest(request.FeedUri, FeedPath.Create(localFeedPath).Value);
         var pushResult = await mediator.Send(pushRequest);
 
+
         if (pushResult.IsFailure) return pushResult;
 
-        string nipkgUrl = CreateSubUrl(feedBaseUr, packageName, queryString);
+        //Directory.Delete(temporaryDirectory, true);
+
+
+            
+        return await UploadPackage(request.FeedUri, FeedPath.Create(localFeedPath).Value, packageName);
+    }
+
+    private async Task<UnitResult<Error>> UploadPackage(FeedUri feedUri, FeedPath localFeedPath, string packageName)
+    {
+        string nipkgUrl = CreateSubUrl(feedUri, packageName);
 
         var blobUri = AzBlobUri.Create(nipkgUrl);
-        var filePath = FilePath.Create($"{localFeedPath}\\{packageName}");
-
+        var filePath = FilePath.Create($"{localFeedPath.Value}\\{packageName}");
         var result = await uploadService.UploadFileAsync(blobUri.Value, filePath.Value);
-
-
-        Directory.Delete(temporaryDirectory, true);
-
-        return UnitResult.Success<Error>();
+        return result;
     }
 
-    private string CreateSubUrl(string baseUrl, string subPath, string queryParam)
+    private string CreateSubUrl(FeedUri feedUri, string subPath)
     {
-        return $"{baseUrl}/{subPath}{queryParam}";
+        return $"{feedUri.BaseUri}/{subPath}{feedUri.Query}";
     }
 
-    private void AddPackageToLcalFeed(string feedDir, string packagePath)
+    private async Task<UnitResult<Error>> AddPackageToLcalFeed(string feedDir, string packagePath)
     {
+
+        var arguments = new string[] { "feed-add-pkg", feedDir, packagePath };
+        var req = new RunNipkgRequest(arguments);
+        return  await mediator.Send(req);
         // Initialize the ProcessStartInfo with the command
-        string nipkg = @"""C:\Program Files\National Instruments\NI Package Manager\nipkg.exe""";
-        string arguments = $"/c {nipkg} feed-add-pkg {feedDir} {packagePath}";
+        //string nipkg = @"""C:\Program Files\National Instruments\NI Package Manager\nipkg.exe""";
+        //string arguments = $"/c {nipkg} feed-add-pkg {feedDir} {packagePath}";
 
 
-        ProcessStartInfo startInfo = new ProcessStartInfo
-        {
-            FileName = "cmd.exe",       // Use "cmd.exe" to run a command
-            Arguments = arguments, // "/c" tells cmd to run the command and then terminate
-            RedirectStandardOutput = true, // Redirect the output of the command
-            RedirectStandardError = true,  // Redirect any errors
-            UseShellExecute = false,      // Don't use the shell to execute the command
-            CreateNoWindow = true        // Don't create a command window
-        };
+        //ProcessStartInfo startInfo = new ProcessStartInfo
+        //{
+        //    FileName = "cmd.exe",       // Use "cmd.exe" to run a command
+        //    Arguments = arguments, // "/c" tells cmd to run the command and then terminate
+        //    RedirectStandardOutput = true, // Redirect the output of the command
+        //    RedirectStandardError = true,  // Redirect any errors
+        //    UseShellExecute = false,      // Don't use the shell to execute the command
+        //    CreateNoWindow = true        // Don't create a command window
+        //};
 
-        try
-        {
-            using (Process process = Process.Start(startInfo))
-            {
-                // Read the standard output and error
-                string output = process.StandardOutput.ReadToEnd();
-                string errors = process.StandardError.ReadToEnd();
+        //try
+        //{
+        //    using (Process process = Process.Start(startInfo))
+        //    {
+        //        // Read the standard output and error
+        //        string output = process.StandardOutput.ReadToEnd();
+        //        string errors = process.StandardError.ReadToEnd();
 
-                // Wait for the command to finish
-                process.WaitForExit();
+        //        // Wait for the command to finish
+        //        process.WaitForExit();
 
-                // Print the output and errors (if any)
-                Console.WriteLine("Output:");
-                Console.WriteLine(output);
+        //        // Print the output and errors (if any)
+        //        Console.WriteLine("Output:");
+        //        Console.WriteLine(output);
 
-                if (!string.IsNullOrEmpty(errors))
-                {
-                    Console.WriteLine("Errors:");
-                    Console.WriteLine(errors);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error running command: {ex.Message}");
-        }
+        //        if (!string.IsNullOrEmpty(errors))
+        //        {
+        //            Console.WriteLine("Errors:");
+        //            Console.WriteLine(errors);
+        //        }
+
+        //    }
+        //    return UnitResult.Success<Error>();
+        //}
+        //catch (Exception ex)
+        //{
+        //     return UnitResult.Failure<Error>(new Error($"Error running command: {ex.Message}"));
+        //}
     }
 
 }
