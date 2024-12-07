@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Gcd.Commands.NipkgDownloadFeedMetaData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,23 @@ namespace Gcd.Tests.EndToEnd.Nipkg
             _args = new GcdArgsBuilder();
             _tempDirectoryGenerator = new TempDirectoryGenerator();
             _config = new TestConfiguration();
+        }
+
+        [Fact]
+        public void Push_ShouldReturnEror_WhenPathIsEmpty()
+        {
+            var args = new[] {
+                "nipkg", "push-feed-meta",
+                "--feed-local-path", "dd",
+                "--feed-uri", "dd"
+                };
+
+            // Act
+            var result = _gcd.Run(args);
+
+            // Asssert
+            result.Return.Should().Be(1);
+            result.Error.Should().NotBeEmpty();
         }
 
         [Fact]

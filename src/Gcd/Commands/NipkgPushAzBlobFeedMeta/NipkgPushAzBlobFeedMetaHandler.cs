@@ -1,7 +1,9 @@
 ﻿using Azure.Storage.Blobs;
 using CSharpFunctionalExtensions;
+using CSharpFunctionalExtensions.ValueTasks;
 using Gcd.Common;
 using MediatR;
+using System;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData;
 
@@ -9,16 +11,48 @@ public record FeedUri
 {
     public static Result<FeedUri> Create(Maybe<string> feedUriOrNothing)
     {
+        //Result.Try(() => new Uri(feedUriOrNothing.Value), ex => "error invalid uri format"));
         return feedUriOrNothing.ToResult("FeedUri should not be empty")
             .Ensure(feedUri => feedUri != string.Empty, "FeedUri should not be empty")
+            .Bind(CreateUri)
             .Map(feedUri => new FeedUri(feedUri));
     }
-    private FeedUri(string value) => Value = value;
+
+    private static Result<Uri> CreateUri(string uri)
+    {
+        try
+        {
+            return Result.Of<Uri>(new Uri(uri));
+        }
+        catch(Exception ex)
+        {
+            return Result.Failure<Uri>(ex.Message);
+        }
+    }
+
+    private FeedUri(Uri value) => _uri = value;
+
+    private Uri _uri;
+
+    public string Full { get => _uri.AbsoluteUri; }
+    public string BaseUri { get => _uri.GetLeftPart(UriPartial.Path); }
+    public string Query { get => _uri.Query; }
+}
+
+public record FeedPath
+{
+    public static Result<FeedPath> Create(Maybe<string> maybeValue)
+    {
+        return maybeValue.ToResult("FeedUri should not be empty")
+            .Ensure(value => value != string.Empty, "FeedUri should not be empty")
+            .Map(value => new FeedPath(value));
+    }
+    private FeedPath(string value) => Value = value;
     public string Value { get; }
     public override string ToString() => Value;
 }
 
-public record NipkgPushAzBlobFeedMetaRequest(FeedUri FeedUri, string FeedLocalDir) : IRequest<UnitResult<Error>>;
+public record NipkgPushAzBlobFeedMetaRequest(FeedUri FeedUri, FeedPath FeedLocalDir) : IRequest<UnitResult<Error>>;
 public record NipkgPushAzBlobFeedMetaRespons(string Result);
 
 public class NipkgPushAzBlobFeedMetaHandler()
@@ -27,11 +61,11 @@ public class NipkgPushAzBlobFeedMetaHandler()
     public async Task<UnitResult<Error>> Handle(NipkgPushAzBlobFeedMetaRequest request, CancellationToken cancellationToken)
     {
         var localFeedPath = request.FeedLocalDir;
-        Uri uri = new Uri(request.FeedUri.Value);
-        var feedBaseUr = uri.GetLeftPart(UriPartial.Path);
-        var queryString = uri.Query;
 
-        return await UploadMany(feedBaseUr, queryString, localFeedPath,
+        var feedBaseUr = request.FeedUri.BaseUri;
+        var queryString = request.FeedUri.Query;
+
+        return await UploadMany(feedBaseUr, queryString, localFeedPath.ToString(),
             "Packages",
             "Packages.gz",
             "Packages.stamps");
