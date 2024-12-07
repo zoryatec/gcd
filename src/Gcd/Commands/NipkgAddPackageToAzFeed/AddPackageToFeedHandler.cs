@@ -50,7 +50,8 @@ public class AddPackageToFeedHandler(
         //string temporaryDirectory = Path.Combine(currentDirectoryPath, tempPckDirName);
 
         var localFeedPath = temporaryDirectory;
-        var downloadReq = new NipkgPullFeedMetaRequest(request.FeedUri.Full, localFeedPath);
+        var localFeedPath1 = FeedPath.Create(localFeedPath);
+        var downloadReq = new NipkgPullFeedMetaRequest(request.FeedUri, localFeedPath1.Value);
         string packageName = Path.GetFileName(request.PackagePath.Value);
         var packageDestinationPath = Path.Combine(localFeedPath, packageName);
 

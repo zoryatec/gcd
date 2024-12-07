@@ -47,18 +47,11 @@ public class NipkgPushAzBlobFeedMetaHandler(IUploadAzBlobService uploadService)
 {
     public async Task<UnitResult<Error>> Handle(NipkgPushAzBlobFeedMetaRequest request, CancellationToken cancellationToken)
     {
-        var localFeedPath = request.FeedLocalDir;
-
-        var feedBaseUr = request.FeedUri.BaseUri;
-        var queryString = request.FeedUri.Query;
-
         return await UploadMany(request.FeedUri,request.FeedLocalDir,
             "Packages",
             "Packages.gz",
             "Packages.stamps");
     }
-
-
 
     private async Task<UnitResult<Error>> UploadMany(FeedUri feedUri, FeedPath feedLocalDir, params string[] fileNames)
     {

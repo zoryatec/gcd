@@ -8,43 +8,62 @@ using System.Text.Json;
 using System.Xml;
 using CSharpFunctionalExtensions;
 using Gcd.CommandHandlers;
+using Gcd.Common;
 using Gcd.LabViewProject;
+using Gcd.Services;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData;
 
-public record NipkgPullFeedMetaRequest(string FeedUrl, string FeedLocalDir) : IRequest<NipkgPullFeedMetaRespons>;
-public record NipkgPullFeedMetaRespons(string Result);
+public record NipkgPullFeedMetaRequest(FeedUri FeedUri, FeedPath FeedLocalDir) : IRequest<UnitResult<Error>>;
 
-public class NipkgPullFeedMetaHandler()
-    : IRequestHandler<NipkgPullFeedMetaRequest, NipkgPullFeedMetaRespons>
+public class NipkgPullFeedMetaHandler(IDownloadAzBlobService downloadService)
+    : IRequestHandler<NipkgPullFeedMetaRequest, UnitResult<Error>>
 {
-    public async Task<NipkgPullFeedMetaRespons> Handle(NipkgPullFeedMetaRequest request, CancellationToken cancellationToken)
+    public async Task<UnitResult<Error>> Handle(NipkgPullFeedMetaRequest request, CancellationToken cancellationToken)
     {
-        Uri uri = new Uri(request.FeedUrl);
-        string feedBaseUr = uri.GetLeftPart(UriPartial.Path);
-        string queryString = uri.Query;
+        string feedBaseUr = request.FeedUri.BaseUri;
+        string queryString = request.FeedUri.Query;
 
 
 
-        if (!Directory.Exists(request.FeedLocalDir))
+        if (!Directory.Exists(request.FeedLocalDir.Value))
         {
             // If it doesn't exist, create it
-            Directory.CreateDirectory(request.FeedLocalDir);
+            Directory.CreateDirectory(request.FeedLocalDir.Value);
         }
 
-        string packageUrl = CreateSubUrl(feedBaseUr, "Packages", queryString);
-        DownloadFile(packageUrl, Path.Combine(request.FeedLocalDir, "Packages"));
-        string packageGzUrl = CreateSubUrl(feedBaseUr, "Packages.gz", queryString);
-        DownloadFile(packageGzUrl, Path.Combine(request.FeedLocalDir, "Packages.gz"));
-        string packageStampsUrl = CreateSubUrl(feedBaseUr, "Packages.stamps", queryString);
-        DownloadFile(packageStampsUrl, Path.Combine(request.FeedLocalDir, "Packages.stamps"));
+        //string packageUrl = CreateSubUrl(feedBaseUr, "Packages", queryString);
+        //DownloadFile(packageUrl, Path.Combine(request.FeedLocalDir.Value, "Packages"));
+        //string packageGzUrl = CreateSubUrl(feedBaseUr, "Packages.gz", queryString);
+        //DownloadFile(packageGzUrl, Path.Combine(request.FeedLocalDir.Value, "Packages.gz"));
+        //string packageStampsUrl = CreateSubUrl(feedBaseUr, "Packages.stamps", queryString);
+        //DownloadFile(packageStampsUrl, Path.Combine(request.FeedLocalDir.Value, "Packages.stamps"));
+
+        return await DownloadMany(request.FeedUri, request.FeedLocalDir,
+            "Packages",
+            "Packages.gz",
+            "Packages.stamps");
 
 
 
+        //return new NipkgPullFeedMetaRespons("");
+    }
 
-        return new NipkgPullFeedMetaRespons("");
+
+    private async Task<UnitResult<Error>> DownloadMany(FeedUri feedUri, FeedPath feedLocalDir, params string[] fileNames)
+    {
+        foreach (var fileName in fileNames)
+        {
+            var fileUri = CreateSubUrl(feedUri.BaseUri, fileName, feedUri.Query);
+            var blobUri = AzBlobUri.Create(fileUri);
+            var filePath = FilePath.Create($"{feedLocalDir}\\{fileName}");
+
+            var result = await downloadService.DownloadFileAsync(blobUri.Value, filePath.Value);
+            if (result.IsFailure) return result;
+        }
+        return UnitResult.Success<Error>();
     }
 
     private string CreateSubUrl(string baseUrl, string subPath, string queryParam)
