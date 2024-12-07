@@ -5,7 +5,20 @@ using MediatR;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData;
 
-public record NipkgPushAzBlobFeedMetaRequest(string FeedUri, string FeedLocalDir) : IRequest<UnitResult<Error>>;
+public record FeedUri
+{
+    public static Result<FeedUri> Create(Maybe<string> feedUriOrNothing)
+    {
+        return feedUriOrNothing.ToResult("FeedUri should not be empty")
+            .Ensure(feedUri => feedUri != string.Empty, "FeedUri should not be empty")
+            .Map(feedUri => new FeedUri(feedUri));
+    }
+    private FeedUri(string value) => Value = value;
+    public string Value { get; }
+    public override string ToString() => Value;
+}
+
+public record NipkgPushAzBlobFeedMetaRequest(FeedUri FeedUri, string FeedLocalDir) : IRequest<UnitResult<Error>>;
 public record NipkgPushAzBlobFeedMetaRespons(string Result);
 
 public class NipkgPushAzBlobFeedMetaHandler()
@@ -14,20 +27,9 @@ public class NipkgPushAzBlobFeedMetaHandler()
     public async Task<UnitResult<Error>> Handle(NipkgPushAzBlobFeedMetaRequest request, CancellationToken cancellationToken)
     {
         var localFeedPath = request.FeedLocalDir;
-        Uri uri = new Uri(request.FeedUri);
+        Uri uri = new Uri(request.FeedUri.Value);
         var feedBaseUr = uri.GetLeftPart(UriPartial.Path);
         var queryString = uri.Query;
-
-
-        //var packageUrl = CreateSubUrl(feedBaseUr, "Packages", queryString);
-        //var result = await Upload(packageUrl, $"{localFeedPath}\\Packages");
-        //var packageGzUrl = CreateSubUrl(feedBaseUr, "Packages.gz", queryString);
-        //result = await Upload(packageGzUrl, $"{localFeedPath}\\Packages.gz");
-        //var packageStampsUrl = CreateSubUrl(feedBaseUr, "Packages.stamps", queryString);
-        //result = await Upload(packageStampsUrl, $"{localFeedPath}\\Packages.stamps");
-
-        //if (result.IsFailure) return Result.Failure<NipkgPushAzBlobFeedMetaRespons>("ERRORR !!!!");
-        //if(result.IsFailure) return result.Ensure(
 
         return await UploadMany(feedBaseUr, queryString, localFeedPath,
             "Packages",

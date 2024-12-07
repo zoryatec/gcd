@@ -49,7 +49,7 @@ public class AddPackageToFeedHandler(IMediator mediator)
         string feedBaseUr = uri.GetLeftPart(UriPartial.Path);
         string queryString = uri.Query;
 
-        var pushRequest = new NipkgPushAzBlobFeedMetaRequest(request.FeedUri, localFeedPath);
+        var pushRequest = new NipkgPushAzBlobFeedMetaRequest(FeedUri.Create(request.FeedUri).Value, localFeedPath);
         var pushResult = await mediator.Send(pushRequest);
 
         if (pushResult.IsFailure) return pushResult;
