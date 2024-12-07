@@ -1,4 +1,5 @@
-﻿using Azure.Storage.Blobs;
+﻿using Azure.Core;
+using Azure.Storage.Blobs;
 using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
 using Gcd.Common;
@@ -14,26 +15,11 @@ public record FeedUri
         //Result.Try(() => new Uri(feedUriOrNothing.Value), ex => "error invalid uri format"));
         return feedUriOrNothing.ToResult("FeedUri should not be empty")
             .Ensure(feedUri => feedUri != string.Empty, "FeedUri should not be empty")
-            .Bind(CreateUri)
+            .MapTry((uri) => new Uri(uri), ex => ex.Message)
             .Map(feedUri => new FeedUri(feedUri));
     }
-
-    private static Result<Uri> CreateUri(string uri)
-    {
-        try
-        {
-            return Result.Of<Uri>(new Uri(uri));
-        }
-        catch(Exception ex)
-        {
-            return Result.Failure<Uri>(ex.Message);
-        }
-    }
-
     private FeedUri(Uri value) => _uri = value;
-
     private Uri _uri;
-
     public string Full { get => _uri.AbsoluteUri; }
     public string BaseUri { get => _uri.GetLeftPart(UriPartial.Path); }
     public string Query { get => _uri.Query; }
@@ -65,7 +51,7 @@ public class NipkgPushAzBlobFeedMetaHandler()
         var feedBaseUr = request.FeedUri.BaseUri;
         var queryString = request.FeedUri.Query;
 
-        return await UploadMany(feedBaseUr, queryString, localFeedPath.ToString(),
+        return await UploadMany(request.FeedUri,request.FeedLocalDir,
             "Packages",
             "Packages.gz",
             "Packages.stamps");
@@ -73,12 +59,12 @@ public class NipkgPushAzBlobFeedMetaHandler()
 
 
 
-    private async Task<UnitResult<Error>> UploadMany(string feedUri,string queryString, string localFeedPath, params string[] fileNames)
+    private async Task<UnitResult<Error>> UploadMany(FeedUri feedUri, FeedPath feedLocalDir, params string[] fileNames)
     {
         foreach (var fileName in fileNames)
         {
-            var packageUrl = CreateSubUrl(feedUri, fileName, queryString);
-            var result = await Upload(packageUrl, $"{localFeedPath}\\{fileName}");
+            var packageUrl = CreateSubUrl(feedUri.BaseUri, fileName, feedUri.Query);
+            var result = await Upload(packageUrl, $"{feedLocalDir}\\{fileName}");
             if (result.IsFailure) return result;
         }
         return UnitResult.Success<Error>();

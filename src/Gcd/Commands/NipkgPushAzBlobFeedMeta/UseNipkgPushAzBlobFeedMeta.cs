@@ -33,30 +33,13 @@ namespace Gcd.Commands.NipkgDownloadFeedMetaData
                     var feedUri = FeedUri.Create(feedUrl.Value());
                     var feedPath = FeedPath.Create(feedPatht.Value());
 
-
                     return await Result
                         .Combine(feedUri, feedPath)
-                        .TapError(error => console.Error.Write(error))
                         .Map( () => new NipkgPushAzBlobFeedMetaRequest(feedUri.Value, feedPath.Value))
                         .Tap(async (req) => await mediator.Send(req))
                         .Tap(() => console.Write(SUCESS_MESSAGE))
                         .TapError(error => console.Error.Write(error))
                         .Finally(x => x.IsFailure ? 1 : 0);
-                    
-
-
-                    //if (result.IsFailure)
-                    //{
-                    //    console.Error.Write(result.Error);
-                    //    return 1;
-                    //}
-
-
-
-                    //return response
-                    //    .Tap(() => console.Write(SUCESS_MESSAGE))
-                    //    .TapError(error => console.Error.Write(error))
-                    //    .Finally(x => x.IsFailure ? 1 : 0);
                 });
             });
             return app;

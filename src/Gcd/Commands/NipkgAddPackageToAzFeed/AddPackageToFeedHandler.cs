@@ -19,7 +19,22 @@ using MediatR;
 
 namespace Gcd.Commands.NipkgAddPackageToAzFeed;
 
-public record AddPackageToFeedRequest(string FeedUri, string PathToPackage) : IRequest<UnitResult<Error>>;
+public record PackagePath
+{
+    public string Value { get; }
+
+    public static Result<PackagePath> Create(string packagePath)
+    {
+        return Result.Success(new PackagePath(packagePath));
+    }
+
+    private PackagePath(string path)
+    {
+        Value = path;
+    }
+}
+
+ public record AddPackageToFeedRequest(FeedUri FeedUri, PackagePath PackagePath) : IRequest<UnitResult<Error>>;
 public record AddPackageToFeedResponse(string Result);
 
 public class AddPackageToFeedHandler(IMediator mediator)
@@ -33,23 +48,22 @@ public class AddPackageToFeedHandler(IMediator mediator)
         //string temporaryDirectory = Path.Combine(currentDirectoryPath, tempPckDirName);
 
         var localFeedPath = temporaryDirectory;
-        var downloadReq = new NipkgPullFeedMetaRequest(request.FeedUri, localFeedPath);
-        string packageName = Path.GetFileName(request.PathToPackage);
+        var downloadReq = new NipkgPullFeedMetaRequest(request.FeedUri.Full, localFeedPath);
+        string packageName = Path.GetFileName(request.PackagePath.Value);
         var packageDestinationPath = Path.Combine(localFeedPath, packageName);
         CancellationTokenSource cts = new CancellationTokenSource();
         var downloadResult = await mediator.Send(downloadReq);
 
-        File.Copy(request.PathToPackage, packageDestinationPath, true);
+        File.Copy(request.PackagePath.Value, packageDestinationPath, true);
         Console.WriteLine("Package copied to temp feed:");
 
         AddPackageToLcalFeed(localFeedPath, packageDestinationPath);
         Console.WriteLine("Package added to temp feed:");
 
-        Uri uri = new Uri(request.FeedUri);
-        string feedBaseUr = uri.GetLeftPart(UriPartial.Path);
-        string queryString = uri.Query;
+        string feedBaseUr = request.FeedUri.BaseUri;
+        string queryString = request.FeedUri.Query;
 
-        var pushRequest = new NipkgPushAzBlobFeedMetaRequest(FeedUri.Create(request.FeedUri).Value, FeedPath.Create(localFeedPath).Value);
+        var pushRequest = new NipkgPushAzBlobFeedMetaRequest(request.FeedUri, FeedPath.Create(localFeedPath).Value);
         var pushResult = await mediator.Send(pushRequest);
 
         if (pushResult.IsFailure) return pushResult;
@@ -141,5 +155,6 @@ public class AddPackageToFeedHandler(IMediator mediator)
 
 
 }
+
 
 
