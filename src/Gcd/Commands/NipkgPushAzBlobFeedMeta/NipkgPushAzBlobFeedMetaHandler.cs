@@ -3,6 +3,7 @@ using Azure.Storage.Blobs;
 using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
 using Gcd.Common;
+using Gcd.Services;
 using MediatR;
 using System;
 
@@ -41,7 +42,7 @@ public record FeedPath
 public record NipkgPushAzBlobFeedMetaRequest(FeedUri FeedUri, FeedPath FeedLocalDir) : IRequest<UnitResult<Error>>;
 public record NipkgPushAzBlobFeedMetaRespons(string Result);
 
-public class NipkgPushAzBlobFeedMetaHandler()
+public class NipkgPushAzBlobFeedMetaHandler(IUploadAzBlobService uploadService)
     : IRequestHandler<NipkgPushAzBlobFeedMetaRequest, UnitResult<Error>>
 {
     public async Task<UnitResult<Error>> Handle(NipkgPushAzBlobFeedMetaRequest request, CancellationToken cancellationToken)
@@ -63,8 +64,11 @@ public class NipkgPushAzBlobFeedMetaHandler()
     {
         foreach (var fileName in fileNames)
         {
-            var packageUrl = CreateSubUrl(feedUri.BaseUri, fileName, feedUri.Query);
-            var result = await Upload(packageUrl, $"{feedLocalDir}\\{fileName}");
+            var fileUri = CreateSubUrl(feedUri.BaseUri, fileName, feedUri.Query);
+            var blobUri = AzBlobUri.Create(fileUri);
+            var filePath = FilePath.Create($"{feedLocalDir}\\{fileName}");
+
+            var result = await uploadService.UploadFileAsync(blobUri.Value, filePath.Value);
             if (result.IsFailure) return result;
         }
         return UnitResult.Success<Error>();
@@ -73,16 +77,6 @@ public class NipkgPushAzBlobFeedMetaHandler()
     private string CreateSubUrl(string baseUrl, string subPath, string queryParam)
     {
         return $"{baseUrl}/{subPath}{queryParam}";
-    }
-
-    private async Task<UnitResult<Error>> Upload(string fileUri, string fileToUploadPath) =>
-        await Result.Try<Error>(
-            async () => await UploadCore(fileUri,fileToUploadPath),
-            ex => new Error(ex.Message));
-    private async Task UploadCore(string fileUrl, string fileToUploadPath)
-    {
-        var blobClient = new BlobClient(new Uri(fileUrl));
-        await blobClient.UploadAsync(fileToUploadPath, overwrite: true);
     }
 }
 

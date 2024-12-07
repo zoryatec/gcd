@@ -4,6 +4,7 @@ using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
+using Gcd.Services;
 
 
 namespace Gcd
@@ -25,6 +26,8 @@ namespace Gcd
             var assembly = typeof(Program).Assembly;
             var services = new ServiceCollection()
                 .AddSingleton<IVersionizeCommandHandler, VersionizeCommandHandler>()
+                .AddScoped<IDownloadAzBlobService, AzBlobService>()
+                .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddSingleton<IConsole>(PhysicalConsole.Singleton)
                 .AddMediatR(config =>

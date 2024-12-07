@@ -1,6 +1,7 @@
 ﻿using Gcd.CommandHandlers;
 using Gcd.Extensions;
 using Gcd.LabViewProject;
+using Gcd.Services;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +18,8 @@ namespace Gcd.Tests
             var services = new ServiceCollection()
                 .AddSingleton<IVersionizeCommandHandler, VersionizeCommandHandler>()
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
+                .AddScoped<IDownloadAzBlobService, AzBlobService>()
+                .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddSingleton<IConsole>(_console)
                 .AddMediatR(config =>
                 {

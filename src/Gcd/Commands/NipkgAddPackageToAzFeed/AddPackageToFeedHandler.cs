@@ -14,6 +14,7 @@ using Gcd.CommandHandlers;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Common;
 using Gcd.LabViewProject;
+using Gcd.Services;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
@@ -21,23 +22,24 @@ namespace Gcd.Commands.NipkgAddPackageToAzFeed;
 
 public record PackagePath
 {
+    public static Result<PackagePath> Create(Maybe<string> packagePathOrNothing)
+    {
+        return packagePathOrNothing.ToResult("FeedUri should not be empty")
+            .Ensure(packagePath => packagePath != string.Empty, "Package path should not be empty")
+            .Map(feedUri => new PackagePath(feedUri));
+    }
+
+    private PackagePath(string path) => Value = path;
     public string Value { get; }
-
-    public static Result<PackagePath> Create(string packagePath)
-    {
-        return Result.Success(new PackagePath(packagePath));
-    }
-
-    private PackagePath(string path)
-    {
-        Value = path;
-    }
 }
 
  public record AddPackageToFeedRequest(FeedUri FeedUri, PackagePath PackagePath) : IRequest<UnitResult<Error>>;
 public record AddPackageToFeedResponse(string Result);
 
-public class AddPackageToFeedHandler(IMediator mediator)
+public class AddPackageToFeedHandler(
+    IMediator mediator,
+    IDownloadAzBlobService downloadService,
+    IUploadAzBlobService uploadService)
     : IRequestHandler<AddPackageToFeedRequest, UnitResult<Error>>
 {
     public async Task<UnitResult<Error>> Handle(AddPackageToFeedRequest request, CancellationToken cancellationToken)
@@ -51,7 +53,7 @@ public class AddPackageToFeedHandler(IMediator mediator)
         var downloadReq = new NipkgPullFeedMetaRequest(request.FeedUri.Full, localFeedPath);
         string packageName = Path.GetFileName(request.PackagePath.Value);
         var packageDestinationPath = Path.Combine(localFeedPath, packageName);
-        CancellationTokenSource cts = new CancellationTokenSource();
+
         var downloadResult = await mediator.Send(downloadReq);
 
         File.Copy(request.PackagePath.Value, packageDestinationPath, true);
@@ -69,7 +71,12 @@ public class AddPackageToFeedHandler(IMediator mediator)
         if (pushResult.IsFailure) return pushResult;
 
         string nipkgUrl = CreateSubUrl(feedBaseUr, packageName, queryString);
-        await Upload(nipkgUrl, $"{localFeedPath}\\{packageName}");
+
+        var blobUri = AzBlobUri.Create(nipkgUrl);
+        var filePath = FilePath.Create($"{localFeedPath}\\{packageName}");
+
+        var result = await uploadService.UploadFileAsync(blobUri.Value, filePath.Value);
+
 
         Directory.Delete(temporaryDirectory, true);
 
@@ -125,34 +132,6 @@ public class AddPackageToFeedHandler(IMediator mediator)
             Console.WriteLine($"Error running command: {ex.Message}");
         }
     }
-
-    private async Task Upload(string fileUrl, string fileToUploadPath)
-    {
-        // Blob URL with SAS token (including the full query string)
-        string blobUrlWithSas = fileUrl;
-
-        // Path to the file to upload
-        string filePath = fileToUploadPath;
-
-        // Create a BlobClient using the SAS URL
-        BlobClient blobClient = new BlobClient(new Uri(blobUrlWithSas));
-
-        try
-        {
-            Console.WriteLine("Uploading blob...");
-
-            // Upload the file
-            await blobClient.UploadAsync(filePath, overwrite: true);
-
-            Console.WriteLine("Blob uploaded successfully.");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error: {ex.Message}");
-        }
-    }
-
-
 
 }
 

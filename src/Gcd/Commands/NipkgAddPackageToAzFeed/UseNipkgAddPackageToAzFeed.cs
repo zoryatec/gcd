@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
+using CSharpFunctionalExtensions.ValueTasks;
 
 namespace Gcd.Commands.NipkgAddPackageToAzFeed
 {
@@ -10,6 +11,8 @@ namespace Gcd.Commands.NipkgAddPackageToAzFeed
     {
         public static CommandLineApplication UseNipkgAddPackageToAzFeedCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
         {
+            const string SUCESS_MESSAGE = "Metadata pushed successully";
+
             var console = serviceProvider.GetRequiredService<IConsole>();
             var mediator = serviceProvider.GetRequiredService<IMediator>();
             app.Command("add-package-blob-feed", subCmd =>
@@ -21,25 +24,14 @@ namespace Gcd.Commands.NipkgAddPackageToAzFeed
                 {
                     var feedUri = FeedUri.Create(feedUrl.Value());
                     var pathToPackage = PackagePath.Create(packagePath.Value());
-                    var request = new AddPackageToFeedRequest(feedUri.Value, pathToPackage.Value);
-                    var response = await mediator.Send(request);
 
-                    return response
-                        .Tap(() => console.Write("Added sucessfuly"))
+                    return await Result
+                        .Combine(feedUri, pathToPackage)
+                        .Map(() => new AddPackageToFeedRequest(feedUri.Value, pathToPackage.Value))
+                        .Tap((req1) =>  mediator.Send(req1))
+                        .Tap(() => console.Write(SUCESS_MESSAGE))
                         .TapError(error => console.Error.Write(error))
                         .Finally(x => x.IsFailure ? 1 : 0);
-
-
-                    //var feedUri = FeedUri.Create(feedUrl.Value());
-                    //var feedPath = FeedPath.Create(feedPatht.Value());
-
-                    //return await Result
-                    //    .Combine(feedUri, feedPath)
-                    //    .Map(() => new NipkgPushAzBlobFeedMetaRequest(feedUri.Value, feedPath.Value))
-                    //    .Tap(async (req) => await mediator.Send(req))
-                    //    .Tap(() => console.Write(SUCESS_MESSAGE))
-                    //    .TapError(error => console.Error.Write(error))
-                    //    .Finally(x => x.IsFailure ? 1 : 0);
                 });
             });
 
