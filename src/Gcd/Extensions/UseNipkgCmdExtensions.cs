@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
 using CSharpFunctionalExtensions;
+using Gcd.Commands.NipkgAddPackageToAzFeed;
 
 namespace Gcd.Extensions
 {
@@ -30,7 +31,7 @@ namespace Gcd.Extensions
                 nipkg.UseDownloadlNipkg(serviceProvider);
                 nipkg.UseTemplatedCmd(serviceProvider);
                 nipkg.UsePackageCmd(serviceProvider);
-                nipkg.UseNIPKGAddPackageToAzureBlobFeed(serviceProvider);
+                nipkg.UseNipkgAddPackageToAzFeedCmd(serviceProvider);
                 nipkg.UseNipkgPullFeedMetaCmd(serviceProvider);
                 nipkg.UseNipkgPushAzBlobFeedMetaCmd(serviceProvider);
             });
@@ -48,31 +49,6 @@ namespace Gcd.Extensions
                     var request = new InstallNinpkgRequest();
                     var response = await mediator.Send(request);
                     console.WriteLine(response.result);
-                });
-
-            });
-
-            return app;
-        }
-
-        public static CommandLineApplication UseNIPKGAddPackageToAzureBlobFeed(this CommandLineApplication app, IServiceProvider serviceProvider)
-        {
-            var console = serviceProvider.GetRequiredService<IConsole>();
-            var mediator = serviceProvider.GetRequiredService<IMediator>();
-            app.Command("add-package-blob-feed", subCmd =>
-            {
-                subCmd.Description = "Create package template";
-                var packagePath = subCmd.Option("--package-path", "File path must en", CommandOptionType.SingleValue).IsRequired();
-                var feedUrl = subCmd.Option("--feed-url", "File path must en", CommandOptionType.SingleValue).IsRequired();
-                subCmd.OnExecuteAsync(async cancelationToken =>
-                {
-                    var request = new AddPackageToFeedRequest(feedUrl.Value(), packagePath.Value());
-                    var response = await mediator.Send(request);
-
-                    return response
-                        .Tap(() => console.Write("Added sucessfuly"))
-                        .TapError(error => console.Error.Write(error))
-                        .Finally(x => x.IsFailure ? 1 : 0);
                 });
 
             });

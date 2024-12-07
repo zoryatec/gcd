@@ -12,19 +12,20 @@ using Azure.Storage.Blobs;
 using CSharpFunctionalExtensions;
 using Gcd.CommandHandlers;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
+using Gcd.Common;
 using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
-namespace Gcd.Handlers;
+namespace Gcd.Commands.NipkgAddPackageToAzFeed;
 
-public record AddPackageToFeedRequest( string FeedUri, string PathToPackage) : IRequest<Result<AddPackageToFeedResponse>>;
+public record AddPackageToFeedRequest(string FeedUri, string PathToPackage) : IRequest<UnitResult<Error>>;
 public record AddPackageToFeedResponse(string Result);
 
 public class AddPackageToFeedHandler(IMediator mediator)
-    : IRequestHandler<AddPackageToFeedRequest, Result<AddPackageToFeedResponse>>
+    : IRequestHandler<AddPackageToFeedRequest, UnitResult<Error>>
 {
-    public async Task<Result<AddPackageToFeedResponse>> Handle(AddPackageToFeedRequest request, CancellationToken cancellationToken)
+    public async Task<UnitResult<Error>> Handle(AddPackageToFeedRequest request, CancellationToken cancellationToken)
     {
         string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         string currentDirectoryPath = Environment.CurrentDirectory;
@@ -33,7 +34,7 @@ public class AddPackageToFeedHandler(IMediator mediator)
 
         var localFeedPath = temporaryDirectory;
         var downloadReq = new NipkgPullFeedMetaRequest(request.FeedUri, localFeedPath);
-        string packageName = System.IO.Path.GetFileName(request.PathToPackage);
+        string packageName = Path.GetFileName(request.PathToPackage);
         var packageDestinationPath = Path.Combine(localFeedPath, packageName);
         CancellationTokenSource cts = new CancellationTokenSource();
         var downloadResult = await mediator.Send(downloadReq);
@@ -51,12 +52,14 @@ public class AddPackageToFeedHandler(IMediator mediator)
         var pushRequest = new NipkgPushAzBlobFeedMetaRequest(request.FeedUri, localFeedPath);
         var pushResult = await mediator.Send(pushRequest);
 
+        if (pushResult.IsFailure) return pushResult;
+
         string nipkgUrl = CreateSubUrl(feedBaseUr, packageName, queryString);
         await Upload(nipkgUrl, $"{localFeedPath}\\{packageName}");
 
-        Directory.Delete(temporaryDirectory,true);
+        Directory.Delete(temporaryDirectory, true);
 
-        return Result.Success<AddPackageToFeedResponse>(new AddPackageToFeedResponse("result"));
+        return UnitResult.Success<Error>();
     }
 
     private string CreateSubUrl(string baseUrl, string subPath, string queryParam)
