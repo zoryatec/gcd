@@ -1,9 +1,5 @@
-﻿
-using System.Diagnostics;
-using Azure.Core;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
-using Gcd.Common;
 using Gcd.Services;
 using MediatR;
 
