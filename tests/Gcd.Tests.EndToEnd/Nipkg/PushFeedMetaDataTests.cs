@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
+using Gcd.Tests.EndToEnd.Arguments.Nipkg;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -77,11 +78,11 @@ namespace Gcd.Tests.EndToEnd.Nipkg
         private void Pull(string feedDirectory, string feedUri)
         {
             // Arrange
-            var args = new[] {
-                "nipkg", "pull-feed-meta",
-                "--feed-local-path", $"{feedDirectory}",
-                "--feed-uri", $"{feedUri}"
-                };
+
+            var args = (new PullFeedMetaArgBuilder())
+                .WithFeedLocalPath(feedDirectory)
+                .WithFeedUri(feedUri)
+                .Build();
 
             // Act
             var result = _gcd.Run(args);
