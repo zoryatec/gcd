@@ -2,6 +2,7 @@
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using static Gcd.Contract.Nipkg.PullFeedMetaData;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData;
 
@@ -11,12 +12,11 @@ public static class UseNipkgPullFeedMetaCmdExtensions
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
-        const string SUCESS_MESSAGE = "Metadata pushed successully";
 
-        app.Command("pull-feed-meta", subCmd =>
+        app.Command(COMMAND, subCmd =>
         {
-            var feedPatht = subCmd.Option("--feed-local-path", "Path to local directory with feed", CommandOptionType.SingleValue).IsRequired();
-            var feedUrl = subCmd.Option("--feed-uri", "Link to remote feed", CommandOptionType.SingleValue).IsRequired();
+            var feedPatht = subCmd.Option(FEED_LOCAL_PATH_OPTION, FEED_LOCAL_PATH_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
+            var feedUrl = subCmd.Option(REMOTE_FEED_URI_OPTION,REMOTE_FEED_URI_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
             subCmd.OnExecuteAsync(async cancelationToken =>
             {
                 var feedUri = FeedUri.Create(feedUrl.Value());

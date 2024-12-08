@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Gcd.Contract\Gcd.Contract.csproj" />
       <ProjectReference Include="..\Gcd.LabViewProject\Gcd.LabViewProject.csproj" />
     </ItemGroup>
 
