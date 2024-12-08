@@ -2,3 +2,4 @@ bin
 obj
 .idea
 .vs
+/tests/Gcd.Tests.EndToEnd/appsetings.dev.json
