@@ -45,7 +45,7 @@
 		</Content>
 	</ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition="Exists('appsettings.dev.json')">
 		<Content Include="appsettings.dev.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
