@@ -14,7 +14,7 @@ namespace Gcd.Handlers;
 public record TemplateCreateRequest(string PackagePath, string PackageName, string PackageVersion, string PackageDestinationDir) : IRequest<TemplateCreateResponse>;
 public record TemplateCreateResponse(string result);
 
-public class TemplateCreateHandler(ILabViewProjectProvider _labViewProjectProvider)
+public class TemplateCreateHandler()
     : IRequestHandler<TemplateCreateRequest, TemplateCreateResponse>
 {
     public async Task<TemplateCreateResponse> Handle(TemplateCreateRequest request, CancellationToken cancellationToken)

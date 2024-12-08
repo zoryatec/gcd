@@ -1,4 +1,5 @@
 using System.Text.Json;
+using CSharpFunctionalExtensions;
 using Gcd.CommandHandlers;
 using Gcd.Commands.ProjectBuildSpecSetVersion;
 using Gcd.Handlers;
@@ -86,9 +87,31 @@ public static class UseProjectCmdExtensions
 
             listCmd.OnExecuteAsync(async cancelationToken =>
             {
-                var request = new BuildSpecSetVersionRequest(projectPath.Value(), buildSpecName.Value(), buildSpecType.Value(), buildSpecTarget.Value(),version.Value());
-                var response = await mediator.Send(request);
-                console.WriteLine(response.result);
+                var maybeProjectPath = Maybe.From(projectPath.Value()).ToResult("Projectpath not found");
+                var maybebuildSpecName = Maybe.From(buildSpecName.Value()).ToResult("buildsepecname not found");
+                var maybebuildSpecType = Maybe.From(buildSpecType.Value()).ToResult("buildspectype not found");
+                var maybebuildSpecTarget = Maybe.From(buildSpecTarget.Value()).ToResult("build spec target not found");
+                var maybeversion = Maybe.From(version.Value()).ToResult("version not found");
+
+                var result = Result.Combine(maybeProjectPath,
+                        maybebuildSpecName,
+                        maybebuildSpecType,
+                        maybebuildSpecTarget,
+                        maybeversion);
+
+                if (result.IsSuccess)
+                {
+                    var request = new BuildSpecSetVersionRequest(maybeProjectPath.Value, maybebuildSpecName.Value, maybebuildSpecType.Value, maybebuildSpecTarget.Value, maybeversion.Value);
+                    var response = await mediator.Send(request);
+                    console.WriteLine(response.result);
+                    return 0;
+                }
+                else 
+                { 
+                    console.Error.Write(result.Error);
+                    return 1;
+                }
+
             });
         });
         return app;

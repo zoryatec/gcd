@@ -1,17 +1,9 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Text.Json;
-using System.Xml;
-using CSharpFunctionalExtensions;
-using Gcd.CommandHandlers;
-using Gcd.Commands.NipkgAddPackageToAzFeed;
+﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
-using Gcd.LabViewProject;
-using McMaster.Extensions.CommandLineUtils;
+using Gcd.Handlers;
 using MediatR;
 
-namespace Gcd.Handlers;
+namespace Gcd.Commands.NipkgPackageBuild;
 
 public record PackageCreateRequest(string PackageContentPath, string PackageName, string PackageVersion, string PackageInstalationDir, string PackageDestinationDir) : IRequest<PackageCreateResponse>;
 public record PackageCreateResponse(string result);
@@ -22,7 +14,7 @@ public class PackageCreateHandler(IMediator _mediator)
     public async Task<PackageCreateResponse> Handle(PackageCreateRequest request, CancellationToken cancellationToken)
     {
 
-        string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString()); 
+        string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         string pckgDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
 
@@ -54,7 +46,7 @@ public class PackageCreateHandler(IMediator _mediator)
 
 
         string packageDestinationFilePath = Path.Combine(packageDestinationDir, packageFileName);
-        File.Copy(packageFilePath, packageDestinationFilePath,overwrite: true);
+        File.Copy(packageFilePath, packageDestinationFilePath, overwrite: true);
 
         Directory.Delete(temporaryDirectory, true);
 

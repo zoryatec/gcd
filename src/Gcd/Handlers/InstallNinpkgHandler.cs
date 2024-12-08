@@ -41,7 +41,7 @@ public class InstallNinpkgHandler(IMediator _mediator)
 
 
         var nipkgPath = @"C:\Program Files\National Instruments\NI Package Manager";
-        var requestToAddPath = new SystemAddToUserPathRequest(nipkgPath);
+        var requestToAddPath = new SystemAddToPathRequest(nipkgPath, EnvironmentVariableTarget.User);
         var response = await _mediator.Send(requestToAddPath);
 
 

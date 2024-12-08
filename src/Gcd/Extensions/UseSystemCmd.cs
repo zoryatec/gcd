@@ -41,15 +41,20 @@ public static class UseSystemExtensions
 
             addToUserPath.OnExecuteAsync( async cancelationToken =>
             {
-                string newPath = pathToAdd.Value;
+                var maybePath = Maybe.From(pathToAdd.Value);
+                if(maybePath.HasValue)
+                {
+                    var requestToAddPath = new SystemAddToPathRequest(maybePath.Value, EnvironmentVariableTarget.User);
+                    var response = await mediator.Send(requestToAddPath);
 
-                var requestToAddPath = new SystemAddToUserPathRequest(newPath);
-                var response = await mediator.Send(requestToAddPath);
+                    return response
+                        .Tap(() => console.Write("Path added sucessfully"))
+                        .TapError(error => console.Error.Write(error))
+                        .Finally(x => x.IsFailure ? 1 : 0);
 
-                return response
-                    .Tap(() => console.Write("Path added sucessfully"))
-                    .TapError(error => console.Error.Write(error))
-                    .Finally(x => x.IsFailure ? 1: 0);
+                }
+                console.Error.Write("Path not given");
+                return 1;
             });
         });
         return app;
@@ -64,35 +69,23 @@ public static class UseSystemExtensions
             addToUserPath.Description = "adds to user path";
 
             var pathToAdd = addToUserPath.Option("--path", "Path to be added to user path enviromental variable", CommandOptionType.SingleValue).IsRequired();
-            addToUserPath.OnExecute(async () =>
+            addToUserPath.OnExecuteAsync(async cancelationToken =>
             {
-                console.WriteLine(pathToAdd.Value());
-                string newPath = pathToAdd.Value();
-
-                // Get the current user's PATH environment variable
-                string currentPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine);
-
-                // Check if the new path is already in the PATH to avoid duplicates
-                if (!currentPath.Contains(newPath))
+                var maybePath = Maybe.From(pathToAdd.Value);
+                if (maybePath.HasValue)
                 {
-                    // Add the new path to the user's PATH
-                    string updatedPath = currentPath + ";" + newPath;
+                    var requestToAddPath = new SystemAddToPathRequest(maybePath.Value, EnvironmentVariableTarget.Machine);
+                    var response = await mediator.Send(requestToAddPath);
 
-                    // Set the new PATH value for the user (this affects the current user only)
-                    try
-                    {
-                        Environment.SetEnvironmentVariable("PATH", updatedPath, EnvironmentVariableTarget.Machine);
-                        console.WriteLine($"Added to PATH: {newPath}");
-                    }
-                    catch(Exception ex)
-                    {
-                        console.WriteLine(ex.Message);
-                    }
+                    return response
+                        .Tap(() => console.Write("Path added sucessfully"))
+                        .TapError(error => console.Error.Write(error))
+                        .Finally(x => x.IsFailure ? 1 : 0);
+
                 }
-                else
-                {
-                    console.WriteLine($"Path {newPath} already exists in PATH.");
-                }
+                console.Error.Write("Path not given");
+                return 1;
+
             });
         });
         return app;
