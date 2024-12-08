@@ -17,12 +17,12 @@ public static class UseNipkgAddPackageToAzFeedCmdExtensions
         app.Command(COMMAND_NAME, subCmd =>
         {
             subCmd.Description = COMMAND_DESCRIPTION;
-            var packagePath = subCmd.Option(PACKAGE_PATH_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
-            var feedUrl = subCmd.Option(AZ_FEED_URI_OPTION, AZ_FEED_URI_OPTION_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
+            var packagePathOption = subCmd.Option(PACKAGE_PATH_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
+            var feedUrlOption = subCmd.Option(AZ_FEED_URI_OPTION, AZ_FEED_URI_OPTION_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
             subCmd.OnExecuteAsync(async cancelationToken =>
             {
-                var feedUri = FeedUri.Create(feedUrl.Value());
-                var pathToPackage = PackagePath.Create(packagePath.Value());
+                var feedUri = FeedUri.Create(feedUrlOption.Value());
+                var pathToPackage = PackagePath.Create(packagePathOption.Value());
 
                 return await Result
                     .Combine(feedUri, pathToPackage)

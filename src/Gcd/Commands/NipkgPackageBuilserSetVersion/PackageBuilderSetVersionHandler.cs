@@ -13,13 +13,12 @@ using MediatR;
 
 namespace Gcd.Commands.NipkgPackageBuilserSetVersion;
 
-public record PackageBuilderSetVersionRequest(PackageDestinationDirectory PackagePath, PackageVersion PackageVersion) : IRequest<PackageBuilderSetVersionResponse>;
-public record PackageBuilderSetVersionResponse(string result);
+public record PackageBuilderSetVersionRequest(PackageDestinationDirectory PackagePath, PackageVersion PackageVersion) : IRequest<Result>;
 
 public class PackageBuilderSetVersionHandler()
-    : IRequestHandler<PackageBuilderSetVersionRequest, PackageBuilderSetVersionResponse>
+    : IRequestHandler<PackageBuilderSetVersionRequest, Result>
 {
-    public async Task<PackageBuilderSetVersionResponse> Handle(PackageBuilderSetVersionRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(PackageBuilderSetVersionRequest request, CancellationToken cancellationToken)
     {
         string currentDirectoryPath = Environment.CurrentDirectory;
         string packageDirectoryPath = Path.Combine(currentDirectoryPath, request.PackagePath.Value);
@@ -41,7 +40,7 @@ public class PackageBuilderSetVersionHandler()
 
         File.WriteAllText(controlFilePath, controlFileContent);
 
-        return new PackageBuilderSetVersionResponse("result");
+        return Result.Success();
     }
 }
 

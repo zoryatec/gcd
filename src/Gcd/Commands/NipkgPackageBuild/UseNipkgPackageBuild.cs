@@ -1,4 +1,5 @@
-﻿using Gcd.Commands.NipkgPackageBuild;
+﻿using CSharpFunctionalExtensions;
+using Gcd.Commands.NipkgPackageBuild;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,31 +15,44 @@ public static class UseNipkgPackageBuildCmdExtensions
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
 
-        app.Command(COMMAND, create =>
+        app.Command(COMMAND, cmd =>
         {
-            create.Description = COMMAND_DESCRIPTION;
-            var packageSoureDir = create.Option(PACKAGE_CONTENT_DIR_OPTION, PACKAGE_CONTENT_DIR_DESCRIPTION, CommandOptionType.SingleValue)
-                .IsRequired();
-            var packageName1 = create.Option(PACKAGE_NAME_OPTION, PACKAGE_NAME_DESCRIPTION, CommandOptionType.SingleValue)
-                .IsRequired();
-            var packageVersion1 = create.Option(PACKAGE_VERSION_OPTION, PACKAGE_VERSION_DESCRIPTION, CommandOptionType.SingleValue)
-                .IsRequired();
-            var packageInstalationDir1 = create.Option(PACKAGE_INSTALATION_DIR_OPTION, PACKAGE_INSTALATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
-                    .IsRequired();
-            var packageDestinationDir1 = create.Option(PACKAGE_DESTINATION_DIR_OPTION,PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
+            cmd.Description = COMMAND_DESCRIPTION;
+            var packageSoureDirOption = cmd
+                .Option(PACKAGE_CONTENT_DIR_OPTION, PACKAGE_CONTENT_DIR_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
 
-            create.OnExecuteAsync(async cancelationToken =>
+            var packageNameOption = cmd
+                .Option(PACKAGE_NAME_OPTION, PACKAGE_NAME_DESCRIPTION, CommandOptionType.SingleValue)
+                .IsRequired();
+
+            var packageVersionOption = cmd
+                .Option(PACKAGE_VERSION_OPTION, PACKAGE_VERSION_DESCRIPTION, CommandOptionType.SingleValue)
+                .IsRequired();
+
+            var packageInstalationOption = cmd
+                .Option(PACKAGE_INSTALATION_DIR_OPTION, PACKAGE_INSTALATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
+                .IsRequired();
+
+            var packageDestinationOption = cmd
+                .Option(PACKAGE_DESTINATION_DIR_OPTION,PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
+                .IsRequired();
+
+            cmd.OnExecuteAsync(async cancelationToken =>
             {
-                var packageContent = PackageContentDir.Create(packageSoureDir.Value());
-                var packageName = PackageName.Create(packageName1.Value());
-                var packageVersion = PackageVersion.Create(packageVersion1.Value());
-                var packageInstalationDir = PackageInstalationDir.Create(packageInstalationDir1.Value());
-                var packageDestinationDir = PackageDestinationDirectory.Create(packageDestinationDir1.Value());
+                var packageContent = PackageContentDir.Create(packageSoureDirOption.Value());
+                var packageName = PackageName.Create(packageNameOption.Value());
+                var packageVersion = PackageVersion.Create(packageVersionOption.Value());
+                var packageInstalationDir = PackageInstalationDir.Create(packageInstalationOption.Value());
+                var packageDestinationDir = PackageDestinationDirectory.Create(packageDestinationOption.Value());
 
-                var request = new PackageBuildRequest(packageContent.Value, packageName.Value, packageVersion.Value, packageInstalationDir.Value, packageDestinationDir.Value);
-                var response = await mediator.Send(request, cancelationToken);
-                console.WriteLine(response.result);
+                return await Result
+                    .Combine(packageContent, packageName, packageVersion, packageInstalationDir, packageDestinationDir)
+                    .Map(() => new PackageBuildRequest(packageContent.Value, packageName.Value, packageVersion.Value, packageInstalationDir.Value, packageDestinationDir.Value))
+                    .Bind((req1) => mediator.Send(req1, cancelationToken))
+                    .Tap(() => console.Write(SUCESS_MESSAGE))
+                    .TapError(error => console.Error.Write(error))
+                    .Finally(x => x.IsFailure ? 1 : 0);
             });
         });
         return app;

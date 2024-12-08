@@ -4,6 +4,7 @@ using Gcd.Commands.NipkgPackageBuilserSetVersion;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using static Gcd.Contract.Nipkg.PackageBuilderSetVersion;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData
 {
@@ -13,24 +14,27 @@ namespace Gcd.Commands.NipkgDownloadFeedMetaData
         {
             var console = serviceProvider.GetRequiredService<IConsole>();
             var mediator = serviceProvider.GetRequiredService<IMediator>();
-            //const string SUCESS_MESSAGE = "Metadata pushed successully";
 
-            app.Command("set-version", create =>
+            app.Command(COMMAND, create =>
             {
-                create.Description = "Create package template";
-                var packagePath = create.Option("--package-path", "Directory where package will be created", CommandOptionType.SingleValue)
+                create.Description = COMMAND_DESCRIPTION;
+                var packagePathOption = create.Option(PACKAGE_PATH_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue)
                     .IsRequired();
-                var packageVersion = create.Option("--package-version", "Package version.", CommandOptionType.SingleValue)
+                var packageVersionOption = create.Option(PACKAGE_VERSION_OPTION, PACKAGE_VERSION_DESCRIPTION, CommandOptionType.SingleValue)
                     .IsRequired();
 
-
-                create.OnExecute(async () =>
+                create.OnExecuteAsync(async cancelationToken =>
                 {
-                    var request = new PackageBuilderSetVersionRequest(
-                        PackageDestinationDirectory.Create(packagePath.Value()).Value,
-                        PackageVersion.Create(packageVersion.Value()).Value);
-                    var response = await mediator.Send(request);
-                    console.WriteLine(response.result);
+                    var packagePath = PackageDestinationDirectory.Create(packagePathOption.Value());
+                    var packageVersion = PackageVersion.Create(packageVersionOption.Value());
+
+                    return await Result
+                        .Combine(packagePath, packageVersion)
+                        .Map(() => new PackageBuilderSetVersionRequest(packagePath.Value, packageVersion.Value))
+                        .Bind((req1) => mediator.Send(req1, cancelationToken))
+                        .Tap(() => console.Write(SUCESS_MESSAGE))
+                        .TapError(error => console.Error.Write(error))
+                        .Finally(x => x.IsFailure ? 1 : 0);
                 });
             });
 

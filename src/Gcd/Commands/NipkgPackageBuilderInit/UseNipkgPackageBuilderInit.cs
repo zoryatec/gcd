@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgPackageBuild;
 using Gcd.Commands.NipkgPackageBuilderInit;
-using Gcd.Handlers;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,26 +19,29 @@ public static class UseNipkgPackageBuilderInitmdExtensions
         app.Command(COMMAND, create =>
         {
             create.Description = COMMAND_DESCRIPTION;
-            var packagePath = create.Option(PACKAGE_PATH_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue)
+            var packagePathOption = create.Option(PACKAGE_PATH_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
-            var packageName = create.Option(PACKAGE_NAME_OPTION, PACKAGE_NAME_DESCRIPTION, CommandOptionType.SingleValue)
+            var packageNameOption = create.Option(PACKAGE_NAME_OPTION, PACKAGE_NAME_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
-            var packageVersion = create.Option(PACKAGE_VERSION_OPTION, PACKAGE_VERSION_DESCRIPTION, CommandOptionType.SingleValue)
+            var packageVersionOption = create.Option(PACKAGE_VERSION_OPTION, PACKAGE_VERSION_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
-            var packageDestinationDir = create.Option(PACKAGE_DESTINATION_DIR_OPTION, PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
+            var packageDestinationDirOption = create.Option(PACKAGE_DESTINATION_DIR_OPTION, PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
 
-            create.OnExecute(async () =>
+            create.OnExecuteAsync(async cancelationToken =>
             {
-                var request = new PackageBuilderInitRequest(
-                    PackageContentDir.Create(packagePath.Value()).Value,
-                    PackageName.Create(packageName.Value()).Value,
-                    PackageVersion.Create(packageVersion.Value()).Value,
-                    PackageInstalationDir.Create(packageDestinationDir.Value()).Value);
+                var packagePath = PackageContentDir.Create(packagePathOption.Value());
+                var packageName = PackageName.Create(packageNameOption.Value());
+                var packageVersion = PackageVersion.Create(packageVersionOption.Value());
+                var packageDestination = PackageInstalationDir.Create(packageDestinationDirOption.Value());
 
-                var response = await mediator.Send(request);
-                if (response.IsFailure) console.Error.Write(response.Error);
-                else console.Out.Write(SUCESS_MESSAGE);
+                return await Result
+                    .Combine(packagePath, packageName, packageVersion, packageDestination)
+                    .Map(() => new PackageBuilderInitRequest(packagePath.Value, packageName.Value, packageVersion.Value, packageDestination.Value))
+                    .Bind((req1) => mediator.Send(req1, cancelationToken))
+                    .Tap(() => console.Write(SUCESS_MESSAGE))
+                    .TapError(error => console.Error.Write(error))
+                    .Finally(x => x.IsFailure ? 1 : 0);
             });
         });
 

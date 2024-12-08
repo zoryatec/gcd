@@ -63,13 +63,13 @@ public record PackageDestinationDirectory
 }
 
 
-public record PackageBuildRequest(PackageContentDir PackageContentPath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir, PackageDestinationDirectory PackageDestinationDir) : IRequest<PackageBuildResponse>;
-public record PackageBuildResponse(string result);
+public record PackageBuildRequest(PackageContentDir PackageContentPath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir, PackageDestinationDirectory PackageDestinationDir) : IRequest<Result>;
+
 
 public class PackageBuildHandler(IMediator _mediator)
-    : IRequestHandler<PackageBuildRequest, PackageBuildResponse>
+    : IRequestHandler<PackageBuildRequest, Result>
 {
-    public async Task<PackageBuildResponse> Handle(PackageBuildRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(PackageBuildRequest request, CancellationToken cancellationToken)
     {
 
         string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
@@ -111,7 +111,7 @@ public class PackageBuildHandler(IMediator _mediator)
 
         Directory.Delete(pckgDirectory, true);
 
-        return new PackageBuildResponse("result");
+        return Result.Success();
     }
 
     static void CopyDirectoryContents(string sourceDir, string destinationDir)
