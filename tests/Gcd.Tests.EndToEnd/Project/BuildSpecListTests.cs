@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace Gcd.Tests.EndToEnd.Project
 {
-    public class BuildSpecListTests
-    {
+    public class BuildSpecListTests : IClassFixture<TestFixture>
+    { 
         IGcdProcess _gcd;
         GcdArgsBuilder _args;
         ITempDirectoryGenerator _tempDirectoryGenerator;
         TestConfiguration _config;
-        public BuildSpecListTests()
+        public BuildSpecListTests(TestFixture testFixture)
         {
             _gcd = new GcdProcessApp();
             _args = new GcdArgsBuilder();
             _tempDirectoryGenerator = new TempDirectoryGenerator();
-            _config = new TestConfiguration();
+            _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
         }
 
         [Fact]

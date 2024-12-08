@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +15,12 @@ namespace Gcd.Tests.EndToEnd.Nipkg
         GcdArgsBuilder _args;
         ITempDirectoryGenerator _tempDirectoryGenerator;
         TestConfiguration _config;
-        public PullFeedMetaDataTests()
+        public PullFeedMetaDataTests(TestFixture testFixture)
         {
             _gcd = new GcdProcessApp();
             _args = new GcdArgsBuilder();
             _tempDirectoryGenerator = new TempDirectoryGenerator();
-            _config = new TestConfiguration();
+            _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
         }
 
         [Fact]

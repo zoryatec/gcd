@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,12 +13,12 @@ namespace Gcd.Tests.EndToEnd.Project
         GcdArgsBuilder _args;
         ITempDirectoryGenerator _tempDirectoryGenerator;
         TestConfiguration _config;
-        public BuildSpecSetVersionTests()
+        public BuildSpecSetVersionTests(TestFixture testFixture)
         {
             _gcd = new GcdProcessApp();
             _args = new GcdArgsBuilder();
             _tempDirectoryGenerator = new TempDirectoryGenerator();
-            _config = new TestConfiguration();
+            _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
         }
 
         [Fact]
