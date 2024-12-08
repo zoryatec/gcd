@@ -36,7 +36,7 @@ namespace Gcd.Commands.NipkgDownloadFeedMetaData
                     return await Result
                         .Combine(feedUri, feedPath)
                         .Map( () => new NipkgPushAzBlobFeedMetaRequest(feedUri.Value, feedPath.Value))
-                        .Tap(async (req) => await mediator.Send(req))
+                        .Bind(async (req) => await mediator.Send(req))
                         .Tap(() => console.Write(SUCESS_MESSAGE))
                         .TapError(error => console.Error.Write(error))
                         .Finally(x => x.IsFailure ? 1 : 0);

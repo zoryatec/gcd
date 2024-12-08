@@ -14,30 +14,30 @@ namespace Gcd.Services;
 public class AzBlobService : IDownloadAzBlobService, IUploadAzBlobService
 {
 
-    public async Task<UnitResult<Error>> UploadFileAsync(AzBlobUri blobUri, FilePath filePath) =>
+    public async Task<Result> UploadFileAsync(AzBlobUri blobUri, FilePath filePath) =>
 
            await UploadCoreAsync(blobUri.Value, filePath.Value);
   
 
-    private async Task<UnitResult<Error>> UploadCoreAsync(string fileUrl, string fileToUploadPath)
+    private async Task<Result> UploadCoreAsync(string fileUrl, string fileToUploadPath)
     {
         try
         {
             var blobClient = new BlobClient(new Uri(fileUrl));
             await blobClient.UploadAsync(fileToUploadPath, overwrite: true);
-            return UnitResult.Success<Error>();
+            return Result.Success();
         }
         catch (Exception ex)
         {
-            return UnitResult.Failure<Error>(new Error(ex.Message)); 
+            return Result.Failure(ex.Message); 
         }
 
     }
 
-    public async Task<UnitResult<Error>> DownloadFileAsync(AzBlobUri blobUri, FilePath filePath) =>
-        await Result.Try<Error>(
+    public async Task<Result> DownloadFileAsync(AzBlobUri blobUri, FilePath filePath) =>
+        await Result.Try(
             async () => await DownloadCore(blobUri.Value, filePath.Value),
-            ex => new Error(ex.Message));
+            ex => ex.Message);
 
     private async Task DownloadCore(string fileUrl, string downloadPath)
     {

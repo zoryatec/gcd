@@ -16,12 +16,12 @@ using MediatR;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData;
 
-public record NipkgPullFeedMetaRequest(FeedUri FeedUri, FeedPath FeedLocalDir) : IRequest<UnitResult<Error>>;
+public record NipkgPullFeedMetaRequest(FeedUri FeedUri, FeedPath FeedLocalDir) : IRequest<Result>;
 
 public class NipkgPullFeedMetaHandler(IDownloadAzBlobService downloadService)
-    : IRequestHandler<NipkgPullFeedMetaRequest, UnitResult<Error>>
+    : IRequestHandler<NipkgPullFeedMetaRequest, Result>
 {
-    public async Task<UnitResult<Error>> Handle(NipkgPullFeedMetaRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(NipkgPullFeedMetaRequest request, CancellationToken cancellationToken)
     {
 
         if (!Directory.Exists(request.FeedLocalDir.Value))
@@ -36,7 +36,7 @@ public class NipkgPullFeedMetaHandler(IDownloadAzBlobService downloadService)
             "Packages.stamps");
     }
 
-    private async Task<UnitResult<Error>> DownloadMany(FeedUri feedUri, FeedPath feedLocalDir, params string[] fileNames)
+    private async Task<Result> DownloadMany(FeedUri feedUri, FeedPath feedLocalDir, params string[] fileNames)
     {
         foreach (var fileName in fileNames)
         {
@@ -47,7 +47,7 @@ public class NipkgPullFeedMetaHandler(IDownloadAzBlobService downloadService)
             var result = await downloadService.DownloadFileAsync(blobUri.Value, filePath.Value);
             if (result.IsFailure) return result;
         }
-        return UnitResult.Success<Error>();
+        return Result.Success();
     }
 
     private string CreateSubUrl(string baseUrl, string subPath, string queryParam)

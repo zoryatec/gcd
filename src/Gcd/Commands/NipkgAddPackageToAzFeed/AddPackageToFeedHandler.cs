@@ -22,15 +22,15 @@ public record PackagePath
     public string Value { get; }
 }
 
- public record AddPackageToFeedRequest(FeedUri FeedUri, PackagePath PackagePath) : IRequest<UnitResult<Error>>;
+ public record AddPackageToFeedRequest(FeedUri FeedUri, PackagePath PackagePath) : IRequest<Result>;
 public record AddPackageToFeedResponse(string Result);
 
 public class AddPackageToFeedHandler(
     IMediator mediator,
     IUploadAzBlobService uploadService)
-    : IRequestHandler<AddPackageToFeedRequest, UnitResult<Error>>
+    : IRequestHandler<AddPackageToFeedRequest, Result>
 {
-    public async Task<UnitResult<Error>> Handle(AddPackageToFeedRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(AddPackageToFeedRequest request, CancellationToken cancellationToken)
     {
         string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         string currentDirectoryPath = Environment.CurrentDirectory;
@@ -61,7 +61,7 @@ public class AddPackageToFeedHandler(
         return await UploadPackage(request.FeedUri, FeedPath.Create(localFeedPath).Value, packageName);
     }
 
-    private async Task<UnitResult<Error>> UploadPackage(FeedUri feedUri, FeedPath localFeedPath, string packageName)
+    private async Task<Result> UploadPackage(FeedUri feedUri, FeedPath localFeedPath, string packageName)
     {
         string nipkgUrl = CreateSubUrl(feedUri, packageName);
 
@@ -76,7 +76,7 @@ public class AddPackageToFeedHandler(
         return $"{feedUri.BaseUri}/{subPath}{feedUri.Query}";
     }
 
-    private async Task<UnitResult<Error>> AddPackageToLcalFeed(string feedDir, string packagePath)
+    private async Task<Result> AddPackageToLcalFeed(string feedDir, string packagePath)
     {
 
         var arguments = new string[] { "feed-add-pkg", feedDir, packagePath };

@@ -37,6 +37,6 @@ public record FilePath
 }
 public interface IUploadAzBlobService
 {
-    public Task<UnitResult<Error>> UploadFileAsync(AzBlobUri blobUri, FilePath filePath );
+    public Task<Result> UploadFileAsync(AzBlobUri blobUri, FilePath filePath );
 }
 

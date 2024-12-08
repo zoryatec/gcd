@@ -17,19 +17,19 @@ using MediatR;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData;
 
-public record  RunNipkgRequest(string[] arguments) : IRequest<UnitResult<Error>>;
+public record  RunNipkgRequest(string[] arguments) : IRequest<Result>;
 
 public class  RunNipkgHandler()
-    : IRequestHandler< RunNipkgRequest, UnitResult<Error>>
+    : IRequestHandler< RunNipkgRequest, Result>
 {
-    public async Task<UnitResult<Error>> Handle( RunNipkgRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle( RunNipkgRequest request, CancellationToken cancellationToken)
     {
 
         return RunNipkg(request.arguments);
     }
 
 
-    private UnitResult<Error> RunNipkg(string[] args)
+    private Result RunNipkg(string[] args)
     {
         // Initialize the ProcessStartInfo with the command
         string nipkg = @"""C:\Program Files\National Instruments\NI Package Manager\nipkg.exe""";
@@ -72,11 +72,11 @@ public class  RunNipkgHandler()
                 }
 
             }
-            return UnitResult.Success<Error>();
+            return Result.Success();
         }
         catch (Exception ex)
         {
-            return UnitResult.Failure<Error>(new Error($"Error running command: {ex.Message}"));
+            return Result.Failure(ex.Message);
         }
     }
 }
