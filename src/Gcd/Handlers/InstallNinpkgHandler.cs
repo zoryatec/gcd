@@ -72,10 +72,10 @@ public class InstallNinpkgHandler(IMediator _mediator)
             };
 
             // Start the process
-            using (Process process = Process.Start(startInfo))
+            using (Process? process = Process.Start(startInfo))
             {
                 // Capture and display output
-
+                _ = process ?? throw new ArgumentNullException(nameof(process));
 
                 process.WaitForExit();  // Wait for the process to exit
 
@@ -116,8 +116,9 @@ public class InstallNinpkgHandler(IMediator _mediator)
 
         try
         {
-            using (Process process = Process.Start(startInfo))
+            using (Process? process = Process.Start(startInfo))
             {
+                _ = process ?? throw new ArgumentNullException(nameof(process));
                 // Read the standard output and error
 
 

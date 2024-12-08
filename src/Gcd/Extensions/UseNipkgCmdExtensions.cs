@@ -72,36 +72,13 @@ namespace Gcd.Extensions
                     return 1;
                 });
                 template.UseNipkgPackageBuilderInitmd(serviceProvider);
-                template.UsePackageBuilderSetVersionCmd(serviceProvider);
+                template.UseNipkgPackageBuilderSetVersionCmd(serviceProvider);
             });
 
             return app;
         }
 
 
-        public static CommandLineApplication UsePackageBuilderSetVersionCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
-        {
-            var console = serviceProvider.GetRequiredService<IConsole>();
-            var mediator = serviceProvider.GetRequiredService<IMediator>();
-            app.Command("set-version", create =>
-            {
-                create.Description = "Create package template";
-                var packagePath = create.Option("--package-path", "Directory where package will be created", CommandOptionType.SingleValue)
-                    .IsRequired();
-                var packageVersion = create.Option("--package-version", "Package version.", CommandOptionType.SingleValue)
-                    .IsRequired();
-
-
-                create.OnExecute(async () =>
-                {
-                    var request = new PackageBuilderSetVersionRequest(packagePath.Value(), packageVersion.Value());
-                    var response = await mediator.Send(request);
-                    console.WriteLine(response.result);
-                });
-            });
-
-            return app;
-        }
 
         public static CommandLineApplication UsePackageCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
         {

@@ -14,7 +14,7 @@ namespace Gcd.Commands.NipkgDownloadFeedMetaData
         {
             var console = serviceProvider.GetRequiredService<IConsole>();
             var mediator = serviceProvider.GetRequiredService<IMediator>();
-            const string SUCESS_MESSAGE = "Metadata pushed successully";
+            //const string SUCESS_MESSAGE = "Metadata pushed successully";
 
             app.Command("create", create =>
             {
