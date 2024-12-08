@@ -46,7 +46,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg
             // Arrange
             var feedSourceDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
             var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
-            var feedUri = _config.GetAzureAddPkgTestFeedUri();
+            var feedUri = _config.GetAzurePushPullTestFeedUri();
 
             var sourcePackageContent = Guid.NewGuid().ToString();
             var sourcePackageGzContent = Guid.NewGuid().ToString();

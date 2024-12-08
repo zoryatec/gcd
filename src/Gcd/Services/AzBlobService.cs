@@ -16,15 +16,15 @@ public class AzBlobService : IDownloadAzBlobService, IUploadAzBlobService
 
     public async Task<UnitResult<Error>> UploadFileAsync(AzBlobUri blobUri, FilePath filePath) =>
 
-            UploadCore(blobUri.Value, filePath.Value);
+           await UploadCoreAsync(blobUri.Value, filePath.Value);
   
 
-    private UnitResult<Error> UploadCore(string fileUrl, string fileToUploadPath)
+    private async Task<UnitResult<Error>> UploadCoreAsync(string fileUrl, string fileToUploadPath)
     {
         try
         {
             var blobClient = new BlobClient(new Uri(fileUrl));
-            blobClient.Upload(fileToUploadPath, overwrite: true);
+            await blobClient.UploadAsync(fileToUploadPath, overwrite: true);
             return UnitResult.Success<Error>();
         }
         catch (Exception ex)

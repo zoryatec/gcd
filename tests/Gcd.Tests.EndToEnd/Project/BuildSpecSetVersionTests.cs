@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Gcd.Tests.EndToEnd.Project
 {
-    public class BuildSpecSetVersionTests
+    public class BuildSpecSetVersionTests : IClassFixture<TestFixture>
     {
         IGcdProcess _gcd;
         GcdArgsBuilder _args;

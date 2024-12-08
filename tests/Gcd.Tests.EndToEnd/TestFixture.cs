@@ -13,10 +13,12 @@ public class TestFixture
         var configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory()) // Path to your test project
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile("appsettings.developement.json", optional: true, reloadOnChange: true)
+            .AddJsonFile("appsettings.dev.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables()
             .Build();
 
         // Setup DI
+
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddScoped<IConfiguration>(x => configuration);
         serviceCollection.AddScoped<TestConfiguration>();

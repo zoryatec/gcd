@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Gcd.Tests.EndToEnd.Nipkg
 {
-    public class PullFeedMetaDataTests
+    public class PullFeedMetaDataTests  : IClassFixture<TestFixture>
     {
         IGcdProcess _gcd;
         GcdArgsBuilder _args;

@@ -39,6 +39,18 @@
 		</testdata>
 	</ItemGroup>
 
+	<ItemGroup>
+		<Content Include="appsettings.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="appsettings.dev.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
 
 	<Target Name="CopyDirectoryToBuildOutput" AfterTargets="Build">
 		<Copy SourceFiles="@(testdata)" DestinationFolder="$(OutDir)testdata\%(RecursiveDir)" SkipUnchangedFiles="false" />
