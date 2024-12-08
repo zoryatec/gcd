@@ -15,7 +15,7 @@ using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
-namespace Gcd.Handlers;
+namespace Gcd.Commands.NipkgInstallNipkg;
 
 public record InstallNinpkgRequest() : IRequest<InstallNinpkgResponse>;
 public record InstallNinpkgResponse(string result);

@@ -1,8 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
-using Gcd.CommandHandlers;
 using Gcd.Commands.SystemAddToPath;
-using Gcd.Handlers;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;

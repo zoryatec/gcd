@@ -1,18 +1,10 @@
-﻿using Gcd.Handlers;
-using McMaster.Extensions.CommandLineUtils;
+﻿using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
-using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgAddPackageToAzFeed;
-using Gcd.Commands.NipkgPackageBuilderInit;
-using Gcd.Commands.NipkgPackageBuild;
-using Gcd.Commands.NipkgPackageBuilserSetVersion;
+using Gcd.Commands.NipkgInstallNipkg;
+
 
 namespace Gcd.Extensions
 {
