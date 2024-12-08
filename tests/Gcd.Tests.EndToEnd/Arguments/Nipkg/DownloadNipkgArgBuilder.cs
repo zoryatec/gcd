@@ -1,4 +1,4 @@
-﻿using System;
+﻿using static Gcd.Contract.Nipkg.DownloadNipkg;
 
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg
 {
@@ -7,12 +7,12 @@ namespace Gcd.Tests.EndToEnd.Arguments.Nipkg
         public DownloadNipkgArgBuilder()
         {
             WithArg("nipkg");
-            WithArg("download-nipkg");
+            WithArg(COMMAND);
         }
 
         public DownloadNipkgArgBuilder WithLocalPath(string fileLocalPath)
         {
-            WithOption("--download-path", fileLocalPath);
+            WithOption(DOWNLOAD_PATH_OPTION, fileLocalPath);
             return this;
         }
     }

@@ -1,22 +1,23 @@
-﻿namespace Gcd.Tests.EndToEnd.Arguments.Nipkg
+﻿using static Gcd.Contract.Nipkg.PullFeedMetaData;
+namespace Gcd.Tests.EndToEnd.Arguments.Nipkg
 {
     public class PullFeedMetaArgBuilder : ArgumentsBuilder
     {
         public PullFeedMetaArgBuilder()
         {
             WithArg("nipkg");
-            WithArg("pull-feed-meta");
+            WithArg(COMMAND);
         }
 
         public PullFeedMetaArgBuilder WithFeedLocalPath(string feedLocalPath)
         {
-            WithOption("--feed-local-path",feedLocalPath);
+            WithOption(FEED_LOCAL_PATH_OPTION,feedLocalPath);
             return this;
         }
 
         public PullFeedMetaArgBuilder WithFeedUri(string feedUri)
         {
-            WithOption("--feed-uri", feedUri);
+            WithOption(REMOTE_FEED_URI_OPTION, feedUri);
             return this;
         }
     }

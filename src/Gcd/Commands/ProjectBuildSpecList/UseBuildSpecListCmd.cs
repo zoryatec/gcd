@@ -3,6 +3,7 @@ using Gcd.Commands.ProjectBuildSpecList;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using static Gcd.Contract.Project.BuildSpecList;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData;
 
@@ -12,12 +13,11 @@ public static class UseBuildSpecListCmdExtensions
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
-        //const string SUCESS_MESSAGE = "Metadata pushed successully";
 
-        app.Command("list", listCmd =>
+        app.Command(COMMAND, listCmd =>
         {
-            listCmd.Description = "List build specificatnions";
-            var projectPath = listCmd.Option("--project-path", "Absolute path to a project", CommandOptionType.SingleValue)
+            listCmd.Description = COMMAND_DESCRIPTION;
+            var projectPath = listCmd.Option(PROJECT_PATH_OPTION, PROJECT_PATH_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
             listCmd.OnExecute(async () =>
             {
