@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Gcd.CommandHandlers;
+using Gcd.Commands.ProjectBuildSpecSetVersion;
 using Gcd.Handlers;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
@@ -83,7 +84,7 @@ public static class UseProjectCmdExtensions
             var version = listCmd.Option("--version", "Version to be set", CommandOptionType.SingleValue)
                 .IsRequired();
 
-            listCmd.OnExecute(async () =>
+            listCmd.OnExecuteAsync(async cancelationToken =>
             {
                 var request = new BuildSpecSetVersionRequest(projectPath.Value(), buildSpecName.Value(), buildSpecType.Value(), buildSpecTarget.Value(),version.Value());
                 var response = await mediator.Send(request);

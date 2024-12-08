@@ -7,7 +7,7 @@ using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
-namespace Gcd.Handlers;
+namespace Gcd.Commands.ProjectBuildSpecSetVersion;
 
 public record BuildSpecSetVersionRequest(string projectPath, string buildSpecName, string buildSpecType, string buildSpecTarget, string versionToSet) : IRequest<BuildSpecSetVersioResponse>;
 public record BuildSpecSetVersioResponse(string result);
@@ -21,7 +21,7 @@ public class BuildSpecSetVersionHandler(ILabViewProjectProvider _labViewProjectP
         var project = maybeProject.Value;
 
 
-        var buildSpecMaybe =  project.GetBuildSpec(request.buildSpecName, request.buildSpecType, request.buildSpecTarget);
+        var buildSpecMaybe = project.GetBuildSpec(request.buildSpecName, request.buildSpecType, request.buildSpecTarget);
         var buildSpec = buildSpecMaybe.Value;
 
         var version = BuildSpecVersion.Create(request.versionToSet);
