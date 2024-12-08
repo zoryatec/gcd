@@ -1,4 +1,4 @@
-using Gcd.Handlers;
+using Gcd.Commands.ProjectBuildSpecList;
 
 namespace Gcd.CommandHandlers;
 

@@ -10,7 +10,7 @@ using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
-namespace Gcd.Handlers;
+namespace Gcd.Commands.NipkgPackageBuilserSetVersion;
 
 public record PackageBuilderSetVersionRequest(string PackagePath, string PackageVersion) : IRequest<PackageBuilderSetVersionResponse>;
 public record PackageBuilderSetVersionResponse(string result);

@@ -1,6 +1,7 @@
 using System.Text.Json;
 using CSharpFunctionalExtensions;
 using Gcd.CommandHandlers;
+using Gcd.Commands.ProjectBuildSpecList;
 using Gcd.Commands.ProjectBuildSpecSetVersion;
 using Gcd.Handlers;
 using McMaster.Extensions.CommandLineUtils;

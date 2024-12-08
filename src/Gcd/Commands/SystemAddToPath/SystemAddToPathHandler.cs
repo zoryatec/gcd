@@ -10,7 +10,7 @@ using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
-namespace Gcd.Handlers;
+namespace Gcd.Commands.SystemAddToPath;
 
 public record SystemAddToPathRequest(string PathToAdd, EnvironmentVariableTarget Target) : IRequest<Result>;
 
@@ -26,7 +26,7 @@ public class SystemAddToPathHandler()
         //string currentPath = Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User);
         var currentPath = Maybe.From(Environment.GetEnvironmentVariable("PATH", request.Target));
 
-        if(currentPath.HasValue)
+        if (currentPath.HasValue)
         {
             // Check if the new path is already in the PATH to avoid duplicates
             if (!currentPath.Value.Contains(newPath))

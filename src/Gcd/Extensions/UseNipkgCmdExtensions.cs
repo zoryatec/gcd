@@ -12,6 +12,7 @@ using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgAddPackageToAzFeed;
 using Gcd.Commands.NipkgPackageBuilderInit;
 using Gcd.Commands.NipkgPackageBuild;
+using Gcd.Commands.NipkgPackageBuilserSetVersion;
 
 namespace Gcd.Extensions
 {

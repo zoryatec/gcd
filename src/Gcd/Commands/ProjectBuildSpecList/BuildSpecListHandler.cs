@@ -6,7 +6,7 @@ using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
-namespace Gcd.Handlers;
+namespace Gcd.Commands.ProjectBuildSpecList;
 
 public record BuildSpecDto(string Name, string Type, string Target, string Version);
 public record BuildSpecListRequest(string projectPaht) : IRequest<BuildSpecListResponse>;

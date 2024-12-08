@@ -10,6 +10,7 @@ using System.Text.Json;
 using System.Xml;
 using CSharpFunctionalExtensions;
 using Gcd.CommandHandlers;
+using Gcd.Commands.SystemAddToPath;
 using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
