@@ -12,13 +12,12 @@ using MediatR;
 
 namespace Gcd.Commands.NipkgPackageBuilderInit;
 
-public record TemplateCreateRequest(PackageContentDir PackagePath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir) : IRequest<TemplateCreateResponse>;
-public record TemplateCreateResponse(string result);
+public record PackageBuilderInitRequest(PackageContentDir PackagePath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir) : IRequest<Result>;
 
 public class TemplateCreateHandler()
-    : IRequestHandler<TemplateCreateRequest, TemplateCreateResponse>
+    : IRequestHandler<PackageBuilderInitRequest, Result>
 {
-    public async Task<TemplateCreateResponse> Handle(TemplateCreateRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(PackageBuilderInitRequest request, CancellationToken cancellationToken)
     {
         string currentDirectoryPath = Environment.CurrentDirectory;
         string packageDirectoryPath = Path.Combine(currentDirectoryPath, request.PackagePath.Value);
@@ -76,7 +75,7 @@ Depends:
         File.WriteAllText(instructionFilePath, instructionFileContent);
 
 
-        return new TemplateCreateResponse("result");
+        return Result.Success();
     }
 }
 

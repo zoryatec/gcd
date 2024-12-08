@@ -28,7 +28,7 @@ public static class UseNipkgPackageBuildCmdExtensions
             var packageDestinationDir1 = create.Option(PACKAGE_DESTINATION_DIR_OPTION,PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
 
-            create.OnExecute(async () =>
+            create.OnExecuteAsync(async cancelationToken =>
             {
                 var packageContent = PackageContentDir.Create(packageSoureDir.Value());
                 var packageName = PackageName.Create(packageName1.Value());
@@ -37,7 +37,7 @@ public static class UseNipkgPackageBuildCmdExtensions
                 var packageDestinationDir = PackageDestinationDirectory.Create(packageDestinationDir1.Value());
 
                 var request = new PackageBuildRequest(packageContent.Value, packageName.Value, packageVersion.Value, packageInstalationDir.Value, packageDestinationDir.Value);
-                var response = await mediator.Send(request);
+                var response = await mediator.Send(request, cancelationToken);
                 console.WriteLine(response.result);
             });
         });

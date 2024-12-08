@@ -5,45 +5,46 @@ using Gcd.Handlers;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using static Gcd.Contract.Nipkg.PackageBuilderInit;
 
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData
+namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+
+public static class UseNipkgPackageBuilderInitmdExtensions
 {
-    public static class UseNipkgPackageBuilderInitmdExtensions
+    public static CommandLineApplication UseNipkgPackageBuilderInitmd(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
-        public static CommandLineApplication UseNipkgPackageBuilderInitmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+        var console = serviceProvider.GetRequiredService<IConsole>();
+        var mediator = serviceProvider.GetRequiredService<IMediator>();
+
+        app.Command(COMMAND, create =>
         {
-            var console = serviceProvider.GetRequiredService<IConsole>();
-            var mediator = serviceProvider.GetRequiredService<IMediator>();
+            create.Description = COMMAND_DESCRIPTION;
+            var packagePath = create.Option(PACKAGE_PATH_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue)
+                .IsRequired();
+            var packageName = create.Option(PACKAGE_NAME_OPTION, PACKAGE_NAME_DESCRIPTION, CommandOptionType.SingleValue)
+                .IsRequired();
+            var packageVersion = create.Option(PACKAGE_VERSION_OPTION, PACKAGE_VERSION_DESCRIPTION, CommandOptionType.SingleValue)
+                .IsRequired();
+            var packageDestinationDir = create.Option(PACKAGE_DESTINATION_DIR_OPTION, PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
+                .IsRequired();
 
-            //const string SUCESS_MESSAGE = "Metadata pushed successully";
-            app.Command("create", create =>
+            create.OnExecute(async () =>
             {
-                create.Description = "Create package template";
-                var packagePath = create.Option("--package-path", "Directory where package will be created", CommandOptionType.SingleValue)
-                    .IsRequired();
-                var packageName = create.Option("--package-name", "Package name.", CommandOptionType.SingleValue)
-                    .IsRequired();
-                var packageVersion = create.Option("--package-version", "Package version.", CommandOptionType.SingleValue)
-                    .IsRequired();
-                var packageDestinationDir = create.Option("--package-destination-dir", "Destination dir version.", CommandOptionType.SingleValue)
-                    .IsRequired();
+                var request = new PackageBuilderInitRequest(
+                    PackageContentDir.Create(packagePath.Value()).Value,
+                    PackageName.Create(packageName.Value()).Value,
+                    PackageVersion.Create(packageVersion.Value()).Value,
+                    PackageInstalationDir.Create(packageDestinationDir.Value()).Value);
 
-                create.OnExecute(async () =>
-                {
-                    var request = new TemplateCreateRequest(
-                        PackageContentDir.Create(packagePath.Value()).Value,
-                        PackageName.Create(packageName.Value()).Value,
-                       PackageVersion.Create(packageVersion.Value()).Value,
-                       PackageInstalationDir.Create(packageDestinationDir.Value()).Value);
-
-                    var response = await mediator.Send(request);
-                    console.WriteLine(response.result);
-                });
+                var response = await mediator.Send(request);
+                if (response.IsFailure) console.Error.Write(response.Error);
+                else console.Out.Write(SUCESS_MESSAGE);
             });
+        });
 
-            return app;
-        }
+        return app;
     }
 }
+
 

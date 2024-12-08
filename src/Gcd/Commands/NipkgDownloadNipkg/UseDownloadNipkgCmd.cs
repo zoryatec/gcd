@@ -27,12 +27,11 @@ public static class UseDownloadNipkgCmdExtensions
 
                 return await filePath
                     .Map((arg) => new DownloadNipkgRequest(arg))
-                    .Bind(async (req) => await mediator.Send(req))
+                    .Bind(async (req) => await mediator.Send(req,cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);
             });
-
         });
         return app;
     }

@@ -84,7 +84,7 @@ public class PackageBuildHandler(IMediator _mediator)
 
 
         var temporaryDir = PackageContentDir.Create(temporaryDirectory);
-        var subRequest = new TemplateCreateRequest(temporaryDir.Value, request.PackageName, request.PackageVersion, request.PackageInstalationDir);
+        var subRequest = new PackageBuilderInitRequest(temporaryDir.Value, request.PackageName, request.PackageVersion, request.PackageInstalationDir);
         var subResponse = await _mediator.Send(subRequest);
 
         var contnetDestinationPaht = $"{temporaryDirectory}\\data\\{request.PackageInstalationDir.Value}";
