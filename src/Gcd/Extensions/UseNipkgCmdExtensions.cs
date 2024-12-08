@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
 using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgAddPackageToAzFeed;
+using Gcd.Commands.NipkgPackageBuilderInit;
+using Gcd.Commands.NipkgPackageBuild;
 
 namespace Gcd.Extensions
 {
@@ -68,39 +70,13 @@ namespace Gcd.Extensions
                     template.ShowHelp();
                     return 1;
                 });
-                template.UsePackageBuilderCreateCmd(serviceProvider);
+                template.UseNipkgPackageBuilderInitmd(serviceProvider);
                 template.UsePackageBuilderSetVersionCmd(serviceProvider);
             });
 
             return app;
         }
 
-        public static CommandLineApplication UsePackageBuilderCreateCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
-        {
-            var console = serviceProvider.GetRequiredService<IConsole>();
-            var mediator = serviceProvider.GetRequiredService<IMediator>();
-            app.Command("create", create =>
-            {
-                create.Description = "Create package template";
-                var packagePath = create.Option("--package-path", "Directory where package will be created", CommandOptionType.SingleValue)
-                    .IsRequired();
-                var packageName = create.Option("--package-name", "Package name.", CommandOptionType.SingleValue)
-                    .IsRequired();
-                var packageVersion = create.Option("--package-version", "Package version.", CommandOptionType.SingleValue)
-                    .IsRequired();
-                var packageDestinationDir = create.Option("--package-destination-dir", "Destination dir version.", CommandOptionType.SingleValue)
-                    .IsRequired();
-
-                create.OnExecute(async () =>
-                {
-                    var request = new TemplateCreateRequest(packagePath.Value(), packageName.Value(), packageVersion.Value(), packageDestinationDir.Value());
-                    var response = await mediator.Send(request);
-                    console.WriteLine(response.result);
-                });
-            });
-
-            return app;
-        }
 
         public static CommandLineApplication UsePackageBuilderSetVersionCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
         {

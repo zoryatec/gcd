@@ -5,13 +5,14 @@ using System.Text.Json;
 using System.Xml;
 using CSharpFunctionalExtensions;
 using Gcd.CommandHandlers;
+using Gcd.Commands.NipkgPackageBuild;
 using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
-namespace Gcd.Handlers;
+namespace Gcd.Commands.NipkgPackageBuilderInit;
 
-public record TemplateCreateRequest(string PackagePath, string PackageName, string PackageVersion, string PackageDestinationDir) : IRequest<TemplateCreateResponse>;
+public record TemplateCreateRequest(PackageContentDir PackagePath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir) : IRequest<TemplateCreateResponse>;
 public record TemplateCreateResponse(string result);
 
 public class TemplateCreateHandler()
@@ -20,12 +21,12 @@ public class TemplateCreateHandler()
     public async Task<TemplateCreateResponse> Handle(TemplateCreateRequest request, CancellationToken cancellationToken)
     {
         string currentDirectoryPath = Environment.CurrentDirectory;
-        string packageDirectoryPath = Path.Combine(currentDirectoryPath,request.PackagePath);
+        string packageDirectoryPath = Path.Combine(currentDirectoryPath, request.PackagePath.Value);
 
         if (Directory.Exists(packageDirectoryPath))
         {
             // Delete the directory
-            Directory.Delete(packageDirectoryPath, true); 
+            Directory.Delete(packageDirectoryPath, true);
         }
 
 
@@ -39,7 +40,7 @@ public class TemplateCreateHandler()
         string dataDirectoryPath = Path.Combine(packageDirectoryPath, "data");
         Directory.CreateDirectory(dataDirectoryPath);
 
-        string windPath = request.PackageDestinationDir.Replace('/', '\\');
+        string windPath = request.PackageInstalationDir.Value.Replace('/', '\\');
         string destinationDirectory = Path.Combine(dataDirectoryPath, windPath);
         Directory.CreateDirectory(destinationDirectory);
 
@@ -56,8 +57,8 @@ XB-Plugin: file
 XB-UserVisible: yes
 XB-StoreProduct: yes
 XB-Section: Application Software
-Package: {request.PackageName}
-Version: {request.PackageVersion}
+Package: {request.PackageName.Value}
+Version: {request.PackageVersion.Value}
 Depends: 
 ";
         string controlFilePath = Path.Combine(controlDirectoryPath, "control");

@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgAddPackageToAzFeed;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
+using Gcd.Commands.NipkgPackageBuilderInit;
 using Gcd.Handlers;
 using MediatR;
 
@@ -82,7 +83,8 @@ public class PackageBuildHandler(IMediator _mediator)
         }
 
 
-        var subRequest = new TemplateCreateRequest(temporaryDirectory, request.PackageName.Value, request.PackageVersion.Value, request.PackageDestinationDir.Value);
+        var temporaryDir = PackageContentDir.Create(temporaryDirectory);
+        var subRequest = new TemplateCreateRequest(temporaryDir.Value, request.PackageName, request.PackageVersion, request.PackageInstalationDir);
         var subResponse = await _mediator.Send(subRequest);
 
         var contnetDestinationPaht = $"{temporaryDirectory}\\data\\{request.PackageInstalationDir.Value}";
