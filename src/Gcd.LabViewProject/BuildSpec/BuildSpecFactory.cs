@@ -1,4 +1,5 @@
 using System.Xml;
+using System.Xml.Linq;
 using CSharpFunctionalExtensions;
 
 namespace Gcd.LabViewProject;
@@ -7,7 +8,10 @@ public class BuildSpecFactory
 {
     public Result<IBuildSpec> Create(XmlNode specNode)
     {
-        string type = specNode.Attributes["Type"]?.Value;
+        ArgumentNullException.ThrowIfNull(specNode.Attributes, nameof(specNode.Attributes));
+        var attributes = specNode.Attributes;
+
+        string type = attributes["Type"]?.Value ?? throw new ArgumentNullException("attributes[\"Type\"]?.Value");
 
         switch (type)
         {

@@ -21,13 +21,18 @@ public class LabViewProject
         Path = path;
         _xmlDocument = new XmlDocument();
         _xmlDocument.LoadXml(projectContent);
+        ArgumentNullException.ThrowIfNull(_xmlDocument);
 
-        XmlNode buildSpecsNode = _xmlDocument.SelectSingleNode("//Item[@Name='Build Specifications' and @Type='Build']");
+        XmlNode buildSpecsNode = _xmlDocument.SelectSingleNode("//Item[@Name='Build Specifications' and @Type='Build']") ?? throw new ArgumentNullException("//Item[@Name='Build Specifications' and @Type='Build']");
 
         _buildSpecifications = new List<IBuildSpec>();
         // Extract and print all build specification names
         var buildSpecFactory = new BuildSpecFactory();
-        foreach (XmlNode item in buildSpecsNode.SelectNodes("Item"))
+        ArgumentNullException.ThrowIfNull(buildSpecsNode);
+
+        var nodeList = buildSpecsNode.SelectNodes("Item") ?? throw new ArgumentNullException(" buildSpecsNode.SelectNodes(\"Item\")");
+
+        foreach (XmlNode item in nodeList)
         {
             var buildSpec = buildSpecFactory.Create(item);
             _buildSpecifications.Add(buildSpec.Value);

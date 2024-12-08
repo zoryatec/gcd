@@ -17,7 +17,6 @@ public class BuildSpec : IBuildSpec
         _node = node;
         ArgumentNullException.ThrowIfNull(_node.Attributes, nameof(_node.Attributes));
         _attributes = _node.Attributes;
-        ArgumentNullException.ThrowIfNull(_attributes["Name"], "Buildspec name");
     }
     public void SetVersion(BuildSpecVersion version)
     {
