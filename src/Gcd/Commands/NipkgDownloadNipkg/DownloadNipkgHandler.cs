@@ -12,7 +12,7 @@ using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
-namespace Gcd.Handlers;
+namespace Gcd.Commands.NipkgDownloadNipkg;
 
 public record DownloadNipkgRequest(string DownloadPath) : IRequest<DownloadNipkgResponse>;
 public record DownloadNipkgResponse(string Result);

@@ -28,7 +28,7 @@ namespace Gcd.Extensions
                     return 1;
                 });
                 nipkg.UseInstallNipkg(serviceProvider);
-                nipkg.UseDownloadlNipkg(serviceProvider);
+                nipkg.UseDownloadNipkgCmd(serviceProvider);
                 nipkg.UseTemplatedCmd(serviceProvider);
                 nipkg.UsePackageCmd(serviceProvider);
                 nipkg.UseNipkgAddPackageToAzFeedCmd(serviceProvider);
@@ -56,25 +56,6 @@ namespace Gcd.Extensions
             return app;
         }
 
-        public static CommandLineApplication UseDownloadlNipkg(this CommandLineApplication app, IServiceProvider serviceProvider)
-        {
-            var console = serviceProvider.GetRequiredService<IConsole>();
-            var mediator = serviceProvider.GetRequiredService<IMediator>();
-            app.Command("download-nipkg", subCmd =>
-            {
-                subCmd.Description = "Create package template";
-                var downloadPath = subCmd.Option("--download-path", "File path must end with exe", CommandOptionType.SingleValue);
-                subCmd.OnExecute(async () =>
-                {
-                    var request = new DownloadNipkgRequest(downloadPath.Value());
-                    var response = await mediator.Send(request);
-                    console.WriteLine(response.Result);
-                });
-
-            });
-
-            return app;
-        }
 
         public static CommandLineApplication UseTemplatedCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
         {
