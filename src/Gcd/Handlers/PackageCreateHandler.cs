@@ -5,6 +5,8 @@ using System.Text.Json;
 using System.Xml;
 using CSharpFunctionalExtensions;
 using Gcd.CommandHandlers;
+using Gcd.Commands.NipkgAddPackageToAzFeed;
+using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
@@ -37,7 +39,7 @@ public class PackageCreateHandler(IMediator _mediator)
         var contnetDestinationPaht = $"{temporaryDirectory}\\data\\{request.PackageInstalationDir}";
         CopyDirectoryContents(request.PackageContentPath, contnetDestinationPaht);
 
-        RunCommand(temporaryDirectory, pckgDirectory);
+        var result = RunCommand(temporaryDirectory, pckgDirectory);
         string packageFileName = $"{request.PackageName}_{request.PackageVersion}_windows_x64.nipkg";
         string packageFilePath = Path.Combine(pckgDirectory, packageFileName);
 
@@ -89,49 +91,11 @@ public class PackageCreateHandler(IMediator _mediator)
         }
     }
 
-    private void RunCommand(string temporaryDirectory, string pckgDirectory)
+    private async Task<Result> RunCommand(string temporaryDirectory, string pckgDirectory)
     {
-        // Initialize the ProcessStartInfo with the command
-        string nipkg = @"""C:\Program Files\National Instruments\NI Package Manager\nipkg.exe""";
-        string arguments = $"/c {nipkg} pack {temporaryDirectory} {pckgDirectory}";
-
-
-        ProcessStartInfo startInfo = new ProcessStartInfo
-        {
-            FileName = "cmd.exe",       // Use "cmd.exe" to run a command
-            Arguments = arguments, // "/c" tells cmd to run the command and then terminate
-            RedirectStandardOutput = true, // Redirect the output of the command
-            RedirectStandardError = true,  // Redirect any errors
-            UseShellExecute = false,      // Don't use the shell to execute the command
-            CreateNoWindow = true        // Don't create a command window
-        };
-
-        try
-        {
-            using (Process process = Process.Start(startInfo))
-            {
-                // Read the standard output and error
-                string output = process.StandardOutput.ReadToEnd();
-                string errors = process.StandardError.ReadToEnd();
-
-                // Wait for the command to finish
-                process.WaitForExit();
-
-                // Print the output and errors (if any)
-                Console.WriteLine("Output:");
-                Console.WriteLine(output);
-
-                if (!string.IsNullOrEmpty(errors))
-                {
-                    Console.WriteLine("Errors:");
-                    Console.WriteLine(errors);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error running command: {ex.Message}");
-        }
+        var arguments = new string[] { "pack", temporaryDirectory, pckgDirectory };
+        var req = new RunNipkgRequest(arguments);
+        return await _mediator.Send(req);
     }
 }
 

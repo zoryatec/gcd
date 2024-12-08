@@ -31,13 +31,9 @@ public class  RunNipkgHandler()
 
     private Result RunNipkg(string[] args)
     {
-        // Initialize the ProcessStartInfo with the command
         string nipkg = @"""C:\Program Files\National Instruments\NI Package Manager\nipkg.exe""";
-        //var tempArgs = new List<string>() { }
 
         var arguments = string.Join(" ", args);
-
-        //string arguments = $"/c {nipkg} feed-add-pkg {feedDir} {packagePath}";
 
 
         ProcessStartInfo startInfo = new ProcessStartInfo
@@ -52,18 +48,13 @@ public class  RunNipkgHandler()
 
         try
         {
-            using (Process process = Process.Start(startInfo))
+            using (Process? process = Process.Start(startInfo))
             {
-                // Read the standard output and error
-                string output = process.StandardOutput.ReadToEnd();
-                string errors = process.StandardError.ReadToEnd();
-
-                // Wait for the command to finish
+                _ = process ?? throw new ArgumentNullException(nameof(process));
                 process.WaitForExit();
 
-                // Print the output and errors (if any)
-                Console.WriteLine("Output:");
-                Console.WriteLine(output);
+                string output = process.StandardOutput.ReadToEnd();
+                string errors = process.StandardError.ReadToEnd();
 
                 if (!string.IsNullOrEmpty(errors))
                 {
