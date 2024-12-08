@@ -1,50 +1,47 @@
-﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgPackageBuild;
-using Gcd.Handlers;
+﻿using Gcd.Commands.NipkgPackageBuild;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using static Gcd.Contract.Nipkg.PackageBuild;
 
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData
+namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+
+public static class UseNipkgPackageBuildCmdExtensions
 {
-    public static class UseNipkgPackageBuildCmdExtensions
+    public static CommandLineApplication UseNipkgPackageBuildCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
-        public static CommandLineApplication UseNipkgPackageBuildCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+        var console = serviceProvider.GetRequiredService<IConsole>();
+        var mediator = serviceProvider.GetRequiredService<IMediator>();
+
+        app.Command(COMMAND, create =>
         {
-            var console = serviceProvider.GetRequiredService<IConsole>();
-            var mediator = serviceProvider.GetRequiredService<IMediator>();
-            //const string SUCESS_MESSAGE = "Metadata pushed successully";
+            create.Description = COMMAND_DESCRIPTION;
+            var packageSoureDir = create.Option(PACKAGE_CONTENT_DIR_OPTION, PACKAGE_CONTENT_DIR_DESCRIPTION, CommandOptionType.SingleValue)
+                .IsRequired();
+            var packageName1 = create.Option(PACKAGE_NAME_OPTION, PACKAGE_NAME_DESCRIPTION, CommandOptionType.SingleValue)
+                .IsRequired();
+            var packageVersion1 = create.Option(PACKAGE_VERSION_OPTION, PACKAGE_VERSION_DESCRIPTION, CommandOptionType.SingleValue)
+                .IsRequired();
+            var packageInstalationDir1 = create.Option(PACKAGE_INSTALATION_DIR_OPTION, PACKAGE_INSTALATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
+                    .IsRequired();
+            var packageDestinationDir1 = create.Option(PACKAGE_DESTINATION_DIR_OPTION,PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
+                .IsRequired();
 
-            app.Command("create", create =>
+            create.OnExecute(async () =>
             {
-                create.Description = "Create package template";
-                var packageSoureDir = create.Option("--package-sourec-dir", "Directory where package will be taken from", CommandOptionType.SingleValue)
-                    .IsRequired();
-                var packageName1 = create.Option("--package-name", "Package name.", CommandOptionType.SingleValue)
-                    .IsRequired();
-                var packageVersion1 = create.Option("--package-version", "Package version.", CommandOptionType.SingleValue)
-                    .IsRequired();
-                var packageInstalationDir1 = create.Option("--package-instalation-dir", "Instalation dir version.", CommandOptionType.SingleValue)
-                     .IsRequired();
-                var packageDestinationDir1 = create.Option("--package-destination-dir", "Destination dir version.", CommandOptionType.SingleValue)
-                    .IsRequired();
+                var packageContent = PackageContentDir.Create(packageSoureDir.Value());
+                var packageName = PackageName.Create(packageName1.Value());
+                var packageVersion = PackageVersion.Create(packageVersion1.Value());
+                var packageInstalationDir = PackageInstalationDir.Create(packageInstalationDir1.Value());
+                var packageDestinationDir = PackageDestinationDirectory.Create(packageDestinationDir1.Value());
 
-                create.OnExecute(async () =>
-                {
-                    var packageContent = PackageContentDir.Create(packageSoureDir.Value());
-                    var packageName = PackageName.Create(packageName1.Value());
-                    var packageVersion = PackageVersion.Create(packageVersion1.Value());
-                    var packageInstalationDir = PackageInstalationDir.Create(packageInstalationDir1.Value());
-                    var packageDestinationDir = PackageDestinationDirectory.Create(packageDestinationDir1.Value());
-
-                    var request = new PackageBuildRequest(packageContent.Value, packageName.Value, packageVersion.Value, packageInstalationDir.Value, packageDestinationDir.Value);
-                    var response = await mediator.Send(request);
-                    console.WriteLine(response.result);
-                });
+                var request = new PackageBuildRequest(packageContent.Value, packageName.Value, packageVersion.Value, packageInstalationDir.Value, packageDestinationDir.Value);
+                var response = await mediator.Send(request);
+                console.WriteLine(response.result);
             });
-
-            return app;
-        }
+        });
+        return app;
     }
 }
+

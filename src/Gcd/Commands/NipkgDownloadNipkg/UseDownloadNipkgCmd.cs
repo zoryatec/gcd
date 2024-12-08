@@ -5,6 +5,7 @@ using Gcd.Services;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using static Gcd.Contract.Nipkg.DownloadNipkg;
 
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData;
@@ -15,15 +16,13 @@ public static class UseDownloadNipkgCmdExtensions
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
-        const string SUCESS_MESSAGE = "NIPKG download succesfully pushed successully";
 
-        app.Command("download-nipkg", subCmd =>
+        app.Command(COMMAND, subCmd =>
         {
-            subCmd.Description = "Create package template";
-            var downloadPath = subCmd.Option("--download-path", "File path must end with exe", CommandOptionType.SingleValue);
+            subCmd.Description = COMMAND_DESCRIPTION;
+            var downloadPath = subCmd.Option(DOWNLOAD_PATH_OPTION, DOWNLOAD_PATH_DESCRIPTION, CommandOptionType.SingleValue);
             subCmd.OnExecuteAsync(async cancelationToken =>
             {
-
                 var filePath = FilePath.Create(downloadPath.Value());
 
                 return await filePath
