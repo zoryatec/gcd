@@ -28,6 +28,7 @@ namespace Gcd
                 .AddSingleton<IVersionizeCommandHandler, VersionizeCommandHandler>()
                 .AddScoped<IDownloadAzBlobService, AzBlobService>()
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
+                .AddScoped<IWebDownload, WebDownload>()
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddSingleton<IConsole>(PhysicalConsole.Singleton)
                 .AddMediatR(config =>

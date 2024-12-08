@@ -1,6 +1,8 @@
-﻿using CSharpFunctionalExtensions;
+﻿using Azure.Core;
+using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Common;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,10 +27,13 @@ public record AzBlobUri
 
 public record FilePath
 {
-    public static Result<FilePath> Create(Maybe<string> packagePathOrNothing)
+    public static Result<FilePath> Create(Maybe<string> maybeValue)
     {
-        return packagePathOrNothing.ToResult("FilePath should not be empty")
+        string currentDirectoryPath = Environment.CurrentDirectory;
+
+        return maybeValue.ToResult("FilePath should not be empty")
             .Ensure(packagePath => packagePath != string.Empty, "FilePath  should not be empty")
+            .Map(filepath => Path.Combine(currentDirectoryPath, filepath))
             .Map(feedUri => new FilePath(feedUri));
     }
 

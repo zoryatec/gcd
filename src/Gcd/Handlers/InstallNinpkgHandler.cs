@@ -50,19 +50,7 @@ public class InstallNinpkgHandler(IMediator _mediator)
 
     private void DownloadNipkg(string fileUrl, string downloadPath)
     {
-        try
-        {
-            using (WebClient client = new WebClient())
-            {
-                // Download the file asynchronously
-                client.DownloadFile(fileUrl, downloadPath);
-                Console.WriteLine($"File downloaded successfully to {downloadPath}");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error downloading file: {ex.Message}");
-        }
+        /// functionalit does not work replace with download medated
     }
 
     private string RunProgramWithArguments(string programPath, string arguments)

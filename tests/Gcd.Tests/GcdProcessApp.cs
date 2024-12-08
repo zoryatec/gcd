@@ -20,6 +20,7 @@ namespace Gcd.Tests
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddScoped<IDownloadAzBlobService, AzBlobService>()
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
+                .AddScoped<IWebDownload, WebDownload>()
                 .AddSingleton<IConsole>(_console)
                 .AddMediatR(config =>
                 {

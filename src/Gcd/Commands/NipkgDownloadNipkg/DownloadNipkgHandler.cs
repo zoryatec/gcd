@@ -9,51 +9,29 @@ using System.Xml;
 using CSharpFunctionalExtensions;
 using Gcd.CommandHandlers;
 using Gcd.LabViewProject;
+using Gcd.Services;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
 namespace Gcd.Commands.NipkgDownloadNipkg;
 
-public record DownloadNipkgRequest(string DownloadPath) : IRequest<DownloadNipkgResponse>;
-public record DownloadNipkgResponse(string Result);
+public record DownloadNipkgRequest(FilePath FilePath) : IRequest<Result>;
 
-public class DownloadNipkgHandler(IMediator _mediator)
-    : IRequestHandler<DownloadNipkgRequest, DownloadNipkgResponse>
+
+public class DownloadNipkgHandler(IWebDownload _webDownload)
+    : IRequestHandler<DownloadNipkgRequest, Result>
 {
-    public async Task<DownloadNipkgResponse> Handle(DownloadNipkgRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DownloadNipkgRequest request, CancellationToken cancellationToken)
     {
         var nipkgInstaller = "NIPackageManager21.3.0_online.exe";
         var url = $"https://download.ni.com/support/nipkg/products/ni-package-manager/installers/{nipkgInstaller}";
 
-        string currentDirectoryPath = Environment.CurrentDirectory;
-        string packageDownloadPath = Path.Combine(currentDirectoryPath, request.DownloadPath);
+        var webUri = WebUri.Create(url);
 
+        if (File.Exists(request.FilePath.Value)) File.Delete(request.FilePath.Value);
 
-        if (File.Exists(packageDownloadPath)) File.Delete(packageDownloadPath);
-
-        DownloadNipkg(url, packageDownloadPath);
-
-
-        return new DownloadNipkgResponse("result");
+        return await _webDownload.DownloadFileAsync(webUri.Value, request.FilePath);
     }
-
-    private void DownloadNipkg(string fileUrl, string downloadPath)
-    {
-        try
-        {
-            using (WebClient client = new WebClient())
-            {
-                // Download the file asynchronously
-                client.DownloadFile(fileUrl, downloadPath);
-                Console.WriteLine($"File downloaded successfully to {downloadPath}");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error downloading file: {ex.Message}");
-        }
-    }
-
 }
 
 
