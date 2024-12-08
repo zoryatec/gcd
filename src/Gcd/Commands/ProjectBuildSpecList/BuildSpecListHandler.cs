@@ -1,9 +1,5 @@
-using System.ComponentModel;
 using System.Text.Json;
-using System.Xml;
-using Gcd.CommandHandlers;
 using Gcd.LabViewProject;
-using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
 namespace Gcd.Commands.ProjectBuildSpecList;

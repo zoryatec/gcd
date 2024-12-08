@@ -1,18 +1,5 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Text.Json;
-using System.Xml;
-using CSharpFunctionalExtensions;
-using Gcd.CommandHandlers;
+﻿using System.Diagnostics;
 using Gcd.Commands.SystemAddToPath;
-using Gcd.LabViewProject;
-using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
 namespace Gcd.Commands.NipkgInstallNipkg;

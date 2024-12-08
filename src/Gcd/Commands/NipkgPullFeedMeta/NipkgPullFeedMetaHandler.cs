@@ -1,17 +1,5 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Net;
-using System.Text.Json;
-using System.Xml;
-using CSharpFunctionalExtensions;
-using Gcd.CommandHandlers;
-using Gcd.Common;
-using Gcd.LabViewProject;
+﻿using CSharpFunctionalExtensions;
 using Gcd.Services;
-using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData;

@@ -1,10 +1,4 @@
-﻿using System.ComponentModel;
-using System.Text.Json;
-using System.Xml;
-using CSharpFunctionalExtensions;
-using Gcd.CommandHandlers;
-using Gcd.LabViewProject;
-using McMaster.Extensions.CommandLineUtils;
+﻿using Gcd.LabViewProject;
 using MediatR;
 
 namespace Gcd.Commands.ProjectBuildSpecSetVersion;

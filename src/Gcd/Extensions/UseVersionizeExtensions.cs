@@ -1,4 +1,3 @@
-using Gcd.CommandHandlers;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,8 +14,7 @@ public static class UseVersionizeExtensions
         {
             versionizeCommand.OnExecute(() =>
             {
-                var handler = serviceProvider.GetRequiredService<IVersionizeCommandHandler>();
-                handler.Handle();
+
             });
         });
         return app;

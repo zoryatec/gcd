@@ -1,14 +1,6 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Text.Json;
-using System.Text.RegularExpressions;
-using System.Xml;
+﻿using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
-using Gcd.CommandHandlers;
 using Gcd.Commands.NipkgPackageBuild;
-using Gcd.LabViewProject;
-using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 
 namespace Gcd.Commands.NipkgPackageBuilserSetVersion;

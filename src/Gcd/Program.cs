@@ -1,4 +1,4 @@
-﻿using Gcd.CommandHandlers;
+﻿
 using Gcd.Extensions;
 using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
@@ -12,20 +12,15 @@ namespace Gcd
     public class Program
     {
         private readonly IConsole _console;
-        private readonly IVersionizeCommandHandler _versionizeCommandHandler;
 
-        public Program(IConsole console,
-            IVersionizeCommandHandler versionizeCommandHandler
-        )
+        public Program(IConsole console)
         {
             _console = console;
-            _versionizeCommandHandler = versionizeCommandHandler;
         }
         public static int Main(string[] args)
         {
             var assembly = typeof(Program).Assembly;
             var services = new ServiceCollection()
-                .AddSingleton<IVersionizeCommandHandler, VersionizeCommandHandler>()
                 .AddScoped<IDownloadAzBlobService, AzBlobService>()
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddScoped<IWebDownload, WebDownload>()
@@ -60,7 +55,6 @@ namespace Gcd
         
         private void OnExecuteVersionizeCommand()
         {
-            _versionizeCommandHandler.Handle();
         }
     }
 }

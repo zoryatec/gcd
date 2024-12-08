@@ -1,5 +1,4 @@
-﻿using Gcd.CommandHandlers;
-using Gcd.Extensions;
+﻿using Gcd.Extensions;
 using Gcd.LabViewProject;
 using Gcd.Services;
 using McMaster.Extensions.CommandLineUtils;
@@ -16,7 +15,6 @@ namespace Gcd.Tests
             _console = new FakeConsole();
             var assembly = typeof(Program).Assembly;
             var services = new ServiceCollection()
-                .AddSingleton<IVersionizeCommandHandler, VersionizeCommandHandler>()
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddScoped<IDownloadAzBlobService, AzBlobService>()
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
