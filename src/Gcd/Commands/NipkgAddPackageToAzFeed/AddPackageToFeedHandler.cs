@@ -19,7 +19,7 @@ public record PackagePath
     public string Value { get; }
 }
 
- public record AddPackageToFeedRequest(AzBlobFeedUri FeedUri, PackagePath PackagePath) : IRequest<Result>;
+ public record AddPackageToFeedRequest(AzBlobFeedDefinition AzFeedDef, PackagePath PackagePath) : IRequest<Result>;
 public record AddPackageToFeedResponse(string Result);
 
 public class AddPackageToFeedHandler(
@@ -36,7 +36,7 @@ public class AddPackageToFeedHandler(
         var localFeedPath = temporaryDirectory;
         var localFeedDef = LocalDirPath.Of(localFeedPath)
             .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
-        var downloadReq = new NipkgPullFeedMetaRequest(AzBlobFeedDefinition.Of(request.FeedUri).Value, localFeedDef.Value);
+        var downloadReq = new NipkgPullFeedMetaRequest(request.AzFeedDef, localFeedDef.Value);
         string packageName = Path.GetFileName(request.PackagePath.Value);
         var packageDestinationPath = Path.Combine(localFeedPath, packageName);
 
@@ -46,13 +46,12 @@ public class AddPackageToFeedHandler(
 
         var addPakcgResult = await AddPackageToLcalFeed(localFeedPath, packageDestinationPath);
 
-        var azFeedDef = AzBlobFeedUri.Create(request.FeedUri.Full)
-            .Bind(feedUri => AzBlobFeedDefinition.Of(feedUri));
+
 
         var localFeedDef3 = LocalDirPath.Of(localFeedPath)
             .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
 
-        var pushRequest = new NipkgPushAzBlobFeedMetaRequest(azFeedDef.Value, localFeedDef3.Value);
+        var pushRequest = new NipkgPushAzBlobFeedMetaRequest(request.AzFeedDef, localFeedDef3.Value);
         var pushResult = await mediator.Send(pushRequest);
 
 
@@ -61,8 +60,8 @@ public class AddPackageToFeedHandler(
         //Directory.Delete(temporaryDirectory, true);
 
 
-            
-        return await UploadPackage(request.FeedUri, FeedPath.Create(localFeedPath).Value, packageName);
+        var azblob = AzBlobFeedUri.Create(request.AzFeedDef.Feed.Full); ;
+        return await UploadPackage(azblob.Value, FeedPath.Create(localFeedPath).Value, packageName);
     }
 
     private async Task<Result> UploadPackage(AzBlobFeedUri feedUri, FeedPath localFeedPath, string packageName)

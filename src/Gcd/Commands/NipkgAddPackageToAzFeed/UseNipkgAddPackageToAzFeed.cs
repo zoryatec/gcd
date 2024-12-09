@@ -5,6 +5,7 @@ using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
 using CSharpFunctionalExtensions.ValueTasks;
 using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
+using Gcd.Commands.NipkgPushAzBlobFeedMeta;
 
 namespace Gcd.Commands.NipkgAddPackageToAzFeed;
 
@@ -21,12 +22,13 @@ public static class UseNipkgAddPackageToAzFeedCmdExtensions
             var feedUrlOption = subCmd.Option(AZ_FEED_URI_OPTION, AZ_FEED_URI_OPTION_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
             subCmd.OnExecuteAsync(async cancelationToken =>
             {
-                var feedUri = AzBlobFeedUri.Create(feedUrlOption.Value());
+                var azFeedDef = AzBlobFeedUri.Create(feedUrlOption.Value())
+                    .Bind(feedUri => AzBlobFeedDefinition.Of(feedUri));
                 var pathToPackage = PackagePath.Create(packagePathOption.Value());
 
                 return await Result
-                    .Combine(feedUri, pathToPackage)
-                    .Map(() => new AddPackageToFeedRequest(feedUri.Value, pathToPackage.Value))
+                    .Combine(azFeedDef, pathToPackage)
+                    .Map(() => new AddPackageToFeedRequest(azFeedDef.Value, pathToPackage.Value))
                     .Bind((req1) =>  mediator.Send(req1,cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
