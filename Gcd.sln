@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gcd.Common", "src\Gcd.Commo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gcd.Tests.EndToEnd", "tests\Gcd.Tests.EndToEnd\Gcd.Tests.EndToEnd.csproj", "{69AA8B40-22B4-48F4-BCA7-2DD136FA750C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gcd.Contract", "src\Gcd.Contract\Gcd.Contract.csproj", "{8A81542F-5B9D-45D0-A68C-FD9D5FAE2267}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gcd.Contract", "src\Gcd.Contract\Gcd.Contract.csproj", "{8A81542F-5B9D-45D0-A68C-FD9D5FAE2267}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

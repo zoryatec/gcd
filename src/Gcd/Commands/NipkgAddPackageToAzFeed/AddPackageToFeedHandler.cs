@@ -1,11 +1,11 @@
-﻿using CSharpFunctionalExtensions;
+﻿using Azure.Core;
+using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Commands.NipkgPullFeedMeta;
 using Gcd.Commands.NipkgPushAzBlobFeedMeta;
 using Gcd.Model;
 using Gcd.Services;
 using MediatR;
-using System.Threading;
 
 namespace Gcd.Commands.NipkgAddPackageToAzFeed;
 
@@ -19,34 +19,21 @@ public class AddPackageToFeedHandler(
 {
     public async Task<Result> Handle(AddPackageToFeedRequest request, CancellationToken cancellationToken)
     {
-        var (azFeedDef, PackagePath) = request;
+        var (azFeedDef, packagePath) = request;
 
-        var localFeedDef = await CreateTempFeedDefinition();
-        var localFeedPath = localFeedDef.Value.Feed.Value;
-        string packageName = Path.GetFileName(request.PackagePath.Value);
-
-        var packageDestinationPath = Path.Combine(localFeedPath, packageName);
+        var localFeedDefResult = await CreateTempFeedDefinition();
 
 
-        var downloadResult = await mediator.PullAzBlobFeedMetaDataAsync(request.AzFeedDef, localFeedDef.Value);
-
-        File.Copy(request.PackagePath.Value, packageDestinationPath, true);
-
-        var addPakcgResult = await AddPackageToLcalFeed(localFeedPath, packageDestinationPath);
+        var localFeedDef = localFeedDefResult.Value;
+        var insideFeedPkgPath = await CreteTempPackagePath(localFeedDef,packagePath);
 
 
-
-
-
-
-        var pushResult = await mediator.PushAzBlobFeedMetaDataAsync(request.AzFeedDef, localFeedDef.Value, cancellationToken);
-
+        var downloadResult = await mediator.PullAzBlobFeedMetaDataAsync(azFeedDef, localFeedDef);
+        var resCOpy = await CopyPackage(packagePath, insideFeedPkgPath.Value);
+        var addPakcgResult = await AddPackageToLcalFeed(localFeedDef, insideFeedPkgPath.Value);
+        var pushResult = await mediator.PushAzBlobFeedMetaDataAsync(request.AzFeedDef, localFeedDef, cancellationToken);
         if (pushResult.IsFailure) return pushResult;
-
-
-
-        var azblob = AzBlobFeedUri.Create(request.AzFeedDef.Feed.Full); ;
-        return await UploadPackage(azblob.Value, localFeedDef.Value, packageName);
+        return await UploadPackage(azFeedDef, insideFeedPkgPath.Value);
     }
 
     private async Task<Result<LocalFeedDefinition>> CreateTempFeedDefinition()
@@ -61,12 +48,13 @@ public class AddPackageToFeedHandler(
         return localFeedDef;
     }
 
-    private async Task<Result> UploadPackage(AzBlobFeedUri feedUri, LocalFeedDefinition locFeedDef, string packageName)
+    private async Task<Result> UploadPackage(AzBlobFeedDefinition azFeedDef, PackagePath packagePath)
     {
-        string nipkgUrl = CreateSubUrl(feedUri, packageName);
+        var azblob = AzBlobFeedUri.Create(azFeedDef.Feed.Full); ;
+        string nipkgUrl = CreateSubUrl(azblob.Value, packagePath.PkgName);
 
         var blobUri = AzBlobUri.Create(nipkgUrl);
-        var filePath = LocalFilePath.Of($"{locFeedDef.Feed.Value}\\{packageName}");
+        var filePath = LocalFilePath.Of(packagePath.Value);
         var result = await uploadService.UploadFileAsync(blobUri.Value, filePath.Value);
         return result;
     }
@@ -75,13 +63,24 @@ public class AddPackageToFeedHandler(
     {
         return $"{feedUri.BaseUri}/{subPath}{feedUri.Query}";
     }
-
-    private async Task<Result> AddPackageToLcalFeed(string feedDir, string packagePath)
+    private async Task<Result<PackagePath>> CreteTempPackagePath(LocalFeedDefinition feedDefinition, PackagePath sourcePackagePath)
     {
+        return PackagePath.Create($"{feedDefinition.Feed.Value}\\{sourcePackagePath.PkgName}");
+    }
 
-        var arguments = new string[] { "feed-add-pkg", feedDir, packagePath };
+
+
+    private async Task<Result> AddPackageToLcalFeed(LocalFeedDefinition feedDefinition, PackagePath packagePath)
+    {
+        var arguments = new string[] { "feed-add-pkg", feedDefinition.Feed.Value, packagePath.Value };
         var req = new RunNipkgRequest(arguments);
         return  await mediator.Send(req);
+    }
+
+    private async Task<Result> CopyPackage(PackagePath packageSource, PackagePath packageDestinataion)
+    {
+        File.Copy(packageSource.Value, packageDestinataion.Value, true);
+        return Result.Success();
     }
 
 }
