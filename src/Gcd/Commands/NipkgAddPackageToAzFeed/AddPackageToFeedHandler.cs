@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
+using Gcd.Commands.NipkgPullFeedMeta;
 using Gcd.Commands.NipkgPushAzBlobFeedMeta;
 using Gcd.Model;
 using Gcd.Services;
@@ -8,20 +9,7 @@ using System.Threading;
 
 namespace Gcd.Commands.NipkgAddPackageToAzFeed;
 
-public record PackagePath
-{
-    public static Result<PackagePath> Create(Maybe<string> packagePathOrNothing)
-    {
-        return packagePathOrNothing.ToResult("FeedUri should not be empty")
-            .Ensure(packagePath => packagePath != string.Empty, "Package path should not be empty")
-            .Map(feedUri => new PackagePath(feedUri));
-    }
-
-    private PackagePath(string path) => Value = path;
-    public string Value { get; }
-}
-
- public record AddPackageToFeedRequest(AzBlobFeedDefinition AzFeedDef, PackagePath PackagePath) : IRequest<Result>;
+public record AddPackageToFeedRequest(AzBlobFeedDefinition AzFeedDef, PackagePath PackagePath) : IRequest<Result>;
 public record AddPackageToFeedResponse(string Result);
 
 public class AddPackageToFeedHandler(
@@ -31,18 +19,16 @@ public class AddPackageToFeedHandler(
 {
     public async Task<Result> Handle(AddPackageToFeedRequest request, CancellationToken cancellationToken)
     {
-        string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        string currentDirectoryPath = Environment.CurrentDirectory;
+        var (azFeedDef, PackagePath) = request;
 
-
-        var localFeedPath = temporaryDirectory;
-        var localFeedDef = LocalDirPath.Of(localFeedPath)
-            .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
-        var downloadReq = new NipkgPullFeedMetaRequest(request.AzFeedDef, localFeedDef.Value);
+        var localFeedDef = await CreateTempFeedDefinition();
+        var localFeedPath = localFeedDef.Value.Feed.Value;
         string packageName = Path.GetFileName(request.PackagePath.Value);
+
         var packageDestinationPath = Path.Combine(localFeedPath, packageName);
 
-        var downloadResult = await mediator.Send(downloadReq);
+
+        var downloadResult = await mediator.PullAzBlobFeedMetaDataAsync(request.AzFeedDef, localFeedDef.Value);
 
         File.Copy(request.PackagePath.Value, packageDestinationPath, true);
 
@@ -50,27 +36,37 @@ public class AddPackageToFeedHandler(
 
 
 
-        var localFeedDef3 = LocalDirPath.Of(localFeedPath)
-            .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
 
 
-        var pushResult = await mediator.PushAzBlobFeedMetaDataAsync(request.AzFeedDef, localFeedDef3.Value, cancellationToken);
+
+        var pushResult = await mediator.PushAzBlobFeedMetaDataAsync(request.AzFeedDef, localFeedDef.Value, cancellationToken);
 
         if (pushResult.IsFailure) return pushResult;
 
-        //Directory.Delete(temporaryDirectory, true);
 
 
         var azblob = AzBlobFeedUri.Create(request.AzFeedDef.Feed.Full); ;
-        return await UploadPackage(azblob.Value, FeedPath.Create(localFeedPath).Value, packageName);
+        return await UploadPackage(azblob.Value, localFeedDef.Value, packageName);
     }
 
-    private async Task<Result> UploadPackage(AzBlobFeedUri feedUri, FeedPath localFeedPath, string packageName)
+    private async Task<Result<LocalFeedDefinition>> CreateTempFeedDefinition()
+    {
+        string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        string currentDirectoryPath = Environment.CurrentDirectory;
+
+
+        var localFeedPath = temporaryDirectory;
+        var localFeedDef = LocalDirPath.Of(localFeedPath)
+            .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
+        return localFeedDef;
+    }
+
+    private async Task<Result> UploadPackage(AzBlobFeedUri feedUri, LocalFeedDefinition locFeedDef, string packageName)
     {
         string nipkgUrl = CreateSubUrl(feedUri, packageName);
 
         var blobUri = AzBlobUri.Create(nipkgUrl);
-        var filePath = LocalFilePath.Of($"{localFeedPath.Value}\\{packageName}");
+        var filePath = LocalFilePath.Of($"{locFeedDef.Feed.Value}\\{packageName}");
         var result = await uploadService.UploadFileAsync(blobUri.Value, filePath.Value);
         return result;
     }
