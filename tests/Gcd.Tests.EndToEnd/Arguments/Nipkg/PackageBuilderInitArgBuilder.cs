@@ -2,36 +2,36 @@
 
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg;
 
-    public class PackageBuilderInitArgBuilder : ArgumentsBuilder
+public class PackageBuilderInitArgBuilder : ArgumentsBuilder
+{
+    public PackageBuilderInitArgBuilder()
     {
-        public PackageBuilderInitArgBuilder()
-        {
-            WithArg("nipkg");
-            WithArg("package-builder");
-            WithArg(COMMAND);
-        }
-
-        public PackageBuilderInitArgBuilder WithPackageBuilderDirectory(string value)
-        {
-            WithOption(PACKAGE_PATH_OPTION, value);
-            return this;
-        }
-        public PackageBuilderInitArgBuilder WithPackageName(string value)
-        {
-            WithOption(PACKAGE_NAME_OPTION, value);
-            return this;
-        }
-
-        public PackageBuilderInitArgBuilder WithPackageVersion(string value)
-        {
-            WithOption(PACKAGE_VERSION_OPTION, value);
-            return this;
-        }
-
-
-        public PackageBuilderInitArgBuilder WithPackageBuilderInstalationDir(string value)
-        {
-            WithOption(PACKAGE_DESTINATION_DIR_OPTION, value);
-            return this;
-        }
+        WithArg("nipkg");
+        WithArg("package-builder");
+        WithArg(COMMAND);
     }
+
+    public PackageBuilderInitArgBuilder WithPackageBuilderDirectory(string value)
+    {
+        WithOption(PACKAGE_PATH_OPTION, value);
+        return this;
+    }
+    public PackageBuilderInitArgBuilder WithPackageName(string value)
+    {
+        WithOption(PACKAGE_NAME_OPTION, value);
+        return this;
+    }
+
+    public PackageBuilderInitArgBuilder WithPackageVersion(string value)
+    {
+        WithOption(PACKAGE_VERSION_OPTION, value);
+        return this;
+    }
+
+
+    public PackageBuilderInitArgBuilder WithPackageBuilderInstalationDir(string value)
+    {
+        WithOption(PACKAGE_DESTINATION_DIR_OPTION, value);
+        return this;
+    }
+}

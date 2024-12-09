@@ -1,165 +1,150 @@
 ﻿using FluentAssertions;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Gcd.Tests.EndToEnd.Nipkg
+namespace Gcd.Tests.EndToEnd.Nipkg;
+
+public class AddToAzFeedTests : IClassFixture<TestFixture>
 {
-    public class AddToAzFeedTests : IClassFixture<TestFixture>
+    IGcdProcess _gcd;
+    GcdArgsBuilder _args;
+    ITempDirectoryGenerator _tempDirectoryGenerator;
+    TestConfiguration _config;
+    public AddToAzFeedTests(TestFixture testFixture)
     {
-        IGcdProcess _gcd;
-        GcdArgsBuilder _args;
-        ITempDirectoryGenerator _tempDirectoryGenerator;
-        TestConfiguration _config;
-        public AddToAzFeedTests(TestFixture testFixture)
-        {
-            _gcd = new GcdProcessApp();
-            _args = new GcdArgsBuilder();
-            _tempDirectoryGenerator = new TempDirectoryGenerator();
-            _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
-        }
+        _gcd = new GcdProcessApp();
+        _args = new GcdArgsBuilder();
+        _tempDirectoryGenerator = new TempDirectoryGenerator();
+        _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
+    }
 
-        [Fact]
-        public void AddPackageToAZ()
-        {
-            // Arrange
-            var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
-            var feedUri = _config.GetAzureAddPkgTestFeedUri();
+    [Fact]
+    public void AddPackageToAZ()
+    {
+        // Arrange
+        var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
+        var feedUri = _config.GetAzureAddPkgTestFeedUri();
 
-            // Act
-            ClearFeed(feedUri);
+        ClearFeed(feedUri);
 
-            var packagePath = BuildPackage();
+        var packagePath = BuildPackage();
+        var packageName = Path.GetFileName(packagePath);
 
-            AddPackage(packagePath, feedUri);
-
-            string packageName =  Path.GetFileName(packagePath);
+        // Act
+        AddPackage(packagePath, feedUri);
 
 
-            Pull(feedDestinationDirectory, feedUri);
+        // Assert
+        PullMetaData(feedDestinationDirectory, feedUri);
+
+        var destinationPackagesContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages");
+        var destinationPackagesGzContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.gz");
+        var destinationPackagesStampsContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.stamps");
+
+        destinationPackagesContent.Should().Contain(packageName);
+        destinationPackagesStampsContent.Should().Contain(packageName);
+
+        Directory.Delete(feedDestinationDirectory, true);
+    }
+
+    private void ClearFeed(string feedUri)
+    {
+        var feedSourceDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
 
 
-            var destinationPackagesContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages");
-            var destinationPackagesGzContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.gz");
-            var destinationPackagesStampsContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.stamps");
-            //File.Exists($"{feedDestinationDirectory}\\{packageName}").Should().BeTrue();
+        var sourcePackageContent = "";
+        var sourcePackageGzContent = "";
+        var sourcePackageStampsContent = "";
 
-            //destinationPackagesContent.Should().Be(sourcePackageContent);
-            //destinationPackagesGzContent.Should().Be(sourcePackageGzContent);
-            //destinationPackagesStampsContent.Should().Be(sourcePackageStampsContent);
+        File.WriteAllText($"{feedSourceDirectory}\\Packages", sourcePackageContent);
+        File.WriteAllText($"{feedSourceDirectory}\\Packages.gz", sourcePackageGzContent);
+        File.WriteAllText($"{feedSourceDirectory}\\Packages.stamps", sourcePackageStampsContent);
+        PushMetadata(feedSourceDirectory, feedUri);
+    }
 
-            Directory.Delete(feedDestinationDirectory, true);
+    public string BuildPackage()
+    {
+        // Arrange
+        var packageName = "sample-package";
+        var packageVersion = "99.88.77.66";
+        var packageInstalationDir = "BootVolume/Zoryatec/sample-package";
 
-        }
+        var packageContentDirectory = GetPackageContentDir();
+        var packageDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
 
-        public void ClearFeed(string feedUri)
-        {
-            var feedSourceDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
+        var args = (new PackageBuildArgBuilder())
+            .WithPackageContentDirectory(packageContentDirectory)
+            .WithPackageName(packageName)
+            .WithPackageVersion(packageVersion)
+            .WithPackageInstalationDir(packageInstalationDir)
+            .WithPackageDestinationDir(packageDestinationDirectory)
+            .Build();
 
+        // Act
+        var result = _gcd.Run(args);
 
-            var sourcePackageContent = "";
-            var sourcePackageGzContent = "";
-            var sourcePackageStampsContent = "";
+        // Asssert
+        result.Return.Should().Be(0);
+        result.Error.Should().BeEmpty();
+        var packagePath = $"{packageDestinationDirectory}\\{packageName}_{packageVersion}_windows_x64.nipkg";
+        File.Exists(packagePath);
+        return packagePath;
+    }
 
-            File.WriteAllText($"{feedSourceDirectory}\\Packages", sourcePackageContent);
-            File.WriteAllText($"{feedSourceDirectory}\\Packages.gz", sourcePackageGzContent);
-            File.WriteAllText($"{feedSourceDirectory}\\Packages.stamps", sourcePackageStampsContent);
-            Push(feedSourceDirectory, feedUri);
-        }
+    private string GetPackageContentDir()
+    {
+        var currentDir = Directory.GetCurrentDirectory();
+        var packageContentDirectory = Path.Combine(currentDir, "testdata", "nipkg", "test-pkg-content");
+        return packageContentDirectory;
+    }
 
-        public string BuildPackage()
-        {
-            // Arrange
-            var packageName = "sample-package";
-            var packageVersion = "99.88.77.66";
-            var packageInstalationDir = "BootVolume/Zoryatec/sample-package";
+    private void PullMetaData(string feedDirectory, string feedUri)
+    {
+        // Arrange
+        var args = (new PullFeedMetaArgBuilder())
+            .WithFeedLocalPath(feedDirectory)
+            .WithFeedUri(feedUri)
+            .Build();
 
-            var packageContentDirectory = GetPackageContentDir();
-            var packageDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
+        // Act
+        var result = _gcd.Run(args);
 
-            var args = (new PackageBuildArgBuilder())
-                .WithPackageContentDirectory(packageContentDirectory)
-                .WithPackageName(packageName)
-                .WithPackageVersion(packageVersion)
-                .WithPackageInstalationDir(packageInstalationDir)
-                .WithPackageDestinationDir(packageDestinationDirectory)
-                .Build();
+        // Asssert
+        result.Error.Should().BeEmpty();
+        result.Return.Should().Be(0);
+    }
 
-            // Act
-            var result = _gcd.Run(args);
+    private void PushMetadata(string feedDirectory, string feedUri)
+    {
+        // Arrange
+        var args = (new PushAzFeedMetaArgBuilder())
+            .WithFeedLocalPath(feedDirectory)
+            .WithFeedUri(feedUri)
+            .Build();
 
-            // Asssert
-            result.Return.Should().Be(0);
-            result.Error.Should().BeEmpty();
-            var packagePath = $"{packageDestinationDirectory}\\{packageName}_{packageVersion}_windows_x64.nipkg";
-            File.Exists(packagePath);
-            return packagePath;
-        }
+        // Act
+        var result = _gcd.Run(args);
 
-        private string GetPackageContentDir()
-        {
-            var currentDir = Directory.GetCurrentDirectory();
-            var packageContentDirectory = Path.Combine(currentDir, "testdata", "nipkg", "test-pkg-content");
-            return packageContentDirectory;
-        }
+        // Asssert
+        result.Error.Should().BeEmpty();
+        result.Return.Should().Be(0);
+    }
 
+    private void AddPackage(string packagePath, string feedUri)
+    {
+        // Arrange
 
+        var args = (new AddToAzFeedArgBuilder())
+            .WithPackagePath(packagePath)
+            .WithAzFeedUri(feedUri)
+            .Build();
 
+        // Act
+        var result = _gcd.Run(args);
 
-        private void Pull(string feedDirectory, string feedUri)
-        {
-            // Arrange
-            var args = new[] {
-                "nipkg", "pull-feed-meta",
-                "--feed-local-path", $"{feedDirectory}",
-                "--feed-uri", $"{feedUri}"
-                };
-
-            // Act
-            var result = _gcd.Run(args);
-
-            // Asssert
-            result.Return.Should().Be(0);
-            result.Error.Should().BeEmpty();
-        }
-
-        private void Push(string feedDirectory, string feedUri)
-        {
-            // Arrange
-            var args = new[] {
-                "nipkg", "push-feed-meta",
-                "--feed-local-path", $"{feedDirectory}",
-                "--feed-uri", $"{feedUri}"
-                };
-
-            // Act
-            var result = _gcd.Run(args);
-
-            // Asssert
-            result.Return.Should().Be(0);
-            result.Error.Should().BeEmpty();
-        }
-
-        private void AddPackage(string packagePath, string feedUri)
-        {
-            // Arrange
-            var args = new[] {
-                "nipkg", "add-package-blob-feed",
-                "--package-path", $"{packagePath}",
-                "--feed-url", $"{feedUri}"
-                };
-
-            // Act
-            var result = _gcd.Run(args);
-
-            // Asssert
-            result.Return.Should().Be(0);
-            result.Error.Should().BeEmpty();
-        }
-
+        // Asssert
+        result.Error.Should().BeEmpty();
+        result.Return.Should().Be(0);
     }
 }
+
