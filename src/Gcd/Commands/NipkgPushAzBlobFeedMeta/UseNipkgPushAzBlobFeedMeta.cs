@@ -1,10 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Commands.NipkgDownloadFeedMetaData;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using static Gcd.Contract.Nipkg.PushAzBlobFeedMetaData;
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+namespace Gcd.Commands.NipkgPushAzBlobFeedMeta;
 
 public static class UUseNipkgPushAzBlobFeedMetaaCmdExtensions
 {
@@ -20,12 +21,15 @@ public static class UUseNipkgPushAzBlobFeedMetaaCmdExtensions
             var feedUrl = subCmd.Option(REMOTE_FEED_URI_OPTION, REMOTE_FEED_PATH_OPTION_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
             subCmd.OnExecuteAsync(async cancelationToken =>
             {
-                var feedUri = AzBlobFeedUri.Create(feedUrl.Value());
-                var feedPath = FeedPath.Create(feedPatht.Value());
+                var azFeedDef = AzBlobFeedUri.Create(feedUrl.Value())
+                    .Bind(feedUri => AzBlobFeedDefinition.Of(feedUri));
+
+                var localFeedDef = LocalDirPath.Of(feedPatht.Value())
+                    .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
 
                 return await Result
-                    .Combine(feedUri, feedPath)
-                    .Map( () => new NipkgPushAzBlobFeedMetaRequest(feedUri.Value, feedPath.Value))
+                    .Combine(azFeedDef, localFeedDef)
+                    .Map( () => new NipkgPushAzBlobFeedMetaRequest(azFeedDef.Value, localFeedDef.Value))
                     .Bind(async (req) => await mediator.Send(req))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))

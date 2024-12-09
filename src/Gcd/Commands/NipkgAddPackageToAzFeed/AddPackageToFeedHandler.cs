@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
+using Gcd.Commands.NipkgPushAzBlobFeedMeta;
 using Gcd.Services;
 using MediatR;
 
@@ -45,7 +46,13 @@ public class AddPackageToFeedHandler(
 
         var addPakcgResult = await AddPackageToLcalFeed(localFeedPath, packageDestinationPath);
 
-        var pushRequest = new NipkgPushAzBlobFeedMetaRequest(request.FeedUri, FeedPath.Create(localFeedPath).Value);
+        var azFeedDef = AzBlobFeedUri.Create(request.FeedUri.Full)
+            .Bind(feedUri => AzBlobFeedDefinition.Of(feedUri));
+
+        var localFeedDef3 = LocalDirPath.Of(localFeedPath)
+            .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
+
+        var pushRequest = new NipkgPushAzBlobFeedMetaRequest(azFeedDef.Value, localFeedDef3.Value);
         var pushResult = await mediator.Send(pushRequest);
 
 

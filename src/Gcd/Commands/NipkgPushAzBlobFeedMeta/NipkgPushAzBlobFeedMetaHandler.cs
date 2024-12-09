@@ -2,12 +2,13 @@
 using Azure.Storage.Blobs;
 using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
+using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Common;
 using Gcd.Services;
 using MediatR;
 using System;
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+namespace Gcd.Commands.NipkgPushAzBlobFeedMeta;
 
 public record FeedUri
 {
@@ -39,7 +40,7 @@ public record FeedPath
     public override string ToString() => Value;
 }
 
-public record NipkgPushAzBlobFeedMetaRequest(AzBlobFeedUri FeedUri, FeedPath FeedLocalDir) : IRequest<Result>;
+public record NipkgPushAzBlobFeedMetaRequest(AzBlobFeedDefinition AzFeedDefinition, LocalFeedDefinition LocalFeedDefinition) : IRequest<Result>;
 public record NipkgPushAzBlobFeedMetaRespons(string Result);
 
 public class NipkgPushAzBlobFeedMetaHandler(IUploadAzBlobService uploadService)
@@ -47,29 +48,13 @@ public class NipkgPushAzBlobFeedMetaHandler(IUploadAzBlobService uploadService)
 {
     public async Task<Result> Handle(NipkgPushAzBlobFeedMetaRequest request, CancellationToken cancellationToken)
     {
-        return await UploadMany(request.FeedUri,request.FeedLocalDir,
-            "Packages",
-            "Packages.gz",
-            "Packages.stamps");
+        var (azFeedDef, localFeedDef) = request;
+        return await UploadFileAsync(azFeedDef.Package, localFeedDef.Package)
+            .Bind(() => UploadFileAsync(azFeedDef.PackageGz, localFeedDef.PackageGz))
+            .Bind(() => UploadFileAsync(azFeedDef.PackageStamps, localFeedDef.PackageStamps));
     }
 
-    private async Task<Result> UploadMany(AzBlobFeedUri feedUri, FeedPath feedLocalDir, params string[] fileNames)
-    {
-        foreach (var fileName in fileNames)
-        {
-            var fileUri = CreateSubUrl(feedUri.BaseUri, fileName, feedUri.Query);
-            var blobUri = AzBlobUri.Create(fileUri);
-            var filePath = LocalFilePath.Of($"{feedLocalDir}\\{fileName}");
-
-            var result = await uploadService.UploadFileAsync(blobUri.Value, filePath.Value);
-            if (result.IsFailure) return result;
-        }
-        return Result.Success();
-    }
-
-    private string CreateSubUrl(string baseUrl, string subPath, string queryParam)
-    {
-        return $"{baseUrl}/{subPath}{queryParam}";
-    }
+    private async Task<Result> UploadFileAsync(AzBlobUri uri, LocalFilePath filePath) =>
+     await uploadService.UploadFileAsync(uri, filePath);
 }
 

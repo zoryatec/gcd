@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Commands.NipkgAddPackageToAzFeed;
 using Gcd.Commands.NipkgInstallNipkg;
+using Gcd.Commands.NipkgPushAzBlobFeedMeta;
 
 
 namespace Gcd.Extensions
