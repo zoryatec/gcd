@@ -23,7 +23,7 @@ public static class UseDownloadNipkgCmdExtensions
             var downloadPath = subCmd.Option(DOWNLOAD_PATH_OPTION, DOWNLOAD_PATH_DESCRIPTION, CommandOptionType.SingleValue);
             subCmd.OnExecuteAsync(async cancelationToken =>
             {
-                var filePath = FilePath.Create(downloadPath.Value());
+                var filePath = LocalFilePath.Of(downloadPath.Value());
 
                 return await filePath
                     .Map((arg) => new DownloadNipkgRequest(arg))

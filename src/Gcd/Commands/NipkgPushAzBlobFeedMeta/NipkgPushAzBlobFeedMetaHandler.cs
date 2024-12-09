@@ -39,7 +39,7 @@ public record FeedPath
     public override string ToString() => Value;
 }
 
-public record NipkgPushAzBlobFeedMetaRequest(FeedUri FeedUri, FeedPath FeedLocalDir) : IRequest<Result>;
+public record NipkgPushAzBlobFeedMetaRequest(AzBlobFeedUri FeedUri, FeedPath FeedLocalDir) : IRequest<Result>;
 public record NipkgPushAzBlobFeedMetaRespons(string Result);
 
 public class NipkgPushAzBlobFeedMetaHandler(IUploadAzBlobService uploadService)
@@ -53,13 +53,13 @@ public class NipkgPushAzBlobFeedMetaHandler(IUploadAzBlobService uploadService)
             "Packages.stamps");
     }
 
-    private async Task<Result> UploadMany(FeedUri feedUri, FeedPath feedLocalDir, params string[] fileNames)
+    private async Task<Result> UploadMany(AzBlobFeedUri feedUri, FeedPath feedLocalDir, params string[] fileNames)
     {
         foreach (var fileName in fileNames)
         {
             var fileUri = CreateSubUrl(feedUri.BaseUri, fileName, feedUri.Query);
             var blobUri = AzBlobUri.Create(fileUri);
-            var filePath = FilePath.Create($"{feedLocalDir}\\{fileName}");
+            var filePath = LocalFilePath.Of($"{feedLocalDir}\\{fileName}");
 
             var result = await uploadService.UploadFileAsync(blobUri.Value, filePath.Value);
             if (result.IsFailure) return result;

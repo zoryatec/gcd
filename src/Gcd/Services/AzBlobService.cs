@@ -14,7 +14,7 @@ namespace Gcd.Services;
 public class AzBlobService : IDownloadAzBlobService, IUploadAzBlobService
 {
 
-    public async Task<Result> UploadFileAsync(AzBlobUri blobUri, FilePath filePath) =>
+    public async Task<Result> UploadFileAsync(AzBlobUri blobUri, LocalFilePath filePath) =>
 
            await UploadCoreAsync(blobUri.Value, filePath.Value);
   
@@ -34,7 +34,7 @@ public class AzBlobService : IDownloadAzBlobService, IUploadAzBlobService
 
     }
 
-    public async Task<Result> DownloadFileAsync(AzBlobUri blobUri, FilePath filePath) =>
+    public async Task<Result> DownloadFileAsync(AzBlobUri blobUri, LocalFilePath filePath) =>
         await Result.Try(
             async () => await DownloadCore(blobUri.Value, filePath.Value),
             ex => ex.Message);

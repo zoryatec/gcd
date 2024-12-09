@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Commands.NipkgPullFeedMeta;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,13 +20,15 @@ public static class UseNipkgPullFeedMetaCmdExtensions
             var feedUrl = subCmd.Option(REMOTE_FEED_URI_OPTION,REMOTE_FEED_URI_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
             subCmd.OnExecuteAsync(async cancelationToken =>
             {
-                var feedUri = FeedUri.Create(feedUrl.Value());
-                var feedPath = FeedPath.Create(feedPatht.Value());
+                var azFeedDef = AzBlobFeedUri.Create(feedUrl.Value())
+                    .Bind(feedUri => AzBlobFeedDefinition.Of(feedUri));
+
+                var localFeedDef = LocalDirPath.Of(feedPatht.Value())
+                    .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
 
                 return await Result
-                    .Combine(feedUri, feedPath)
-                    .Map(() => new NipkgPullFeedMetaRequest(feedUri.Value, feedPath.Value))
-                    .Bind(async (req) => await mediator.Send(req,cancelationToken))
+                    .Combine(azFeedDef, localFeedDef)
+                    .Bind(() => mediator.PullAzBlobFeedMetaDataAsync(azFeedDef.Value, localFeedDef.Value, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

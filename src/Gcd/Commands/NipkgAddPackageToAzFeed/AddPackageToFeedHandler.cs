@@ -18,7 +18,7 @@ public record PackagePath
     public string Value { get; }
 }
 
- public record AddPackageToFeedRequest(FeedUri FeedUri, PackagePath PackagePath) : IRequest<Result>;
+ public record AddPackageToFeedRequest(AzBlobFeedUri FeedUri, PackagePath PackagePath) : IRequest<Result>;
 public record AddPackageToFeedResponse(string Result);
 
 public class AddPackageToFeedHandler(
@@ -33,8 +33,9 @@ public class AddPackageToFeedHandler(
 
 
         var localFeedPath = temporaryDirectory;
-        var localFeedPath1 = FeedPath.Create(localFeedPath);
-        var downloadReq = new NipkgPullFeedMetaRequest(request.FeedUri, localFeedPath1.Value);
+        var localFeedDef = LocalDirPath.Of(localFeedPath)
+            .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
+        var downloadReq = new NipkgPullFeedMetaRequest(AzBlobFeedDefinition.Of(request.FeedUri).Value, localFeedDef.Value);
         string packageName = Path.GetFileName(request.PackagePath.Value);
         var packageDestinationPath = Path.Combine(localFeedPath, packageName);
 
@@ -57,17 +58,17 @@ public class AddPackageToFeedHandler(
         return await UploadPackage(request.FeedUri, FeedPath.Create(localFeedPath).Value, packageName);
     }
 
-    private async Task<Result> UploadPackage(FeedUri feedUri, FeedPath localFeedPath, string packageName)
+    private async Task<Result> UploadPackage(AzBlobFeedUri feedUri, FeedPath localFeedPath, string packageName)
     {
         string nipkgUrl = CreateSubUrl(feedUri, packageName);
 
         var blobUri = AzBlobUri.Create(nipkgUrl);
-        var filePath = FilePath.Create($"{localFeedPath.Value}\\{packageName}");
+        var filePath = LocalFilePath.Of($"{localFeedPath.Value}\\{packageName}");
         var result = await uploadService.UploadFileAsync(blobUri.Value, filePath.Value);
         return result;
     }
 
-    private string CreateSubUrl(FeedUri feedUri, string subPath)
+    private string CreateSubUrl(AzBlobFeedUri feedUri, string subPath)
     {
         return $"{feedUri.BaseUri}/{subPath}{feedUri.Query}";
     }

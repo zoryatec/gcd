@@ -10,6 +10,6 @@ namespace Gcd.Services;
 
 public interface IDownloadAzBlobService
 {
-    public Task<Result> DownloadFileAsync(AzBlobUri blobUri, FilePath filePath);
+    public Task<Result> DownloadFileAsync(AzBlobUri blobUri, LocalFilePath filePath);
 }
 

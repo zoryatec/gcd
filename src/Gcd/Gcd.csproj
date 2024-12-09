@@ -24,4 +24,8 @@
       <ProjectReference Include="..\Gcd.LabViewProject\Gcd.LabViewProject.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Model\" />
+    </ItemGroup>
+
 </Project>

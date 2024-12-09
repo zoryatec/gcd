@@ -10,7 +10,7 @@ namespace Gcd.Services
 {
     public class WebDownload : IWebDownload
     {
-        public async Task<Result> DownloadFileAsync(WebUri webUri, FilePath filePath)
+        public async Task<Result> DownloadFileAsync(WebUri webUri, LocalFilePath filePath)
         {
             try
             {

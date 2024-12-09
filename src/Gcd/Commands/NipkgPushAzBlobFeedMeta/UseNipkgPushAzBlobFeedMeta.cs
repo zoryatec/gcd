@@ -20,7 +20,7 @@ public static class UUseNipkgPushAzBlobFeedMetaaCmdExtensions
             var feedUrl = subCmd.Option(REMOTE_FEED_URI_OPTION, REMOTE_FEED_PATH_OPTION_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
             subCmd.OnExecuteAsync(async cancelationToken =>
             {
-                var feedUri = FeedUri.Create(feedUrl.Value());
+                var feedUri = AzBlobFeedUri.Create(feedUrl.Value());
                 var feedPath = FeedPath.Create(feedPatht.Value());
 
                 return await Result

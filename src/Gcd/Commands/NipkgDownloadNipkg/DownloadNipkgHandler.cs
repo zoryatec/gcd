@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Gcd.Commands.NipkgDownloadNipkg;
 
-public record DownloadNipkgRequest(FilePath FilePath) : IRequest<Result>;
+public record DownloadNipkgRequest(LocalFilePath FilePath) : IRequest<Result>;
 
 
 public class DownloadNipkgHandler(IWebDownload _webDownload)

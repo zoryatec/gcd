@@ -21,7 +21,7 @@ public static class UseNipkgAddPackageToAzFeedCmdExtensions
             var feedUrlOption = subCmd.Option(AZ_FEED_URI_OPTION, AZ_FEED_URI_OPTION_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
             subCmd.OnExecuteAsync(async cancelationToken =>
             {
-                var feedUri = FeedUri.Create(feedUrlOption.Value());
+                var feedUri = AzBlobFeedUri.Create(feedUrlOption.Value());
                 var pathToPackage = PackagePath.Create(packagePathOption.Value());
 
                 return await Result

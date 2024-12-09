@@ -19,5 +19,5 @@ public record WebUri
 
 public interface IWebDownload
 {
-    public Task<Result> DownloadFileAsync(WebUri blobUri, FilePath filePath);
+    public Task<Result> DownloadFileAsync(WebUri blobUri, LocalFilePath filePath);
 }

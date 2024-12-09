@@ -4,43 +4,28 @@ using MediatR;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData;
 
-public record NipkgPullFeedMetaRequest(FeedUri FeedUri, FeedPath FeedLocalDir) : IRequest<Result>;
+public record NipkgPullFeedMetaRequest(AzBlobFeedDefinition AzFeedDef, LocalFeedDefinition LocalFeedDef) : IRequest<Result>;
 
 public class NipkgPullFeedMetaHandler(IDownloadAzBlobService downloadService)
     : IRequestHandler<NipkgPullFeedMetaRequest, Result>
 {
     public async Task<Result> Handle(NipkgPullFeedMetaRequest request, CancellationToken cancellationToken)
     {
-
-        if (!Directory.Exists(request.FeedLocalDir.Value))
-        {
-            // If it doesn't exist, create it
-            Directory.CreateDirectory(request.FeedLocalDir.Value);
-        }
-
-        return await DownloadMany(request.FeedUri, request.FeedLocalDir,
-            "Packages",
-            "Packages.gz",
-            "Packages.stamps");
+        var (azFeedDef, localFeedDef) = request;
+        return await CreateDirAsync(localFeedDef.Feed)
+            .Bind(() => DownloadFileAsync(azFeedDef.Package, localFeedDef.Package))
+            .Bind(() => DownloadFileAsync(azFeedDef.PackageGz, localFeedDef.PackageGz))
+            .Bind(() => DownloadFileAsync(azFeedDef.PackageStamps, localFeedDef.PackageStamps));
     }
 
-    private async Task<Result> DownloadMany(FeedUri feedUri, FeedPath feedLocalDir, params string[] fileNames)
+    private async Task<Result> CreateDirAsync(LocalDirPath locDirPath)
     {
-        foreach (var fileName in fileNames)
-        {
-            var fileUri = CreateSubUrl(feedUri.BaseUri, fileName, feedUri.Query);
-            var blobUri = AzBlobUri.Create(fileUri);
-            var filePath = FilePath.Create($"{feedLocalDir}\\{fileName}");
-
-            var result = await downloadService.DownloadFileAsync(blobUri.Value, filePath.Value);
-            if (result.IsFailure) return result;
-        }
+        if (!Directory.Exists(locDirPath.Value)) Directory.CreateDirectory(locDirPath.Value);
         return Result.Success();
     }
 
-    private string CreateSubUrl(string baseUrl, string subPath, string queryParam)
-    {
-        return $"{baseUrl}/{subPath}{queryParam}";
-    }
+    private async Task<Result> DownloadFileAsync(AzBlobUri uri, LocalFilePath filePath) =>
+         await downloadService.DownloadFileAsync(uri, filePath);
+
 }
 

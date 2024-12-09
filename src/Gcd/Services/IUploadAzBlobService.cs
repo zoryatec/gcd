@@ -25,23 +25,23 @@ public record AzBlobUri
     public string Value { get => _uri.AbsoluteUri; }
 }
 
-public record FilePath
+public record LocalFilePath
 {
-    public static Result<FilePath> Create(Maybe<string> maybeValue)
+    public static Result<LocalFilePath> Of(Maybe<string> maybeValue)
     {
         string currentDirectoryPath = Environment.CurrentDirectory;
 
         return maybeValue.ToResult("FilePath should not be empty")
             .Ensure(packagePath => packagePath != string.Empty, "FilePath  should not be empty")
             .Map(filepath => Path.Combine(currentDirectoryPath, filepath))
-            .Map(feedUri => new FilePath(feedUri));
+            .Map(feedUri => new LocalFilePath(feedUri));
     }
 
-    private FilePath(string path) => Value = path;
+    private LocalFilePath(string path) => Value = path;
     public string Value { get; }
 }
 public interface IUploadAzBlobService
 {
-    public Task<Result> UploadFileAsync(AzBlobUri blobUri, FilePath filePath );
+    public Task<Result> UploadFileAsync(AzBlobUri blobUri, LocalFilePath filePath );
 }
 
