@@ -1,12 +1,6 @@
 ﻿using FluentAssertions;
-using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gcd.Tests.EndToEnd.Nipkg
 {
@@ -27,11 +21,10 @@ namespace Gcd.Tests.EndToEnd.Nipkg
         [Fact]
         public void Push_ShouldReturnEror_WhenPathIsEmpty()
         {
-            var args = new[] {
-                "nipkg", "push-feed-meta",
-                "--feed-local-path", "dd",
-                "--feed-uri", "dd"
-                };
+            var args = (new PushAzFeedMetaArgBuilder())
+                .WithFeedLocalPath("dd")
+                .WithFeedUri("dd")
+                .Build();
 
             // Act
             var result = _gcd.Run(args);
@@ -95,11 +88,10 @@ namespace Gcd.Tests.EndToEnd.Nipkg
         private void Push(string feedDirectory, string feedUri)
         {
             // Arrange
-            var args = new[] {
-                "nipkg", "push-feed-meta",
-                "--feed-local-path", $"{feedDirectory}",
-                "--feed-uri", $"{feedUri}"
-                };
+            var args = (new PushAzFeedMetaArgBuilder())
+                .WithFeedLocalPath(feedDirectory)
+                .WithFeedUri(feedUri)
+                .Build();
 
             // Act
             var result = _gcd.Run(args);
