@@ -21,19 +21,17 @@ public class AddPackageToFeedHandler(
     {
         var (azFeedDef, packagePath) = request;
 
-        var localFeedDefResult = await CreateTempFeedDefinition();
+        var localFeedDef = await CreateTempFeedDefinition();
 
+        var insideFeedPkgPath = await localFeedDef
+            .Bind((arg) => CreteTempPackagePath(arg, packagePath));
 
-        var localFeedDef = localFeedDefResult.Value;
-        var insideFeedPkgPath = await CreteTempPackagePath(localFeedDef,packagePath);
-
-
-        var downloadResult = await mediator.PullAzBlobFeedMetaDataAsync(azFeedDef, localFeedDef);
-        var resCOpy = await CopyPackage(packagePath, insideFeedPkgPath.Value);
-        var addPakcgResult = await AddPackageToLcalFeed(localFeedDef, insideFeedPkgPath.Value);
-        var pushResult = await mediator.PushAzBlobFeedMetaDataAsync(request.AzFeedDef, localFeedDef, cancellationToken);
-        if (pushResult.IsFailure) return pushResult;
-        return await UploadPackage(azFeedDef, insideFeedPkgPath.Value);
+        return await Result.Combine(localFeedDef, insideFeedPkgPath)
+            .Bind(() => mediator.PullAzBlobFeedMetaDataAsync(azFeedDef, localFeedDef.Value))
+            .Bind(() => CopyPackage(packagePath, insideFeedPkgPath.Value))
+            .Bind(() => AddPackageToLcalFeed(localFeedDef.Value, insideFeedPkgPath.Value))
+            .Bind(() => mediator.PushAzBlobFeedMetaDataAsync(azFeedDef, localFeedDef.Value, cancellationToken))
+            .Bind(() => UploadPackage(azFeedDef, insideFeedPkgPath.Value));
     }
 
     private async Task<Result<LocalFeedDefinition>> CreateTempFeedDefinition()
