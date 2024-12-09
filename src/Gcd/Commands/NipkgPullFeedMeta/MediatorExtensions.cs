@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
+using Gcd.Model;
 using MediatR;
 using System;
 using System.Collections.Generic;

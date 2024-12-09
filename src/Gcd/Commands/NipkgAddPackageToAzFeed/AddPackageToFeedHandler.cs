@@ -1,8 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Commands.NipkgPushAzBlobFeedMeta;
+using Gcd.Model;
 using Gcd.Services;
 using MediatR;
+using System.Threading;
 
 namespace Gcd.Commands.NipkgAddPackageToAzFeed;
 
@@ -51,9 +53,8 @@ public class AddPackageToFeedHandler(
         var localFeedDef3 = LocalDirPath.Of(localFeedPath)
             .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
 
-        var pushRequest = new NipkgPushAzBlobFeedMetaRequest(request.AzFeedDef, localFeedDef3.Value);
-        var pushResult = await mediator.Send(pushRequest);
 
+        var pushResult = await mediator.PushAzBlobFeedMetaDataAsync(request.AzFeedDef, localFeedDef3.Value, cancellationToken);
 
         if (pushResult.IsFailure) return pushResult;
 
@@ -85,49 +86,6 @@ public class AddPackageToFeedHandler(
         var arguments = new string[] { "feed-add-pkg", feedDir, packagePath };
         var req = new RunNipkgRequest(arguments);
         return  await mediator.Send(req);
-        // Initialize the ProcessStartInfo with the command
-        //string nipkg = @"""C:\Program Files\National Instruments\NI Package Manager\nipkg.exe""";
-        //string arguments = $"/c {nipkg} feed-add-pkg {feedDir} {packagePath}";
-
-
-        //ProcessStartInfo startInfo = new ProcessStartInfo
-        //{
-        //    FileName = "cmd.exe",       // Use "cmd.exe" to run a command
-        //    Arguments = arguments, // "/c" tells cmd to run the command and then terminate
-        //    RedirectStandardOutput = true, // Redirect the output of the command
-        //    RedirectStandardError = true,  // Redirect any errors
-        //    UseShellExecute = false,      // Don't use the shell to execute the command
-        //    CreateNoWindow = true        // Don't create a command window
-        //};
-
-        //try
-        //{
-        //    using (Process process = Process.Start(startInfo))
-        //    {
-        //        // Read the standard output and error
-        //        string output = process.StandardOutput.ReadToEnd();
-        //        string errors = process.StandardError.ReadToEnd();
-
-        //        // Wait for the command to finish
-        //        process.WaitForExit();
-
-        //        // Print the output and errors (if any)
-        //        Console.WriteLine("Output:");
-        //        Console.WriteLine(output);
-
-        //        if (!string.IsNullOrEmpty(errors))
-        //        {
-        //            Console.WriteLine("Errors:");
-        //            Console.WriteLine(errors);
-        //        }
-
-        //    }
-        //    return UnitResult.Success<Error>();
-        //}
-        //catch (Exception ex)
-        //{
-        //     return UnitResult.Failure<Error>(new Error($"Error running command: {ex.Message}"));
-        //}
     }
 
 }

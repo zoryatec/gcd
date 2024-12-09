@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgDownloadFeedMetaData;
+using CSharpFunctionalExtensions.ValueTasks;
+using Gcd.Model;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,8 +30,7 @@ public static class UUseNipkgPushAzBlobFeedMetaaCmdExtensions
 
                 return await Result
                     .Combine(azFeedDef, localFeedDef)
-                    .Map( () => new NipkgPushAzBlobFeedMetaRequest(azFeedDef.Value, localFeedDef.Value))
-                    .Bind(async (req) => await mediator.Send(req))
+                    .Bind(() => mediator.PushAzBlobFeedMetaDataAsync(azFeedDef.Value, localFeedDef.Value, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

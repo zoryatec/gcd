@@ -2,8 +2,8 @@
 using Azure.Storage.Blobs;
 using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
-using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Common;
+using Gcd.Model;
 using Gcd.Services;
 using MediatR;
 using System;

@@ -2,10 +2,10 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgDownloadFeedMetaData;
 using CSharpFunctionalExtensions.ValueTasks;
 using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
 using Gcd.Commands.NipkgPushAzBlobFeedMeta;
+using Gcd.Model;
 
 namespace Gcd.Commands.NipkgAddPackageToAzFeed;
 

@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+namespace Gcd.Model;
 
 public record AzBlobContainerUri
 {

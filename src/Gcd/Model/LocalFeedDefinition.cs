@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Services;
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+namespace Gcd.Model;
 
 public record LocalFeedDefinition
 {
@@ -19,7 +19,7 @@ public record LocalFeedDefinition
             .Combine(package, packageGz, packageStamps)
             .Map(() => new LocalFeedDefinition(feedDirPath, package.Value, packageGz.Value, packageStamps.Value));
     }
-    private LocalFeedDefinition(LocalDirPath feed,LocalFilePath package, LocalFilePath packageGz, LocalFilePath packageStamps)
+    private LocalFeedDefinition(LocalDirPath feed, LocalFilePath package, LocalFilePath packageGz, LocalFilePath packageStamps)
     {
         Feed = feed;
         Package = package;

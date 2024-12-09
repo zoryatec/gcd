@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Services;
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+namespace Gcd.Model;
 
 public record AzBlobFeedDefinition
 {
@@ -17,7 +17,7 @@ public record AzBlobFeedDefinition
         var packageGz = AzBlobUri.Create($"{feedUri.BaseUri}/Packages.gz{feedUri.Query}");
         var packageStamps = AzBlobUri.Create($"{feedUri.BaseUri}/Packages.stamps{feedUri.Query}");
         return Result
-            .Combine(feed,package, packageGz, packageStamps)
+            .Combine(feed, package, packageGz, packageStamps)
             .Map(() => new AzBlobFeedDefinition(feed.Value, package.Value, packageGz.Value, packageStamps.Value));
     }
     private AzBlobFeedDefinition(AzBlobContainerUri feed, AzBlobUri package, AzBlobUri packageGz, AzBlobUri packageStamps)
