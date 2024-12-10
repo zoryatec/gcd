@@ -1,8 +1,12 @@
 ﻿using System.Diagnostics;
 using CSharpFunctionalExtensions;
+using Gcd.Commands.NipkgPushAzBlobFeedMeta;
+using Gcd.Model;
 using MediatR;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+
+
 
 public record  RunNipkgRequest(string[] arguments) : IRequest<Result>;
 
@@ -60,3 +64,8 @@ public class  RunNipkgHandler()
 }
 
 
+public static class MediatorExtensions
+{
+    public static async Task<Result> RunNipkgRequestAsync(this IMediator mediator, string[] arguments, CancellationToken cancellationToken = default)
+        => await mediator.Send(new RunNipkgRequest(arguments), cancellationToken);
+}

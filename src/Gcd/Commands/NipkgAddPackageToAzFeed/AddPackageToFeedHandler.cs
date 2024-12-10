@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Commands.NipkgPullFeedMeta;
 using Gcd.Commands.NipkgPushAzBlobFeedMeta;
@@ -57,30 +56,18 @@ public class AddPackageToFeedHandler(
         return result;
     }
 
-    private string CreateSubUrl(AzBlobFeedUri feedUri, string subPath)
-    {
-        return $"{feedUri.BaseUri}/{subPath}{feedUri.Query}";
-    }
-    private async Task<Result<PackagePath>> CreteTempPackagePath(LocalFeedDefinition feedDefinition, PackagePath sourcePackagePath)
-    {
-        return PackagePath.Create($"{feedDefinition.Feed.Value}\\{sourcePackagePath.PkgName}");
-    }
+    private string CreateSubUrl(AzBlobFeedUri feedUri, string subPath) => 
+        $"{feedUri.BaseUri}/{subPath}{feedUri.Query}";
 
-
-
-    private async Task<Result> AddPackageToLcalFeed(LocalFeedDefinition feedDefinition, PackagePath packagePath)
-    {
-        var arguments = new string[] { "feed-add-pkg", feedDefinition.Feed.Value, packagePath.Value };
-        var req = new RunNipkgRequest(arguments);
-        return  await mediator.Send(req);
-    }
-
-    private async Task<Result> CopyPackage(PackagePath packageSource, PackagePath packageDestinataion)
-    {
-        File.Copy(packageSource.Value, packageDestinataion.Value, true);
-        return Result.Success();
-    }
-
+    private async Task<Result<PackagePath>> CreteTempPackagePath(LocalFeedDefinition feedDefinition, PackagePath sourcePackagePath) =>
+        PackagePath.Create($"{feedDefinition.Feed.Value}\\{sourcePackagePath.PkgName}");
+    
+    private async Task<Result> AddPackageToLcalFeed(LocalFeedDefinition feedDefinition, PackagePath packagePath) =>
+        await mediator.RunNipkgRequestAsync(new string[] { "feed-add-pkg", feedDefinition.Feed.Value, packagePath.Value });
+    
+    private async Task<Result> CopyPackage(PackagePath packageSource, PackagePath packageDestinataion) => 
+        Result.Try(() => File.Copy(packageSource.Value, packageDestinataion.Value, true), ex => $"{ex.Message}");
+ 
 }
 
 
