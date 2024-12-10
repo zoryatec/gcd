@@ -1,65 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Commands.NipkgPackageBuilderInit;
+using Gcd.Model;
+using Gcd.Services;
 using MediatR;
 
 namespace Gcd.Commands.NipkgPackageBuild;
-
-public record PackageContentDir
-{
-    public static Result<PackageContentDir> Create(Maybe<string> packagePathOrNothing) =>
-         packagePathOrNothing.ToResult($"{nameof(PackageContentDir)} should not be empty")
-            .Ensure(packagePath => packagePath != string.Empty, $"{nameof(PackageContentDir)} should not be empty")
-            .Map(feedUri => new PackageContentDir(feedUri));
-    
-    private PackageContentDir(string path) => Value = path;
-    public string Value { get; }
-}
-
-public record PackageName
-{
-    public static Result<PackageName> Create(Maybe<string> packagePathOrNothing) =>
-         packagePathOrNothing.ToResult($"{nameof(PackageName)} should not be empty")
-            .Ensure(packagePath => packagePath != string.Empty, $"{nameof(PackageName)} should not be empty")
-            .Map(feedUri => new PackageName(feedUri));
-
-    private PackageName(string path) => Value = path;
-    public string Value { get; }
-}
-
-public record PackageVersion
-{
-  public static Result<PackageVersion> Create(Maybe<string> packagePathOrNothing) =>
-         packagePathOrNothing.ToResult($"{nameof(PackageVersion)} should not be empty")
-            .Ensure(packagePath => packagePath != string.Empty, $"{nameof(PackageVersion)} should not be empty")
-            .Map(feedUri => new PackageVersion(feedUri));
-
-    private PackageVersion(string path) => Value = path;
-    public string Value { get; }
-}
-
-public record PackageInstalationDir
-{
-    public static Result<PackageInstalationDir> Create(Maybe<string> packagePathOrNothing) =>
-           packagePathOrNothing.ToResult($"{nameof(PackageInstalationDir)} should not be empty")
-              .Ensure(packagePath => packagePath != string.Empty, $"{nameof(PackageInstalationDir)} should not be empty")
-              .Map(feedUri => new PackageInstalationDir(feedUri));
-
-    private PackageInstalationDir(string path) => Value = path;
-    public string Value { get; }
-}
-
-public record PackageDestinationDirectory
-{
-    public static Result<PackageDestinationDirectory> Create(Maybe<string> packagePathOrNothing) =>
-           packagePathOrNothing.ToResult($"{nameof(PackageDestinationDirectory)} should not be empty")
-              .Ensure(packagePath => packagePath != string.Empty, $"{nameof(PackageDestinationDirectory)} should not be empty")
-              .Map(feedUri => new PackageDestinationDirectory(feedUri));
-
-    private PackageDestinationDirectory(string path) => Value = path;
-    public string Value { get; }
-}
-
 
 public record PackageBuildRequest(PackageContentDir PackageContentPath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir, PackageDestinationDirectory PackageDestinationDir) : IRequest<Result>;
 

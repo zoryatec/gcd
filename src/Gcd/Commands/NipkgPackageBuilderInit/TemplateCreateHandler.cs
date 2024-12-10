@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgPackageBuild;
+using Gcd.Model;
 using MediatR;
 
 namespace Gcd.Commands.NipkgPackageBuilderInit;

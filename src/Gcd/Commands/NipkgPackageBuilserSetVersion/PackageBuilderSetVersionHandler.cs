@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgPackageBuild;
+using Gcd.Model;
 using MediatR;
 
 namespace Gcd.Commands.NipkgPackageBuilserSetVersion;

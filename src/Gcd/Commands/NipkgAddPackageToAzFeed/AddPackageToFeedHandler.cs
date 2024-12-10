@@ -1,9 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
-using Gcd.Commands.NipkgPullFeedMeta;
+using Gcd.Services;
 using Gcd.Commands.NipkgPushAzBlobFeedMeta;
 using Gcd.Model;
-using Gcd.Services;
 using MediatR;
 
 namespace Gcd.Commands.NipkgAddPackageToAzFeed;

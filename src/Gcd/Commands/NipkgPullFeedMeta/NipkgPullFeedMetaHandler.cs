@@ -30,3 +30,8 @@ public class NipkgPullFeedMetaHandler(IDownloadAzBlobService downloadService)
 
 }
 
+public static class MediatorExtensions
+{
+    public static async Task<Result> PullAzBlobFeedMetaDataAsync(this IMediator mediator, AzBlobFeedDefinition AzFeedDef, LocalFeedDefinition LocalFeedDef, CancellationToken cancellationToken = default)
+        => await mediator.Send(new NipkgPullFeedMetaRequest(AzFeedDef, LocalFeedDef), cancellationToken);
+}

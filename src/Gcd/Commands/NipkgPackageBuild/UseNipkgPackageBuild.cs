@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgPackageBuild;
+using Gcd.Model;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;

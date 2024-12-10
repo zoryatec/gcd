@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgPullFeedMeta;
 using Gcd.Model;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;

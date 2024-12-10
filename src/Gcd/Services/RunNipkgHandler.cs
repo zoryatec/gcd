@@ -4,7 +4,7 @@ using Gcd.Commands.NipkgPushAzBlobFeedMeta;
 using Gcd.Model;
 using MediatR;
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+namespace Gcd.Services;
 
 
 
