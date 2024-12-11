@@ -1,4 +1,7 @@
-﻿using CSharpFunctionalExtensions;
+﻿using Azure.Core;
+using CSharpFunctionalExtensions;
+using Gcd.Commands.NipkgPushAzBlobFeedMeta;
+using Gcd.Model;
 using Gcd.Services;
 using MediatR;
 
@@ -7,21 +10,26 @@ namespace Gcd.Commands.NipkgDownloadNipkg;
 public record DownloadNipkgRequest(LocalFilePath FilePath) : IRequest<Result>;
 
 
-public class DownloadNipkgHandler(IWebDownload _webDownload)
+public class DownloadNipkgHandler(IWebDownload _webDownload, NipkgInstallerUri _installerUri)
     : IRequestHandler<DownloadNipkgRequest, Result>
 {
     public async Task<Result> Handle(DownloadNipkgRequest request, CancellationToken cancellationToken)
     {
-        var nipkgInstaller = "NIPackageManager21.3.0_online.exe";
-        var url = $"https://download.ni.com/support/nipkg/products/ni-package-manager/installers/{nipkgInstaller}";
+        return await WebUri.Create(_installerUri.Value)
+            .Bind( uri => DownloadFileAsync(uri, request.FilePath));
+    }
 
-        var webUri = WebUri.Create(url);
-
-        if (File.Exists(request.FilePath.Value)) File.Delete(request.FilePath.Value);
-
-        return await _webDownload.DownloadFileAsync(webUri.Value, request.FilePath);
+    public async Task<Result> DownloadFileAsync(WebUri webUri, LocalFilePath filePath)
+    {
+        if (File.Exists(filePath.Value)) File.Delete(filePath.Value);
+        return await _webDownload.DownloadFileAsync(webUri, filePath);
     }
 }
 
 
+public static class MediatorExtensions
+{
+    public static async Task<Result> DownloadNipkgInstallerAsync(this IMediator mediator, LocalFilePath FilePath, CancellationToken cancellationToken = default)
+        => await mediator.Send(new DownloadNipkgRequest(FilePath), cancellationToken);
+}
 

@@ -1,4 +1,5 @@
-﻿using Gcd.Extensions;
+﻿using Gcd.Commands.NipkgDownloadNipkg;
+using Gcd.Extensions;
 using Gcd.LabViewProject;
 using Gcd.Services;
 using McMaster.Extensions.CommandLineUtils;
@@ -13,12 +14,15 @@ namespace Gcd.Tests
         public GcdProcessApp()
         {
             _console = new FakeConsole();
+            var nipkgInstaller = "NIPackageManager21.3.0_online.exe";
+            var url = $"https://download.ni.com/support/nipkg/products/ni-package-manager/installers/{nipkgInstaller}";
             var assembly = typeof(Program).Assembly;
             var services = new ServiceCollection()
-                .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddScoped<IDownloadAzBlobService, AzBlobService>()
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddScoped<IWebDownload, WebDownload>()
+                .AddScoped<NipkgInstallerUri>(x => NipkgInstallerUri.Of(url).Value)
+                .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddSingleton<IConsole>(_console)
                 .AddMediatR(config =>
                 {
