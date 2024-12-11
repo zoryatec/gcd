@@ -7,7 +7,7 @@ using System.Reflection.Metadata;
 
 namespace Gcd.Commands.NipkgPackageBuild;
 
-public record PackageBuildRequest(PackageContentSourceDir PackageContentPath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir, PackageDestinationDirectory PackageDestinationDir) : IRequest<Result>;
+public record PackageBuildRequest(PackageBuilderRootDir PackageContentPath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir, PackageDestinationDirectory PackageDestinationDir) : IRequest<Result>;
 
 
 public class PackageBuildHandler(IMediator _mediator)
@@ -25,7 +25,7 @@ public class PackageBuildHandler(IMediator _mediator)
         var pckDefinitionRes = PackageBuilderDefinition.Of(pckBuilderDest.Value, request.PackageInstalationDir);
         var pckDefiniton = pckDefinitionRes.Value;
 
-        var temporaryDir = PackageContentSourceDir.Create(temporaryDirectory);
+        var temporaryDir = PackageBuilderRootDir.Create(temporaryDirectory);
 
         var subRequest = await _mediator.PackageBuilderInitAsync(temporaryDir.Value, request.PackageName, request.PackageVersion, request.PackageInstalationDir);
 

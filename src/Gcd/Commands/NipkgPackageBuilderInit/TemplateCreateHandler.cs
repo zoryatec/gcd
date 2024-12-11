@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Gcd.Commands.NipkgPackageBuilderInit;
 
-public record PackageBuilderInitRequest(PackageContentSourceDir PackagePath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir) : IRequest<Result>;
+public record PackageBuilderInitRequest(PackageBuilderRootDir PackagePath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir) : IRequest<Result>;
 
 public class TemplateCreateHandler()
     : IRequestHandler<PackageBuilderInitRequest, Result>
@@ -43,7 +43,7 @@ public static class MediatorExtensions
 {
     public static async Task<Result> PackageBuilderInitAsync(
         this IMediator mediator,
-        PackageContentSourceDir packageContentDir,
+        PackageBuilderRootDir packageContentDir,
         PackageName packageName, 
         PackageVersion packageVersion, 
         PackageInstalationDir packageInstalationDir,

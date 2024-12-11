@@ -25,7 +25,7 @@ namespace Gcd.Commands.NipkgDownloadFeedMetaData
 
                 create.OnExecuteAsync(async cancelationToken =>
                 {
-                    var packagePath = PackageDestinationDirectory.Create(packagePathOption.Value());
+                    var packagePath = PackageBuilderRootDir.Create(packagePathOption.Value());
                     var packageVersion = PackageVersion.Create(packageVersionOption.Value());
 
                     return await Result

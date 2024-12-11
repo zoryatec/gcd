@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Gcd.Commands.NipkgPackageBuilserSetVersion;
 
-public record PackageBuilderSetVersionRequest(PackageDestinationDirectory PackagePath, PackageVersion PackageVersion) : IRequest<Result>;
+public record PackageBuilderSetVersionRequest(PackageBuilderRootDir PackagePath, PackageVersion PackageVersion) : IRequest<Result>;
 
 public class PackageBuilderSetVersionHandler()
     : IRequestHandler<PackageBuilderSetVersionRequest, Result>
@@ -14,6 +14,7 @@ public class PackageBuilderSetVersionHandler()
     {
         string currentDirectoryPath = Environment.CurrentDirectory;
         string packageDirectoryPath = Path.Combine(currentDirectoryPath, request.PackagePath.Value);
+
 
         string controlDirectoryPath = Path.Combine(packageDirectoryPath, "control");
         string controlFilePath = Path.Combine(controlDirectoryPath, "control");

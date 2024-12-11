@@ -30,7 +30,7 @@ public static class UseNipkgPackageBuilderInitmdExtensions
 
             create.OnExecuteAsync(async cancelationToken =>
             {
-                var packagePath = PackageContentSourceDir.Create(packagePathOption.Value());
+                var packagePath = PackageBuilderRootDir.Create(packagePathOption.Value());
                 var packageName = PackageName.Create(packageNameOption.Value());
                 var packageVersion = PackageVersion.Create(packageVersionOption.Value());
                 var packageDestination = PackageInstalationDir.Create(packageDestinationDirOption.Value());
