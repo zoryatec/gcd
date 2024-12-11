@@ -6,6 +6,7 @@ namespace Gcd.Model;
 
 public record PackageName
 {
+    public static PackageName Default => new PackageName("unset-package-name");
     public static Result<PackageName> Create(Maybe<string> packagePathOrNothing) =>
          packagePathOrNothing.ToResult($"{nameof(PackageName)} should not be empty")
             .Ensure(packagePath => packagePath != string.Empty, $"{nameof(PackageName)} should not be empty")
@@ -13,6 +14,7 @@ public record PackageName
 
     private PackageName(string path) => Value = path;
     public string Value { get; }
+    public override string ToString() => Value;
 }
 
 

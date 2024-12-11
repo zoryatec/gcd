@@ -27,7 +27,7 @@ public class TemplateCreateHandler()
 
         File.WriteAllText(pckDefiniton.DebianFile.Value, "2.0");
 
-        var controlFileContent = new ControlFileContent(request.PackageName, request.PackageVersion).ToString();
+        var controlFileContent = (ControlFileContent.Default with { Name = request.PackageName, Version = request.PackageVersion }).Content.ToString();
 
         File.WriteAllText(pckDefiniton.ControlFile.Value, controlFileContent);
 

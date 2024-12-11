@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using Gcd.Model;
+using Gcd.Services;
 using MediatR;
 
 namespace Gcd.Commands.NipkgPackageBuilserSetVersion;
@@ -12,17 +13,12 @@ public class PackageBuilderSetVersionHandler()
 {
     public async Task<Result> Handle(PackageBuilderSetVersionRequest request, CancellationToken cancellationToken)
     {
-        string currentDirectoryPath = Environment.CurrentDirectory;
-        string packageDirectoryPath = Path.Combine(currentDirectoryPath, request.PackagePath.Value);
+
+        var controlFileContentResult = await PackageBuilderDefinition.Of(request.PackagePath)
+            .Bind(def => ReadTextFile(def.ControlFile));
 
 
-        var pckBuilderDefinitionResult = PackageBuilderDefinition.Of(request.PackagePath);
-        var packBuilderDef = pckBuilderDefinitionResult.Value;
-
-        //string controlDirectoryPath = Path.Combine(packageDirectoryPath, "control");
-        //string controlFilePath = Path.Combine(controlDirectoryPath, "control");
-
-        string controlFileContent = File.ReadAllText(packBuilderDef.ControlFile.Value);
+        string controlFileContent = controlFileContentResult.Value;
 
         string newVersion = request.PackageVersion.Value;
 
@@ -33,11 +29,38 @@ public class PackageBuilderSetVersionHandler()
         // Replace the line
         controlFileContent = Regex.Replace(controlFileContent, pattern, replacement, RegexOptions.Multiline);
 
-
-        File.WriteAllText(packBuilderDef.ControlFile.Value, controlFileContent);
+        var writeResult = await PackageBuilderDefinition.Of(request.PackagePath)
+            .Bind(def => WriteTextFile(def.ControlFile, controlFileContent));
 
         return Result.Success();
     }
+
+    private async Task<Result<string>> ReadTextFile(LocalFilePath filePath, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            string content = File.ReadAllText(filePath.Value);
+            return Result.Success(content);
+        }
+        catch (Exception e) 
+        {
+            return Result.Failure<string>($"{e.Message}");
+        }
+    }
+
+    private async Task<Result<string>> WriteTextFile(LocalFilePath filePath, string content, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            File.WriteAllText(filePath.Value, content);
+            return Result.Success(content);
+        }
+        catch (Exception e)
+        {
+            return Result.Failure<string>($"{e.Message}");
+        }
+    }
+
 }
 
 
