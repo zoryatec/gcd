@@ -41,7 +41,7 @@ public static class UseNipkgPackageBuildCmdExtensions
 
             cmd.OnExecuteAsync(async cancelationToken =>
             {
-                var packageContent = PackageContentDir.Create(packageSoureDirOption.Value());
+                var packageContent = PackageContentSourceDir.Create(packageSoureDirOption.Value());
                 var packageName = PackageName.Create(packageNameOption.Value());
                 var packageVersion = PackageVersion.Create(packageVersionOption.Value());
                 var packageInstalationDir = PackageInstalationDir.Create(packageInstalationOption.Value());

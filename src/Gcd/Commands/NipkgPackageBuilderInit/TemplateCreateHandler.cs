@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Gcd.Commands.NipkgPackageBuilderInit;
 
-public record PackageBuilderInitRequest(PackageContentDir PackagePath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir) : IRequest<Result>;
+public record PackageBuilderInitRequest(PackageContentSourceDir PackagePath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir) : IRequest<Result>;
 
 public class TemplateCreateHandler()
     : IRequestHandler<PackageBuilderInitRequest, Result>
@@ -27,31 +27,11 @@ public class TemplateCreateHandler()
 
         File.WriteAllText(pckDefiniton.DebianFile.Value, "2.0");
 
-
-        var controlFileContent =
-$@"Architecture: windows_x64
-Homepage: zoryatec.com
-Maintainer: Zoryatec
-Description: package descritpion
-XB-Plugin: file
-XB-UserVisible: yes
-XB-StoreProduct: yes
-XB-Section: Application Software
-Package: {request.PackageName.Value}
-Version: {request.PackageVersion.Value}
-Depends: 
-";
+        var controlFileContent = new ControlFileContent(request.PackageName, request.PackageVersion).ToString();
 
         File.WriteAllText(pckDefiniton.ControlFile.Value, controlFileContent);
 
-        var instructionFileContent =
- @"<instructions>
-	<targetAttributes readOnly=""allWritable""/>
-    <customExecutes>
-        <customExecute root=""BootVolume"" step=""install"" schedule=""post"" exeName=""Program Files\gcd\gcd.exe"" arguments=""system add-to-user-path --path C:\PROGRA~1\gcd"" />
-    </customExecutes>
-</instructions>
-";
+        var instructionFileContent = new InstructionFileContent().ToString();
 
         File.WriteAllText(pckDefiniton.InstructionFile.Value, instructionFileContent);
 
@@ -63,7 +43,7 @@ public static class MediatorExtensions
 {
     public static async Task<Result> PackageBuilderInitAsync(
         this IMediator mediator,
-        PackageContentDir packageContentDir,
+        PackageContentSourceDir packageContentDir,
         PackageName packageName, 
         PackageVersion packageVersion, 
         PackageInstalationDir packageInstalationDir,

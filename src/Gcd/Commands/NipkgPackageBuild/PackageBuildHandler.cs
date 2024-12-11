@@ -7,7 +7,7 @@ using System.Reflection.Metadata;
 
 namespace Gcd.Commands.NipkgPackageBuild;
 
-public record PackageBuildRequest(PackageContentDir PackageContentPath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir, PackageDestinationDirectory PackageDestinationDir) : IRequest<Result>;
+public record PackageBuildRequest(PackageContentSourceDir PackageContentPath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir, PackageDestinationDirectory PackageDestinationDir) : IRequest<Result>;
 
 
 public class PackageBuildHandler(IMediator _mediator)
@@ -19,19 +19,18 @@ public class PackageBuildHandler(IMediator _mediator)
         string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         string pckgDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
+        if (!Directory.Exists(pckgDirectory)) Directory.CreateDirectory(pckgDirectory);
 
-        if (!Directory.Exists(pckgDirectory))
-        {
-            // Delete the directory
-            Directory.CreateDirectory(pckgDirectory);
-        }
+        var pckBuilderDest = LocalDirPath.Of(temporaryDirectory);
+        var pckDefinitionRes = PackageBuilderDefinition.Of(pckBuilderDest.Value, request.PackageInstalationDir);
+        var pckDefiniton = pckDefinitionRes.Value;
 
+        var temporaryDir = PackageContentSourceDir.Create(temporaryDirectory);
 
-        var temporaryDir = PackageContentDir.Create(temporaryDirectory);
         var subRequest = await _mediator.PackageBuilderInitAsync(temporaryDir.Value, request.PackageName, request.PackageVersion, request.PackageInstalationDir);
 
-        var contnetDestinationPaht = $"{temporaryDirectory}\\data\\{request.PackageInstalationDir.Value}";
-        CopyDirectoryContents(request.PackageContentPath.Value, contnetDestinationPaht);
+
+        CopyDirectoryContents(request.PackageContentPath.Value, pckDefiniton.ContentDir.Value);
 
         var result = RunCommand(temporaryDirectory, pckgDirectory);
         string packageFileName = $"{request.PackageName.Value}_{request.PackageVersion.Value}_windows_x64.nipkg";
@@ -40,18 +39,12 @@ public class PackageBuildHandler(IMediator _mediator)
         string currentDirectoryPath = Environment.CurrentDirectory;
         string packageDestinationDir = Path.Combine(currentDirectoryPath, request.PackageDestinationDir.Value);
 
-        if (!Directory.Exists(packageDestinationDir))
-        {
-            // Delete the directory
-            Directory.CreateDirectory(packageDestinationDir);
-        }
-
+        if (!Directory.Exists(packageDestinationDir)) Directory.CreateDirectory(packageDestinationDir);
 
         string packageDestinationFilePath = Path.Combine(packageDestinationDir, packageFileName);
         File.Copy(packageFilePath, packageDestinationFilePath, overwrite: true);
 
         Directory.Delete(temporaryDirectory, true);
-
         Directory.Delete(pckgDirectory, true);
 
         return Result.Success();
