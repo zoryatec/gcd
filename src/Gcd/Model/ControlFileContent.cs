@@ -1,4 +1,6 @@
-﻿namespace Gcd.Model;
+﻿using CSharpFunctionalExtensions;
+
+namespace Gcd.Model;
 
 public record ControlFileContent(
                 PackageArchitecture Architecture,
@@ -26,6 +28,13 @@ public record ControlFileContent(
                 PackageName.Default,
                 PackageVersion.Default,
                 PackageDependencies.Default); 
+
+    public static Result<ControlFileContent> Of(Maybe<string> content)
+    {
+
+
+        return Result.Failure<ControlFileContent>("");
+    }
 
     public string Content
     {

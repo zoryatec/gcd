@@ -25,7 +25,7 @@ public class TemplateCreateHandler()
         Directory.CreateDirectory(pckDefiniton.DataDir.Value);
         Directory.CreateDirectory(pckDefiniton.ControlDir.Value);
 
-        File.WriteAllText(pckDefiniton.DebianFile.Value, "2.0");
+        File.WriteAllText(pckDefiniton.DebianFile.Value, DebianFileContent.Default.Value);
 
         var controlFileContent = (ControlFileContent.Default with { Name = request.PackageName, Version = request.PackageVersion }).Content.ToString();
 
