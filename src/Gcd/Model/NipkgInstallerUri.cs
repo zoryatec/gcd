@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace Gcd.Commands.NipkgDownloadNipkg;
+namespace Gcd.Model;
 
 public record NipkgInstallerUri
 {

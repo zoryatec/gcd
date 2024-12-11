@@ -3,6 +3,7 @@ using Gcd.Commands.NipkgPackageBuilderInit;
 using Gcd.Model;
 using Gcd.Services;
 using MediatR;
+using System.Reflection.Metadata;
 
 namespace Gcd.Commands.NipkgPackageBuild;
 
@@ -27,8 +28,7 @@ public class PackageBuildHandler(IMediator _mediator)
 
 
         var temporaryDir = PackageContentDir.Create(temporaryDirectory);
-        var subRequest = new PackageBuilderInitRequest(temporaryDir.Value, request.PackageName, request.PackageVersion, request.PackageInstalationDir);
-        var subResponse = await _mediator.Send(subRequest);
+        var subRequest = await _mediator.PackageBuilderInitAsync(temporaryDir.Value, request.PackageName, request.PackageVersion, request.PackageInstalationDir);
 
         var contnetDestinationPaht = $"{temporaryDirectory}\\data\\{request.PackageInstalationDir.Value}";
         CopyDirectoryContents(request.PackageContentPath.Value, contnetDestinationPaht);
@@ -85,11 +85,8 @@ public class PackageBuildHandler(IMediator _mediator)
         }
     }
 
-    private async Task<Result> RunCommand(string temporaryDirectory, string pckgDirectory)
-    {
-        var arguments = new string[] { "pack", temporaryDirectory, pckgDirectory };
-        var req = new RunNipkgRequest(arguments);
-        return await _mediator.Send(req);
-    }
+    private async Task<Result> RunCommand(string temporaryDirectory, string pckgDirectory) =>
+        await _mediator.RunNipkgRequestAsync(new string[] { "pack", temporaryDirectory, pckgDirectory });
+    
 }
 

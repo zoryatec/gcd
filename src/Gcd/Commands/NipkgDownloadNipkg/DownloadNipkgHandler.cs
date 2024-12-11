@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgPushAzBlobFeedMeta;
+﻿using CSharpFunctionalExtensions;
 using Gcd.Model;
 using Gcd.Services;
 using MediatR;
@@ -25,7 +23,6 @@ public class DownloadNipkgHandler(IWebDownload _webDownload, NipkgInstallerUri _
         return await _webDownload.DownloadFileAsync(webUri, filePath);
     }
 }
-
 
 public static class MediatorExtensions
 {

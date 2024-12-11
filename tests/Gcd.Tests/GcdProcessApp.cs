@@ -1,6 +1,6 @@
-﻿using Gcd.Commands.NipkgDownloadNipkg;
-using Gcd.Extensions;
+﻿using Gcd.Extensions;
 using Gcd.LabViewProject;
+using Gcd.Model;
 using Gcd.Services;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;

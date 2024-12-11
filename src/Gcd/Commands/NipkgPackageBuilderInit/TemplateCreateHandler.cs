@@ -1,5 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Commands.NipkgDownloadNipkg;
 using Gcd.Model;
+using Gcd.Services;
 using MediatR;
 
 namespace Gcd.Commands.NipkgPackageBuilderInit;
@@ -20,23 +22,16 @@ public class TemplateCreateHandler()
             Directory.Delete(packageDirectoryPath, true);
         }
 
-
         Directory.CreateDirectory(packageDirectoryPath);
 
+        var pckBuilderDest = LocalDirPath.Of(packageDirectoryPath);
+        var pckDefinitionRes = PackageBuilderDefinition.Of(pckBuilderDest.Value, request.PackageInstalationDir);
+        var pckDefiniton = pckDefinitionRes.Value;
 
-        string debianbinaryFilePath = Path.Combine(packageDirectoryPath, "debian-binary");
-        File.WriteAllText(debianbinaryFilePath, "2.0");
+        File.WriteAllText(pckDefiniton.DebianFile.Value, "2.0");
+        Directory.CreateDirectory(pckDefiniton.DataDir.Value);
+        Directory.CreateDirectory(pckDefiniton.ControlDir.Value);
 
-
-        string dataDirectoryPath = Path.Combine(packageDirectoryPath, "data");
-        Directory.CreateDirectory(dataDirectoryPath);
-
-        string windPath = request.PackageInstalationDir.Value.Replace('/', '\\');
-        string destinationDirectory = Path.Combine(dataDirectoryPath, windPath);
-        Directory.CreateDirectory(destinationDirectory);
-
-        string controlDirectoryPath = Path.Combine(packageDirectoryPath, "control");
-        Directory.CreateDirectory(controlDirectoryPath);
 
 
         var controlFileContent =
@@ -52,8 +47,8 @@ Package: {request.PackageName.Value}
 Version: {request.PackageVersion.Value}
 Depends: 
 ";
-        string controlFilePath = Path.Combine(controlDirectoryPath, "control");
-        File.WriteAllText(controlFilePath, controlFileContent);
+
+        File.WriteAllText(pckDefiniton.ControlFile.Value, controlFileContent);
 
         var instructionFileContent =
  @"<instructions>
@@ -63,11 +58,22 @@ Depends:
     </customExecutes>
 </instructions>
 ";
-        string instructionFilePath = Path.Combine(dataDirectoryPath, "instructions");
-        File.WriteAllText(instructionFilePath, instructionFileContent);
 
+        File.WriteAllText(pckDefiniton.InstructionFile.Value, instructionFileContent);
 
         return Result.Success();
     }
+}
+
+public static class MediatorExtensions
+{
+    public static async Task<Result> PackageBuilderInitAsync(
+        this IMediator mediator,
+        PackageContentDir packageContentDir,
+        PackageName packageName, 
+        PackageVersion packageVersion, 
+        PackageInstalationDir packageInstalationDir,
+        CancellationToken cancellationToken = default)
+        => await mediator.Send(new PackageBuilderInitRequest(packageContentDir,  packageName, packageVersion, packageInstalationDir), cancellationToken);
 }
 

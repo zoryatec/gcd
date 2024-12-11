@@ -5,7 +5,7 @@ using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using Gcd.Services;
-using Gcd.Commands.NipkgDownloadNipkg;
+using Gcd.Model;
 
 
 namespace Gcd
