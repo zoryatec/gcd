@@ -8,6 +8,7 @@ namespace Gcd.Model;
 
 public record PackageBuilderDefinition
 {
+    public LocalDirPath RootDir { get; }
     public LocalDirPath DataDir { get; }
     public LocalDirPath ControlDir { get; }
     public LocalDirPath ContentDir { get; }
@@ -19,6 +20,7 @@ public record PackageBuilderDefinition
     {
         string windPath = packageInstalationDir.Value.Replace('/', '\\');
 
+        var rootDir = LocalDirPath.Of($"{feedDirPath.Value}");
         var dataDir = LocalDirPath.Of($"{feedDirPath.Value}\\data");
         var controlDir = LocalDirPath.Of($"{feedDirPath.Value}\\control");
         var contentDir = LocalDirPath.Of($"{feedDirPath.Value}\\data\\{windPath}");
@@ -28,8 +30,9 @@ public record PackageBuilderDefinition
 
 
         return Result
-            .Combine(dataDir, controlDir, contentDir, debianFile, controlFile, instructionsFile)
+            .Combine(rootDir,dataDir, controlDir, contentDir, debianFile, controlFile, instructionsFile)
             .Map(() => new PackageBuilderDefinition(
+                rootDir.Value,
                 dataDir.Value,
                 controlDir.Value,
                 contentDir.Value,
@@ -39,13 +42,15 @@ public record PackageBuilderDefinition
                 ));
     }
     private PackageBuilderDefinition
-        (LocalDirPath dataDir,
+        (LocalDirPath rootDir,
+        LocalDirPath dataDir,
         LocalDirPath controlDir,
         LocalDirPath contentDir,
         LocalFilePath debianFile,
         LocalFilePath controlFile,
         LocalFilePath instrFile)
     {
+        RootDir = rootDir;
         DataDir = dataDir;
         ControlDir = controlDir;
         ContentDir = contentDir;

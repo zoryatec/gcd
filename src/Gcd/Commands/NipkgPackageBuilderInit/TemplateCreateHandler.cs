@@ -15,23 +15,17 @@ public class TemplateCreateHandler()
     {
         string currentDirectoryPath = Environment.CurrentDirectory;
         string packageDirectoryPath = Path.Combine(currentDirectoryPath, request.PackagePath.Value);
-
-        if (Directory.Exists(packageDirectoryPath))
-        {
-            // Delete the directory
-            Directory.Delete(packageDirectoryPath, true);
-        }
-
-        Directory.CreateDirectory(packageDirectoryPath);
-
         var pckBuilderDest = LocalDirPath.Of(packageDirectoryPath);
         var pckDefinitionRes = PackageBuilderDefinition.Of(pckBuilderDest.Value, request.PackageInstalationDir);
         var pckDefiniton = pckDefinitionRes.Value;
 
-        File.WriteAllText(pckDefiniton.DebianFile.Value, "2.0");
+
+        if (Directory.Exists(pckDefiniton.RootDir.Value)) Directory.Delete(packageDirectoryPath, true);
+        Directory.CreateDirectory(pckDefiniton.RootDir.Value);
         Directory.CreateDirectory(pckDefiniton.DataDir.Value);
         Directory.CreateDirectory(pckDefiniton.ControlDir.Value);
 
+        File.WriteAllText(pckDefiniton.DebianFile.Value, "2.0");
 
 
         var controlFileContent =
