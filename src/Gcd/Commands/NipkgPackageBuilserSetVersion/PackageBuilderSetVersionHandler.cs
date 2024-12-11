@@ -16,10 +16,13 @@ public class PackageBuilderSetVersionHandler()
         string packageDirectoryPath = Path.Combine(currentDirectoryPath, request.PackagePath.Value);
 
 
-        string controlDirectoryPath = Path.Combine(packageDirectoryPath, "control");
-        string controlFilePath = Path.Combine(controlDirectoryPath, "control");
+        var pckBuilderDefinitionResult = PackageBuilderDefinition.Of(request.PackagePath);
+        var packBuilderDef = pckBuilderDefinitionResult.Value;
 
-        string controlFileContent = File.ReadAllText(controlFilePath);
+        //string controlDirectoryPath = Path.Combine(packageDirectoryPath, "control");
+        //string controlFilePath = Path.Combine(controlDirectoryPath, "control");
+
+        string controlFileContent = File.ReadAllText(packBuilderDef.ControlFile.Value);
 
         string newVersion = request.PackageVersion.Value;
 
@@ -31,7 +34,7 @@ public class PackageBuilderSetVersionHandler()
         controlFileContent = Regex.Replace(controlFileContent, pattern, replacement, RegexOptions.Multiline);
 
 
-        File.WriteAllText(controlFilePath, controlFileContent);
+        File.WriteAllText(packBuilderDef.ControlFile.Value, controlFileContent);
 
         return Result.Success();
     }

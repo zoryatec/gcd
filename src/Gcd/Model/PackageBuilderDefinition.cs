@@ -14,7 +14,7 @@ public record PackageBuilderContentDir
     public static Result<PackageBuilderContentDir> Of(PackageBuilderRootDir rootDir, PackageInstalationDir packageInstalatioDir)
     {
         string windPath = packageInstalatioDir.Value.Replace('/', '\\');
-        var dir = LocalDirPath.Of($"{rootDir.Value}");
+        var dir = LocalDirPath.Parse($"{rootDir.Value}");
         return dir.Map((dir) => new PackageBuilderContentDir(dir));
     }
     private PackageBuilderContentDir(LocalDirPath value)
@@ -37,9 +37,9 @@ public record PackageBuilderDefinition
     {
 
 
-        var rootDir = LocalDirPath.Of($"{feedDirPath.Value}");
-        var dataDir = LocalDirPath.Of($"{feedDirPath.Value}\\data");
-        var controlDir = LocalDirPath.Of($"{feedDirPath.Value}\\control");
+        var rootDir = LocalDirPath.Parse($"{feedDirPath.Value}");
+        var dataDir = LocalDirPath.Parse($"{feedDirPath.Value}\\data");
+        var controlDir = LocalDirPath.Parse($"{feedDirPath.Value}\\control");
 
         var debianFile = LocalFilePath.Of($"{feedDirPath.Value}\\debian-binary");
         var controlFile = LocalFilePath.Of($"{feedDirPath.Value}\\control\\control");

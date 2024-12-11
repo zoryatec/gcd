@@ -25,7 +25,7 @@ public static class UUseNipkgPushAzBlobFeedMetaaCmdExtensions
                 var azFeedDef = AzBlobFeedUri.Create(feedUrl.Value())
                     .Bind(feedUri => AzBlobFeedDefinition.Of(feedUri));
 
-                var localFeedDef = LocalDirPath.Of(feedPatht.Value())
+                var localFeedDef = LocalDirPath.Parse(feedPatht.Value())
                     .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
 
                 return await Result

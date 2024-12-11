@@ -21,7 +21,7 @@ public class PackageBuildHandler(IMediator _mediator)
 
         if (!Directory.Exists(pckgDirectory)) Directory.CreateDirectory(pckgDirectory);
 
-        var pckBuilderDest = LocalDirPath.Of(temporaryDirectory);
+        var pckBuilderDest = LocalDirPath.Parse(temporaryDirectory);
         var pckDefinitionRes = PackageBuilderDefinition.Of(pckBuilderDest.Value);
         var pckDefiniton = pckDefinitionRes.Value;
 

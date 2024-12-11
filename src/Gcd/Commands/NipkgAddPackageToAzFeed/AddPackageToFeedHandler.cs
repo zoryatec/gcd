@@ -39,7 +39,7 @@ public class AddPackageToFeedHandler(
 
 
         var localFeedPath = temporaryDirectory;
-        var localFeedDef = LocalDirPath.Of(localFeedPath)
+        var localFeedDef = LocalDirPath.Parse(localFeedPath)
             .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
         return localFeedDef;
     }
