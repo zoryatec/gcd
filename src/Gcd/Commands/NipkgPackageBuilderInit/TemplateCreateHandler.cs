@@ -16,7 +16,7 @@ public class TemplateCreateHandler()
         string currentDirectoryPath = Environment.CurrentDirectory;
         string packageDirectoryPath = Path.Combine(currentDirectoryPath, request.PackagePath.Value);
         var pckBuilderDest = LocalDirPath.Of(packageDirectoryPath);
-        var pckDefinitionRes = PackageBuilderDefinition.Of(pckBuilderDest.Value, request.PackageInstalationDir);
+        var pckDefinitionRes = PackageBuilderDefinition.Of(pckBuilderDest.Value);
         var pckDefiniton = pckDefinitionRes.Value;
 
 

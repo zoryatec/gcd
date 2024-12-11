@@ -22,15 +22,15 @@ public class PackageBuildHandler(IMediator _mediator)
         if (!Directory.Exists(pckgDirectory)) Directory.CreateDirectory(pckgDirectory);
 
         var pckBuilderDest = LocalDirPath.Of(temporaryDirectory);
-        var pckDefinitionRes = PackageBuilderDefinition.Of(pckBuilderDest.Value, request.PackageInstalationDir);
+        var pckDefinitionRes = PackageBuilderDefinition.Of(pckBuilderDest.Value);
         var pckDefiniton = pckDefinitionRes.Value;
 
         var temporaryDir = PackageBuilderRootDir.Create(temporaryDirectory);
 
         var subRequest = await _mediator.PackageBuilderInitAsync(temporaryDir.Value, request.PackageName, request.PackageVersion, request.PackageInstalationDir);
 
-
-        CopyDirectoryContents(request.PackageContentPath.Value, pckDefiniton.ContentDir.Value);
+        var contentDirResult = PackageBuilderContentDir.Of(temporaryDir.Value, request.PackageInstalationDir);
+        CopyDirectoryContents(request.PackageContentPath.Value, contentDirResult.Value.Value.Value);
 
         var result = RunCommand(temporaryDirectory, pckgDirectory);
         string packageFileName = $"{request.PackageName.Value}_{request.PackageVersion.Value}_windows_x64.nipkg";
