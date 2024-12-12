@@ -23,18 +23,11 @@ public class PackageBuilderSetVersionHandler()
         var contFunctResult = ControlFileContent.Of(controlFileContent);
         var contFunct = contFunctResult.Value;
 
+        contFunct = contFunct with { Version = request.PackageVersion };
 
-        string newVersion = request.PackageVersion.Value;
-
-        // Regular expression to match the line starting with "Version:"
-        string pattern = @"^Version:.*$";
-        string replacement = $"Version: {newVersion}";
-
-        // Replace the line
-        controlFileContent = Regex.Replace(controlFileContent, pattern, replacement, RegexOptions.Multiline);
 
         var writeResult = await PackageBuilderDefinition.Of(request.PackagePath)
-            .Bind(def => WriteTextFile(def.ControlFile, controlFileContent));
+            .Bind(def => WriteTextFile(def.ControlFile, contFunct.Content));
 
         return Result.Success();
     }
