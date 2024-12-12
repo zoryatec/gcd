@@ -5,7 +5,7 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace Gcd.Model;
 
-public record PackageName
+public record PackageName : ControlFileProperty
 {
     public static PackageName Default => new PackageName("unset-package-name");
     public static Result<PackageName> Create(Maybe<string> packagePathOrNothing) =>

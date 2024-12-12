@@ -2,7 +2,7 @@
 
 namespace Gcd.Model
 {
-    public record PackageHomePage
+    public record PackageHomePage : ControlFileProperty
     {
         public static PackageHomePage Default => new PackageHomePage("unset-home-page");
 

@@ -2,7 +2,7 @@
 
 namespace Gcd.Model;
 
-public record PackageVersion
+public record PackageVersion : ControlFileProperty
 {
     public static PackageVersion Default => new PackageVersion("0.0.0.1");
     public static Result<PackageVersion> Create(Maybe<string> packagePathOrNothing) =>

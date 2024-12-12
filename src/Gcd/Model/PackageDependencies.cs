@@ -2,7 +2,7 @@
 
 namespace Gcd.Model;
 
-public record PackageDependencies
+public record PackageDependencies : ControlFileProperty
 {
     public static PackageDependencies Default => new PackageDependencies("");
     public static Result<PackageDependencies> Of(string value)

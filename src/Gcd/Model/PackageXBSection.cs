@@ -2,7 +2,7 @@
 
 namespace Gcd.Model
 {
-    public record PackageXBSection
+    public record PackageXBSection : ControlFileProperty
     {
         public static PackageXBSection Default => new PackageXBSection("unset-section");
         public static Result<PackageXBSection> Of(string value)

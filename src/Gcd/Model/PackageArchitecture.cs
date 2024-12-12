@@ -2,7 +2,7 @@
 
 namespace Gcd.Model
 {
-    public record PackageArchitecture
+    public record PackageArchitecture : ControlFileProperty
     {
         public static PackageArchitecture Default => new PackageArchitecture("windows_x64");
         

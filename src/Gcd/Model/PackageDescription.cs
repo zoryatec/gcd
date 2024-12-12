@@ -3,7 +3,7 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace Gcd.Model
 {
-    public record PackageDescription
+    public record PackageDescription : ControlFileProperty
     {
         public static PackageDescription Default => new PackageDescription("unset-description");
         public static Result<PackageDescription> Of(string value)

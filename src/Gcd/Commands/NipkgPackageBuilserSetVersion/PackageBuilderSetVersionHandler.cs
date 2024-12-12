@@ -15,14 +15,34 @@ public class PackageBuilderSetVersionHandler()
         var (rootDir, packageVersion) = request;
         var pckDefinition = PackageBuilderDefinition.Of(rootDir);
 
+        test();
+
         return  await pckDefinition
             .Bind(def => ReadTextFileAsync(def.ControlFile))
             .Bind(fileContent => ControlFileContent.Of(fileContent))
             .Map(controlFile => controlFile with { Version = packageVersion })
             .Bind(controlFile => WriteTextFile(pckDefinition.Value.ControlFile, controlFile.Content));
     }
+    
+    private void test()
+    {
+        List<ControlFileProperty> controlFileProperties = new List<ControlFileProperty>();
+        controlFileProperties.Add(PackageArchitecture.Of("dddd").Value);
+        controlFileProperties.Add(PackageHomePage.Of("adsfdsfds").Value);
+        controlFileProperties.Add(PackageMaintainer.Of("dfdfd").Value);
+
+        var cfc = ControlFileContent.Default;
+
+        foreach(var prop in controlFileProperties) 
+        {
+            cfc = cfc.WithProperty(prop);
+        }
 
 
+    }
+
+
+    
     private async Task<Result<string>> ReadTextFileAsync(LocalFilePath filePath, CancellationToken cancellationToken = default) =>
         ReadTextFile(filePath);
 

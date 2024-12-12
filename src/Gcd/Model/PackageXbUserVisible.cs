@@ -2,7 +2,7 @@
 
 namespace Gcd.Model
 {
-    public record PackageXbUserVisible
+    public record PackageXbUserVisible : ControlFileProperty
     {
         public static PackageXbUserVisible Default => new PackageXbUserVisible("yes");
         public static Result<PackageXbUserVisible> Of(string value)

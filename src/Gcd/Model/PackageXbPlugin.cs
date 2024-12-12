@@ -2,7 +2,7 @@
 
 namespace Gcd.Model
 {
-    public record PackageXbPlugin
+    public record PackageXbPlugin : ControlFileProperty
     {
         public static PackageXbPlugin Default => new PackageXbPlugin("file");
         public static Result<PackageXbPlugin> Of(string value)

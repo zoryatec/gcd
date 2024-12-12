@@ -2,8 +2,8 @@
 
 namespace Gcd.Model
 {
-    public record PackageMaintainer
-    {
+    public record PackageMaintainer : ControlFileProperty
+    { 
         public static PackageMaintainer Default => new PackageMaintainer("unset-maintainer");
 
         public static Result<PackageMaintainer> Of(string value)

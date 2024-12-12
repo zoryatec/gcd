@@ -2,7 +2,7 @@
 
 namespace Gcd.Model
 {
-    public record PackageXbStoreProduct
+    public record PackageXbStoreProduct : ControlFileProperty
     {
         public static PackageXbStoreProduct Default => new PackageXbStoreProduct("yes");
         public static Result<PackageXbStoreProduct> Of(string value)
