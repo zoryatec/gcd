@@ -31,21 +31,21 @@ public record ControlFileContent(
                 PackageDependencies.Default);
 
     public ControlFileContent WithProperty( ControlFileProperty property) =>
-    property switch
-    {
-        PackageArchitecture prop => this with { Architecture = prop },
-        PackageHomePage prop => this with { HomePage = prop },
-        PackageMaintainer prop => this with { Maintainer = prop },
-        PackageDescription prop => this with { Description = prop },
-        PackageXbPlugin prop => this with { XbPlugin = prop },
-        PackageXbUserVisible prop => this with { XbUserVisible = prop },
-        PackageXbStoreProduct prop => this with { XbStoreProduct = prop },
-        PackageXBSection prop => this with { XBSection = prop },
-        PackageName prop => this with { Name = prop },
-        PackageVersion prop => this with { Version = prop },
-        PackageDependencies prop => this with { Dependencies = prop },
-        _ => this
-    };
+        property switch
+        {
+            PackageArchitecture prop => this with { Architecture = prop },
+            PackageHomePage prop => this with { HomePage = prop },
+            PackageMaintainer prop => this with { Maintainer = prop },
+            PackageDescription prop => this with { Description = prop },
+            PackageXbPlugin prop => this with { XbPlugin = prop },
+            PackageXbUserVisible prop => this with { XbUserVisible = prop },
+            PackageXbStoreProduct prop => this with { XbStoreProduct = prop },
+            PackageXBSection prop => this with { XBSection = prop },
+            PackageName prop => this with { Name = prop },
+            PackageVersion prop => this with { Version = prop },
+            PackageDependencies prop => this with { Dependencies = prop },
+            _ => throw new ArgumentException(nameof(property))
+        };
 
 
     public static Result<ControlFileContent> Of(Maybe<string> content)
