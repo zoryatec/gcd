@@ -31,7 +31,11 @@ public record ControlFileContent(
 
     public static Result<ControlFileContent> Of(Maybe<string> content)
     {
+        var cfc = ControlFileContent.Default;
 
+        var dictionary = ParseProperties(content.Value);
+        cfc = PackageArchitecture.Of(dictionary[nameof(Architecture)])
+            .Map(prop => cfc with { Architecture = prop }).Value;
 
         return Result.Failure<ControlFileContent>("");
     }
@@ -54,6 +58,20 @@ Depends: {Dependencies}
     }
 
     public override string ToString() => Content;
+
+    public static Dictionary<string, string> ParseProperties(string content)
+    {
+        return content
+            .Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
+            .Select(line => line.Split(new[] { ": " }, 2, StringSplitOptions.None))
+            .Where(parts => parts.Length == 2)
+            .Select(parts => Result.Try(() => new KeyValuePair<string, string>(
+                parts[0].Trim(),
+                parts[1].Trim())))
+            .Where(result => result.IsSuccess)
+            .Select(result => result.Value)
+            .ToDictionary(pair => pair.Key, pair => pair.Value);
+    }
 
 }
 
