@@ -13,24 +13,16 @@ public class PackageBuilderSetVersionHandler()
 {
     public async Task<Result> Handle(PackageBuilderSetVersionRequest request, CancellationToken cancellationToken)
     {
+        var (rootDir, packageVersion) = request;
+        var pckDefinition = PackageBuilderDefinition.Of(rootDir);
 
-        var controlFileContentResult = await PackageBuilderDefinition.Of(request.PackagePath)
-            .Bind(def => ReadTextFile(def.ControlFile));
-
-
-        string controlFileContent = controlFileContentResult.Value;
-
-        var contFunctResult = ControlFileContent.Of(controlFileContent);
-        var contFunct = contFunctResult.Value;
-
-        contFunct = contFunct with { Version = request.PackageVersion };
-
-
-        var writeResult = await PackageBuilderDefinition.Of(request.PackagePath)
-            .Bind(def => WriteTextFile(def.ControlFile, contFunct.Content));
-
-        return Result.Success();
+        return  await pckDefinition
+            .Bind(def => ReadTextFile(def.ControlFile))
+            .Bind(fileContent => ControlFileContent.Of(fileContent))
+            .Map(controlFile => controlFile with { Version = packageVersion })
+            .Bind(controlFile => WriteTextFile(pckDefinition.Value.ControlFile, controlFile.Content));
     }
+
 
     private async Task<Result<string>> ReadTextFile(LocalFilePath filePath, CancellationToken cancellationToken = default)
     {
