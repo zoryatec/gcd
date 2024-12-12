@@ -12,6 +12,8 @@ public record PackageVersion
 
     private PackageVersion(string path) => Value = path;
     public string Value { get; }
+    public static string Key { get; } = "Version";
     public override string ToString() => Value;
 }
+
 

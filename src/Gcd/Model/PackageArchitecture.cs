@@ -14,6 +14,7 @@ namespace Gcd.Model
 
         private PackageArchitecture(string value) => Value = value;
         public string Value { get; }
+        public static string Key { get; } = "Architecture";
         public override string ToString() => Value;
     }
 }

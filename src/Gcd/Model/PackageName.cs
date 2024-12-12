@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgDownloadFeedMetaData;
 using MediatR;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Gcd.Model;
 
@@ -14,7 +15,24 @@ public record PackageName
 
     private PackageName(string path) => Value = path;
     public string Value { get; }
+    public static string Key { get; } = "Package";
     public override string ToString() => Value;
 }
 
 
+//public static string Key { get; } = "Description";
+//public override string ToString() => Value;
+//    }
+//}
+
+
+//Homepage: { HomePage}
+//Maintainer: { Maintainer}
+//Description: { Description}
+//XB - Plugin: { XbPlugin}
+//XB - UserVisible: { XbUserVisible}
+//XB - StoreProduct: { XbUserVisible}
+//XB - Section: { XBSection}
+//Package: { Name}
+//Version: { Version}
+//Depends: { Dependencies}

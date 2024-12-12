@@ -20,6 +20,10 @@ public class PackageBuilderSetVersionHandler()
 
         string controlFileContent = controlFileContentResult.Value;
 
+        var contFunctResult = ControlFileContent.Of(controlFileContent);
+        var contFunct = contFunctResult.Value;
+
+
         string newVersion = request.PackageVersion.Value;
 
         // Regular expression to match the line starting with "Version:"
