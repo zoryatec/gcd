@@ -23,6 +23,8 @@ namespace Gcd.Commands.NipkgDownloadFeedMetaData
                 var packageVersionOption = create.Option(PACKAGE_VERSION_OPTION, PACKAGE_VERSION_DESCRIPTION, CommandOptionType.SingleValue)
                     .IsRequired();
 
+                IReadOnlyList<ControlFileProperty> properties = new List<ControlFileProperty>();
+
                 create.OnExecuteAsync(async cancelationToken =>
                 {
                     var packagePath = PackageBuilderRootDir.Create(packagePathOption.Value());
@@ -30,8 +32,7 @@ namespace Gcd.Commands.NipkgDownloadFeedMetaData
 
                     return await Result
                         .Combine(packagePath, packageVersion)
-                        .Map(() => new PackageBuilderSetVersionRequest(packagePath.Value, packageVersion.Value))
-                        .Bind((req1) => mediator.Send(req1, cancelationToken))
+                        .Bind(() => mediator.PackageBuilderSetPropertyAsync(packagePath.Value, packageVersion.Value, properties, cancelationToken))
                         .Tap(() => console.Write(SUCESS_MESSAGE))
                         .TapError(error => console.Error.Write(error))
                         .Finally(x => x.IsFailure ? 1 : 0);

@@ -1,18 +1,19 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Model;
 using Gcd.Services;
 using MediatR;
 
 namespace Gcd.Commands.NipkgPackageBuilserSetVersion;
 
-public record PackageBuilderSetVersionRequest(PackageBuilderRootDir PackagePath, PackageVersion PackageVersion) : IRequest<Result>;
+public record PackageBuilderSetVersionRequest(PackageBuilderRootDir PackagePath, PackageVersion PackageVersion, IReadOnlyList<ControlFileProperty> Properties) : IRequest<Result>;
 
 public class PackageBuilderSetVersionHandler()
     : IRequestHandler<PackageBuilderSetVersionRequest, Result>
 {
     public async Task<Result> Handle(PackageBuilderSetVersionRequest request, CancellationToken cancellationToken)
     {
-        var (rootDir, packageVersion) = request;
+        var (rootDir, packageVersion, properties) = request;
         var pckDefinition = PackageBuilderDefinition.Of(rootDir);
 
         test();
@@ -40,9 +41,7 @@ public class PackageBuilderSetVersionHandler()
 
 
     }
-
-
-    
+ 
     private async Task<Result<string>> ReadTextFileAsync(LocalFilePath filePath, CancellationToken cancellationToken = default) =>
         ReadTextFile(filePath);
 
@@ -54,6 +53,11 @@ public class PackageBuilderSetVersionHandler()
 
     private Result WriteTextFile(LocalFilePath filePath, string content) =>
         Result.Try(() => File.WriteAllText(filePath.Value, content), ex => ex.Message);
+
 }
 
-
+public static class MediatorExtensions
+{
+    public static async Task<Result> PackageBuilderSetPropertyAsync(this IMediator mediator, PackageBuilderRootDir packageBuilderRootDir, PackageVersion packageVersion, IReadOnlyList<ControlFileProperty> properties, CancellationToken cancellationToken = default)
+        => await mediator.Send(new PackageBuilderSetVersionRequest(packageBuilderRootDir, packageVersion, properties), cancellationToken);
+}
