@@ -8,7 +8,7 @@ namespace Gcd.Commands.NipkgPackageBuilderInit;
 
 public record PackageBuilderInitRequest(PackageBuilderRootDir PackagePath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir) : IRequest<Result>;
 
-public class TemplateCreateHandler()
+public class PackageBuilderInitHandler()
     : IRequestHandler<PackageBuilderInitRequest, Result>
 {
     public async Task<Result> Handle(PackageBuilderInitRequest request, CancellationToken cancellationToken)

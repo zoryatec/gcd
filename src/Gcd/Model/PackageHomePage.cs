@@ -6,18 +6,10 @@ namespace Gcd.Model
     {
         public static PackageHomePage Default => new PackageHomePage("unset-home-page");
 
-        public static Result<PackageHomePage> Of(string value)
+        public static Result<PackageHomePage> Of(Maybe<string> maybeValue)
         {
-            return Result.Success()
-                .Map(() => new PackageHomePage(value));
-        }
-
-        public static Result<PackageHomePage> From(Maybe<Dictionary<string, string>> maybeDict)
-        {
-            return maybeDict
-                .ToResult("incorrect format of control file")
-                .Ensure(dict => dict.ContainsKey(Key), "")
-                .Bind(dict => PackageHomePage.Of(dict[Key]));
+            return maybeValue.ToResult("value cannot be empty")
+                .Map((value) => new PackageHomePage(value));
         }
 
         private PackageHomePage(string value) => Value = value;

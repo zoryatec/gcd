@@ -20,4 +20,16 @@ public class PackageBuilderSerVersionArgBuilder : ArgumentsBuilder
         WithOption(PACKAGE_VERSION_OPTION, value);
         return this;
     }
+
+    public PackageBuilderSerVersionArgBuilder WithHomePage(string value)
+    {
+        WithOption(PACKAGE_HOME_PAGE_OPTION, value);
+        return this;
+    }
+
+    public PackageBuilderSerVersionArgBuilder WithMaintainer(string value)
+    {
+        WithOption(PACKAGE_MAINTAINER_OPTION, value);
+        return this;
+    }
 }

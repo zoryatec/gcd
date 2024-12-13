@@ -6,10 +6,10 @@ namespace Gcd.Model
     { 
         public static PackageMaintainer Default => new PackageMaintainer("unset-maintainer");
 
-        public static Result<PackageMaintainer> Of(string value)
+        public static Result<PackageMaintainer> Of(Maybe<string> maybeValue)
         {
-            return Result.Success()
-                .Map(() => new PackageMaintainer(value));
+            return maybeValue.ToResult("value cannot be empty")
+                .Map((value) => new PackageMaintainer(value));
         }
         private PackageMaintainer(string value) => Value = value;
         public string Value { get; }

@@ -31,6 +31,8 @@ namespace Gcd.Tests.EndToEnd.Nipkg
             var packageName = "sample-package";
             var packageVersion = "99.88.77.66";
             var packageInstalationDir = "BootVolume/Zoryatec/sample-package";
+            var packageHomePage = Guid.NewGuid().ToString();
+            var packageMaintainer = Guid.NewGuid().ToString();
 
             //var packageContentDirectory = GetPackageContentDir();
             var packageBuilderDir = _tempDirectoryGenerator.GenerateTempDirectory();
@@ -43,25 +45,31 @@ namespace Gcd.Tests.EndToEnd.Nipkg
                 .Build();
 
             var result = _gcd.Run(args);
-            result.Return.Should().Be(0);
             result.Error.Should().BeEmpty();
+            result.Return.Should().Be(0);
+
 
             packageVersion = "12.34.56.78";
 
             args = (new PackageBuilderSerVersionArgBuilder())
                 .WithPackageBuilderDirectory(packageBuilderDir)
                 .WithVersion(packageVersion)
+                .WithMaintainer(packageHomePage)
+                .WithHomePage(packageMaintainer)
                 .Build();
 
             // Act
             result = _gcd.Run(args);
 
             // Asssert
-            result.Return.Should().Be(0);
             result.Error.Should().BeEmpty();
+            result.Return.Should().Be(0);
+
 
             var content = File.ReadAllText($"{packageBuilderDir}\\control\\control");
             content.Should().Contain(packageVersion);
+            content.Should().Contain(packageHomePage);
+            content.Should().Contain(packageMaintainer);
 
         }
 

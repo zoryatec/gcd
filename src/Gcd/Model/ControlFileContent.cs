@@ -47,6 +47,15 @@ public record ControlFileContent(
             _ => throw new ArgumentException(nameof(property))
         };
 
+    public ControlFileContent WithProperties(IReadOnlyList<ControlFileProperty> properties)
+    {
+        var cfc = this;
+        foreach (var property in properties)
+        {
+            cfc = cfc.WithProperty(property);
+        }
+        return cfc;
+    }
 
     public static Result<ControlFileContent> Of(Maybe<string> content)
     {
