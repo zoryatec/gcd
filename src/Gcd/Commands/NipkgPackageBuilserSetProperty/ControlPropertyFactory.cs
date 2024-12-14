@@ -28,13 +28,19 @@ public class ControlPropertyFactory : IControlPropertyFactory
     {
         var result = option switch
         {
-            PackageVersionOption => PackageVersion.Create(option.Value()).Map(x => x as ControlFileProperty),
+            PackageArchitectureOption => PackageArchitecture.Of(option.Value()).Map(x => x as ControlFileProperty),
             PackageHomePageOption => PackageHomePage.Of(option.Value()).Map(x => x as ControlFileProperty),
             PackageMaintainerOption => PackageMaintainer.Of(option.Value()).Map(x => x as ControlFileProperty),
+            PackageDescriptionOption => PackageDescription.Of(option.Value()).Map(x => x as ControlFileProperty),
+            PackageXbPluginOption => PackageXbPlugin.Of(option.Value()).Map(x => x as ControlFileProperty),
+            PackageXbUserVisibleOption => PackageXbUserVisible.Of(option.Value()).Map(x => x as ControlFileProperty),
+            PackageXbStoreProductOption => PackageXbStoreProduct.Of(option.Value()).Map(x => x as ControlFileProperty),
+            PackageXBSectionOption => PackageXBSection.Of(option.Value()).Map(x => x as ControlFileProperty),
             PackageNameOption => PackageName.Create(option.Value()).Map(x => x as ControlFileProperty),
+            PackageVersionOption => PackageVersion.Create(option.Value()).Map(x => x as ControlFileProperty),
+            PackageDependenciesOption => PackageDependencies.Of(option.Value()).Map(x => x as ControlFileProperty),
             _ => Result.Failure<ControlFileProperty>($"not implemented factory option {option.LongName}")
         };
         return result;
     }
 }
-

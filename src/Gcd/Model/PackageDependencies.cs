@@ -5,10 +5,10 @@ namespace Gcd.Model;
 public record PackageDependencies : ControlFileProperty
 {
     public static PackageDependencies Default => new PackageDependencies("");
-    public static Result<PackageDependencies> Of(string value)
+    public static Result<PackageDependencies> Of(Maybe<string> maybeValue)
     {
-        return Result.Success()
-            .Map(() => new PackageDependencies(value));
+        return maybeValue.ToResult("value cannot be empty")
+            .Map((value) => new PackageDependencies(value));
     }
     private PackageDependencies(string value) => Value = value;
     public string Value { get; }

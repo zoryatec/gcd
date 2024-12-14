@@ -6,10 +6,10 @@ namespace Gcd.Model
     public record PackageDescription : ControlFileProperty
     {
         public static PackageDescription Default => new PackageDescription("unset-description");
-        public static Result<PackageDescription> Of(string value)
+        public static Result<PackageDescription> Of(Maybe<string> maybeValue)
         {
-            return Result.Success()
-                .Map(() => new PackageDescription(value));
+            return maybeValue.ToResult("value cannot be empty")
+                .Map((value) => new PackageDescription(value));
         }
         private PackageDescription(string value) => Value = value;
         public string Value { get; }

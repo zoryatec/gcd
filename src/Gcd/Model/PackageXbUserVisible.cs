@@ -5,10 +5,10 @@ namespace Gcd.Model
     public record PackageXbUserVisible : ControlFileProperty
     {
         public static PackageXbUserVisible Default => new PackageXbUserVisible("yes");
-        public static Result<PackageXbUserVisible> Of(string value)
+        public static Result<PackageXbUserVisible> Of(Maybe<string> maybeValue)
         {
-            return Result.Success()
-                .Map(() => new PackageXbUserVisible(value));
+            return maybeValue.ToResult("value cannot be empty")
+                .Map((value) => new PackageXbUserVisible(value));
         }
         private PackageXbUserVisible(string value) => Value = value;
         public string Value { get; }

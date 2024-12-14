@@ -5,10 +5,10 @@ namespace Gcd.Model
     public record PackageXbStoreProduct : ControlFileProperty
     {
         public static PackageXbStoreProduct Default => new PackageXbStoreProduct("yes");
-        public static Result<PackageXbStoreProduct> Of(string value)
+        public static Result<PackageXbStoreProduct> Of(Maybe<string> maybeValue)
         {
-            return Result.Success()
-                .Map(() => new PackageXbStoreProduct(value));
+            return maybeValue.ToResult("value cannot be empty")
+                .Map((value) => new PackageXbStoreProduct(value));
         }
         private PackageXbStoreProduct(string value) => Value = value;
         public string Value { get; }

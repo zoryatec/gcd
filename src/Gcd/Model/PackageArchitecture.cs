@@ -6,10 +6,10 @@ namespace Gcd.Model
     {
         public static PackageArchitecture Default => new PackageArchitecture("windows_x64");
         
-        public static Result<PackageArchitecture> Of(string value)
+        public static Result<PackageArchitecture> Of(Maybe<string> maybeValue)
         {
-            return Result.Success()
-                .Map(() => new PackageArchitecture(value));
+            return maybeValue.ToResult("value cannot be empty")
+                .Map((value) => new PackageArchitecture(value));
         }
 
         private PackageArchitecture(string value) => Value = value;
