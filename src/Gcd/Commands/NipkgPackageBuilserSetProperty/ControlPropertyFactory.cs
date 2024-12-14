@@ -31,6 +31,7 @@ public class ControlPropertyFactory : IControlPropertyFactory
             PackageVersionOption => PackageVersion.Create(option.Value()).Map(x => x as ControlFileProperty),
             PackageHomePageOption => PackageHomePage.Of(option.Value()).Map(x => x as ControlFileProperty),
             PackageMaintainerOption => PackageMaintainer.Of(option.Value()).Map(x => x as ControlFileProperty),
+            PackageNameOption => PackageName.Create(option.Value()).Map(x => x as ControlFileProperty),
             _ => Result.Failure<ControlFileProperty>($"not implemented factory option {option.LongName}")
         };
         return result;

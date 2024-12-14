@@ -26,7 +26,8 @@ public static class UseNipkgPackageBuilderSetPropertyCmdExtensions
             {
                 new PackageVersionOption(),
                 new PackageHomePageOption(),
-                new PackageMaintainerOption()
+                new PackageMaintainerOption(),
+                new PackageNameOption(),
             };
 
             command.AddOptions(options);
@@ -56,6 +57,7 @@ public static class UseNipkgPackageBuilderSetPropertyCmdExtensions
 
 public abstract class ControlPropertyOption(string template, CommandOptionType optionType) : CommandOption(template, optionType);
 public sealed class PackageVersionOption() : ControlPropertyOption($"--{PACKAGE_VERSION_OPTION}", CommandOptionType.SingleValue);
+public sealed class PackageNameOption() : ControlPropertyOption(PACKAGE_NAME_OPTION, CommandOptionType.SingleValue);
 public sealed class PackageHomePageOption() : ControlPropertyOption($"--{PACKAGE_HOME_PAGE_OPTION}", CommandOptionType.SingleValue);
 public sealed class PackageMaintainerOption() : ControlPropertyOption($"--{PACKAGE_MAINTAINER_OPTION}", CommandOptionType.SingleValue);
 

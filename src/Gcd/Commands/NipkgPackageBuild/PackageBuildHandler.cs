@@ -27,7 +27,11 @@ public class PackageBuildHandler(IMediator _mediator)
 
         var temporaryDir = PackageBuilderRootDir.Create(temporaryDirectory);
 
-        var subRequest = await _mediator.PackageBuilderInitAsync(temporaryDir.Value, request.PackageName, request.PackageVersion, request.PackageInstalationDir);
+        List<ControlFileProperty> properties = new List<ControlFileProperty>();
+        properties.Add(request.PackageVersion);
+        properties.Add(request.PackageName);
+
+        var subRequest = await _mediator.PackageBuilderInitAsync(temporaryDir.Value, request.PackageInstalationDir, properties);
 
         var contentDirResult = PackageBuilderContentDir.Of(temporaryDir.Value, request.PackageInstalationDir);
         CopyDirectoryContents(request.PackageContentPath.Value, contentDirResult.Value.Value.Value);

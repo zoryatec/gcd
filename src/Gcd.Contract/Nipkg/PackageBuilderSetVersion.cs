@@ -14,6 +14,10 @@ namespace Gcd.Contract.Nipkg
         public const string PACKAGE_PATH_OPTION = "--package-path";
         public const string PACKAGE_PATH_DESCRIPTION = "Path to a package";
 
+
+        public const string PACKAGE_NAME_OPTION = "--package-name";
+        public const string PACKAGE_NAME_DESCRIPTION = "package version to set";
+
         public const string PACKAGE_VERSION_OPTION = "package-version";
         public const string PACKAGE_VERSION_DESCRIPTION = "package version to set";
 

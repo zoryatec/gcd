@@ -1,5 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgPackageBuilderInit;
+using Gcd.Commands.NipkgPackageBuilserSetVersion;
+using Gcd.Extensions;
 using Gcd.Model;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
@@ -15,30 +17,41 @@ public static class UseNipkgPackageBuilderInitmdExtensions
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
+        var factory = serviceProvider.GetRequiredService<IControlPropertyFactory>();
 
-        app.Command(COMMAND, create =>
+        app.Command(COMMAND, command =>
         {
-            create.Description = COMMAND_DESCRIPTION;
-            var packagePathOption = create.Option(PACKAGE_PATH_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue)
+            command.Description = COMMAND_DESCRIPTION;
+            var packagePathOption = command.Option(PACKAGE_PATH_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
-            var packageNameOption = create.Option(PACKAGE_NAME_OPTION, PACKAGE_NAME_DESCRIPTION, CommandOptionType.SingleValue)
-                .IsRequired();
-            var packageVersionOption = create.Option(PACKAGE_VERSION_OPTION, PACKAGE_VERSION_DESCRIPTION, CommandOptionType.SingleValue)
-                .IsRequired();
-            var packageDestinationDirOption = create.Option(PACKAGE_DESTINATION_DIR_OPTION, PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
+            //var packageNameOption = command.Option(PACKAGE_NAME_OPTION, PACKAGE_NAME_DESCRIPTION, CommandOptionType.SingleValue)
+            //    .IsRequired();
+            //var packageVersionOption = command.Option(PACKAGE_VERSION_OPTION, PACKAGE_VERSION_DESCRIPTION, CommandOptionType.SingleValue)
+            //    .IsRequired();
+            var packageDestinationDirOption = command.Option(PACKAGE_DESTINATION_DIR_OPTION, PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
 
-            create.OnExecuteAsync(async cancelationToken =>
+            var options = new List<ControlPropertyOption>
+            {
+                new PackageVersionOption(),
+                new PackageHomePageOption(),
+                new PackageMaintainerOption(),
+                new PackageNameOption(),
+            };
+
+            command.AddOptions(options);
+
+            command.OnExecuteAsync(async cancelationToken =>
             {
                 var packagePath = PackageBuilderRootDir.Create(packagePathOption.Value());
-                var packageName = PackageName.Create(packageNameOption.Value());
-                var packageVersion = PackageVersion.Create(packageVersionOption.Value());
+                //var packageName = PackageName.Create(packageNameOption.Value());
+                //var packageVersion = PackageVersion.Create(packageVersionOption.Value());
                 var packageDestination = PackageInstalationDir.Create(packageDestinationDirOption.Value());
+                var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
 
                 return await Result
-                    .Combine(packagePath, packageName, packageVersion, packageDestination)
-                    .Map(() => new PackageBuilderInitRequest(packagePath.Value, packageName.Value, packageVersion.Value, packageDestination.Value))
-                    .Bind((req1) => mediator.Send(req1, cancelationToken))
+                    .Combine(packagePath, packageDestination,properties)
+                    .Bind(() => mediator.PackageBuilderInitAsync(packagePath.Value, packageDestination.Value, properties.Value, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);
