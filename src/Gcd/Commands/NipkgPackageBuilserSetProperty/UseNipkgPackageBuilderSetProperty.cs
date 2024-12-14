@@ -6,15 +6,12 @@ using Gcd.Model;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using static Gcd.Contract.Nipkg.PackageBuilderSetVersion;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData;
-
-
-public static class UseNipkgPackageBuilderSetVersionCmdExtensions
+public static class UseNipkgPackageBuilderSetPropertyCmdExtensions
 {
-    public static CommandLineApplication UseNipkgPackageBuilderSetVersionCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseNipkgPackageBuilderSetPropertyCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
@@ -22,7 +19,7 @@ public static class UseNipkgPackageBuilderSetVersionCmdExtensions
 
         app.Command(COMMAND, command =>
         {
-            var packagePathOption = command.Option(PACKAGE_PATH_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue)
+            var rootDirOpt = command.Option(PACKAGE_PATH_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
 
             var options = new List<ControlPropertyOption>
@@ -32,18 +29,21 @@ public static class UseNipkgPackageBuilderSetVersionCmdExtensions
                 new PackageMaintainerOption()
             };
 
-
             command.AddOptions(options);
 
             command.OnExecuteAsync(async cancelationToken =>
             {
-                var packagePath = PackageBuilderRootDir.Create(packagePathOption.Value());
-
+                var rootDir = PackageBuilderRootDir.Create(rootDirOpt.Value());
                 var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
 
-                return await 
-                        properties
-                    .Bind((prop) => mediator.PackageBuilderSetPropertiesAsync(packagePath.Value, prop, cancelationToken))
+                if (rootDir.IsFailure)
+                {
+                    console.Error.Write(rootDir.Error);
+                    return 1;
+                }
+
+                return await properties
+                    .Bind((prop) => mediator.PackageBuilderSetPropertiesAsync(rootDir.Value, prop, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

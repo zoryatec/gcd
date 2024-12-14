@@ -65,7 +65,7 @@ namespace Gcd.Extensions
                     return 1;
                 });
                 template.UseNipkgPackageBuilderInitmd(serviceProvider);
-                template.UseNipkgPackageBuilderSetVersionCmd(serviceProvider);
+                template.UseNipkgPackageBuilderSetPropertyCmd(serviceProvider);
             });
 
             return app;
