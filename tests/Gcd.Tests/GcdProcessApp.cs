@@ -1,4 +1,5 @@
-﻿using Gcd.Extensions;
+﻿using Gcd.Commands.NipkgPackageBuilserSetVersion;
+using Gcd.Extensions;
 using Gcd.LabViewProject;
 using Gcd.Model;
 using Gcd.Services;
@@ -21,6 +22,7 @@ namespace Gcd.Tests
                 .AddScoped<IDownloadAzBlobService, AzBlobService>()
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddScoped<IWebDownload, WebDownload>()
+                .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
                 .AddScoped<NipkgInstallerUri>(x => NipkgInstallerUri.Of(url).Value)
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddSingleton<IConsole>(_console)

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using Gcd.Services;
 using Gcd.Model;
+using Gcd.Commands.NipkgPackageBuilserSetVersion;
 
 
 namespace Gcd
@@ -28,6 +29,7 @@ namespace Gcd
                 .AddScoped<IDownloadAzBlobService, AzBlobService>()
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddScoped<IWebDownload, WebDownload>()
+                .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
                 .AddScoped<NipkgInstallerUri>(x => NipkgInstallerUri.Of(url).Value)
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddSingleton<IConsole>(PhysicalConsole.Singleton)
