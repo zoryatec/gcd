@@ -7,6 +7,7 @@ using MediatR;
 using Gcd.Services;
 using Gcd.Model;
 using Gcd.Commands.NipkgPackageBuilserSetVersion;
+using Gcd.Tests.EndToEnd;
 
 
 namespace Gcd
@@ -24,6 +25,7 @@ namespace Gcd
 
             var nipkgInstaller = "NIPackageManager21.3.0_online.exe";
             var url = $"https://download.ni.com/support/nipkg/products/ni-package-manager/installers/{nipkgInstaller}";
+            var nipkgCmdPath = @"""C:\Program Files\National Instruments\NI Package Manager\nipkg.exe""";
             var assembly = typeof(Program).Assembly;
             var services = new ServiceCollection()
                 .AddScoped<IDownloadAzBlobService, AzBlobService>()
@@ -33,6 +35,8 @@ namespace Gcd
                 .AddScoped<ITextFileReader, LocalFileService>()
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
                 .AddScoped<NipkgInstallerUri>(x => NipkgInstallerUri.Of(url).Value)
+                .AddScoped<NipkgCmdPath>(x=> NipkgCmdPath.Of(nipkgCmdPath).Value)
+                .AddScoped<ITempDirectoryProvider,TempDirectoryProvider>()
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddSingleton<IConsole>(PhysicalConsole.Singleton)
                 .AddMediatR(config =>

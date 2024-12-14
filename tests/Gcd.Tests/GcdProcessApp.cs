@@ -3,6 +3,7 @@ using Gcd.Extensions;
 using Gcd.LabViewProject;
 using Gcd.Model;
 using Gcd.Services;
+using Gcd.Tests.EndToEnd;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +18,7 @@ namespace Gcd.Tests
             _console = new FakeConsole();
             var nipkgInstaller = "NIPackageManager21.3.0_online.exe";
             var url = $"https://download.ni.com/support/nipkg/products/ni-package-manager/installers/{nipkgInstaller}";
+            var nipkgCmdPath = @"""C:\Program Files\National Instruments\NI Package Manager\nipkg.exe""";
             var assembly = typeof(Program).Assembly;
             var services = new ServiceCollection()
                 .AddScoped<IDownloadAzBlobService, AzBlobService>()
@@ -26,6 +28,8 @@ namespace Gcd.Tests
                 .AddScoped<ITextFileReader, LocalFileService>()
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
                 .AddScoped<NipkgInstallerUri>(x => NipkgInstallerUri.Of(url).Value)
+                .AddScoped<NipkgCmdPath>(x => NipkgCmdPath.Of(nipkgCmdPath).Value)
+                .AddScoped<ITempDirectoryProvider, TempDirectoryProvider>()
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddSingleton<IConsole>(_console)
                 .AddMediatR(config =>

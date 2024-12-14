@@ -1,104 +1,48 @@
 ﻿using System.Diagnostics;
+using CSharpFunctionalExtensions;
+using Gcd.Commands.NipkgDownloadNipkg;
 using Gcd.Commands.SystemAddToPath;
+using Gcd.Model;
+using Gcd.Services;
+using Gcd.Tests.EndToEnd;
 using MediatR;
 
 namespace Gcd.Commands.NipkgInstallNipkg;
 
-public record InstallNinpkgRequest() : IRequest<InstallNinpkgResponse>;
+public record InstallNinpkgRequest() : IRequest<Result>;
 public record InstallNinpkgResponse(string result);
 
-public class InstallNinpkgHandler(IMediator _mediator)
-    : IRequestHandler<InstallNinpkgRequest, InstallNinpkgResponse>
+public class InstallNinpkgHandler(IMediator _mediator, ITempDirectoryProvider _tempDir)
+    : IRequestHandler<InstallNinpkgRequest, Result>
 {
-    public async Task<InstallNinpkgResponse> Handle(InstallNinpkgRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(InstallNinpkgRequest request, CancellationToken cancellationToken)
     {
-        var nipkgInstaller = "NIPackageManager21.3.0_online.exe";
-        var url = $"https://download.ni.com/support/nipkg/products/ni-package-manager/installers/{nipkgInstaller}";
-        var tempPath = $@"C:\Projects\{nipkgInstaller}";
-        //var tempPath = Path.Combine("C:", "Projects", nipkgInstaller);
-        //var stringPath = tempPath.ToString();
+        var tempDirR = await _tempDir.GenerateTempDirectoryAsync();
+        var tempDir = tempDirR.Value;
 
-        if (File.Exists(tempPath)) File.Delete(tempPath);
+        var intallerPath = LocalFilePath.Of($"{tempDir.Value}\\nipkg-installer.exe");
 
-        DownloadNipkg(url, tempPath);
-
-        //var procesName = RunProgramWithArguments(tempPath, "--quiet --accept-eulas --prevent-reboot");
-        //WaitForProcessToExit(procesName);
-        string cmd = $"start /wait {tempPath} --quiet --accept-eulas --prevent-reboot";
-        RunCommand(cmd);
-
-
-        var nipkgPath = @"C:\Program Files\National Instruments\NI Package Manager";
-        var requestToAddPath = new SystemAddToPathRequest(nipkgPath, EnvironmentVariableTarget.User);
-        var response = await _mediator.Send(requestToAddPath);
-
-
-        return new InstallNinpkgResponse("");
+        return await _mediator.DownloadNipkgInstallerAsync(intallerPath.Value)
+            .Bind(() => InstallAsync(intallerPath.Value))
+            .Bind(() => CheckNipkgVersionAsync());
     }
 
-    private void DownloadNipkg(string fileUrl, string downloadPath)
-    {
-        /// functionalit does not work replace with download medated
-    }
+    private async Task<Result> CheckNipkgVersionAsync() =>
+        await _mediator.RunNipkgRequestAsync(new string[] { "--version" });
 
-    private string RunProgramWithArguments(string programPath, string arguments)
-    {
 
-        string procName = "";
-        try
-        {
-            // Initialize ProcessStartInfo to specify the program and arguments
-            ProcessStartInfo startInfo = new ProcessStartInfo
-            {
-                FileName = programPath,        // Path to the program
-                Arguments = arguments,         // Arguments to pass to the program
-                UseShellExecute = true,       // Set to false to use the ProcessStartInfo directly
-                RedirectStandardOutput = false, // Redirect the output so we can capture it
-                RedirectStandardError = false,  // Redirect errors if there are any
-                CreateNoWindow = false          // Don't create a new window
-            };
-
-            // Start the process
-            using (Process? process = Process.Start(startInfo))
-            {
-                // Capture and display output
-                _ = process ?? throw new ArgumentNullException(nameof(process));
-
-                process.WaitForExit();  // Wait for the process to exit
-
-                string output = process.StandardOutput.ReadToEnd();
-                string errors = process.StandardError.ReadToEnd();
-                procName = process.ProcessName;
-                // Display the output and errors
-                Console.WriteLine("Output:");
-                Console.WriteLine(output);
-
-                if (!string.IsNullOrEmpty(errors))
-                {
-                    Console.WriteLine("Errors:");
-                    Console.WriteLine(errors);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error: {ex.Message}");
-        }
-
-        return procName;
-    }
-
-    static void RunCommand(string command)
+    static async Task<Result> InstallAsync(LocalFilePath nipkgInstaller)
     {
         // Initialize the ProcessStartInfo with the command and arguments
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
-            FileName = "cmd.exe",         // Use "cmd.exe" to run a command
-            Arguments = command, // "/c" tells cmd to run the command and then terminate
-            RedirectStandardOutput = false,  // Redirect the output of the command
-            RedirectStandardError = false,   // Redirect any errors
-            UseShellExecute = true,       // Don't use the shell to execute the command
-            CreateNoWindow = true         // Don't create a command window
+
+            FileName = nipkgInstaller.Value,         // Use "cmd.exe" to run a command
+            Arguments = "--quiet --accept-eulas --prevent-reboot",
+            RedirectStandardOutput = true,  // Redirect the output of the command
+            RedirectStandardError = true,   // Redirect any errors
+            UseShellExecute = false,       // Don't use the shell to execute the command
+            CreateNoWindow = false         // Don't create a command 
         };
 
         try
@@ -114,41 +58,23 @@ public class InstallNinpkgHandler(IMediator _mediator)
                 string output = process.StandardOutput.ReadToEnd();
                 string errors = process.StandardError.ReadToEnd();
 
-                // Print the output and errors (if any)
-                Console.WriteLine("Output:");
-                Console.WriteLine(output);
-
                 if (!string.IsNullOrEmpty(errors))
                 {
-                    Console.WriteLine("Errors:");
-                    Console.WriteLine(errors);
+                    return Result.Failure(errors);
                 }
             }
+            return Result.Success();
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error running command: {ex.Message}");
-        }
-    }
 
-
-    static void WaitForProcessToExit(string processName)
-    {
-        while (true)
-        {
-            // Check if the process is running
-            var process = Process.GetProcessesByName(processName).FirstOrDefault();
-
-            if (process == null)
-            {
-                // Process has exited
-                break;
-            }
-
-            // Wait a bit before checking again
-            Thread.Sleep(1000); // 1 second delay
+            return Result.Failure(ex.Message); ;
         }
     }
 }
 
-
+public static class MediatorExtensions
+{
+    public static async Task<Result> InstallNipkgInstallerAsync(this IMediator mediator, CancellationToken cancellationToken = default)
+        => await mediator.Send(new InstallNinpkgRequest(), cancellationToken);
+}

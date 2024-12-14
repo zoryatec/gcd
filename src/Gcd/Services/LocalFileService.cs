@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Model;
 
 
 namespace Gcd.Services

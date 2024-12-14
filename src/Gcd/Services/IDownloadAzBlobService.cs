@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Common;
+using Gcd.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

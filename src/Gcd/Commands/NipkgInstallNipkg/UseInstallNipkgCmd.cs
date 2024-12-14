@@ -5,14 +5,14 @@ using Gcd.Model;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using static Gcd.Contract.Nipkg.DownloadNipkg;
+using static Gcd.Contract.Nipkg.InstallNipkg;
 
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+namespace Gcd.Commands.NipkgInstallNipkg;
 
-public static class UseDownloadNipkgCmdExtensions
+public static class UseInstallNipkgCmdExtensions
 {
-    public static CommandLineApplication UseDownloadNipkgCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseInstallNipkgCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
@@ -20,14 +20,11 @@ public static class UseDownloadNipkgCmdExtensions
         app.Command(COMMAND, subCmd =>
         {
             subCmd.Description = COMMAND_DESCRIPTION;
-            var downloadPath = subCmd.Option(DOWNLOAD_PATH_OPTION, DOWNLOAD_PATH_DESCRIPTION, CommandOptionType.SingleValue);
+
             subCmd.OnExecuteAsync(async cancelationToken =>
             {
-                var filePath = LocalFilePath.Of(downloadPath.Value());
 
-                return await filePath
-                    .Map((arg) => new DownloadNipkgRequest(arg))
-                    .Bind(async (req) => await mediator.Send(req,cancelationToken))
+                return  await mediator.InstallNipkgInstallerAsync(cancelationToken)
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

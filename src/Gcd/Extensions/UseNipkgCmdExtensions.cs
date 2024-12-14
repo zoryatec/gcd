@@ -23,7 +23,7 @@ namespace Gcd.Extensions
                     nipkg.ShowHelp();
                     return 1;
                 });
-                nipkg.UseInstallNipkg(serviceProvider);
+                nipkg.UseInstallNipkgCmd(serviceProvider);
                 nipkg.UseDownloadNipkgCmd(serviceProvider);
                 nipkg.UseTemplatedCmd(serviceProvider);
                 nipkg.UsePackageCmd(serviceProvider);
@@ -33,25 +33,6 @@ namespace Gcd.Extensions
             });
             return app;
         }
-
-        public static CommandLineApplication UseInstallNipkg(this CommandLineApplication app, IServiceProvider serviceProvider)
-        {
-            var console = serviceProvider.GetRequiredService<IConsole>();
-            var mediator = serviceProvider.GetRequiredService<IMediator>();
-            app.Command("install-nipkg", template =>
-            {
-                template.OnExecute(async () =>
-                {
-                    var request = new InstallNinpkgRequest();
-                    var response = await mediator.Send(request);
-                    console.WriteLine(response.result);
-                });
-
-            });
-
-            return app;
-        }
-
 
         public static CommandLineApplication UseTemplatedCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
         {

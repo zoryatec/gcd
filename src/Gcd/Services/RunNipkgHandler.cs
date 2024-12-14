@@ -10,7 +10,7 @@ namespace Gcd.Services;
 
 public record  RunNipkgRequest(string[] arguments) : IRequest<Result>;
 
-public class  RunNipkgHandler()
+public class  RunNipkgHandler(NipkgCmdPath _cmd)
     : IRequestHandler< RunNipkgRequest, Result>
 {
     public async Task<Result> Handle( RunNipkgRequest request, CancellationToken cancellationToken)
@@ -22,14 +22,14 @@ public class  RunNipkgHandler()
 
     private Result RunNipkg(string[] args)
     {
-        string nipkg = @"""C:\Program Files\National Instruments\NI Package Manager\nipkg.exe""";
+        //string nipkg = @"""C:\Program Files\National Instruments\NI Package Manager\nipkg.exe""";
 
         var arguments = string.Join(" ", args);
 
 
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
-            FileName = nipkg,       // Use "cmd.exe" to run a command
+            FileName = _cmd.Value,       // Use "cmd.exe" to run a command
             Arguments = arguments, // "/c" tells cmd to run the command and then terminate
             RedirectStandardOutput = true, // Redirect the output of the command
             RedirectStandardError = true,  // Redirect any errors
