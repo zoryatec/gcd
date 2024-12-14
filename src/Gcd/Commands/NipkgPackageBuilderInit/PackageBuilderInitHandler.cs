@@ -8,39 +8,41 @@ using System.Threading;
 
 namespace Gcd.Commands.NipkgPackageBuilderInit;
 
-public record PackageBuilderInitRequest(PackageBuilderRootDir PackagePath, PackageInstalationDir PackageInstalationDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
+public record PackageBuilderInitRequest(PackageBuilderRootDir RootDir, PackageInstalationDir InstalationDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
 
-public class PackageBuilderInitHandler(IMediator _mediator)
+public class PackageBuilderInitHandler(IMediator _mediator, ITextFileWriter _writer)
     : IRequestHandler<PackageBuilderInitRequest, Result>
 {
     public async Task<Result> Handle(PackageBuilderInitRequest request, CancellationToken cancellationToken)
     {
-        var ControlProp = request.ControlProperties;
-        string currentDirectoryPath = Environment.CurrentDirectory;
-        string packageDirectoryPath = Path.Combine(currentDirectoryPath, request.PackagePath.Value);
-        var pckBuilderDest = LocalDirPath.Parse(packageDirectoryPath);
-        var pckDefinitionRes = PackageBuilderDefinition.Of(pckBuilderDest.Value);
-        var pckDefiniton = pckDefinitionRes.Value;
+        var (rootdir, installationDir, controlProperties) = request;
 
+        var defR = PackageBuilderDefinition.Of(rootdir);
+        if (defR.IsFailure) return defR;
 
-        if (Directory.Exists(pckDefiniton.RootDir.Value)) Directory.Delete(packageDirectoryPath, true);
-        Directory.CreateDirectory(pckDefiniton.RootDir.Value);
-        Directory.CreateDirectory(pckDefiniton.DataDir.Value);
-        Directory.CreateDirectory(pckDefiniton.ControlDir.Value);
+        var def = defR.Value;
 
-        File.WriteAllText(pckDefiniton.DebianFile.Value, DebianFileContent.Default.Value);
+        return await CreatePackageBuilderStructure(def)
+        .Bind(() => _writer.WriteTextFileAsync(def.DebianFile, DebianFileContent.Default.Value))
+        .Bind(() => _writer.WriteTextFileAsync(def.ControlFile, ControlFileContent.Default.Content.ToString()))
+        .Bind(() => _writer.WriteTextFileAsync(def.InstructionFile, InstructionFileContent.Default.ToString()))
+        .Bind(() => _mediator.PackageBuilderSetPropertiesAsync(request.RootDir, controlProperties, cancellationToken));
+    }
 
-        var controlFileContent = (ControlFileContent.Default).Content.ToString();
-
-        File.WriteAllText(pckDefiniton.ControlFile.Value, controlFileContent);
-
-        var instructionFileContent = new InstructionFileContent().ToString();
-
-        File.WriteAllText(pckDefiniton.InstructionFile.Value, instructionFileContent);
-
-        var result = await _mediator.PackageBuilderSetPropertiesAsync(request.PackagePath, ControlProp, cancellationToken);
-
-        return Result.Success();
+    private Result CreatePackageBuilderStructure(PackageBuilderDefinition def)
+    {
+        try
+        {
+            if (Directory.Exists(def.RootDir.Value)) Directory.Delete(def.RootDir.Value, true);
+            Directory.CreateDirectory(def.RootDir.Value);
+            Directory.CreateDirectory(def.DataDir.Value);
+            Directory.CreateDirectory(def.ControlDir.Value);
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+            return Result.Failure(ex.Message);
+        }
     }
 }
 

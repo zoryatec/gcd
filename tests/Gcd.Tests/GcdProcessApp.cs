@@ -22,6 +22,8 @@ namespace Gcd.Tests
                 .AddScoped<IDownloadAzBlobService, AzBlobService>()
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddScoped<IWebDownload, WebDownload>()
+                .AddScoped<ITextFileWriter, LocalFileService>()
+                .AddScoped<ITextFileReader, LocalFileService>()
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
                 .AddScoped<NipkgInstallerUri>(x => NipkgInstallerUri.Of(url).Value)
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()

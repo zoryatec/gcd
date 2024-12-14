@@ -8,6 +8,7 @@ namespace Gcd.Model
 {
     public record InstructionFileContent
     {
+        public static InstructionFileContent Default => new InstructionFileContent();
         public override string ToString() =>
  @"<instructions>
 	<targetAttributes readOnly=""allWritable""/>
