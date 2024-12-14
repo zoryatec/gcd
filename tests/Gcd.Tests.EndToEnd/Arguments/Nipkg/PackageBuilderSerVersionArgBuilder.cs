@@ -17,19 +17,19 @@ public class PackageBuilderSerVersionArgBuilder : ArgumentsBuilder
     }
     public PackageBuilderSerVersionArgBuilder WithVersion(string value)
     {
-        WithOption(PACKAGE_VERSION_OPTION, value);
+        WithOption($"--{PACKAGE_VERSION_OPTION}", value);
         return this;
     }
 
     public PackageBuilderSerVersionArgBuilder WithHomePage(string value)
     {
-        WithOption(PACKAGE_HOME_PAGE_OPTION, value);
+        WithOption($"--{PACKAGE_HOME_PAGE_OPTION}", value);
         return this;
     }
 
     public PackageBuilderSerVersionArgBuilder WithMaintainer(string value)
     {
-        WithOption(PACKAGE_MAINTAINER_OPTION, value);
+        WithOption($"--{PACKAGE_MAINTAINER_OPTION}", value);
         return this;
     }
 }

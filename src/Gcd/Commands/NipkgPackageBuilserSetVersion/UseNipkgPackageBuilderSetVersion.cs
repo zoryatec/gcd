@@ -1,9 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
+using CSharpFunctionalExtensions.ValueTasks;
 using Gcd.Commands.NipkgPackageBuilserSetVersion;
 using Gcd.Model;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using static Gcd.Contract.Nipkg.PackageBuilderSetVersion;
 
 namespace Gcd.Commands.NipkgDownloadFeedMetaData
@@ -15,37 +17,30 @@ namespace Gcd.Commands.NipkgDownloadFeedMetaData
             var console = serviceProvider.GetRequiredService<IConsole>();
             var mediator = serviceProvider.GetRequiredService<IMediator>();
 
-            app.Command(COMMAND, create =>
+            app.Command(COMMAND, command =>
             {
-                var packagePathOption = create.Option(PACKAGE_PATH_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue)
+                var packagePathOption = command.Option(PACKAGE_PATH_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue)
                     .IsRequired();
-                var packageVersionOption = create.Option(PACKAGE_VERSION_OPTION, PACKAGE_VERSION_DESCRIPTION, CommandOptionType.SingleValue);
-                var packageHomePageOption = create.Option(PACKAGE_HOME_PAGE_OPTION, PACKAGE_HOME_PAGE_DESCRIPTION, CommandOptionType.SingleValue);
-                var packageMaintainerOption = create.Option(PACKAGE_MAINTAINER_OPTION, PACKAGE_MAINTAINER_DESCRIPTION, CommandOptionType.SingleValue);
 
-
-
-
-                create.OnExecuteAsync(async cancelationToken =>
+                List<CommandOption> propertyOptions = new List<CommandOption>
                 {
+                    new CommandOption($"--{PACKAGE_VERSION_OPTION}",CommandOptionType.SingleValue),
+                    new CommandOption($"--{PACKAGE_HOME_PAGE_OPTION}",CommandOptionType.SingleValue),
+                    new CommandOption($"--{PACKAGE_MAINTAINER_OPTION}",CommandOptionType.SingleValue)
+                };
 
-                    //packageHomePageOption.HasValue
+
+                command.AddOptions(propertyOptions);
+
+                command.OnExecuteAsync(async cancelationToken =>
+                {
                     var packagePath = PackageBuilderRootDir.Create(packagePathOption.Value());
-                    var packageVersion = PackageVersion.Create(packageVersionOption.Value());
-                    var packagePage = PackageHomePage.Of(packageHomePageOption.Value());
-                    var packageMaintainer = PackageMaintainer.Of(packageMaintainerOption.Value());
 
-                    var result = Result.Combine(packagePath, packageVersion, packagePage, packageMaintainer);
+                    var properties = CreateControlProperties(propertyOptions);
 
-                    result.TapError(error => console.Error.Write(error));
-
-                    IReadOnlyList<ControlFileProperty> properties = new List<ControlFileProperty> { packageMaintainer.Value, packageVersion.Value, packagePage.Value };
-
-                    if (result.IsFailure) return 1;
-
-                    return await Result
-                        .Combine(packagePath, packageVersion)
-                        .Bind(() => mediator.PackageBuilderSetPropertiesAsync(packagePath.Value, properties, cancelationToken))
+                    return await 
+                         properties
+                        .Bind((prop) => mediator.PackageBuilderSetPropertiesAsync(packagePath.Value, prop, cancelationToken))
                         .Tap(() => console.Write(SUCESS_MESSAGE))
                         .TapError(error => console.Error.Write(error))
                         .Finally(x => x.IsFailure ? 1 : 0);
@@ -54,8 +49,41 @@ namespace Gcd.Commands.NipkgDownloadFeedMetaData
 
             return app;
         }
+
+        private static Result<IReadOnlyList<ControlFileProperty>> CreateControlProperties(IReadOnlyList<CommandOption> commandOptions)
+        {
+            List<Result<ControlFileProperty>> controlFileProperties = new List<Result<ControlFileProperty>>();
+            var filteredOptions = commandOptions.Where(x => x.HasValue()).ToList() ;
+
+            foreach (var option in filteredOptions)
+            {
+                controlFileProperties.Add(ControPropertyFactory(option));
+            }
+            var result = Result.Combine(controlFileProperties);
+            if (result.IsFailure) return Result.Failure<IReadOnlyList<ControlFileProperty>>(result.Error);
+
+            return Result.Success(controlFileProperties.Select(x => x.Value).ToList() as IReadOnlyList<ControlFileProperty>);
+ 
+        }
+
+        private static Result<ControlFileProperty> ControPropertyFactory(CommandOption option)
+        {
+
+            var result = option switch
+            {
+                { LongName: PACKAGE_VERSION_OPTION } => PackageVersion.Create(option.Value()).Map(x => x as ControlFileProperty),
+                { LongName: PACKAGE_HOME_PAGE_OPTION } => PackageHomePage.Of(option.Value()).Map(x => x as ControlFileProperty),
+                { LongName: PACKAGE_MAINTAINER_OPTION } => PackageMaintainer.Of(option.Value()).Map(x => x as ControlFileProperty),
+                _ => Result.Failure<ControlFileProperty>($"not implemented factory option {option.LongName}")
+            };
+            return result;
+        }
+
+        public static CommandLineApplication AddOptions(this CommandLineApplication app, IReadOnlyCollection<CommandOption> options)
+        {
+            foreach (var option in options) app.AddOption(option);
+            return app;
+        }
+
     }
-
-
-
 }

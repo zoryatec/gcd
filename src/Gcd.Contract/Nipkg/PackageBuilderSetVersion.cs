@@ -14,13 +14,13 @@ namespace Gcd.Contract.Nipkg
         public const string PACKAGE_PATH_OPTION = "--package-path";
         public const string PACKAGE_PATH_DESCRIPTION = "Path to a package";
 
-        public const string PACKAGE_VERSION_OPTION = "--package-version";
+        public const string PACKAGE_VERSION_OPTION = "package-version";
         public const string PACKAGE_VERSION_DESCRIPTION = "package version to set";
 
-        public const string PACKAGE_HOME_PAGE_OPTION = "--package-home-page";
+        public const string PACKAGE_HOME_PAGE_OPTION = "package-home-page";
         public const string PACKAGE_HOME_PAGE_DESCRIPTION = "package home page to set";
 
-        public const string PACKAGE_MAINTAINER_OPTION = "--package-maintainer";
+        public const string PACKAGE_MAINTAINER_OPTION = "package-maintainer";
         public const string PACKAGE_MAINTAINER_DESCRIPTION = "package maintainer to set";
 
         public const string SUCESS_MESSAGE = "Package version set sucessfuly successully";
