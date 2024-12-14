@@ -1,5 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgPackageBuild;
+using Gcd.Commands.NipkgPackageBuilserSetVersion;
+using Gcd.Extensions;
 using Gcd.Model;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
@@ -15,20 +17,13 @@ public static class UseNipkgPackageBuildCmdExtensions
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
+        var factory = serviceProvider.GetRequiredService<IControlPropertyFactory>();
 
         app.Command(COMMAND, cmd =>
         {
             cmd.Description = COMMAND_DESCRIPTION;
             var packageSoureDirOption = cmd
                 .Option(PACKAGE_CONTENT_DIR_OPTION, PACKAGE_CONTENT_DIR_DESCRIPTION, CommandOptionType.SingleValue)
-                .IsRequired();
-
-            var packageNameOption = cmd
-                .Option(PACKAGE_NAME_OPTION, PACKAGE_NAME_DESCRIPTION, CommandOptionType.SingleValue)
-                .IsRequired();
-
-            var packageVersionOption = cmd
-                .Option(PACKAGE_VERSION_OPTION, PACKAGE_VERSION_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
 
             var packageInstalationOption = cmd
@@ -39,18 +34,33 @@ public static class UseNipkgPackageBuildCmdExtensions
                 .Option(PACKAGE_DESTINATION_DIR_OPTION,PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
 
-            cmd.OnExecuteAsync(async cancelationToken =>
+            var options = new List<ControlPropertyOption>
+            {
+                new PackageArchitectureOption(),
+                new PackageHomePageOption(),
+                new PackageMaintainerOption(),
+                new PackageDescriptionOption(),
+                new PackageXbPluginOption(),
+                new PackageXbUserVisibleOption(),
+                new PackageXbStoreProductOption(),
+                new PackageXBSectionOption(),
+                new PackageVersionOption(),
+                new PackageNameOption(),
+                new PackageDependenciesOption(),
+            };
+
+            cmd.AddOptions(options);
+
+            cmd.OnExecuteAsync(async cancellationToken =>
             {
                 var packageContent = PackageBuilderRootDir.Create(packageSoureDirOption.Value());
-                var packageName = PackageName.Create(packageNameOption.Value());
-                var packageVersion = PackageVersion.Create(packageVersionOption.Value());
                 var packageInstalationDir = PackageInstalationDir.Create(packageInstalationOption.Value());
                 var packageDestinationDir = PackageDestinationDirectory.Create(packageDestinationOption.Value());
+                var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
 
                 return await Result
-                    .Combine(packageContent, packageName, packageVersion, packageInstalationDir, packageDestinationDir)
-                    .Map(() => new PackageBuildRequest(packageContent.Value, packageName.Value, packageVersion.Value, packageInstalationDir.Value, packageDestinationDir.Value))
-                    .Bind((req1) => mediator.Send(req1, cancelationToken))
+                    .Combine(packageContent, packageInstalationDir, packageDestinationDir, properties)
+                    .Bind(() => mediator.PackageBuilderBuildAsync(packageContent.Value, packageInstalationDir.Value, packageDestinationDir.Value,properties.Value, cancellationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

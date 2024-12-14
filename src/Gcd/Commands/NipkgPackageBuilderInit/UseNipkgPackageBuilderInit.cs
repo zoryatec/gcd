@@ -24,19 +24,22 @@ public static class UseNipkgPackageBuilderInitmdExtensions
             command.Description = COMMAND_DESCRIPTION;
             var packagePathOption = command.Option(PACKAGE_PATH_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
-            //var packageNameOption = command.Option(PACKAGE_NAME_OPTION, PACKAGE_NAME_DESCRIPTION, CommandOptionType.SingleValue)
-            //    .IsRequired();
-            //var packageVersionOption = command.Option(PACKAGE_VERSION_OPTION, PACKAGE_VERSION_DESCRIPTION, CommandOptionType.SingleValue)
-            //    .IsRequired();
             var packageDestinationDirOption = command.Option(PACKAGE_DESTINATION_DIR_OPTION, PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
 
             var options = new List<ControlPropertyOption>
             {
-                new PackageVersionOption(),
+                new PackageArchitectureOption(),
                 new PackageHomePageOption(),
                 new PackageMaintainerOption(),
+                new PackageDescriptionOption(),
+                new PackageXbPluginOption(),
+                new PackageXbUserVisibleOption(),
+                new PackageXbStoreProductOption(),
+                new PackageXBSectionOption(),
+                new PackageVersionOption(),
                 new PackageNameOption(),
+                new PackageDependenciesOption(),
             };
 
             command.AddOptions(options);
@@ -44,8 +47,6 @@ public static class UseNipkgPackageBuilderInitmdExtensions
             command.OnExecuteAsync(async cancelationToken =>
             {
                 var packagePath = PackageBuilderRootDir.Create(packagePathOption.Value());
-                //var packageName = PackageName.Create(packageNameOption.Value());
-                //var packageVersion = PackageVersion.Create(packageVersionOption.Value());
                 var packageDestination = PackageInstalationDir.Create(packageDestinationDirOption.Value());
                 var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
 

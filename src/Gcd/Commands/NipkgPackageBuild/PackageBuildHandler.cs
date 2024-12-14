@@ -7,7 +7,7 @@ using System.Reflection.Metadata;
 
 namespace Gcd.Commands.NipkgPackageBuild;
 
-public record PackageBuildRequest(PackageBuilderRootDir PackageContentPath, PackageName PackageName, PackageVersion PackageVersion, PackageInstalationDir PackageInstalationDir, PackageDestinationDirectory PackageDestinationDir) : IRequest<Result>;
+public record PackageBuildRequest(PackageBuilderRootDir PackageContentPath, PackageInstalationDir PackageInstalationDir, PackageDestinationDirectory PackageDestinationDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
 
 
 public class PackageBuildHandler(IMediator _mediator)
@@ -27,17 +27,23 @@ public class PackageBuildHandler(IMediator _mediator)
 
         var temporaryDir = PackageBuilderRootDir.Create(temporaryDirectory);
 
-        List<ControlFileProperty> properties = new List<ControlFileProperty>();
-        properties.Add(request.PackageVersion);
-        properties.Add(request.PackageName);
 
-        var subRequest = await _mediator.PackageBuilderInitAsync(temporaryDir.Value, request.PackageInstalationDir, properties);
+
+        
+
+        var subRequest = await _mediator.PackageBuilderInitAsync(temporaryDir.Value, request.PackageInstalationDir, request.ControlProperties);
 
         var contentDirResult = PackageBuilderContentDir.Of(temporaryDir.Value, request.PackageInstalationDir);
         CopyDirectoryContents(request.PackageContentPath.Value, contentDirResult.Value.Value.Value);
 
+        string content  = File.ReadAllText(pckDefiniton.ControlFile.Value);
+
+        var cfcR = ControlFileContent.Of(content);
+        var cfc = cfcR.Value;
+
+
         var result = RunCommand(temporaryDirectory, pckgDirectory);
-        string packageFileName = $"{request.PackageName.Value}_{request.PackageVersion.Value}_windows_x64.nipkg";
+        string packageFileName = $"{cfc.Name.Value}_{cfc.Version.Value}_windows_x64.nipkg";
         string packageFilePath = Path.Combine(pckgDirectory, packageFileName);
 
         string currentDirectoryPath = Environment.CurrentDirectory;
@@ -87,3 +93,14 @@ public class PackageBuildHandler(IMediator _mediator)
     
 }
 
+public static class MediatorExtensions
+{
+    public static async Task<Result> PackageBuilderBuildAsync(
+        this IMediator mediator,
+        PackageBuilderRootDir packageContentDir,
+        PackageInstalationDir packageInstalationDir,
+        PackageDestinationDirectory packageDestinationDir,
+        IReadOnlyList<ControlFileProperty> controlProperties,
+        CancellationToken cancellationToken = default)
+        => await mediator.Send(new PackageBuildRequest(packageContentDir, packageInstalationDir, packageDestinationDir, controlProperties), cancellationToken);
+}
