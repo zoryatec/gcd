@@ -21,4 +21,6 @@ public interface IFileSystem
 
     public Task<Result> CopyDirectoryRecursievely(LocalDirPath source, LocalDirPath destination, bool overwrite = false, CancellationToken cancellationToken = default);
 
+    public Task<Result> CreateDirAsync(LocalDirPath locDirPath);
+
 }

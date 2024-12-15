@@ -36,6 +36,16 @@ namespace Gcd.Services
             return LocalDirPath.Parse(path);
         }
 
+        public async Task<Result> CreateDirAsync(LocalDirPath locDirPath)
+        {
+            return Result.Try(() => CreateDir(locDirPath));
+        }
+
+        private void CreateDir(LocalDirPath locDirPath)
+        {
+            if (!Directory.Exists(locDirPath.Value)) Directory.CreateDirectory(locDirPath.Value);
+        }
+
         public string GenerateTempDirectory()
         {
             string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
