@@ -15,4 +15,8 @@ public interface IFileSystem
 
     public Task<Result> CopyFileAsync(LocalFilePath source, LocalFilePath destination, bool overwrite = false, CancellationToken cancellationToken = default);
 
+    public Task<Result<LocalDirPath>> GenerateTempDirectoryAsync();
+
+    public Task<Result<LocalDirPath>> CreateTempDirPathAsync();
+
 }

@@ -22,8 +22,8 @@ public class AddPackageToFeedHandler(
 
         var localFeedDef = await CreateTempFeedDefinition();
 
-        var insideFeedPkgPath = await localFeedDef
-            .Bind((arg) => CreteTempPackagePath(arg, packagePath.FileName));
+        var insideFeedPkgPath =  localFeedDef
+            .Map((arg) => PackageFilePath.Of(arg.Feed, packagePath.FileName));
 
         return await Result.Combine(localFeedDef, insideFeedPkgPath)
             .Bind(() => _mediator.PullAzBlobFeedMetaDataAsync(azFeedDef, localFeedDef.Value))
@@ -33,17 +33,10 @@ public class AddPackageToFeedHandler(
             .Bind(() => UploadPackage(azFeedDef, insideFeedPkgPath.Value));
     }
 
-    private async Task<Result<LocalFeedDefinition>> CreateTempFeedDefinition()
-    {
-        string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-        string currentDirectoryPath = Environment.CurrentDirectory;
-
-
-        var localFeedPath = temporaryDirectory;
-        var localFeedDef = LocalDirPath.Parse(localFeedPath)
+    private async Task<Result<LocalFeedDefinition>> CreateTempFeedDefinition() =>
+        await _fs.CreateTempDirPathAsync()
             .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
-        return localFeedDef;
-    }
+    
 
     private async Task<Result> UploadPackage(AzBlobFeedDefinition azFeedDef, PackageFilePath packagePath)
     {
@@ -51,22 +44,13 @@ public class AddPackageToFeedHandler(
         string nipkgUrl = CreateSubUrl(azblob.Value, packagePath.FileName.Value);
 
         var blobUri = AzBlobUri.Create(nipkgUrl);
-        var filePath = LocalFilePath.Offf(packagePath.Value);
-        var result = await _uploadService.UploadFileAsync(blobUri.Value, filePath.Value);
+        var result = await _uploadService.UploadFileAsync(blobUri.Value, packagePath);
         return result;
     }
 
     private string CreateSubUrl(AzBlobFeedUri feedUri, string subPath) => 
         $"{feedUri.BaseUri}/{subPath}{feedUri.Query}";
-
-    private async Task<Result<PackageFilePath>> CreteTempPackagePath(LocalFeedDefinition feedDefinition, PackageFileName srcName) =>
-        PackageFilePath.Of(feedDefinition.Feed, srcName);
-    
-
-    
-    private async Task<Result> CopyPackage(PackagePath packageSource, PackagePath packageDestinataion) => 
-        Result.Try(() => File.Copy(packageSource.Value, packageDestinataion.Value, true), ex => $"{ex.Message}");
- 
+  
 }
 
 

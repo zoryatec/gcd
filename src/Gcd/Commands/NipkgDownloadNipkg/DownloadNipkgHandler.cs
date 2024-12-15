@@ -7,8 +7,7 @@ namespace Gcd.Commands.NipkgDownloadNipkg;
 
 public record DownloadNipkgRequest(LocalFilePath FilePath) : IRequest<Result>;
 
-
-public class DownloadNipkgHandler(IWebDownload _webDownload, NipkgInstallerUri _installerUri)
+public class DownloadNipkgHandler(IWebDownload _webDownload, IFileSystem _fs, NipkgInstallerUri _installerUri)
     : IRequestHandler<DownloadNipkgRequest, Result>
 {
     public async Task<Result> Handle(DownloadNipkgRequest request, CancellationToken cancellationToken)
