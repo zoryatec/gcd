@@ -2,6 +2,7 @@
 using Azure.Core;
 using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
+using Gcd.Model.File;
 
 namespace Gcd.Model;
 

@@ -1,4 +1,4 @@
-﻿namespace Gcd.Model;
+﻿namespace Gcd.Model.File;
 
 public abstract record FileName
 {

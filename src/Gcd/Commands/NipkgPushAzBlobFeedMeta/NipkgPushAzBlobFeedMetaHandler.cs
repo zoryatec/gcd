@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
 using Gcd.Model;
+using Gcd.Model.File;
 using Gcd.Services;
 using MediatR;
 

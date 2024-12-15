@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
+using Gcd.Model.File;
 using System;
 using System.Collections.Generic;
 using System.Linq;

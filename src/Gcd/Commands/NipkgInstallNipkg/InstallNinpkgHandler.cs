@@ -2,7 +2,7 @@
 using CSharpFunctionalExtensions;
 using Gcd.Commands.NipkgDownloadNipkg;
 using Gcd.Commands.SystemAddToPath;
-using Gcd.Model;
+using Gcd.Model.File;
 using Gcd.Services;
 using Gcd.Tests.EndToEnd;
 using MediatR;

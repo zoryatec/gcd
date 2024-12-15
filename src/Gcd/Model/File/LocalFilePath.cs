@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace Gcd.Model;
+namespace Gcd.Model.File;
 
 public record LocalFilePath
 {

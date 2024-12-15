@@ -1,7 +1,7 @@
 ﻿using Azure.Core;
 using CSharpFunctionalExtensions;
 
-namespace Gcd.Model;
+namespace Gcd.Model.File;
 
 public record LocalDirPath
 {
@@ -12,7 +12,7 @@ public record LocalDirPath
         {
             string currentDirectoryPath = Environment.CurrentDirectory;
             string packageDirectoryPath = Path.Combine(currentDirectoryPath, maybeValue.Value);
-            maybeValue =  Maybe.From(packageDirectoryPath);
+            maybeValue = Maybe.From(packageDirectoryPath);
         }
 
         return maybeValue.ToResult($"{nameof(LocalDirPath)} should not be empty")
