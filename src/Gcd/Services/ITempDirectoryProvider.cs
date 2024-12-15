@@ -13,5 +13,7 @@ namespace Gcd.Tests.EndToEnd
         public string GenerateTempDirectory();
 
         public Task<Result<LocalDirPath>> GenerateTempDirectoryAsync();
+
+        public Task<Result<LocalDirPath>> CreateTempDirPathAsync();
     }
 }

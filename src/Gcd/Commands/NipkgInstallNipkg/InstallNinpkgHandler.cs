@@ -20,7 +20,7 @@ public class InstallNinpkgHandler(IMediator _mediator, ITempDirectoryProvider _t
         var tempDirR = await _tempDir.GenerateTempDirectoryAsync();
         var tempDir = tempDirR.Value;
 
-        var intallerPath = LocalFilePath.Of($"{tempDir.Value}\\nipkg-installer.exe");
+        var intallerPath = LocalFilePath.Offf($"{tempDir.Value}\\nipkg-installer.exe");
 
         return await _mediator.DownloadNipkgInstallerAsync(intallerPath.Value)
             .Bind(() => InstallAsync(intallerPath.Value))

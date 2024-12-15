@@ -4,7 +4,7 @@ namespace Gcd.Model;
 
 public record LocalFilePath
 {
-    public static Result<LocalFilePath> Of(Maybe<string> maybeValue)
+    public static Result<LocalFilePath> Offf(Maybe<string> maybeValue)
     {
         string currentDirectoryPath = Environment.CurrentDirectory;
 
@@ -14,7 +14,9 @@ public record LocalFilePath
             .Map(feedUri => new LocalFilePath(feedUri));
     }
 
-    private LocalFilePath(string path) => Value = path;
+    protected LocalFilePath(string path) => Value = path;
     public string Value { get; }
+
+    public override string ToString() => Value;
 }
 

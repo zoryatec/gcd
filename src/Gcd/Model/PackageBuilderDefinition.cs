@@ -6,20 +6,15 @@ using CSharpFunctionalExtensions.ValueTasks;
 namespace Gcd.Model;
 
 
-public record PackageBuilderContentDir
+public sealed record PackageBuilderContentDir : LocalDirPath
 {
-    public LocalDirPath Value { get; }
-
     public static Result<PackageBuilderContentDir> Of(PackageBuilderRootDir rootDir, PackageInstalationDir packageInstalatioDir)
     {
         string windPath = packageInstalatioDir.Value.Replace('/', '\\');
         var dir = LocalDirPath.Parse($"{rootDir.Value}");
         return dir.Map((dir) => new PackageBuilderContentDir(dir));
     }
-    private PackageBuilderContentDir(LocalDirPath value)
-    {
-        Value = value;
-    }
+    private PackageBuilderContentDir(LocalDirPath value) : base(value) { }
 }
 
 public record PackageBuilderDefinition
@@ -40,9 +35,9 @@ public record PackageBuilderDefinition
         var dataDir = LocalDirPath.Parse($"{feedDirPath.Value}\\data");
         var controlDir = LocalDirPath.Parse($"{feedDirPath.Value}\\control");
 
-        var debianFile = LocalFilePath.Of($"{feedDirPath.Value}\\debian-binary");
-        var controlFile = LocalFilePath.Of($"{feedDirPath.Value}\\control\\control");
-        var instructionsFile = LocalFilePath.Of($"{feedDirPath.Value}\\data\\instructions");
+        var debianFile = LocalFilePath.Offf($"{feedDirPath.Value}\\debian-binary");
+        var controlFile = LocalFilePath.Offf($"{feedDirPath.Value}\\control\\control");
+        var instructionsFile = LocalFilePath.Offf($"{feedDirPath.Value}\\data\\instructions");
 
 
         return Result

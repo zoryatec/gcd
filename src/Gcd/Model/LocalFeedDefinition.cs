@@ -11,9 +11,9 @@ public record LocalFeedDefinition
 
     public static Result<LocalFeedDefinition> Of(LocalDirPath feedDirPath)
     {
-        var package = LocalFilePath.Of($"{feedDirPath.Value}\\Packages");
-        var packageGz = LocalFilePath.Of($"{feedDirPath.Value}\\Packages.gz");
-        var packageStamps = LocalFilePath.Of($"{feedDirPath.Value}\\Packages.stamps");
+        var package = LocalFilePath.Offf($"{feedDirPath.Value}\\Packages");
+        var packageGz = LocalFilePath.Offf($"{feedDirPath.Value}\\Packages.gz");
+        var packageStamps = LocalFilePath.Offf($"{feedDirPath.Value}\\Packages.stamps");
         return Result
             .Combine(package, packageGz, packageStamps)
             .Map(() => new LocalFeedDefinition(feedDirPath, package.Value, packageGz.Value, packageStamps.Value));

@@ -3,6 +3,7 @@ using CSharpFunctionalExtensions;
 using Gcd.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,12 @@ namespace Gcd.Tests.EndToEnd
 {
     public class TempDirectoryProvider : ITempDirectoryProvider
     {
+        public async Task<Result<LocalDirPath>> CreateTempDirPathAsync()
+        {
+            string path = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            return LocalDirPath.Parse(path);
+        }
+
         public string GenerateTempDirectory()
         {
             string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());

@@ -20,6 +20,14 @@ namespace Gcd.Services
 
         public async Task<Result> CreateDirectoryAsync(LocalDirPath path) =>
             Result.Try(() => Directory.CreateDirectory(path.Value));
+
+
+        public async Task<Result<bool>> CheckDirectoryExists(LocalDirPath path) =>
+             Result.Try(() => Directory.Exists(path.Value), ex => ex.Message);
+
+
+        public async Task<Result> CopyFileAsync(LocalFilePath source, LocalFilePath destination, bool overwrite = false, CancellationToken cancellationToken = default) =>
+            Result.Try(() => File.Copy(source.Value, destination.Value, overwrite: overwrite));
             
         
     }

@@ -2,14 +2,12 @@
 
 namespace Gcd.Model;
 
-public record PackageDestinationDirectory
+public record PackageDestinationDirectory : LocalDirPath
 {
-    public static Result<PackageDestinationDirectory> Create(Maybe<string> packagePathOrNothing) =>
-           packagePathOrNothing.ToResult($"{nameof(PackageDestinationDirectory)} should not be empty")
-              .Ensure(packagePath => packagePath != string.Empty, $"{nameof(PackageDestinationDirectory)} should not be empty")
-              .Map(feedUri => new PackageDestinationDirectory(feedUri));
+    public static Result<PackageDestinationDirectory> Of(Maybe<string> maybeValue) =>
+        LocalDirPath.Parse(maybeValue)
+        .Map(x => new PackageDestinationDirectory(x));
 
-    private PackageDestinationDirectory(string path) => Value = path;
-    public string Value { get; }
+    private PackageDestinationDirectory(LocalDirPath value) : base(value) { }
 }
 

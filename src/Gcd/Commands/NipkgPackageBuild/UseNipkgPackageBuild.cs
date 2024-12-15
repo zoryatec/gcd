@@ -55,7 +55,7 @@ public static class UseNipkgPackageBuildCmdExtensions
             {
                 var packageContent = PackageBuilderContentSourceDir.Of(packageSoureDirOption.Value());
                 var packageInstalationDir = PackageInstalationDir.Create(packageInstalationOption.Value());
-                var packageDestinationDir = PackageDestinationDirectory.Create(packageDestinationOption.Value());
+                var packageDestinationDir = PackageDestinationDirectory.Of(packageDestinationOption.Value());
                 var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
 
                 return await Result

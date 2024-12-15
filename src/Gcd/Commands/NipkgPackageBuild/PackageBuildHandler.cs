@@ -16,56 +16,65 @@ public class PackageBuildHandler(IMediator _mediator, ITempDirectoryProvider _te
 {
     public async Task<Result> Handle(PackageBuildRequest request, CancellationToken cancellationToken)
     {
-        var (rootDir, installationDir, outputDir, controlProperties) = request;
+        var (contentSrcDir, installationDir, outputDir, controlProperties) = request;
 
         var temporaryDirectoryR =  await _tempDir.GenerateTempDirectoryAsync();
         var tempDir = temporaryDirectoryR.Value;
 
 
-        var pckgDirectoryR = await _tempDir.GenerateTempDirectoryAsync();
-        //var pckgDirectory = temporaryDirectoryR.Value;
-        string pckgDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        var pckgDirectoryR = await _tempDir.CreateTempDirPathAsync();
+        string pckgDirectory = pckgDirectoryR.Value.Value.ToString();
 
-        if (!Directory.Exists(pckgDirectory)) Directory.CreateDirectory(pckgDirectory);
+        if (! (await _fs.CheckDirectoryExists(pckgDirectoryR.Value)).Value) await _fs.CreateDirectoryAsync(pckgDirectoryR.Value);
 
-        var pckBuilderDest = LocalDirPath.Parse(tempDir.Value);
-        var pckDefinitionRes = PackageBuilderDefinition.Of(pckBuilderDest.Value);
+
+        var pckDefinitionRes = PackageBuilderDefinition.Of(tempDir);
         var pckDefiniton = pckDefinitionRes.Value;
 
-        var temporaryDir = PackageBuilderRootDir.Create(tempDir.Value);
+        var rootDirTempR = PackageBuilderRootDir.Create(tempDir.Value);
+        var rootDirTemp = rootDirTempR.Value;
 
+        var subRequest = await _mediator.PackageBuilderInitAsync(rootDirTemp, request.PackageInstalationDir, request.ControlProperties);
 
+        var contentDirResult = PackageBuilderContentDir.Of(rootDirTemp, request.PackageInstalationDir);
+        var contentDstDir = contentDirResult.Value;
 
-        
-
-        var subRequest = await _mediator.PackageBuilderInitAsync(temporaryDir.Value, request.PackageInstalationDir, request.ControlProperties);
-
-        var contentDirResult = PackageBuilderContentDir.Of(temporaryDir.Value, request.PackageInstalationDir);
-        CopyDirectoryContents(request.PackageContentPath.Value.Value, contentDirResult.Value.Value.Value);
+        await CopyPackageContentAsync(contentSrcDir, contentDstDir);
 
         var contentR = await _fs.ReadTextFileAsync(pckDefiniton.ControlFile);
-        string content = contentR.Value; /*File.ReadAllText(pckDefiniton.ControlFile.Value);*/
+        string content = contentR.Value;
 
         var cfcR = ControlFileContent.Of(content);
         var cfc = cfcR.Value;
 
 
-        var result = RunCommand(tempDir.Value, pckgDirectory);
-        string packageFileName = $"{cfc.Name.Value}_{cfc.Version.Value}_windows_x64.nipkg";
-        string packageFilePath = Path.Combine(pckgDirectory, packageFileName);
+        var result = await NipkgPackAsync(tempDir.Value, pckgDirectory);
+
+        var packageFileNameRR = new PackageFileName(cfc.Architecture, cfc.Name, cfc.Version);
+        //string packageFileName = (new PackageFileName(cfc.Architecture,cfc.Name,cfc.Version)).Value;
+        var packageSrcFilePathR = PackageFilePath.Of(pckgDirectoryR.Value, packageFileNameRR);
+
+        string packageFilePath = /*Path.Combine(pckgDirectory, packageFileName);*/ packageSrcFilePathR.Value;
 
         string currentDirectoryPath = Environment.CurrentDirectory;
         string packageDestinationDir = Path.Combine(currentDirectoryPath, request.PackageDestinationDir.Value);
 
-        if (!Directory.Exists(packageDestinationDir)) Directory.CreateDirectory(packageDestinationDir);
+        if ((await _fs.CheckDirectoryExists(outputDir)).Value) await _fs.CreateDirectoryAsync(outputDir);
 
-        string packageDestinationFilePath = Path.Combine(packageDestinationDir, packageFileName);
-        File.Copy(packageFilePath, packageDestinationFilePath, overwrite: true);
+        var packageDestFilePathR = PackageFilePath.Of(outputDir, packageFileNameRR);
+
+        await _fs.CopyFileAsync(packageSrcFilePathR, packageDestFilePathR);
 
         Directory.Delete(tempDir.Value, true);
         Directory.Delete(pckgDirectory, true);
 
         return Result.Success();
+    }
+
+    static async Task<Result> CopyPackageContentAsync(PackageBuilderContentSourceDir source, PackageBuilderContentDir dest)
+    {
+       return Result.Try(() => CopyDirectoryContents(source.Value, dest.Value));
+        
     }
 
     static void CopyDirectoryContents(string sourceDir, string destinationDir)
@@ -96,7 +105,7 @@ public class PackageBuildHandler(IMediator _mediator, ITempDirectoryProvider _te
         }
     }
 
-    private async Task<Result> RunCommand(string temporaryDirectory, string pckgDirectory) =>
+    private async Task<Result> NipkgPackAsync(string temporaryDirectory, string pckgDirectory) =>
         await _mediator.RunNipkgRequestAsync(new string[] { "pack", temporaryDirectory, pckgDirectory });
     
 }

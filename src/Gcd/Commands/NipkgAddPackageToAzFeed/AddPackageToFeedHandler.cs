@@ -50,7 +50,7 @@ public class AddPackageToFeedHandler(
         string nipkgUrl = CreateSubUrl(azblob.Value, packagePath.PkgName);
 
         var blobUri = AzBlobUri.Create(nipkgUrl);
-        var filePath = LocalFilePath.Of(packagePath.Value);
+        var filePath = LocalFilePath.Offf(packagePath.Value);
         var result = await uploadService.UploadFileAsync(blobUri.Value, filePath.Value);
         return result;
     }
