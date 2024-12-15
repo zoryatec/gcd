@@ -7,7 +7,7 @@ namespace Gcd.Commands.NipkgPackageBuilserSetVersion;
 
 public record PackageBuilderSetPropertyRequest(PackageBuilderRootDir PackagePath, IReadOnlyList<ControlFileProperty> Properties) : IRequest<Result>;
 
-public class PackageBuilderSetPropertyHandler(ITextFileReader reader, ITextFileWriter writer)
+public class PackageBuilderSetPropertyHandler( IFileSystem _fs)
     : IRequestHandler<PackageBuilderSetPropertyRequest, Result>
 {
     public async Task<Result> Handle(PackageBuilderSetPropertyRequest request, CancellationToken cancellationToken)
@@ -16,10 +16,10 @@ public class PackageBuilderSetPropertyHandler(ITextFileReader reader, ITextFileW
         var pckDefinition = PackageBuilderDefinition.Of(rootDir);
 
         return  await pckDefinition
-            .Bind(def => reader.ReadTextFileAsync(def.ControlFile))
+            .Bind(def => _fs.ReadTextFileAsync(def.ControlFile))
             .Bind(fileContent => ControlFileContent.Of(fileContent))
             .Map(controlFile => controlFile.WithProperties(properties))
-            .Bind(controlFile => writer.WriteTextFileAsync(pckDefinition.Value.ControlFile, controlFile.Content));
+            .Bind(controlFile => _fs.WriteTextFileAsync(pckDefinition.Value.ControlFile, controlFile.Content));
     }
 }
 

@@ -4,7 +4,7 @@ using Gcd.Model;
 
 namespace Gcd.Services
 {
-    public class LocalFileService : ITextFileReader, ITextFileWriter
+    public class LocalFileService : IFileSystem
     {
         public async Task<Result<string>> ReadTextFileAsync(LocalFilePath filePath, CancellationToken cancellationToken = default) =>
             ReadTextFile(filePath);
@@ -17,6 +17,11 @@ namespace Gcd.Services
 
         private Result WriteTextFile(LocalFilePath filePath, string content) =>
             Result.Try(() => File.WriteAllText(filePath.Value, content), ex => ex.Message);
+
+        public async Task<Result> CreateDirectoryAsync(LocalDirPath path) =>
+            Result.Try(() => Directory.CreateDirectory(path.Value));
+            
+        
     }
 
 

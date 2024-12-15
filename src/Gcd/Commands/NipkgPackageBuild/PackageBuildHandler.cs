@@ -2,30 +2,37 @@
 using Gcd.Commands.NipkgPackageBuilderInit;
 using Gcd.Model;
 using Gcd.Services;
+using Gcd.Tests.EndToEnd;
 using MediatR;
 using System.Reflection.Metadata;
 
 namespace Gcd.Commands.NipkgPackageBuild;
 
-public record PackageBuildRequest(PackageBuilderRootDir PackageContentPath, PackageInstalationDir PackageInstalationDir, PackageDestinationDirectory PackageDestinationDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
+public record PackageBuildRequest(PackageBuilderContentSourceDir PackageContentPath, PackageInstalationDir PackageInstalationDir, PackageDestinationDirectory PackageDestinationDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
 
 
-public class PackageBuildHandler(IMediator _mediator)
+public class PackageBuildHandler(IMediator _mediator, ITempDirectoryProvider _tempDir, IFileSystem _fs)
     : IRequestHandler<PackageBuildRequest, Result>
 {
     public async Task<Result> Handle(PackageBuildRequest request, CancellationToken cancellationToken)
     {
+        var (rootDir, installationDir, outputDir, controlProperties) = request;
 
-        string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        var temporaryDirectoryR =  await _tempDir.GenerateTempDirectoryAsync();
+        var tempDir = temporaryDirectoryR.Value;
+
+
+        var pckgDirectoryR = await _tempDir.GenerateTempDirectoryAsync();
+        //var pckgDirectory = temporaryDirectoryR.Value;
         string pckgDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
         if (!Directory.Exists(pckgDirectory)) Directory.CreateDirectory(pckgDirectory);
 
-        var pckBuilderDest = LocalDirPath.Parse(temporaryDirectory);
+        var pckBuilderDest = LocalDirPath.Parse(tempDir.Value);
         var pckDefinitionRes = PackageBuilderDefinition.Of(pckBuilderDest.Value);
         var pckDefiniton = pckDefinitionRes.Value;
 
-        var temporaryDir = PackageBuilderRootDir.Create(temporaryDirectory);
+        var temporaryDir = PackageBuilderRootDir.Create(tempDir.Value);
 
 
 
@@ -34,15 +41,16 @@ public class PackageBuildHandler(IMediator _mediator)
         var subRequest = await _mediator.PackageBuilderInitAsync(temporaryDir.Value, request.PackageInstalationDir, request.ControlProperties);
 
         var contentDirResult = PackageBuilderContentDir.Of(temporaryDir.Value, request.PackageInstalationDir);
-        CopyDirectoryContents(request.PackageContentPath.Value, contentDirResult.Value.Value.Value);
+        CopyDirectoryContents(request.PackageContentPath.Value.Value, contentDirResult.Value.Value.Value);
 
-        string content  = File.ReadAllText(pckDefiniton.ControlFile.Value);
+        var contentR = await _fs.ReadTextFileAsync(pckDefiniton.ControlFile);
+        string content = contentR.Value; /*File.ReadAllText(pckDefiniton.ControlFile.Value);*/
 
         var cfcR = ControlFileContent.Of(content);
         var cfc = cfcR.Value;
 
 
-        var result = RunCommand(temporaryDirectory, pckgDirectory);
+        var result = RunCommand(tempDir.Value, pckgDirectory);
         string packageFileName = $"{cfc.Name.Value}_{cfc.Version.Value}_windows_x64.nipkg";
         string packageFilePath = Path.Combine(pckgDirectory, packageFileName);
 
@@ -54,7 +62,7 @@ public class PackageBuildHandler(IMediator _mediator)
         string packageDestinationFilePath = Path.Combine(packageDestinationDir, packageFileName);
         File.Copy(packageFilePath, packageDestinationFilePath, overwrite: true);
 
-        Directory.Delete(temporaryDirectory, true);
+        Directory.Delete(tempDir.Value, true);
         Directory.Delete(pckgDirectory, true);
 
         return Result.Success();
@@ -97,7 +105,7 @@ public static class MediatorExtensions
 {
     public static async Task<Result> PackageBuilderBuildAsync(
         this IMediator mediator,
-        PackageBuilderRootDir packageContentDir,
+        PackageBuilderContentSourceDir packageContentDir,
         PackageInstalationDir packageInstalationDir,
         PackageDestinationDirectory packageDestinationDir,
         IReadOnlyList<ControlFileProperty> controlProperties,

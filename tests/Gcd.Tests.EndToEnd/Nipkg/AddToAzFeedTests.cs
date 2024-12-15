@@ -87,7 +87,7 @@ public class AddToAzFeedTests : IClassFixture<TestFixture>
         result.Return.Should().Be(0);
         result.Error.Should().BeEmpty();
         var packagePath = $"{packageDestinationDirectory}\\{packageName}_{packageVersion}_windows_x64.nipkg";
-        File.Exists(packagePath);
+        File.Exists(packagePath).Should().BeTrue();
         return packagePath;
     }
 

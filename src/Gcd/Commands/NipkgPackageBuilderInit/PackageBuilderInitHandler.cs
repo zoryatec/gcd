@@ -10,7 +10,7 @@ namespace Gcd.Commands.NipkgPackageBuilderInit;
 
 public record PackageBuilderInitRequest(PackageBuilderRootDir RootDir, PackageInstalationDir InstalationDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
 
-public class PackageBuilderInitHandler(IMediator _mediator, ITextFileWriter _writer)
+public class PackageBuilderInitHandler(IMediator _mediator, IFileSystem _writer)
     : IRequestHandler<PackageBuilderInitRequest, Result>
 {
     public async Task<Result> Handle(PackageBuilderInitRequest request, CancellationToken cancellationToken)
