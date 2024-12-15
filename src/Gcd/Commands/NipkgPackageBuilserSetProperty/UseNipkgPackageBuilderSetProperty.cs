@@ -41,7 +41,7 @@ public static class UseNipkgPackageBuilderSetPropertyCmdExtensions
 
             command.OnExecuteAsync(async cancelationToken =>
             {
-                var rootDir = PackageBuilderRootDir.Create(rootDirOpt.Value());
+                var rootDir = PackageBuilderRootDir.Of(rootDirOpt.Value());
                 var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
 
                 if (rootDir.IsFailure)
