@@ -24,7 +24,7 @@ public static class UseNipkgAddPackageToAzFeedCmdExtensions
             {
                 var azFeedDef = AzBlobFeedUri.Create(feedUrlOption.Value())
                     .Bind(feedUri => AzBlobFeedDefinition.Of(feedUri));
-                var pathToPackage = PackagePath.Create(packagePathOption.Value());
+                var pathToPackage = PackageFilePath.Of(packagePathOption.Value());
 
                 return await Result
                     .Combine(azFeedDef, pathToPackage)

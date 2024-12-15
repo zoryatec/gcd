@@ -68,4 +68,7 @@ public static class MediatorExtensions
 {
     public static async Task<Result> RunNipkgRequestAsync(this IMediator mediator, string[] arguments, CancellationToken cancellationToken = default)
         => await mediator.Send(new RunNipkgRequest(arguments), cancellationToken);
+    public static async Task<Result> AddPackageToLcalFeedAsync(this IMediator mediator, LocalFeedDefinition feedDefinition, PackageFilePath packagePath, CancellationToken cancellationToken = default) =>
+    await mediator.RunNipkgRequestAsync(new string[] { "feed-add-pkg", feedDefinition.Feed.Value, packagePath.Value });
 }
+

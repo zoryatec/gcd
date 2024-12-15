@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CSharpFunctionalExtensions;
+using CSharpFunctionalExtensions.ValueTasks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +14,18 @@ namespace Gcd.Model
         {
             Directory = directory;
             FileName = fileName;
+        }
+
+        public static Result<PackageFilePath> Of(Maybe<string> packagePathOrNothing)
+        {
+            var pkgName = Path.GetFileName(packagePathOrNothing.Value);
+            var dir = Path.GetDirectoryName(packagePathOrNothing.Value);
+            var locDir = LocalDirPath.Parse(dir); ;
+
+            var packageFileName = PackageFileName.Of(pkgName);
+            return packagePathOrNothing.ToResult("FeedUri should not be empty")
+                .Ensure(packagePath => packagePath != string.Empty, "Package path should not be empty")
+                .Map(feedUri => new PackageFilePath(locDir.Value, packageFileName.Value));
         }
 
         public static PackageFilePath Of(LocalDirPath Directory, PackageFileName FileName)
