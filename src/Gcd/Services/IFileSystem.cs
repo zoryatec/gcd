@@ -19,4 +19,6 @@ public interface IFileSystem
 
     public Task<Result<LocalDirPath>> CreateTempDirPathAsync();
 
+    public Task<Result> CopyDirectoryRecursievely(LocalDirPath source, LocalDirPath destination, bool overwrite = false, CancellationToken cancellationToken = default);
+
 }

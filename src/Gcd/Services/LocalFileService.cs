@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Model;
+using System.IO;
 
 
 namespace Gcd.Services
@@ -58,7 +59,37 @@ namespace Gcd.Services
                 return Result.Failure<LocalDirPath>(ex.Message);
             }
         }
-    }
 
+
+        public async Task<Result> CopyDirectoryRecursievely(LocalDirPath source, LocalDirPath destination, bool overwrite = false, CancellationToken cancellationToken = default)
+            => Result.Try(() => CopyDirectoryContents(source.Value,destination.Value), ex => ex.Message);
+        private void CopyDirectoryContents(string sourceDir, string destinationDir)
+        {
+            // Ensure the source directory exists
+            if (!Directory.Exists(sourceDir))
+            {
+                throw new DirectoryNotFoundException($"Source directory does not exist: {sourceDir}");
+            }
+
+            // Create the destination directory if it does not exist
+            Directory.CreateDirectory(destinationDir);
+
+            // Copy all files from source to destination
+            foreach (string file in Directory.GetFiles(sourceDir))
+            {
+                string fileName = Path.GetFileName(file);
+                string destFile = Path.Combine(destinationDir, fileName);
+                File.Copy(file, destFile, overwrite: true);
+            }
+
+            // Recursively copy all subdirectories
+            foreach (string directory in Directory.GetDirectories(sourceDir))
+            {
+                string directoryName = Path.GetFileName(directory);
+                string destDir = Path.Combine(destinationDir, directoryName);
+                CopyDirectoryContents(directory, destDir);
+            }
+        }
+    }
 
 }
