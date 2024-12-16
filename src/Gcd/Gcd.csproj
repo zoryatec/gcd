@@ -36,7 +36,6 @@
 
     <ItemGroup>
       <Folder Include="Commands\Config\" />
-      <Folder Include="NewFolder\" />
     </ItemGroup>
 
 </Project>

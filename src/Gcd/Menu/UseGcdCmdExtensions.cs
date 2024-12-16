@@ -1,7 +1,7 @@
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Gcd.Extensions;
+namespace Gcd.Menu;
 
 public static class UseGcdCmdExtensions
 {
@@ -10,13 +10,13 @@ public static class UseGcdCmdExtensions
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         app.VersionOption("-v|--version", GetVersion());
-        
+
         app.Conventions
             .UseDefaultConventions()
             .UseConstructorInjection(serviceProvider);
-        
+
         app.HelpOption(inherited: true);
-        
+
         app.UseProjectCmd(serviceProvider);
         app.UseNipkgCmd(serviceProvider);
         app.UseVersionizeCmd(serviceProvider);

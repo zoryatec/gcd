@@ -3,7 +3,7 @@ using Gcd.Commands.Project.BuildSpec.SetVersion;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Gcd.Extensions;
+namespace Gcd.Menu;
 
 public static class UseProjectCmdExtensions
 {

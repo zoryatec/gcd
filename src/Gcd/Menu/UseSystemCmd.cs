@@ -5,7 +5,7 @@ using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Gcd.Extensions;
+namespace Gcd.Menu;
 
 public static class UseSystemExtensions
 {
@@ -38,10 +38,10 @@ public static class UseSystemExtensions
 
             var pathToAdd = addToUserPath.Argument("path", "Path to be added to user path enviromental variable").IsRequired();
 
-            addToUserPath.OnExecuteAsync( async cancelationToken =>
+            addToUserPath.OnExecuteAsync(async cancelationToken =>
             {
                 var maybePath = Maybe.From(pathToAdd.Value);
-                if(maybePath.HasValue)
+                if (maybePath.HasValue)
                 {
                     var requestToAddPath = new SystemAddToPathRequest(maybePath.Value, EnvironmentVariableTarget.User);
                     var response = await mediator.Send(requestToAddPath);

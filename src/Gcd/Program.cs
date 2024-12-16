@@ -1,6 +1,4 @@
-﻿
-using Gcd.Extensions;
-using Gcd.LabViewProject;
+﻿using Gcd.LabViewProject;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
@@ -8,6 +6,7 @@ using Gcd.Services;
 using Gcd.Model;
 using Gcd.Tests.EndToEnd;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
+using Gcd.Menu;
 
 
 namespace Gcd

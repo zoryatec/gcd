@@ -11,7 +11,7 @@ using Gcd.Commands.Tools.InstallNipkg;
 using Gcd.Commands.Tools.DownloadNipkg;
 
 
-namespace Gcd.Extensions
+namespace Gcd.Menu
 {
     public static class UseNipkgCmdExtensions
     {
@@ -77,6 +77,6 @@ namespace Gcd.Extensions
         }
 
 
-        
+
     }
 }
