@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgPackageBuild;
-using Gcd.Commands.NipkgPackageBuilserSetVersion;
+using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Extensions;
 using Gcd.Model;
 using McMaster.Extensions.CommandLineUtils;
@@ -9,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using static Gcd.Contract.Nipkg.PackageBuild;
 
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+namespace Gcd.Commands.Nipkg.Build;
 
 public static class UseNipkgPackageBuildCmdExtensions
 {
@@ -31,7 +30,7 @@ public static class UseNipkgPackageBuildCmdExtensions
                 .IsRequired();
 
             var packageDestinationOption = cmd
-                .Option(PACKAGE_DESTINATION_DIR_OPTION,PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
+                .Option(PACKAGE_DESTINATION_DIR_OPTION, PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
 
             var options = new List<ControlPropertyOption>
@@ -60,7 +59,7 @@ public static class UseNipkgPackageBuildCmdExtensions
 
                 return await Result
                     .Combine(packageContent, packageInstalationDir, packageDestinationDir, properties)
-                    .Bind(() => mediator.PackageBuilderBuildAsync(packageContent.Value, packageInstalationDir.Value, packageDestinationDir.Value,properties.Value, cancellationToken))
+                    .Bind(() => mediator.PackageBuilderBuildAsync(packageContent.Value, packageInstalationDir.Value, packageDestinationDir.Value, properties.Value, cancellationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

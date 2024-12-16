@@ -5,6 +5,9 @@ using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Commands.NipkgAddPackageToAzFeed;
 using Gcd.Commands.NipkgInstallNipkg;
 using Gcd.Commands.NipkgPushAzBlobFeedMeta;
+using Gcd.Commands.Nipkg.Builder.Init;
+using Gcd.Commands.Nipkg.Builder.SetProperty;
+using Gcd.Commands.Nipkg.Build;
 
 
 namespace Gcd.Extensions

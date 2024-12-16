@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
-using Gcd.Commands.NipkgPackageBuilserSetVersion;
 using Gcd.Extensions;
 using Gcd.Model;
 using McMaster.Extensions.CommandLineUtils;
@@ -8,7 +7,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using static Gcd.Contract.Nipkg.PackageBuilderSetProperty;
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+namespace Gcd.Commands.Nipkg.Builder.SetProperty;
 public static class UseNipkgPackageBuilderSetPropertyCmdExtensions
 {
     public static CommandLineApplication UseNipkgPackageBuilderSetPropertyCmd(this CommandLineApplication app, IServiceProvider serviceProvider)

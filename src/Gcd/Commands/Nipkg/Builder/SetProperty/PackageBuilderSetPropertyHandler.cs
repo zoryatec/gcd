@@ -3,11 +3,11 @@ using Gcd.Model;
 using Gcd.Services;
 using MediatR;
 
-namespace Gcd.Commands.NipkgPackageBuilserSetVersion;
+namespace Gcd.Commands.Nipkg.Builder.SetProperty;
 
 public record PackageBuilderSetPropertyRequest(PackageBuilderRootDir PackagePath, IReadOnlyList<ControlFileProperty> Properties) : IRequest<Result>;
 
-public class PackageBuilderSetPropertyHandler( IFileSystem _fs)
+public class PackageBuilderSetPropertyHandler(IFileSystem _fs)
     : IRequestHandler<PackageBuilderSetPropertyRequest, Result>
 {
     public async Task<Result> Handle(PackageBuilderSetPropertyRequest request, CancellationToken cancellationToken)
@@ -15,7 +15,7 @@ public class PackageBuilderSetPropertyHandler( IFileSystem _fs)
         var (rootDir, properties) = request;
         var pckDefinition = PackageBuilderDefinition.Of(rootDir);
 
-        return  await pckDefinition
+        return await pckDefinition
             .Bind(def => _fs.ReadTextFileAsync(def.ControlFile))
             .Bind(fileContent => ControlFileContent.Of(fileContent))
             .Map(controlFile => controlFile.WithProperties(properties))

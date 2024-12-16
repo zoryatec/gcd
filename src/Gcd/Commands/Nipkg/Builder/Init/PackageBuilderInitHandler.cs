@@ -1,12 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Commands.NipkgDownloadNipkg;
-using Gcd.Commands.NipkgPackageBuilserSetVersion;
 using Gcd.Model;
 using Gcd.Services;
 using MediatR;
 using System.Threading;
 
-namespace Gcd.Commands.NipkgPackageBuilderInit;
+namespace Gcd.Commands.Nipkg.Builder.Init;
 
 public record PackageBuilderInitRequest(PackageBuilderRootDir RootDir, InatallationTargetRootDir InstalationDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
 

@@ -1,13 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.Nipkg.Builder.AddContent;
+using Gcd.Commands.Nipkg.Builder.Init;
 using Gcd.Commands.Nipkg.Builder.Pack;
-using Gcd.Commands.NipkgPackageBuilderInit;
 using Gcd.Model;
 using Gcd.Services;
 using Gcd.Tests.EndToEnd;
 using MediatR;
 
-namespace Gcd.Commands.NipkgPackageBuild;
+namespace Gcd.Commands.Nipkg.Build;
 
 public record PackageBuildRequest(PackageBuilderContentSourceDir PackageContentPath, InatallationTargetRootDir PackageInstalationDir, PackageDestinationDirectory PackageDestinationDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
 
@@ -21,14 +21,14 @@ public class PackageBuildHandler(IMediator _mediator, ITempDirectoryProvider _te
 
         var rootDirTempR = await _tempDir.GenerateTempDirectoryAsync()
             .Bind(dir => PackageBuilderRootDir.Of(dir.Value));
- 
+
         var rootDirTemp = rootDirTempR.Value;
         var contentDirResult = PackageBuilderContentDir.Of(rootDirTemp, installationDir);
         var contentDstDir = contentDirResult.Value;
 
 
         // build package
-        return  await _mediator
+        return await _mediator
             .PackageBuilderInitAsync(rootDirTemp, installationDir, controlProp)
             .Bind(() => _mediator.AddContentAsync(rootDirTemp, installationDir, contentSrcDir))
             .Bind(() => _mediator.BuilderPackAsync(rootDirTemp, outputDir));

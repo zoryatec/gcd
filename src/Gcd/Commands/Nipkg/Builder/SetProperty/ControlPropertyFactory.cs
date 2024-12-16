@@ -1,30 +1,29 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Model;
 using Gcd.Extensions;
 
-namespace Gcd.Commands.NipkgPackageBuilserSetVersion;
+namespace Gcd.Commands.Nipkg.Builder.SetProperty;
 
 public interface IControlPropertyFactory
 {
-    public  Result<IReadOnlyList<ControlFileProperty>> Create(IReadOnlyList<ControlPropertyOption> options);
-    public  Result<ControlFileProperty> Create(ControlPropertyOption option);
+    public Result<IReadOnlyList<ControlFileProperty>> Create(IReadOnlyList<ControlPropertyOption> options);
+    public Result<ControlFileProperty> Create(ControlPropertyOption option);
 }
 
 public class ControlPropertyFactory : IControlPropertyFactory
 {
-    public  Result<IReadOnlyList<ControlFileProperty>> Create(IReadOnlyList<ControlPropertyOption> options)
+    public Result<IReadOnlyList<ControlFileProperty>> Create(IReadOnlyList<ControlPropertyOption> options)
     {
         List<Result<ControlFileProperty>> properties = new List<Result<ControlFileProperty>>();
 
         options.ForEach(option => properties.Add(Create(option)));
         return Result
             .Combine(properties)
-            .Map(() => 
+            .Map(() =>
                 properties.Select(x => x.Value).ToList() as IReadOnlyList<ControlFileProperty>);
     }
 
-    public  Result<ControlFileProperty> Create(ControlPropertyOption option)
+    public Result<ControlFileProperty> Create(ControlPropertyOption option)
     {
         var result = option switch
         {

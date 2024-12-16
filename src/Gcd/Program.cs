@@ -6,8 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using Gcd.Services;
 using Gcd.Model;
-using Gcd.Commands.NipkgPackageBuilserSetVersion;
 using Gcd.Tests.EndToEnd;
+using Gcd.Commands.Nipkg.Builder.SetProperty;
 
 
 namespace Gcd

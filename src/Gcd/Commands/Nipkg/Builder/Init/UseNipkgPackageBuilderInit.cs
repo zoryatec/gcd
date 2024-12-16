@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgPackageBuilderInit;
-using Gcd.Commands.NipkgPackageBuilserSetVersion;
+using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Extensions;
 using Gcd.Model;
 using McMaster.Extensions.CommandLineUtils;
@@ -9,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using static Gcd.Contract.Nipkg.PackageBuilderInit;
 
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+namespace Gcd.Commands.Nipkg.Builder.Init;
 
 public static class UseNipkgPackageBuilderInitmdExtensions
 {
@@ -51,7 +50,7 @@ public static class UseNipkgPackageBuilderInitmdExtensions
                 var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
 
                 return await Result
-                    .Combine(packagePath, packageDestination,properties)
+                    .Combine(packagePath, packageDestination, properties)
                     .Bind(() => mediator.PackageBuilderInitAsync(packagePath.Value, packageDestination.Value, properties.Value, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))

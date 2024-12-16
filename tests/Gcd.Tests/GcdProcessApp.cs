@@ -1,4 +1,4 @@
-﻿using Gcd.Commands.NipkgPackageBuilserSetVersion;
+﻿using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Extensions;
 using Gcd.LabViewProject;
 using Gcd.Model;
