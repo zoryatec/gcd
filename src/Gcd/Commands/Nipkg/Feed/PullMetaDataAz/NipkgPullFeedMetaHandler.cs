@@ -4,7 +4,7 @@ using Gcd.Model.File;
 using Gcd.Services;
 using MediatR;
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+namespace Gcd.Commands.Nipkg.Feed.PullMetaDataAz;
 
 public record NipkgPullFeedMetaRequest(AzBlobFeedDefinition AzFeedDef, LocalFeedDefinition LocalFeedDef) : IRequest<Result>;
 

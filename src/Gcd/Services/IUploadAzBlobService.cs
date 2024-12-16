@@ -1,6 +1,5 @@
 ﻿using Azure.Core;
 using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Common;
 using Gcd.Model.File;
 using MediatR;

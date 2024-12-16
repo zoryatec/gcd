@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using static Gcd.Contract.Nipkg.PushAzBlobFeedMetaData;
 
-namespace Gcd.Commands.NipkgPushAzBlobFeedMeta;
+namespace Gcd.Commands.Nipkg.Feed.PushMetaDataAz;
 
 public static class UUseNipkgPushAzBlobFeedMetaaCmdExtensions
 {

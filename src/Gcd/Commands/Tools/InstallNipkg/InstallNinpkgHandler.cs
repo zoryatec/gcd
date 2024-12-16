@@ -1,13 +1,12 @@
 ﻿using System.Diagnostics;
 using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgDownloadNipkg;
-using Gcd.Commands.SystemAddToPath;
+using Gcd.Commands.Tools.DownloadNipkg;
 using Gcd.Model.File;
 using Gcd.Services;
 using Gcd.Tests.EndToEnd;
 using MediatR;
 
-namespace Gcd.Commands.NipkgInstallNipkg;
+namespace Gcd.Commands.Tools.InstallNipkg;
 
 public record InstallNinpkgRequest() : IRequest<Result>;
 public record InstallNinpkgResponse(string result);

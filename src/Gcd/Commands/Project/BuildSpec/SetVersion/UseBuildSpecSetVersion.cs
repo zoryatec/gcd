@@ -1,10 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.ProjectBuildSpecSetVersion;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+namespace Gcd.Commands.Project.BuildSpec.SetVersion;
 
 public static class UseBuildSpecSetVersionCmdExtensions
 {

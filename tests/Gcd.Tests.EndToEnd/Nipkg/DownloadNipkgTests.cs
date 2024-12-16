@@ -1,6 +1,5 @@
 ﻿
 using FluentAssertions;
-using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg;
 using Microsoft.Extensions.DependencyInjection;
 using System;

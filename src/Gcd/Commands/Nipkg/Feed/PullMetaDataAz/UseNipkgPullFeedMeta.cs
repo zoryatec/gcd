@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using static Gcd.Contract.Nipkg.PullFeedMetaData;
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+namespace Gcd.Commands.Nipkg.Feed.PullMetaDataAz;
 
 public static class UseNipkgPullFeedMetaCmdExtensions
 {
@@ -18,7 +18,7 @@ public static class UseNipkgPullFeedMetaCmdExtensions
         app.Command(COMMAND, subCmd =>
         {
             var feedPatht = subCmd.Option(FEED_LOCAL_PATH_OPTION, FEED_LOCAL_PATH_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
-            var feedUrl = subCmd.Option(REMOTE_FEED_URI_OPTION,REMOTE_FEED_URI_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
+            var feedUrl = subCmd.Option(REMOTE_FEED_URI_OPTION, REMOTE_FEED_URI_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
             subCmd.OnExecuteAsync(async cancelationToken =>
             {
                 var azFeedDef = AzBlobFeedUri.Create(feedUrl.Value())

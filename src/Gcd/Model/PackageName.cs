@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgDownloadFeedMetaData;
 using MediatR;
 using static System.Collections.Specialized.BitVector32;
 

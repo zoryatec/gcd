@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
-using Gcd.Commands.NipkgDownloadNipkg;
 using Gcd.Model;
 using Gcd.Services;
 using MediatR;

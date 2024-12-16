@@ -1,11 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.ProjectBuildSpecList;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using static Gcd.Contract.Project.BuildSpecList;
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+namespace Gcd.Commands.Project.BuildSpec.List;
 
 public static class UseBuildSpecListCmdExtensions
 {

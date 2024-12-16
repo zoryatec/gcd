@@ -2,7 +2,7 @@ using System.Text.Json;
 using Gcd.LabViewProject;
 using MediatR;
 
-namespace Gcd.Commands.ProjectBuildSpecList;
+namespace Gcd.Commands.Project.BuildSpec.List;
 
 public record BuildSpecDto(string Name, string Type, string Target, string Version);
 public record BuildSpecListRequest(string projectPaht) : IRequest<BuildSpecListResponse>;

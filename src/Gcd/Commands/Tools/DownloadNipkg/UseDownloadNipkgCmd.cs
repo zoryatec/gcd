@@ -1,6 +1,5 @@
 ﻿
 using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgDownloadNipkg;
 using Gcd.Model.File;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
@@ -8,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using static Gcd.Contract.Nipkg.DownloadNipkg;
 
 
-namespace Gcd.Commands.NipkgDownloadFeedMetaData;
+namespace Gcd.Commands.Tools.DownloadNipkg;
 
 public static class UseDownloadNipkgCmdExtensions
 {
@@ -27,7 +26,7 @@ public static class UseDownloadNipkgCmdExtensions
 
                 return await filePath
                     .Map((arg) => new DownloadNipkgRequest(arg))
-                    .Bind(async (req) => await mediator.Send(req,cancelationToken))
+                    .Bind(async (req) => await mediator.Send(req, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

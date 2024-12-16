@@ -6,7 +6,7 @@ using Gcd.Services;
 using MediatR;
 
 
-namespace Gcd.Commands.NipkgPushAzBlobFeedMeta;
+namespace Gcd.Commands.Nipkg.Feed.PushMetaDataAz;
 
 public record NipkgPushAzBlobFeedMetaRequest(AzBlobFeedDefinition AzFeedDefinition, LocalFeedDefinition LocalFeedDefinition) : IRequest<Result>;
 public record NipkgPushAzBlobFeedMetaRespons(string Result);

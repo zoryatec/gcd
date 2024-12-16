@@ -1,13 +1,14 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Gcd.Commands.NipkgDownloadFeedMetaData;
-using Gcd.Commands.NipkgAddPackageToAzFeed;
-using Gcd.Commands.NipkgInstallNipkg;
-using Gcd.Commands.NipkgPushAzBlobFeedMeta;
 using Gcd.Commands.Nipkg.Builder.Init;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Commands.Nipkg.Build;
+using Gcd.Commands.Nipkg.Feed.PullMetaDataAz;
+using Gcd.Commands.Nipkg.Feed.PushMetaDataAz;
+using Gcd.Commands.Nipkg.Feed.AddPackageAz;
+using Gcd.Commands.Tools.InstallNipkg;
+using Gcd.Commands.Tools.DownloadNipkg;
 
 
 namespace Gcd.Extensions

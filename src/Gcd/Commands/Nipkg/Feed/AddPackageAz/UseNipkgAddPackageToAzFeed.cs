@@ -4,10 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
 using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
-using Gcd.Commands.NipkgPushAzBlobFeedMeta;
 using Gcd.Model;
 
-namespace Gcd.Commands.NipkgAddPackageToAzFeed;
+namespace Gcd.Commands.Nipkg.Feed.AddPackageAz;
 
 public static class UseNipkgAddPackageToAzFeedCmdExtensions
 {
@@ -29,7 +28,7 @@ public static class UseNipkgAddPackageToAzFeedCmdExtensions
                 return await Result
                     .Combine(azFeedDef, pathToPackage)
                     .Map(() => new AddPackageToFeedRequest(azFeedDef.Value, pathToPackage.Value))
-                    .Bind((req1) =>  mediator.Send(req1,cancelationToken))
+                    .Bind((req1) => mediator.Send(req1, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

@@ -1,6 +1,5 @@
 ﻿
 using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgDownloadNipkg;
 using Gcd.Model;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
@@ -8,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using static Gcd.Contract.Nipkg.InstallNipkg;
 
 
-namespace Gcd.Commands.NipkgInstallNipkg;
+namespace Gcd.Commands.Tools.InstallNipkg;
 
 public static class UseInstallNipkgCmdExtensions
 {
@@ -24,7 +23,7 @@ public static class UseInstallNipkgCmdExtensions
             subCmd.OnExecuteAsync(async cancelationToken =>
             {
 
-                return  await mediator.InstallNipkgInstallerAsync(cancelationToken)
+                return await mediator.InstallNipkgInstallerAsync(cancelationToken)
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

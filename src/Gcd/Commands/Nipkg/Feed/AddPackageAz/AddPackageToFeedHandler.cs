@@ -1,11 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.NipkgDownloadFeedMetaData;
 using Gcd.Services;
-using Gcd.Commands.NipkgPushAzBlobFeedMeta;
 using Gcd.Model;
 using MediatR;
+using Gcd.Commands.Nipkg.Feed.PullMetaDataAz;
+using Gcd.Commands.Nipkg.Feed.PushMetaDataAz;
 
-namespace Gcd.Commands.NipkgAddPackageToAzFeed;
+namespace Gcd.Commands.Nipkg.Feed.AddPackageAz;
 
 public record AddPackageToFeedRequest(AzBlobFeedDefinition AzFeedDef, PackageFilePath PackagePath) : IRequest<Result>;
 public record AddPackageToFeedResponse(string Result);
@@ -22,12 +22,12 @@ public class AddPackageToFeedHandler(
 
         var localFeedDef = await CreateTempFeedDefinition();
 
-        var insideFeedPkgPath =  localFeedDef
+        var insideFeedPkgPath = localFeedDef
             .Map((arg) => PackageFilePath.Of(arg.Feed, packagePath.FileName));
 
         return await Result.Combine(localFeedDef, insideFeedPkgPath)
             .Bind(() => _mediator.PullAzBlobFeedMetaDataAsync(azFeedDef, localFeedDef.Value))
-            .Bind(() =>  _fs.CopyFileAsync(packagePath, insideFeedPkgPath.Value,true))
+            .Bind(() => _fs.CopyFileAsync(packagePath, insideFeedPkgPath.Value, true))
             .Bind(() => _mediator.AddPackageToLcalFeedAsync(localFeedDef.Value, insideFeedPkgPath.Value))
             .Bind(() => _mediator.PushAzBlobFeedMetaDataAsync(azFeedDef, localFeedDef.Value, cancellationToken))
             .Bind(() => UploadPackage(azFeedDef, insideFeedPkgPath.Value));
@@ -36,7 +36,7 @@ public class AddPackageToFeedHandler(
     private async Task<Result<LocalFeedDefinition>> CreateTempFeedDefinition() =>
         await _fs.CreateTempDirPathAsync()
             .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
-    
+
 
     private async Task<Result> UploadPackage(AzBlobFeedDefinition azFeedDef, PackageFilePath packagePath)
     {
@@ -48,9 +48,9 @@ public class AddPackageToFeedHandler(
         return result;
     }
 
-    private string CreateSubUrl(AzBlobFeedUri feedUri, string subPath) => 
+    private string CreateSubUrl(AzBlobFeedUri feedUri, string subPath) =>
         $"{feedUri.BaseUri}/{subPath}{feedUri.Query}";
-  
+
 }
 
 

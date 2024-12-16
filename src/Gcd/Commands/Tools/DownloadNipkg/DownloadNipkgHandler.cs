@@ -4,7 +4,7 @@ using Gcd.Model.File;
 using Gcd.Services;
 using MediatR;
 
-namespace Gcd.Commands.NipkgDownloadNipkg;
+namespace Gcd.Commands.Tools.DownloadNipkg;
 
 public record DownloadNipkgRequest(LocalFilePath FilePath) : IRequest<Result>;
 
@@ -14,7 +14,7 @@ public class DownloadNipkgHandler(IWebDownload _webDownload, IFileSystem _fs, Ni
     public async Task<Result> Handle(DownloadNipkgRequest request, CancellationToken cancellationToken)
     {
         return await WebUri.Create(_installerUri.Value)
-            .Bind( uri => DownloadFileAsync(uri, request.FilePath));
+            .Bind(uri => DownloadFileAsync(uri, request.FilePath));
     }
 
     public async Task<Result> DownloadFileAsync(WebUri webUri, LocalFilePath filePath)

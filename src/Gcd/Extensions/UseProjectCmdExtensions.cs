@@ -1,4 +1,5 @@
-using Gcd.Commands.NipkgDownloadFeedMetaData;
+using Gcd.Commands.Project.BuildSpec.List;
+using Gcd.Commands.Project.BuildSpec.SetVersion;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 

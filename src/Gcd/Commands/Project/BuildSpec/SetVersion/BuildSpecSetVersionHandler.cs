@@ -1,7 +1,7 @@
 ﻿using Gcd.LabViewProject;
 using MediatR;
 
-namespace Gcd.Commands.ProjectBuildSpecSetVersion;
+namespace Gcd.Commands.Project.BuildSpec.SetVersion;
 
 public record BuildSpecSetVersionRequest(string projectPath, string buildSpecName, string buildSpecType, string buildSpecTarget, string versionToSet) : IRequest<BuildSpecSetVersioResponse>;
 public record BuildSpecSetVersioResponse(string result);
