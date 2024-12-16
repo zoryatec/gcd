@@ -50,6 +50,7 @@ namespace Gcd.Extensions
                 });
                 template.UseNipkgPackageBuilderInitmd(serviceProvider);
                 template.UseNipkgPackageBuilderSetPropertyCmd(serviceProvider);
+                template.UseAddContentCmd(serviceProvider);
             });
 
             return app;

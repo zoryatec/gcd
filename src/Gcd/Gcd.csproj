@@ -35,8 +35,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Commands\System\" />
+      <Folder Include="Commands\Tools\" />
       <Folder Include="Commands\NipkgPackageBuild\" />
-      <Folder Include="Commands\Nipkg\Feed\" />
+      <Folder Include="Commands\Nipkg\Feed\PullMetaAz\" />
       <Folder Include="NewFolder\" />
     </ItemGroup>
 

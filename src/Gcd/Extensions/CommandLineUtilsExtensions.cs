@@ -14,5 +14,10 @@ namespace Gcd.Extensions
             foreach (var option in options) app.AddOption(option);
             return app;
         }
+        public static CommandLineApplication AddOptions(this CommandLineApplication app, params CommandOption[] options)
+        {
+            foreach (var option in options) app.AddOption(option);
+            return app;
+        }
     }
 }
