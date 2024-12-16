@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using CSharpFunctionalExtensions;
 using Gcd.Model;
+using Gcd.Model.Config;
 using MediatR;
 
 namespace Gcd.Services;

@@ -5,10 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gcd.Model;
+namespace Gcd.Model.Config;
 
 public record NipkgCmdPath
 {
+    public static NipkgCmdPath None = new NipkgCmdPath("");
+
     public static Result<NipkgCmdPath> Of(Maybe<string> maybeValue)
     {
         string currentDirectoryPath = Environment.CurrentDirectory;

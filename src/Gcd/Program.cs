@@ -3,10 +3,10 @@ using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using Gcd.Services;
-using Gcd.Model;
 using Gcd.Tests.EndToEnd;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Menu;
+using Gcd.Model.Config;
 
 
 namespace Gcd

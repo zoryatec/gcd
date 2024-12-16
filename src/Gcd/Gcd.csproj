@@ -34,8 +34,4 @@
       <ProjectReference Include="..\Gcd.LabViewProject\Gcd.LabViewProject.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Commands\Config\" />
-    </ItemGroup>
-
 </Project>

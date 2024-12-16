@@ -1,7 +1,7 @@
 ﻿using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.LabViewProject;
 using Gcd.Menu;
-using Gcd.Model;
+using Gcd.Model.Config;
 using Gcd.Services;
 using Gcd.Tests.EndToEnd;
 using McMaster.Extensions.CommandLineUtils;

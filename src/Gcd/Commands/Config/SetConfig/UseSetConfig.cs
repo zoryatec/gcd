@@ -6,13 +6,13 @@ using CSharpFunctionalExtensions;
 using Gcd.Extensions;
 using Gcd.Model;
 using Gcd.Commands.Nipkg.Builder.AddContent;
+using Gcd.Commands.Nipkg.Builder.Init;
 
+namespace Gcd.Commands.Config.SetConfig;
 
-namespace Gcd.Commands.Nipkg.Builder.Init;
-
-public static class UseAddContentCmdExtensions
+public static class UseSetConfigCmdExtensions
 {
-    public static CommandLineApplication UseAddContentCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseSetConfigCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
@@ -36,7 +36,7 @@ public static class UseAddContentCmdExtensions
 
                 return await Result
                     .Combine(builderRootDir, contentSrcDir, targetDir)
-                    .Map(() => ContentLink.Of(targetDir.Value,contentSrcDir.Value))
+                    .Map(() => ContentLink.Of(targetDir.Value, contentSrcDir.Value))
                     .Bind((link) => mediator.AddContentAsync(builderRootDir.Value, link, cancelationToken))
                     .Tap(() => console.Write("SUCESS_MESSAGE"))
                     .TapError(error => console.Error.Write(error))
@@ -48,36 +48,26 @@ public static class UseAddContentCmdExtensions
     }
 }
 
-public class PackageBuilderRootDirArgument :  CommandArgument
-{
-    public static readonly string NAME = "--builder-root-dir";
-    public PackageBuilderRootDirArgument() : base()
-    {
-        this.Description = "Description Arg";
-    }
 
-    public Result<PackageBuilderRootDir> Map() =>
-        PackageBuilderRootDir.Of(this.Value);
-}
 
-public class BuilderContentSourceDirOption : CommandOption
+public class NipkgInstallerUriOption : CommandOption
 {
-    public static readonly string NAME = "--content-src-dir";
-    public BuilderContentSourceDirOption() : base(NAME, CommandOptionType.SingleValue)
+    public static readonly string NAME = "--nipkg-installer-uri";
+    public NipkgInstallerUriOption() : base(NAME, CommandOptionType.SingleValue)
     {
-        this.Description = "Description";
+        Description = "Description";
     }
     public Result<PackageBuilderContentSourceDir> Map() =>
-        PackageBuilderContentSourceDir.Of(this.Value());
+        PackageBuilderContentSourceDir.Of(Value());
 }
 
-public class InatallationTargetRootDirOption : CommandOption
+public class NipkgCmdPathOption : CommandOption
 {
-    public static readonly string NAME = "--target-root-dir";
-    public InatallationTargetRootDirOption() : base(NAME, CommandOptionType.SingleValue)
+    public static readonly string NAME = "--nipkg-path";
+    public NipkgCmdPathOption() : base(NAME, CommandOptionType.SingleValue)
     {
-        this.Description = "Description";
+        Description = "Description";
     }
     public Result<InatallationTargetRootDir> Map() =>
-    InatallationTargetRootDir.Create(this.Value());
+    InatallationTargetRootDir.Create(Value());
 }

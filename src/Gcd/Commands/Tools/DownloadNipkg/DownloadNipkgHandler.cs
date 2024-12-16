@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Model;
+using Gcd.Model.Config;
 using Gcd.Model.File;
 using Gcd.Services;
 using MediatR;
