@@ -21,19 +21,18 @@ public static class UseAddContentCmdExtensions
         app.Command("add-content", command =>
         {
             command.Description = "COMMAND_DESCRIPTION";
-            var builderRootDirOpt = new PackageBuilderRootDirOption();
+            //var builderRootDirOpt = new PackageBuilderRootDirOption();
             var contentSrcDirOpt = new BuilderContentSourceDirOption();
             var targetDirOpt = new InatallationTargetRootDirOption();
-
-            //command.AddOptions(builderRootDirOpt,contentSrcDirOpt, targetDirOpt);
-            command.AddOption(builderRootDirOpt.IsRequired());
-            command.AddOption(contentSrcDirOpt.IsRequired());
-            command.AddOption(targetDirOpt.IsRequired());
+            var builderRootDirArg = new PackageBuilderRootDirArgument();
+            command.AddArgument(builderRootDirArg.IsRequired());
+            command.AddOptions(contentSrcDirOpt.IsRequired(), targetDirOpt.IsRequired());
 
 
             command.OnExecuteAsync(async cancelationToken =>
             {
-                var builderRootDir = builderRootDirOpt.Map();
+                var value = builderRootDirArg.Value;
+                var builderRootDir = builderRootDirArg.Map();
                 var contentSrcDir = contentSrcDirOpt.Map();
                 var targetDir = targetDirOpt.Map();
 
@@ -51,16 +50,16 @@ public static class UseAddContentCmdExtensions
     }
 }
 
-public class PackageBuilderRootDirOption : CommandOption
+public class PackageBuilderRootDirArgument :  CommandArgument
 {
     public static readonly string NAME = "--builder-root-dir";
-    public PackageBuilderRootDirOption() : base(NAME, CommandOptionType.SingleValue)
+    public PackageBuilderRootDirArgument() : base()
     {
-        this.Description = "Description";
+        this.Description = "Description Arg";
     }
 
     public Result<PackageBuilderRootDir> Map() =>
-        PackageBuilderRootDir.Of(this.Value());
+        PackageBuilderRootDir.Of(this.Value);
 }
 
 public class BuilderContentSourceDirOption : CommandOption

@@ -43,7 +43,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg
             // Asssert
             result.Return.Should().Be(0);
             result.Error.Should().BeEmpty();
-            Directory.Exists($"{packageBuilderDir}\\data\\BootVolume\\Zoryatec\\sample-package");
+            File.Exists($"{packageBuilderDir}\\data\\BootVolume\\Zoryatec\\sample-package\\content-of-test-package.txt");
         }
 
         private string GetPackageContentDir()

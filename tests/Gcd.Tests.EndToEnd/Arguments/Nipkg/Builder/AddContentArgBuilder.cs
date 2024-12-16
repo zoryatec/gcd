@@ -12,7 +12,8 @@ public class AddContentArgBuilder : ArgumentsBuilder
     }
     public AddContentArgBuilder WithPackageBuilderRootDir(string value)
     {
-        WithOption(PackageBuilderRootDirOption.NAME, value);
+        WithArg(value); ;
+        //WithOption(PackageBuilderRootDirOption.NAME, value);
         return this;
     }
 
