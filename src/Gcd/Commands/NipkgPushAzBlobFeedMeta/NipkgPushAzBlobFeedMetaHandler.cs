@@ -31,6 +31,3 @@ public static class MediatorExtensions
     public static async Task<Result> PushAzBlobFeedMetaDataAsync(this IMediator mediator, AzBlobFeedDefinition AzFeedDef, LocalFeedDefinition LocalFeedDef, CancellationToken cancellationToken = default)
         => await mediator.Send(new NipkgPushAzBlobFeedMetaRequest(AzFeedDef, LocalFeedDef), cancellationToken);
 }
-
-
-

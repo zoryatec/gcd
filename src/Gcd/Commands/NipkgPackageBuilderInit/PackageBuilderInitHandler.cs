@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace Gcd.Commands.NipkgPackageBuilderInit;
 
-public record PackageBuilderInitRequest(PackageBuilderRootDir RootDir, PackageInstalationDir InstalationDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
+public record PackageBuilderInitRequest(PackageBuilderRootDir RootDir, InatallationTargetRootDir InstalationDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
 
 public class PackageBuilderInitHandler(IMediator _mediator, IFileSystem _writer)
     : IRequestHandler<PackageBuilderInitRequest, Result>
@@ -51,7 +51,7 @@ public static class MediatorExtensions
     public static async Task<Result> PackageBuilderInitAsync(
         this IMediator mediator,
         PackageBuilderRootDir packageContentDir,
-        PackageInstalationDir packageInstalationDir,
+        InatallationTargetRootDir packageInstalationDir,
         IReadOnlyList<ControlFileProperty> controlProperties,
         CancellationToken cancellationToken = default)
         => await mediator.Send(new PackageBuilderInitRequest(packageContentDir, packageInstalationDir, controlProperties), cancellationToken);

@@ -9,7 +9,7 @@ namespace Gcd.Model;
 
 public sealed record PackageBuilderContentDir : LocalDirPath
 {
-    public static Result<PackageBuilderContentDir> Of(PackageBuilderRootDir rootDir, PackageInstalationDir packageInstalatioDir)
+    public static Result<PackageBuilderContentDir> Of(PackageBuilderRootDir rootDir, InatallationTargetRootDir packageInstalatioDir)
     {
         string windPath = packageInstalatioDir.Value.Replace('/', '\\');
         var dir = LocalDirPath.Parse($"{rootDir.Value}");

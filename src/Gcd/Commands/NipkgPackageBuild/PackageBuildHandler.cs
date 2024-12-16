@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Commands.Nipkg.Builder;
 using Gcd.Commands.NipkgPackageBuilderInit;
 using Gcd.Model;
 using Gcd.Services;
@@ -7,7 +8,7 @@ using MediatR;
 
 namespace Gcd.Commands.NipkgPackageBuild;
 
-public record PackageBuildRequest(PackageBuilderContentSourceDir PackageContentPath, PackageInstalationDir PackageInstalationDir, PackageDestinationDirectory PackageDestinationDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
+public record PackageBuildRequest(PackageBuilderContentSourceDir PackageContentPath, InatallationTargetRootDir PackageInstalationDir, PackageDestinationDirectory PackageDestinationDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
 
 
 public class PackageBuildHandler(IMediator _mediator, ITempDirectoryProvider _tempDir, IFileSystem _fs)
@@ -28,7 +29,7 @@ public class PackageBuildHandler(IMediator _mediator, ITempDirectoryProvider _te
         // build package
         return  await _mediator
             .PackageBuilderInitAsync(rootDirTemp, installationDir, controlProp)
-            .Bind(() => _fs.CopyDirectoryRecursievely(contentSrcDir, contentDstDir))
+            .Bind(() => _mediator.AddContentAsync(rootDirTemp, installationDir, contentSrcDir))
             .Bind(() => _mediator.NipkgPackAsync(rootDirTemp, outputDir));
     }
 }
@@ -38,7 +39,7 @@ public static class MediatorExtensions
     public static async Task<Result> PackageBuilderBuildAsync(
         this IMediator mediator,
         PackageBuilderContentSourceDir packageContentDir,
-        PackageInstalationDir packageInstalationDir,
+        InatallationTargetRootDir packageInstalationDir,
         PackageDestinationDirectory packageDestinationDir,
         IReadOnlyList<ControlFileProperty> controlProperties,
         CancellationToken cancellationToken = default)

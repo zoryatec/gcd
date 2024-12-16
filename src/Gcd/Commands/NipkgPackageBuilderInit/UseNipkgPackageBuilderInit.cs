@@ -47,7 +47,7 @@ public static class UseNipkgPackageBuilderInitmdExtensions
             command.OnExecuteAsync(async cancelationToken =>
             {
                 var packagePath = PackageBuilderRootDir.Of(packagePathOption.Value());
-                var packageDestination = PackageInstalationDir.Create(packageDestinationDirOption.Value());
+                var packageDestination = InatallationTargetRootDir.Create(packageDestinationDirOption.Value());
                 var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
 
                 return await Result
