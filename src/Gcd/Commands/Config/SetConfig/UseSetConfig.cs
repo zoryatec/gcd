@@ -1,12 +1,9 @@
-﻿using Gcd.Commands.Nipkg.Builder.SetProperty;
-using McMaster.Extensions.CommandLineUtils;
+﻿using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
 using Gcd.Extensions;
-using Gcd.Model;
-using Gcd.Commands.Nipkg.Builder.AddContent;
-using Gcd.Commands.Nipkg.Builder.Init;
+using Gcd.Model.Config;
 
 namespace Gcd.Commands.Config.SetConfig;
 
@@ -16,58 +13,60 @@ public static class UseSetConfigCmdExtensions
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
-        var factory = serviceProvider.GetRequiredService<IControlPropertyFactory>();
+        var factory = new ConfigPropertyFactory();
 
-        app.Command("add-content", command =>
+        app.Command("set-config", command =>
         {
             command.Description = "COMMAND_DESCRIPTION";
-            var contentSrcDirOpt = new BuilderContentSourceDirOption();
-            var targetDirOpt = new InatallationTargetRootDirOption();
-            var builderRootDirArg = new PackageBuilderRootDirArgument();
-            command.AddArgument(builderRootDirArg.IsRequired());
-            command.AddOptions(contentSrcDirOpt.IsRequired(), targetDirOpt.IsRequired());
+            var options = new List<ConfigPropertyOption>
+            {
+                new NipkgCmdPathOption(),
+                new NipkgInstallerUriOption(),
+    
+            };
 
-
+            command.AddOptions(options);
             command.OnExecuteAsync(async cancelationToken =>
             {
-                var builderRootDir = builderRootDirArg.Map();
-                var contentSrcDir = contentSrcDirOpt.Map();
-                var targetDir = targetDirOpt.Map();
+                var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
 
-                return await Result
-                    .Combine(builderRootDir, contentSrcDir, targetDir)
-                    .Map(() => ContentLink.Of(targetDir.Value, contentSrcDir.Value))
-                    .Bind((link) => mediator.AddContentAsync(builderRootDir.Value, link, cancelationToken))
+                return await properties
+                    .Map((prop) => mediator.SetConfigAsync(prop, cancelationToken))
                     .Tap(() => console.Write("SUCESS_MESSAGE"))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);
             });
         });
-
         return app;
     }
 }
 
 
+public abstract class ConfigPropertyOption(string template, CommandOptionType optionType) : CommandOption(template, optionType)
+{
+    public abstract Result<ConfigProperty> Map();
+}
 
-public class NipkgInstallerUriOption : CommandOption
+public class NipkgInstallerUriOption : ConfigPropertyOption
 {
     public static readonly string NAME = "--nipkg-installer-uri";
     public NipkgInstallerUriOption() : base(NAME, CommandOptionType.SingleValue)
     {
         Description = "Description";
     }
-    public Result<PackageBuilderContentSourceDir> Map() =>
-        PackageBuilderContentSourceDir.Of(Value());
+    public override Result<ConfigProperty> Map() =>
+        NipkgInstallerUri.Of(Value())
+        .Map(x => x as ConfigProperty);
 }
 
-public class NipkgCmdPathOption : CommandOption
+public class NipkgCmdPathOption : ConfigPropertyOption
 {
-    public static readonly string NAME = "--nipkg-path";
+    public static readonly string NAME = "--nipkg-cmd-path";
     public NipkgCmdPathOption() : base(NAME, CommandOptionType.SingleValue)
     {
         Description = "Description";
     }
-    public Result<InatallationTargetRootDir> Map() =>
-    InatallationTargetRootDir.Create(Value());
+    public override Result<ConfigProperty> Map() =>
+        NipkgCmdPath.Of(Value())
+        .Map(x => x as ConfigProperty);
 }

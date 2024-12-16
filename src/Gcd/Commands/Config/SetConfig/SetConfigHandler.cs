@@ -1,46 +1,31 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Model;
 using Gcd.Services;
 using MediatR;
-
-
-//https://www.ni.com/docs/en-US/bundle/package-manager/page/installation-target-roots.html
-
-
 using CSharpFunctionalExtensions.ValueTasks;
-using Gcd.Extensions;
-
-
+using Gcd.Model.Config;
 
 namespace Gcd.Commands.Config.SetConfig;
 
-public record SetConfigRequest(PackageBuilderRootDir rootDir, IReadOnlyList<ContentLink> contentLinks) : IRequest<Result>;
+public record SetConfigRequest(IReadOnlyList<ConfigProperty> ConfigProperties) : IRequest<Result>;
 
-public class SetConfigHandler(IFileSystem _fs)
+public class SetConfigHandler(IConfigService _config)
     : IRequestHandler<SetConfigRequest, Result>
 {
     public async Task<Result> Handle(SetConfigRequest request, CancellationToken cancellationToken)
     {
-        var (rootDir, contentLinks) = request;
-        var results = new List<Result>();
+        var configProperties = request.ConfigProperties;
 
-
-        return Result.Combine(results);
+       return  await _config.GetAppConfigAsync()
+            .Map(config => config.WithProperties(configProperties))
+            .Map(config => _config.SetAppconfig(config));
     }
-
-
-
-
-
 }
 
 public static class MediatorExtensions
 {
-    public static async Task<Result> SetConfigAsync(this IMediator mediator, PackageBuilderRootDir rootDir, IReadOnlyList<ContentLink> contentLinks, CancellationToken cancellationToken = default)
-        => await mediator.Send(new SetConfigRequest(rootDir, contentLinks), cancellationToken);
-    public static async Task<Result> SetConfigAsync(this IMediator mediator, PackageBuilderRootDir rootDir, ContentLink contentLink, CancellationToken cancellationToken = default)
-    => await mediator.Send(new SetConfigRequest(rootDir, new List<ContentLink> { contentLink }), cancellationToken);
+    public static async Task<Result> SetConfigAsync(this IMediator mediator, IReadOnlyList<ConfigProperty> configProperties, CancellationToken cancellationToken = default)
+        => await mediator.Send(new SetConfigRequest(configProperties), cancellationToken);
+    public static async Task<Result> SetConfigAsync(this IMediator mediator, ConfigProperty configProperty, CancellationToken cancellationToken = default)
+    => await mediator.Send(new SetConfigRequest(new List<ConfigProperty> { configProperty }), cancellationToken);
 
-    public static async Task<Result> SetConfigAsync(this IMediator mediator, PackageBuilderRootDir rootDir, InatallationTargetRootDir targetRootDir, PackageBuilderContentSourceDir contentSourceDir, CancellationToken cancellationToken = default)
-=> await mediator.Send(new SetConfigRequest(rootDir, new List<ContentLink> { new ContentLink(targetRootDir, contentSourceDir) }), cancellationToken);
 }

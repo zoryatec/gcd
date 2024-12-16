@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Gcd.Model.Config;
 
-public record NipkgCmdPath
+public record NipkgCmdPath : ConfigProperty
 {
-    public static NipkgCmdPath None = new NipkgCmdPath("");
+    public static NipkgCmdPath None = new NipkgCmdPath("unset");
 
     public static Result<NipkgCmdPath> Of(Maybe<string> maybeValue)
     {
