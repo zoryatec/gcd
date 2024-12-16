@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.Nipkg.Builder;
+using Gcd.Commands.Nipkg.Builder.AddContent;
+using Gcd.Commands.Nipkg.Builder.Pack;
 using Gcd.Commands.NipkgPackageBuilderInit;
 using Gcd.Model;
 using Gcd.Services;
@@ -30,7 +31,7 @@ public class PackageBuildHandler(IMediator _mediator, ITempDirectoryProvider _te
         return  await _mediator
             .PackageBuilderInitAsync(rootDirTemp, installationDir, controlProp)
             .Bind(() => _mediator.AddContentAsync(rootDirTemp, installationDir, contentSrcDir))
-            .Bind(() => _mediator.NipkgPackAsync(rootDirTemp, outputDir));
+            .Bind(() => _mediator.BuilderPackAsync(rootDirTemp, outputDir));
     }
 }
 

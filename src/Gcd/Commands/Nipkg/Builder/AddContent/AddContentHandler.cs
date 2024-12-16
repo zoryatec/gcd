@@ -1,13 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Model.File;
 using Gcd.Model;
 using Gcd.Services;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 //https://www.ni.com/docs/en-US/bundle/package-manager/page/installation-target-roots.html
 
@@ -17,7 +12,7 @@ using Gcd.Extensions;
 
 
 
-namespace Gcd.Commands.Nipkg.Builder;
+namespace Gcd.Commands.Nipkg.Builder.AddContent;
 
 public record AddContentRequest(PackageBuilderRootDir rootDir, IReadOnlyList<ContentLink> contentLinks) : IRequest<Result>;
 
@@ -36,7 +31,7 @@ public class AddContentHandler(IFileSystem _fs)
     public async Task<Result> AddContent(PackageBuilderRootDir rootDir, ContentLink contentLink) =>
         await PackageBuilderContentDir.Of(rootDir, contentLink.TargetRootDir)
             .Bind(dir => _fs.CopyDirectoryRecursievely(contentLink.ContentSourceDir, dir));
-    
+
 
 
 }
@@ -49,5 +44,5 @@ public static class MediatorExtensions
     => await mediator.Send(new AddContentRequest(rootDir, new List<ContentLink> { contentLink }), cancellationToken);
 
     public static async Task<Result> AddContentAsync(this IMediator mediator, PackageBuilderRootDir rootDir, InatallationTargetRootDir targetRootDir, PackageBuilderContentSourceDir contentSourceDir, CancellationToken cancellationToken = default)
-=> await mediator.Send(new AddContentRequest(rootDir, new List<ContentLink> { new ContentLink(targetRootDir,contentSourceDir) }), cancellationToken);
+=> await mediator.Send(new AddContentRequest(rootDir, new List<ContentLink> { new ContentLink(targetRootDir, contentSourceDir) }), cancellationToken);
 }
