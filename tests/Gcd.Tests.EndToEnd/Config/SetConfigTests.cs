@@ -24,7 +24,8 @@ public class SetConfigTests : IClassFixture<TestFixture>
         _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
     }
 
-    [Fact(Skip ="for now")]
+    //[Fact(Skip ="for now")]
+    [Fact]
     public void SetConfigTest()
     {
         //Arange

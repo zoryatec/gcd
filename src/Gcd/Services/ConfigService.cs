@@ -38,10 +38,10 @@ namespace Gcd.Services;
             var json = await _fs.ReadTextFileAsync(_path)
                   .Map(content => JObject.Parse(content));
 
-         if (json.IsFailure) return json;
+         if (json.IsFailure) json = Result.Success(new JObject());
 
-         return await json.Map(json => json[nameof(property)] = property.ToString())
-            .Bind((key) => _fs.WriteTextFileAsync(Path, json.ToString()));
+         return await json.Map(json => json[property.GetType().Name] = property.Value.ToString())
+            .Bind((key) => _fs.WriteTextFileAsync(Path, json.Value.ToString()));
         }
 
 
