@@ -21,6 +21,7 @@ public static class UseGcdCmdExtensions
         app.UseNipkgCmd(serviceProvider);
         app.UseVersionizeCmd(serviceProvider);
         app.UseSystemCmd(serviceProvider);
+        app.UseConfigCmd(serviceProvider);
 
 
         app.OnExecute(() =>

@@ -25,6 +25,8 @@ namespace Gcd.Tests
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddScoped<IWebDownload, WebDownload>()
                 .AddScoped<IFileSystem, LocalFileService>()
+                .AddScoped<IConfigService, ConfigService>()
+                .AddScoped<SettingsFilePath>(x => SettingsFilePath.Of("appsettings.test.json").Value)
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
                 .AddScoped<NipkgInstallerUri>(x => NipkgInstallerUri.Of(url).Value)
                 .AddScoped<NipkgCmdPath>(x => NipkgCmdPath.Of(nipkgCmdPath).Value)
