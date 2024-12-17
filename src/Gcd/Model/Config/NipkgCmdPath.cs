@@ -20,7 +20,7 @@ public record NipkgCmdPath : ConfigProperty
             .Map(packagePath => new NipkgCmdPath(packagePath));
     }
 
-    private NipkgCmdPath(string path) => Value = path;
-    public string Value { get; }
+    private NipkgCmdPath(string path) : base(path) { }
+
 }
 

@@ -8,5 +8,11 @@ namespace Gcd.Model.Config
 {
     public abstract record ConfigProperty
     {
+        protected ConfigProperty(string value)
+        {
+            Value = value;
+        }
+
+        public string Value { get; }
     }
 }

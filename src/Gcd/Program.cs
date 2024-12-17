@@ -7,6 +7,7 @@ using Gcd.Tests.EndToEnd;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Menu;
 using Gcd.Model.Config;
+using Microsoft.Extensions.Configuration;
 
 
 namespace Gcd
@@ -21,6 +22,8 @@ namespace Gcd
         }
         public static int Main(string[] args)
         {
+            //IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings").Build();
+            //configuration[""];
 
             var nipkgInstaller = "NIPackageManager21.3.0_online.exe";
             var url = $"https://download.ni.com/support/nipkg/products/ni-package-manager/installers/{nipkgInstaller}";

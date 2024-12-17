@@ -11,9 +11,8 @@ public record NipkgInstallerUri : ConfigProperty
             .Ensure(feedUri => feedUri != string.Empty, "uri should not be empty")
             .Map(feedUri => new NipkgInstallerUri(feedUri));
     }
-    private NipkgInstallerUri(string value) => Value = value;
+    private NipkgInstallerUri(string value) :base(value) { }
 
-    public string Value { get ; }
 
 }
 
