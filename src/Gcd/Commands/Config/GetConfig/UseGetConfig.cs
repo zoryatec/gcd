@@ -4,25 +4,28 @@ using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
 using Gcd.Extensions;
 using Gcd.Model.Config;
+using Gcd.Commands.Config.SetConfig;
+using Gcd.Commands.Config.GetCongi;
+using Newtonsoft.Json.Linq;
 
-namespace Gcd.Commands.Config.SetConfig;
+namespace Gcd.Commands.Config.GetConfig;
 
-public static class UseSetConfigCmdExtensions
+public static class UseGetConfigCmdExtensions
 {
-    public static CommandLineApplication UseSetConfigCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseGetConfigCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
         var factory = new ConfigPropertyFactory();
 
-        app.Command("set-config", command =>
+        app.Command("get-config", command =>
         {
             command.Description = "COMMAND_DESCRIPTION";
             var options = new List<ConfigPropertyOption>
             {
-                new NipkgCmdPathOption(),
-                new NipkgInstallerUriOption(),
-    
+                new GetNipkgInstallerUriOption(),
+                new GetNipkgCmdPathOption(),
+
             };
 
             command.AddOptions(options);
@@ -31,8 +34,8 @@ public static class UseSetConfigCmdExtensions
                 var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
 
                 return await properties
-                    .Bind((prop) => mediator.SetConfigAsync(prop, cancelationToken))
-                    .Tap(() => console.Write("SUCESS_MESSAGE"))
+                    .Bind((prop) => mediator.GetConfigAsync(prop, cancelationToken))
+                    .Tap((x) => console.Write(string.Join("\n", x)))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);
             });
@@ -42,31 +45,24 @@ public static class UseSetConfigCmdExtensions
 }
 
 
-public abstract class ConfigPropertyOption(string template, CommandOptionType optionType) : CommandOption(template, optionType)
-{
-    public abstract Result<ConfigProperty> Map();
-}
-
-public class NipkgInstallerUriOption : ConfigPropertyOption
+public class GetNipkgInstallerUriOption : ConfigPropertyOption
 {
     public static readonly string NAME = "--nipkg-installer-uri";
-    public NipkgInstallerUriOption(CommandOptionType optionType = CommandOptionType.SingleValue) : base(NAME, optionType)
+    public GetNipkgInstallerUriOption(CommandOptionType optionType = CommandOptionType.NoValue) : base(NAME, optionType)
     {
         Description = "Description";
     }
     public override Result<ConfigProperty> Map() =>
-        NipkgInstallerUri.Of(Value())
-        .Map(x => x as ConfigProperty);
+        Result.Success(NipkgInstallerUri.None as ConfigProperty);
 }
 
-public class NipkgCmdPathOption : ConfigPropertyOption
+public class GetNipkgCmdPathOption : ConfigPropertyOption
 {
     public static readonly string NAME = "--nipkg-cmd-path";
-    public NipkgCmdPathOption(CommandOptionType optionType = CommandOptionType.SingleValue) : base(NAME,  optionType)
+    public GetNipkgCmdPathOption(CommandOptionType optionType = CommandOptionType.NoValue) : base(NAME, optionType)
     {
         Description = "Description";
     }
     public override Result<ConfigProperty> Map() =>
-        NipkgCmdPath.Of(Value())
-        .Map(x => x as ConfigProperty);
+        Result.Success(NipkgCmdPath.None as ConfigProperty);
 }

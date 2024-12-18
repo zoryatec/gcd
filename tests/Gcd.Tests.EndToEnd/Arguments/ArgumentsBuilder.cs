@@ -14,6 +14,13 @@ namespace Gcd.Tests.EndToEnd.Arguments
             _args.Add(arg);
             return this;
         }
+
+        public ArgumentsBuilder WithFlag(string arg)
+        {
+            _args.Add(arg);
+            return this;
+        }
+
         public ArgumentsBuilder WithOption(string name, string value)
         {
             _args.Add(name);

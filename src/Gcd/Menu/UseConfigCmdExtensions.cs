@@ -1,3 +1,4 @@
+using Gcd.Commands.Config.GetConfig;
 using Gcd.Commands.Config.SetConfig;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,7 @@ public static class UseConfigCmdExtensions
                 return 1;
             });
             cmd.UseSetConfigCmd(serviceProvider);
+            cmd.UseGetConfigCmd(serviceProvider);
 
         });
         return app;

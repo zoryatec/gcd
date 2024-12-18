@@ -40,6 +40,20 @@ public class SetConfigTests : IClassFixture<TestFixture>
         result.Error.Should().BeEmpty();
         result.Return.Should().Be(0);
         result.Out.Should().NotBeEmpty();
+
+
+        //Arange
+        var args2 = (new GetConfigArgBuilder())
+            .WithNipkgCmdPath()
+                .Build();
+
+        // Act
+        var result2 = _gcd.Run(args2);
+
+        // Asssert
+        result2.Error.Should().BeEmpty();
+        result2.Return.Should().Be(0);
+        result2.Out.Should().NotBeEmpty();
     }
 }
 
