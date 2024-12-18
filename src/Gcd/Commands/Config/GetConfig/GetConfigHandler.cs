@@ -15,10 +15,6 @@ public class GetConfigHandler(IConfigService _config)
     {
         var configProperties = request.ConfigProperties;
 
-       //return  await _config.GetAppConfigAsync()
-       //     .Map(config => config.WithProperties(configProperties))
-       //     .Map(config => _config.GetAppconfig(config));
-
         return await _config.GetProperties(configProperties);
     }
 }

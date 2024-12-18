@@ -35,7 +35,7 @@ public static class UseGetConfigCmdExtensions
 
                 return await properties
                     .Bind((prop) => mediator.GetConfigAsync(prop, cancelationToken))
-                    .Tap((x) => console.Write(string.Join("\n", x)))
+                    .Tap((x) => console.Write(string.Join("\n", x.Select(x => x.Value))))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);
             });
