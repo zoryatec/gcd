@@ -3,7 +3,7 @@ using Gcd.Model.File;
 using System.IO;
 
 
-namespace Gcd.Services
+namespace Gcd.Services.FileSystem
 {
     public class LocalFileService : IFileSystem
     {
@@ -72,7 +72,7 @@ namespace Gcd.Services
 
 
         public async Task<Result> CopyDirectoryRecursievely(LocalDirPath source, LocalDirPath destination, bool overwrite = false, CancellationToken cancellationToken = default)
-            => Result.Try(() => CopyDirectoryContents(source.Value,destination.Value), ex => ex.Message);
+            => Result.Try(() => CopyDirectoryContents(source.Value, destination.Value), ex => ex.Message);
         private void CopyDirectoryContents(string sourceDir, string destinationDir)
         {
             // Ensure the source directory exists

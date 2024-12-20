@@ -5,6 +5,7 @@ using MediatR;
 using Gcd.Commands.Nipkg.Feed.PullMetaDataAz;
 using Gcd.Commands.Nipkg.Feed.PushMetaDataAz;
 using Gcd.Model.Config;
+using Gcd.Services.FileSystem;
 
 namespace Gcd.Commands.Nipkg.Feed.AddPackageAz;
 

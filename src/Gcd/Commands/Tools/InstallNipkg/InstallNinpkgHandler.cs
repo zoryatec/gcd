@@ -4,19 +4,19 @@ using Gcd.Commands.Tools.DownloadNipkg;
 using Gcd.Model.Config;
 using Gcd.Model.File;
 using Gcd.Services;
-using Gcd.Tests.EndToEnd;
+using Gcd.Services.FileSystem;
 using MediatR;
 
 namespace Gcd.Commands.Tools.InstallNipkg;
 
 public record InstallNinpkgRequest(NipkgCmdPath CmdPath) : IRequest<Result>;
 
-public class InstallNinpkgHandler(IMediator _mediator, ITempDirectoryProvider _tempDir)
+public class InstallNinpkgHandler(IMediator _mediator, IFileSystem _fs)
     : IRequestHandler<InstallNinpkgRequest, Result>
 {
     public async Task<Result> Handle(InstallNinpkgRequest request, CancellationToken cancellationToken)
     {
-        var tempDirR = await _tempDir.GenerateTempDirectoryAsync();
+        var tempDirR = await _fs.GenerateTempDirectoryAsync();
         var tempDir = tempDirR.Value;
 
         var intallerPath = LocalFilePath.Offf($"{tempDir.Value}\\nipkg-installer.exe");

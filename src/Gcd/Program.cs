@@ -3,12 +3,12 @@ using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using Gcd.Services;
-using Gcd.Tests.EndToEnd;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Menu;
 using Gcd.Model.Config;
 using Microsoft.Extensions.Configuration;
 using Gcd.Services.DI;
+using Gcd.Services.FileSystem;
 
 
 namespace Gcd
@@ -31,7 +31,6 @@ namespace Gcd
                 .AddScoped<IFileSystem,LocalFileService>()
                 .RegisterConfiguration()
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
-                .AddScoped<ITempDirectoryProvider,TempDirectoryProvider>()
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddSingleton<IConsole>(PhysicalConsole.Singleton)
                 .AddMediatR(config =>

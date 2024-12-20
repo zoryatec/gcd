@@ -1,16 +1,34 @@
 ﻿using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
 using CSharpFunctionalExtensions;
-using Gcd.Common;
 using Gcd.Model.File;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gcd.Services;
+
+
+public record AzBlobUri
+{
+    public static Result<AzBlobUri> Create(Maybe<string> maybeBlobUri)
+    {
+        return maybeBlobUri.ToResult("FeedUri should not be empty")
+        .Ensure(blobUri => blobUri != string.Empty, "FeedUri should not be empty")
+        .MapTry((blobUri) => new Uri(blobUri), ex => ex.Message)
+        .Map(blobUri => new AzBlobUri(blobUri));
+    }
+    private AzBlobUri(Uri value) => _uri = value;
+    private Uri _uri;
+    public string Value { get => _uri.AbsoluteUri; }
+}
+public interface IUploadAzBlobService
+{
+    public Task<Result> UploadFileAsync(AzBlobUri blobUri, LocalFilePath filePath);
+}
+
+
+public interface IDownloadAzBlobService
+{
+    public Task<Result> DownloadFileAsync(AzBlobUri blobUri, LocalFilePath filePath);
+}
 
 public class AzBlobService : IDownloadAzBlobService, IUploadAzBlobService
 {
@@ -32,7 +50,6 @@ public class AzBlobService : IDownloadAzBlobService, IUploadAzBlobService
         {
             return Result.Failure(ex.Message); 
         }
-
     }
 
     public async Task<Result> DownloadFileAsync(AzBlobUri blobUri, LocalFilePath filePath) =>
@@ -42,12 +59,9 @@ public class AzBlobService : IDownloadAzBlobService, IUploadAzBlobService
 
     private async Task DownloadCore(string fileUrl, string downloadPath)
     {
-        //var blobClient = new BlobClient(new Uri(fileUrl));
-        //await blobClient.DownloadToAsync(fileToUploadPath);
 
         using (WebClient client = new WebClient())
         {
-            // Download the file asynchronously
             client.DownloadFile(fileUrl, downloadPath);
             Console.WriteLine($"File downloaded successfully to {downloadPath}");
         }

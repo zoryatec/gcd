@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.Config.SetConfig;
 using Gcd.Model.Config;
+using Gcd.Services.FileSystem;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

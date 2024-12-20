@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Model;
-using Gcd.Services;
+using Gcd.Services.FileSystem;
 using MediatR;
 
 namespace Gcd.Commands.Nipkg.Builder.SetProperty;

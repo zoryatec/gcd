@@ -4,7 +4,7 @@ using Gcd.Menu;
 using Gcd.Model.Config;
 using Gcd.Services;
 using Gcd.Services.DI;
-using Gcd.Tests.EndToEnd;
+using Gcd.Services.FileSystem;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,7 +25,6 @@ namespace Gcd.Tests
                 .AddScoped<IFileSystem, LocalFileService>()
                 .RegisterConfiguration()
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
-                .AddScoped<ITempDirectoryProvider, TempDirectoryProvider>()
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddSingleton<IConsole>(_console)
                 .AddMediatR(config =>

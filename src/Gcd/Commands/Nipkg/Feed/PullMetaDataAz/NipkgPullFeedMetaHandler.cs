@@ -2,6 +2,7 @@
 using Gcd.Model;
 using Gcd.Model.File;
 using Gcd.Services;
+using Gcd.Services.FileSystem;
 using MediatR;
 
 namespace Gcd.Commands.Nipkg.Feed.PullMetaDataAz;

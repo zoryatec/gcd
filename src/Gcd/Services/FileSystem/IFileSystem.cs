@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Model.File;
 
-namespace Gcd.Services;
+namespace Gcd.Services.FileSystem;
 
 public interface IFileSystem
 {

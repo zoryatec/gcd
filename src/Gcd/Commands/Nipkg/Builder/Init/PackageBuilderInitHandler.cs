@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Model;
-using Gcd.Services;
+using Gcd.Services.FileSystem;
 using MediatR;
 using System.Threading;
 
