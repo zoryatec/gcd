@@ -30,13 +30,6 @@ jobs:
           .\gcd.exe nipkg install-nipkg
         working-directory: ./gcd-bootstrap
 
-      - name: Download gcd binary for testing (might need one in the furture)
-        uses: actions/download-artifact@v4.1.8
-        with:
-          name: gcd-bin
-          path: "./gcd-bin"
-          
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
