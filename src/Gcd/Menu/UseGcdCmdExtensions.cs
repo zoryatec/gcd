@@ -19,8 +19,7 @@ public static class UseGcdCmdExtensions
 
         app.UseProjectCmd(serviceProvider);
         app.UseNipkgCmd(serviceProvider);
-        app.UseVersionizeCmd(serviceProvider);
-        app.UseSystemCmd(serviceProvider);
+        app.UseToolsCmd(serviceProvider);
         app.UseConfigCmd(serviceProvider);
 
 

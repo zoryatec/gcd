@@ -8,7 +8,7 @@ public class GetConfigArgBuilder : ArgumentsBuilder
     public GetConfigArgBuilder()
     {
         WithArg("config");
-        WithArg("get-config");
+        WithArg("get");
     }
 
     public GetConfigArgBuilder WithNipkgInstallerUri()

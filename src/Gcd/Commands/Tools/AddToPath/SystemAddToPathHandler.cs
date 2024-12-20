@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using MediatR;
 
-namespace Gcd.Commands.Tools.AddToUserPath;
+namespace Gcd.Commands.Tools.AddToPath;
 
 public record SystemAddToPathRequest(string PathToAdd, EnvironmentVariableTarget Target) : IRequest<Result>;
 

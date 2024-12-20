@@ -8,7 +8,7 @@ public class SetConfigArgBuilder : ArgumentsBuilder
     public SetConfigArgBuilder()
     {
         WithArg("config");
-        WithArg("set-config");
+        WithArg("set");
     }
 
     public SetConfigArgBuilder WithNipkgInstallerUri(string value)

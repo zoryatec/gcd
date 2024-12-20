@@ -18,7 +18,7 @@ public static class UseGetConfigCmdExtensions
         var mediator = serviceProvider.GetRequiredService<IMediator>();
         var factory = new ConfigPropertyFactory();
 
-        app.Command("get-config", command =>
+        app.Command("get", command =>
         {
             command.Description = "COMMAND_DESCRIPTION";
             var options = new List<ConfigPropertyOption>

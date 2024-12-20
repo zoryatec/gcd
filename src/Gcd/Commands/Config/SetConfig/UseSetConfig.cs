@@ -15,7 +15,7 @@ public static class UseSetConfigCmdExtensions
         var mediator = serviceProvider.GetRequiredService<IMediator>();
         var factory = new ConfigPropertyFactory();
 
-        app.Command("set-config", command =>
+        app.Command("set", command =>
         {
             command.Description = "COMMAND_DESCRIPTION";
             var options = new List<ConfigPropertyOption>

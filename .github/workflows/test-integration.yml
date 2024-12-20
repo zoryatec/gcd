@@ -15,9 +15,11 @@ jobs:
           name: gcd-bin
           path: "./gcd-bootstrap"
 
-      - name: Get version of gcd
+      - name: Setup gcd
         run: |
           .\gcd.exe --version  
+          .\gcd.exe config set --nipkg-installer-uri  secrets.NIPKG_INSTALLER_URI
+          .\gcd.exe config set --nipkg-cmd-path  C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe
         working-directory: ./gcd-bootstrap
 
       - name: Install NIPKG
