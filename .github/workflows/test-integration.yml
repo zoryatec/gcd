@@ -27,7 +27,7 @@ jobs:
 
       - name: Install NIPKG
         run: |
-          .\gcd.exe nipkg install-nipkg
+          gcd nipkg install-nipkg
         working-directory: ./gcd-bootstrap
 
       - name: Setup .NET

@@ -32,7 +32,7 @@ public static class UseSetConfigCmdExtensions
 
                 return await properties
                     .Bind((prop) => mediator.SetConfigAsync(prop, cancelationToken))
-                    .Tap(() => console.Write("SUCESS_MESSAGE"))
+                    .Tap(() => console.Write("Parameter set sucessfully\n"))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);
             });
