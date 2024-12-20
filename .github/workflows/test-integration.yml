@@ -17,12 +17,12 @@ jobs:
 
       - name: Get version of gcd
         run: |
-          gcd.exe --version  
+          .\gcd.exe --version  
         working-directory: ./gcd-bootstrap
 
       - name: Install NIPKG
         run: |
-          gcd.exe nipkg install-nipkg
+          .\gcd.exe nipkg install-nipkg
         working-directory: ./gcd-bootstrap
 
       - name: Download gcd binary for testing (might need one in the furture)
