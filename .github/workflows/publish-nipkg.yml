@@ -19,17 +19,13 @@ jobs:
     - name: Download gcd binary
       uses: actions/download-artifact@v4.1.8
       with:
-        # Name of the artifact to download. If unspecified, all artifacts for the run are downloaded.
         name: gcd-bin
-        # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
         path: "./gcd-bootstrap"
 
     - name: Download gcd binary
       uses: actions/download-artifact@v4.1.8
       with:
-        # Name of the artifact to download. If unspecified, all artifacts for the run are downloaded.
         name: gcd-bin
-        # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
         path: "./package-content"
 
         
@@ -48,45 +44,20 @@ jobs:
     - name: Download gcd binary
       uses: actions/download-artifact@v4.1.8
       with:
-        # Name of the artifact to download. If unspecified, all artifacts for the run are downloaded.
         name: gcd-bin
-        # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
         path: "./package/data/BootVolume/Program Files/gcd"
         
     - name: Install NIPKG
       run: |
         ./gcd-bootstrap/gcd.exe nipkg install-nipkg
-               
-#    - name: Download NIPKG
-#      run: |
-#         ./gcd-bootstrap/gcd.exe nipkg download-nipkg --download-path nipkg-installer.exe
-#      
-#
-#    - name: Run Command Prompt command
-#      shell: cmd
-#      run: |
-#        start /wait nipkg-installer.exe --quiet --accept-eulas --prevent-reboot
-#      
-#    - name: Wait for x seconds (Windows)
-#      shell: pwsh  # PowerShell shell
-#      run: |
-#        Write-Host "Waiting for 240 seconds..."
-#        Start-Sleep -Seconds 240  # PowerShell sleep for 240 seconds
-      
-      
+                
     - name: Check NIPKG instalation dir
       run: dir "C:\Program Files\National Instruments\NI Package Manager"
       
-
     - name: Check NIPKG version
       run: |
           $execPath = "C:\Program Files\National Instruments\NI Package Manager\nipkg.exe"
-          & "$execPath" --version
-
-    # - name: Check NIPKG using env path
-    #   run: |
-    #         nipkg.exe --version
-      
+          & "$execPath" --version  
         
     - name: Build NIPKG package
       run:  |
