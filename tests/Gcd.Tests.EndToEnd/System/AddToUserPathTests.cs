@@ -1,4 +1,6 @@
 ﻿using FluentAssertions;
+using Gcd.Model;
+using Gcd.Tests.EndToEnd.Arguments.Nipkg;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -26,7 +28,10 @@ namespace Gcd.Tests.EndToEnd.System
         public void SystemAddToUserPath()
         {
             // Arrange
-            var args = new[] { "system", "add-to-user-path", $"C:\\{Guid.NewGuid().ToString()}" };
+
+            var args = (new AddToUserPathArgBuilder())
+                .WithPath($"C:\\{Guid.NewGuid().ToString()}")
+                .Build();
 
             // Act
             var result = _gcd.Run(args);

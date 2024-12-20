@@ -10,7 +10,7 @@ public static class UseSystemExtensions
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
 
-        app.Command("system", systemCmd =>
+        app.Command("tools", systemCmd =>
         {
             systemCmd.OnExecute(() =>
             {
