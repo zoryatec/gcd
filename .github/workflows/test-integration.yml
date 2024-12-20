@@ -17,16 +17,19 @@ jobs:
 
       - name: Get version of gcd
         run: |
-          ./gcd-bootstrap/gcd.exe --version  
+          gcd --version  
+        working-directory: ./gcd-bootstrap
 
       - name: Download NIPKG
         run: |
           ./gcd-bootstrap/gcd.exe nipkg download-nipkg --download-path nipkg-installer.exe
+        working-directory: ./gcd-bootstrap
         
       - name: Run Command Prompt command
         shell: cmd
         run: |
           start /wait nipkg-installer.exe --quiet --accept-eulas --prevent-reboot
+        working-directory: ./gcd-bootstrap
 
       - name: Download gcd binary for testing (might need one in the furture)
         uses: actions/download-artifact@v4.1.8

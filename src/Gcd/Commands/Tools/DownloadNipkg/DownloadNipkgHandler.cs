@@ -13,6 +13,13 @@ public class DownloadNipkgHandler(IWebDownload _webDownload, NipkgInstallerUri _
 {
     public async Task<Result> Handle(DownloadNipkgRequest request, CancellationToken cancellationToken)
     {
+        var uri = request.InstallerUri;
+        if (uri == NipkgInstallerUri.None)
+        {
+            uri = _installerUri;
+            if (uri == NipkgInstallerUri.None) return Result.Failure("Please specify NIPKG uri");
+        }
+
         return await WebUri.Create(_installerUri.Value)
             .Bind(uri => DownloadFileAsync(uri, request.FilePath));
     }
