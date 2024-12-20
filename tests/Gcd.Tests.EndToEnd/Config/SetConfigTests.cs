@@ -31,8 +31,8 @@ public class SetConfigTests : IClassFixture<TestFixture>
     {
         //Arange
         var args = (new SetConfigArgBuilder())
-            .WithNipkgCmdPath("C:\\Program\\dupa")
-            .WithNipkgInstallerUri(NipkgInstallerUri.None.ToString())
+            .WithNipkgCmdPath("C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe")
+            //.WithNipkgInstallerUri(NipkgInstallerUri.None.ToString())
                 .Build();
 
         // Act

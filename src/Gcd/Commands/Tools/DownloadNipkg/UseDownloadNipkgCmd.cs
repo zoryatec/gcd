@@ -1,5 +1,6 @@
 ﻿
 using CSharpFunctionalExtensions;
+using Gcd.Model.Config;
 using Gcd.Model.File;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
@@ -23,9 +24,10 @@ public static class UseDownloadNipkgCmdExtensions
             subCmd.OnExecuteAsync(async cancelationToken =>
             {
                 var filePath = LocalFilePath.Offf(downloadPath.Value());
+                var installerUri = NipkgInstallerUri.None;
 
                 return await filePath
-                    .Map((arg) => new DownloadNipkgRequest(arg))
+                    .Map((arg) => new DownloadNipkgRequest(arg, installerUri))
                     .Bind(async (req) => await mediator.Send(req, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))

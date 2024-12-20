@@ -8,19 +8,25 @@ namespace Gcd.Services;
 
 
 
-public record  RunNipkgRequest(string[] arguments) : IRequest<Result>;
+public record  RunNipkgRequest(string[] arguments, NipkgCmdPath cmd) : IRequest<Result>;
 
 public class  RunNipkgHandler(NipkgCmdPath _cmd)
     : IRequestHandler< RunNipkgRequest, Result>
 {
     public async Task<Result> Handle( RunNipkgRequest request, CancellationToken cancellationToken)
     {
+        var cmd = request.cmd;
+        if(cmd == NipkgCmdPath.None)
+        {
+            cmd =_cmd;
+            if (cmd == NipkgCmdPath.None) return Result.Failure("Please specify NIPKG path");
+        }
 
-        return RunNipkg(request.arguments);
+        return RunNipkg(request.arguments,cmd);
     }
 
 
-    private Result RunNipkg(string[] args)
+    private Result RunNipkg(string[] args, NipkgCmdPath cmd)
     {
         //string nipkg = @"""C:\Program Files\National Instruments\NI Package Manager\nipkg.exe""";
 
@@ -29,7 +35,7 @@ public class  RunNipkgHandler(NipkgCmdPath _cmd)
 
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
-            FileName = _cmd.Value,       // Use "cmd.exe" to run a command
+            FileName = cmd.Value,       // Use "cmd.exe" to run a command
             Arguments = arguments, // "/c" tells cmd to run the command and then terminate
             RedirectStandardOutput = true, // Redirect the output of the command
             RedirectStandardError = true,  // Redirect any errors
@@ -66,12 +72,12 @@ public class  RunNipkgHandler(NipkgCmdPath _cmd)
 
 public static class MediatorExtensions
 {
-    public static async Task<Result> RunNipkgRequestAsync(this IMediator mediator, string[] arguments, CancellationToken cancellationToken = default)
-        => await mediator.Send(new RunNipkgRequest(arguments), cancellationToken);
-    public static async Task<Result> AddPackageToLcalFeedAsync(this IMediator mediator, LocalFeedDefinition feedDefinition, PackageFilePath packagePath, CancellationToken cancellationToken = default) =>
-    await mediator.RunNipkgRequestAsync(new string[] { "feed-add-pkg", feedDefinition.Feed.Value, packagePath.Value });
+    public static async Task<Result> RunNipkgRequestAsync(this IMediator mediator, string[] arguments, NipkgCmdPath cmd, CancellationToken cancellationToken = default)
+        => await mediator.Send(new RunNipkgRequest(arguments, cmd), cancellationToken);
+    public static async Task<Result> AddPackageToLcalFeedAsync(this IMediator mediator, LocalFeedDefinition feedDefinition, PackageFilePath packagePath, NipkgCmdPath cmd, CancellationToken cancellationToken = default) =>
+    await mediator.RunNipkgRequestAsync(new string[] { "feed-add-pkg", feedDefinition.Feed.Value, packagePath.Value }, cmd, cancellationToken);
 
-    public static async Task<Result> NipkgPackAsync(this IMediator mediator, PackageBuilderRootDir rootDir, PackageDestinationDirectory destDirectory) =>
-    await mediator.RunNipkgRequestAsync(new string[] { "pack", rootDir.Value, destDirectory.Value });
+    public static async Task<Result> NipkgPackAsync(this IMediator mediator, PackageBuilderRootDir rootDir, PackageDestinationDirectory destDirectory, NipkgCmdPath cmd, CancellationToken cancellationToken = default) =>
+    await mediator.RunNipkgRequestAsync(new string[] { "pack", rootDir.Value, destDirectory.Value }, cmd, cancellationToken);
 }
 

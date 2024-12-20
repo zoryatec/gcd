@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using CSharpFunctionalExtensions;
 using Gcd.Commands.Tools.DownloadNipkg;
+using Gcd.Model.Config;
 using Gcd.Model.File;
 using Gcd.Services;
 using Gcd.Tests.EndToEnd;
@@ -8,8 +9,7 @@ using MediatR;
 
 namespace Gcd.Commands.Tools.InstallNipkg;
 
-public record InstallNinpkgRequest() : IRequest<Result>;
-public record InstallNinpkgResponse(string result);
+public record InstallNinpkgRequest(NipkgCmdPath CmdPath) : IRequest<Result>;
 
 public class InstallNinpkgHandler(IMediator _mediator, ITempDirectoryProvider _tempDir)
     : IRequestHandler<InstallNinpkgRequest, Result>
@@ -20,14 +20,15 @@ public class InstallNinpkgHandler(IMediator _mediator, ITempDirectoryProvider _t
         var tempDir = tempDirR.Value;
 
         var intallerPath = LocalFilePath.Offf($"{tempDir.Value}\\nipkg-installer.exe");
+        var installerUri = NipkgInstallerUri.None;
 
-        return await _mediator.DownloadNipkgInstallerAsync(intallerPath.Value)
+        return await _mediator.DownloadNipkgInstallerAsync(intallerPath.Value, installerUri)
             .Bind(() => InstallAsync(intallerPath.Value))
-            .Bind(() => CheckNipkgVersionAsync());
+            .Bind(() => CheckNipkgVersionAsync(request.CmdPath));
     }
 
-    private async Task<Result> CheckNipkgVersionAsync() =>
-        await _mediator.RunNipkgRequestAsync(new string[] { "--version" });
+    private async Task<Result> CheckNipkgVersionAsync(NipkgCmdPath cmd) =>
+        await _mediator.RunNipkgRequestAsync(new string[] { "--version" },cmd);
 
 
     static async Task<Result> InstallAsync(LocalFilePath nipkgInstaller)
@@ -74,6 +75,6 @@ public class InstallNinpkgHandler(IMediator _mediator, ITempDirectoryProvider _t
 
 public static class MediatorExtensions
 {
-    public static async Task<Result> InstallNipkgInstallerAsync(this IMediator mediator, CancellationToken cancellationToken = default)
-        => await mediator.Send(new InstallNinpkgRequest(), cancellationToken);
+    public static async Task<Result> InstallNipkgInstallerAsync(this IMediator mediator,NipkgCmdPath cmdPath, CancellationToken cancellationToken = default)
+        => await mediator.Send(new InstallNinpkgRequest(cmdPath), cancellationToken);
 }

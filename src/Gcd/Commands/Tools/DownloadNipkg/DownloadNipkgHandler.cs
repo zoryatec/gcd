@@ -6,9 +6,9 @@ using MediatR;
 
 namespace Gcd.Commands.Tools.DownloadNipkg;
 
-public record DownloadNipkgRequest(LocalFilePath FilePath) : IRequest<Result>;
+public record DownloadNipkgRequest(LocalFilePath FilePath, NipkgInstallerUri InstallerUri) : IRequest<Result>;
 
-public class DownloadNipkgHandler(IWebDownload _webDownload, IFileSystem _fs, NipkgInstallerUri _installerUri)
+public class DownloadNipkgHandler(IWebDownload _webDownload, NipkgInstallerUri _installerUri)
     : IRequestHandler<DownloadNipkgRequest, Result>
 {
     public async Task<Result> Handle(DownloadNipkgRequest request, CancellationToken cancellationToken)
@@ -26,7 +26,7 @@ public class DownloadNipkgHandler(IWebDownload _webDownload, IFileSystem _fs, Ni
 
 public static class MediatorExtensions
 {
-    public static async Task<Result> DownloadNipkgInstallerAsync(this IMediator mediator, LocalFilePath FilePath, CancellationToken cancellationToken = default)
-        => await mediator.Send(new DownloadNipkgRequest(FilePath), cancellationToken);
+    public static async Task<Result> DownloadNipkgInstallerAsync(this IMediator mediator, LocalFilePath FilePath, NipkgInstallerUri InstallerUri, CancellationToken cancellationToken = default)
+        => await mediator.Send(new DownloadNipkgRequest(FilePath, InstallerUri), cancellationToken);
 }
 

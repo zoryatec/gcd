@@ -17,9 +17,6 @@ namespace Gcd.Tests
         public GcdProcessApp()
         {
             _console = new FakeConsole();
-            var nipkgInstaller = "NIPackageManager21.3.0_online.exe";
-            var url = $"https://download.ni.com/support/nipkg/products/ni-package-manager/installers/{nipkgInstaller}";
-            var nipkgCmdPath = @"""C:\Program Files\National Instruments\NI Package Manager\nipkg.exe""";
             var assembly = typeof(Program).Assembly;
             var services = new ServiceCollection()
                 .AddScoped<IDownloadAzBlobService, AzBlobService>()

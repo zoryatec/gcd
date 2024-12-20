@@ -2,6 +2,7 @@
 using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Extensions;
 using Gcd.Model;
+using Gcd.Model.Config;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -56,10 +57,11 @@ public static class UseNipkgPackageBuildCmdExtensions
                 var packageInstalationDir = InatallationTargetRootDir.Create(packageInstalationOption.Value());
                 var packageDestinationDir = PackageDestinationDirectory.Of(packageDestinationOption.Value());
                 var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
+                var cmdPath = NipkgCmdPath.None;
 
                 return await Result
                     .Combine(packageContent, packageInstalationDir, packageDestinationDir, properties)
-                    .Bind(() => mediator.PackageBuilderBuildAsync(packageContent.Value, packageInstalationDir.Value, packageDestinationDir.Value, properties.Value, cancellationToken))
+                    .Bind(() => mediator.PackageBuilderBuildAsync(packageContent.Value, packageInstalationDir.Value, packageDestinationDir.Value, properties.Value, cmdPath, cancellationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);
