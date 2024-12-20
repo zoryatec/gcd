@@ -23,8 +23,7 @@ public static class UseAddToUserPathCmdExtensions
                 var maybePath = Maybe.From(pathToAdd.Value);
                 if (maybePath.HasValue)
                 {
-                    var requestToAddPath = new SystemAddToPathRequest(maybePath.Value, EnvironmentVariableTarget.User);
-                    var response = await mediator.Send(requestToAddPath);
+                    var response = await mediator.AddToUserPath(maybePath.Value);
 
                     return response
                         .Tap(() => console.Write("Path added sucessfully"))

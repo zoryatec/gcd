@@ -22,8 +22,7 @@ public static class UseAddToSystemPathCmdExtensions
                 var maybePath = Maybe.From(pathToAdd.Value);
                 if (maybePath.HasValue)
                 {
-                    var requestToAddPath = new SystemAddToPathRequest(maybePath.Value, EnvironmentVariableTarget.Machine);
-                    var response = await mediator.Send(requestToAddPath);
+                    var response = await mediator.AddToSystemPath(maybePath.Value);
 
                     return response
                         .Tap(() => console.Write("Path added sucessfully"))
