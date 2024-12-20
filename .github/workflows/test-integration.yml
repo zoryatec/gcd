@@ -26,10 +26,10 @@ jobs:
           .\gcd.exe tools add-to-system-path "$env:GITHUB_WORKSPACE\\gcd-bootstrap"
         working-directory: ./gcd-bootstrap
 
-      - name: add to path
-        run: |
-          echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
-        working-directory: ./gcd-bootstrap
+      # - name: add to path
+      #   run: |
+      #     echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
+      #   working-directory: ./gcd-bootstrap
 
       - name: Install NIPKG
         run: |
