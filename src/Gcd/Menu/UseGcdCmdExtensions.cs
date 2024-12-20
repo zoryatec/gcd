@@ -17,7 +17,7 @@ public static class UseGcdCmdExtensions
 
         app.HelpOption(inherited: true);
 
-        app.UseProjectCmd(serviceProvider);
+        //app.UseProjectCmd(serviceProvider);
         app.UseNipkgCmd(serviceProvider);
         app.UseToolsCmd(serviceProvider);
         app.UseConfigCmd(serviceProvider);
