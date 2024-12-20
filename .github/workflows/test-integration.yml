@@ -18,7 +18,7 @@ jobs:
       - name: Setup gcd
         run: |
           .\gcd.exe --version  
-          .\gcd.exe config set --nipkg-installer-uri  "{{secrets.NIPKG_INSTALLER_URI}}"
+          .\gcd.exe config set --nipkg-installer-uri  "https://download.ni.com/support/nipkg/products/ni-package-manager/installers/NIPackageManager21.3.0_online.exe"
           .\gcd.exe config get --nipkg-installer-uri
           .\gcd.exe config set --nipkg-cmd-path  "C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe"
           .\gcd.exe config get --nipkg-cmd-path
