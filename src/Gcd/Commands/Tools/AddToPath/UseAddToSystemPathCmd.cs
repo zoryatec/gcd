@@ -16,7 +16,8 @@ public static class UseAddToSystemPathCmdExtensions
         {
             addToUserPath.Description = "adds to user path";
 
-            var pathToAdd = addToUserPath.Option("--path", "Path to be added to user path enviromental variable", CommandOptionType.SingleValue).IsRequired();
+            var pathToAdd = addToUserPath.Argument("path", "Path to be added to user path enviromental variable").IsRequired();
+
             addToUserPath.OnExecuteAsync(async cancelationToken =>
             {
                 var maybePath = Maybe.From(pathToAdd.Value);
