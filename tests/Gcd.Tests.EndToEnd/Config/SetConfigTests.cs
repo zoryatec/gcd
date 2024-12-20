@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Gcd.Model.Config;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +32,7 @@ public class SetConfigTests : IClassFixture<TestFixture>
         //Arange
         var args = (new SetConfigArgBuilder())
             .WithNipkgCmdPath("C:\\Program\\dupa")
+            .WithNipkgInstallerUri(NipkgInstallerUri.None.ToString())
                 .Build();
 
         // Act

@@ -3,6 +3,7 @@ using Gcd.LabViewProject;
 using Gcd.Menu;
 using Gcd.Model.Config;
 using Gcd.Services;
+using Gcd.Services.DI;
 using Gcd.Tests.EndToEnd;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,11 +26,8 @@ namespace Gcd.Tests
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddScoped<IWebDownload, WebDownload>()
                 .AddScoped<IFileSystem, LocalFileService>()
-                .AddScoped<IConfigService, ConfigService>()
-                .AddScoped<SettingsFilePath>(x => SettingsFilePath.Of("appsettings.test.json").Value)
+                .RegisterConfiguration()
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
-                .AddScoped<NipkgInstallerUri>(x => NipkgInstallerUri.Of(url).Value)
-                .AddScoped<NipkgCmdPath>(x => NipkgCmdPath.Of(nipkgCmdPath).Value)
                 .AddScoped<ITempDirectoryProvider, TempDirectoryProvider>()
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddSingleton<IConsole>(_console)

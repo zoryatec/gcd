@@ -84,8 +84,9 @@ public class AddToAzFeedTests : IClassFixture<TestFixture>
         var result = _gcd.Run(args);
 
         // Asssert
-        result.Return.Should().Be(0);
         result.Error.Should().BeEmpty();
+        result.Return.Should().Be(0);
+
         var packagePath = $"{packageDestinationDirectory}\\{packageName}_{packageVersion}_windows_x64.nipkg";
         File.Exists(packagePath).Should().BeTrue();
         return packagePath;

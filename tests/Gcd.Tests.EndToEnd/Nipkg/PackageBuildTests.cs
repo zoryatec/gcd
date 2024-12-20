@@ -42,8 +42,8 @@ public class PackageBuildTests : IClassFixture<TestFixture>
         var result = _gcd.Run(args);
 
         // Asssert
-        result.Return.Should().Be(0);
         result.Error.Should().BeEmpty();
+        result.Return.Should().Be(0);
         File.Exists($"{packageDestinationDirectory}\\{packageName}_{packageVersion}_windows_x64.nipkg");
     }
 

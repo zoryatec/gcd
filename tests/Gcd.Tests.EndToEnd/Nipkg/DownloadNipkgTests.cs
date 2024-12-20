@@ -38,8 +38,9 @@ public class DownloadNipkgTests : IClassFixture<TestFixture>
         var result = _gcd.Run(args);
 
         // Asssert
-        result.Return.Should().Be(0);
         result.Error.Should().BeEmpty();
+        result.Return.Should().Be(0);
+
 
         File.Exists(localPath).Should().BeTrue();
 

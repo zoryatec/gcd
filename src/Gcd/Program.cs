@@ -8,6 +8,7 @@ using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Menu;
 using Gcd.Model.Config;
 using Microsoft.Extensions.Configuration;
+using Gcd.Services.DI;
 
 
 namespace Gcd
@@ -22,23 +23,14 @@ namespace Gcd
         }
         public static int Main(string[] args)
         {
-            //IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("appsettings").Build();
-            //configuration[""];
-
-            var nipkgInstaller = "NIPackageManager21.3.0_online.exe";
-            var url = $"https://download.ni.com/support/nipkg/products/ni-package-manager/installers/{nipkgInstaller}";
-            var nipkgCmdPath = @"""C:\Program Files\National Instruments\NI Package Manager\nipkg.exe""";
             var assembly = typeof(Program).Assembly;
             var services = new ServiceCollection()
                 .AddScoped<IDownloadAzBlobService, AzBlobService>()
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddScoped<IWebDownload, WebDownload>()
                 .AddScoped<IFileSystem,LocalFileService>()
-                .AddScoped<IConfigService, ConfigService>()
+                .RegisterConfiguration()
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
-                .AddScoped<SettingsFilePath>(x => SettingsFilePath.Of("appsettings.json").Value)
-                .AddScoped<NipkgInstallerUri>(x => NipkgInstallerUri.Of(url).Value)
-                .AddScoped<NipkgCmdPath>(x=> NipkgCmdPath.Of(nipkgCmdPath).Value)
                 .AddScoped<ITempDirectoryProvider,TempDirectoryProvider>()
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddSingleton<IConsole>(PhysicalConsole.Singleton)
