@@ -8,7 +8,7 @@ namespace Gcd.Contract.Nipkg
 {
     public static class PackageBuild
     {
-        public const string COMMAND = "create";
+        public const string COMMAND = "build";
         public const string COMMAND_DESCRIPTION = "Pull metadata files from remote feed to local";
 
         public const string PACKAGE_CONTENT_DIR_OPTION = "--package-sourec-dir";
