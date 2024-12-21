@@ -9,6 +9,8 @@
 		<RootNamespace>Gcd</RootNamespace>
         <AssemblyVersion>0.5.0</AssemblyVersion>
         <FileVersion>0.5.0</FileVersion>
+		<PackAsTool>true</PackAsTool>
+		<ToolCommandName>gcd</ToolCommandName>
     </PropertyGroup>
 
     <ItemGroup>
