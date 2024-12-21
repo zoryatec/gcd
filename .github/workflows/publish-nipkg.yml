@@ -22,6 +22,10 @@ jobs:
         name: gcd-bin
         path: "./gcd-bootstrap"
 
+    - name: Add GCD to path
+      run: |
+        echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
+
     - name: Download gcd binary
       uses: actions/download-artifact@v4.1.8
       with:
@@ -31,15 +35,15 @@ jobs:
         
     - name: Get Version of gcd
       run: |
-        ./gcd-bootstrap/gcd.exe --version  
+        gcd --version  
 
     - name: Set NIPKG into user path
       run: |
-        ./gcd-bootstrap/gcd.exe system add-to-user-path "C:\Program Files\National Instruments\NI Package Manager"
+        gcd tools add-to-user-path "C:\Program Files\National Instruments\NI Package Manager"
 
     - name: Set NIPKG into system path
       run: |
-        ./gcd-bootstrap/gcd.exe system add-to-system-path --path "C:\Program Files\National Instruments\NI Package Manager"
+        gcd tools add-to-system-path "C:\Program Files\National Instruments\NI Package Manager"
         
     - name: Download gcd binary
       uses: actions/download-artifact@v4.1.8
@@ -49,7 +53,7 @@ jobs:
         
     - name: Install NIPKG
       run: |
-        ./gcd-bootstrap/gcd.exe nipkg install-nipkg
+        gcd nipkg install-nipkg
                 
     - name: Check NIPKG instalation dir
       run: dir "C:\Program Files\National Instruments\NI Package Manager"
@@ -61,7 +65,7 @@ jobs:
         
     - name: Build NIPKG package
       run:  |
-        ./gcd-bootstrap/gcd.exe nipkg package create `
+        gcd nipkg package create `
         --package-sourec-dir "package-content" `
         --package-name "gcd" `
         --package-version "0.5.0-${{github.run_number}}" `
@@ -81,7 +85,7 @@ jobs:
 
     - name: Publish NIPKG package
       run:  |
-        ./gcd-bootstrap/gcd.exe nipkg add-package-blob-feed `
+        gcd nipkg add-package-blob-feed `
         --package-path "D:\\a\\gcd\\gcd\\package\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" `
         --feed-url "https://zoryatecartifacts.blob.core.windows.net/gcd-feed?${{ secrets.SAS_TOKEN }}"
         

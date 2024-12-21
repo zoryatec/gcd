@@ -18,7 +18,6 @@ jobs:
       - name: Add GCD to path
         run: |
           echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
-        working-directory: ./gcd-bootstrap
 
       - name: Setup gcd
         run: |
