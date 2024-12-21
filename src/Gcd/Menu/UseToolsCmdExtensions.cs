@@ -1,4 +1,6 @@
 ﻿using Gcd.Commands.Tools.AddToPath;
+using Gcd.Commands.Tools.DownloadNipkg;
+using Gcd.Commands.Tools.InstallNipkg;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,16 +12,18 @@ public static class UseSystemExtensions
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
 
-        app.Command("tools", systemCmd =>
+        app.Command("tools", cmd =>
         {
-            systemCmd.OnExecute(() =>
+            cmd.OnExecute(() =>
             {
                 console.WriteLine("Specify a subcommand");
-                systemCmd.ShowHelp();
+                cmd.ShowHelp();
                 return 1;
             });
-            systemCmd.UseAddToUserPathCmd(serviceProvider);
-            systemCmd.UseAddToSystemPathCmd(serviceProvider);
+            cmd.UseAddToUserPathCmd(serviceProvider);
+            cmd.UseAddToSystemPathCmd(serviceProvider);
+            cmd.UseInstallNipkgCmd(serviceProvider);
+            cmd.UseDownloadNipkgCmd(serviceProvider);
         });
         return app;
     }

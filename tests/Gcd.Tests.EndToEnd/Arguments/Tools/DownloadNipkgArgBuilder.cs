@@ -6,7 +6,7 @@ namespace Gcd.Tests.EndToEnd.Arguments.Tools
     {
         public DownloadNipkgArgBuilder()
         {
-            WithArg("nipkg");
+            WithArg("tools");
             WithArg(COMMAND);
         }
 

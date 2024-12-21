@@ -6,6 +6,7 @@ public class AddToAzFeedArgBuilder : ArgumentsBuilder
     public AddToAzFeedArgBuilder()
     {
         WithArg("nipkg");
+        WithArg("feed");
         WithArg(COMMAND_NAME);
     }
 

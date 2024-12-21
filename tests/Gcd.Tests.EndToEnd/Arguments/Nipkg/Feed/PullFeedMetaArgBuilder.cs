@@ -6,6 +6,7 @@ public class PullFeedMetaArgBuilder : ArgumentsBuilder
     public PullFeedMetaArgBuilder()
     {
         WithArg("nipkg");
+        WithArg("feed");
         WithArg(COMMAND);
     }
 

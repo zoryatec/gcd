@@ -19,21 +19,17 @@ namespace Gcd.Menu
         {
             var console = serviceProvider.GetRequiredService<IConsole>();
 
-            app.Command("nipkg", nipkg =>
+            app.Command("nipkg", cmd =>
             {
-                nipkg.OnExecute(() =>
+                cmd.OnExecute(() =>
                 {
                     console.WriteLine("Specify a subcommand");
-                    nipkg.ShowHelp();
+                    cmd.ShowHelp();
                     return 1;
                 });
-                nipkg.UseInstallNipkgCmd(serviceProvider);
-                nipkg.UseDownloadNipkgCmd(serviceProvider);
-                nipkg.UseBuilderCmd(serviceProvider);
-                nipkg.UsePackageCmd(serviceProvider);
-                nipkg.UseNipkgAddPackageToAzFeedCmd(serviceProvider);
-                nipkg.UseNipkgPullFeedMetaCmd(serviceProvider);
-                nipkg.UseNipkgPushAzBlobFeedMetaCmd(serviceProvider);
+                cmd.UseBuilderCmd(serviceProvider);
+                cmd.UseFeedCmd(serviceProvider);
+                cmd.UseNipkgPackageBuildCmd(serviceProvider);
             });
             return app;
         }
@@ -59,18 +55,23 @@ namespace Gcd.Menu
 
 
 
-        public static CommandLineApplication UsePackageCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+        public static CommandLineApplication UseFeedCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
         {
             var console = serviceProvider.GetRequiredService<IConsole>();
-            app.Command("package", template =>
+            app.Command("feed", cmd =>
             {
-                template.OnExecute(() =>
+
+                cmd.OnExecute(() =>
                 {
                     console.WriteLine("Specify a subcommand");
-                    template.ShowHelp();
+                    cmd.ShowHelp();
                     return 1;
                 });
-                template.UseNipkgPackageBuildCmd(serviceProvider);
+
+                cmd.UseNipkgAddPackageToAzFeedCmd(serviceProvider);
+                cmd.UseNipkgPullFeedMetaCmd(serviceProvider);
+                cmd.UseNipkgPushAzBlobFeedMetaCmd(serviceProvider);
+
             });
 
             return app;

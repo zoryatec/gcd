@@ -50,7 +50,7 @@ jobs:
         
     - name: Build NIPKG package
       run:  |
-        gcd nipkg package create `
+        gcd nipkg build `
         --package-sourec-dir "package-content" `
         --package-name "gcd" `
         --package-version "0.5.0-${{github.run_number}}" `
@@ -70,7 +70,7 @@ jobs:
 
     - name: Publish NIPKG package
       run:  |
-        gcd nipkg add-package-blob-feed `
+        gcd nipkg feed add-package-az `
         --package-path "D:\\a\\gcd\\gcd\\package\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" `
         --feed-url "https://zoryatecartifacts.blob.core.windows.net/gcd-feed?${{ secrets.SAS_TOKEN }}"
         

@@ -6,6 +6,7 @@ public class PushAzFeedMetaArgBuilder : ArgumentsBuilder
     public PushAzFeedMetaArgBuilder()
     {
         WithArg("nipkg");
+        WithArg("feed");
         WithArg(COMMAND_NAME);
     }
 

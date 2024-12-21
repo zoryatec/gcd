@@ -7,7 +7,6 @@ public class PackageBuildArgBuilder : ArgumentsBuilder
     public PackageBuildArgBuilder()
     {
         WithArg("nipkg");
-        WithArg("package");
         WithArg(COMMAND);
     }
 
