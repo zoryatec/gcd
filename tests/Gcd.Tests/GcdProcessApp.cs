@@ -23,6 +23,7 @@ namespace Gcd.Tests
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddScoped<IWebDownload, WebDownload>()
                 .AddScoped<IFileSystem, LocalFileService>()
+                .RegisterInstructions()
                 .RegisterConfiguration()
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()

@@ -42,7 +42,6 @@ public static class UseAddInstructionCmdExtensions
 
             command.OnExecuteAsync(async cancelationToken =>
             {
-                return 0;
                 var root = rootOpt.Map();
                 var args = argsOpt.Map();
                 var exeName = exeNameOpt.Map();

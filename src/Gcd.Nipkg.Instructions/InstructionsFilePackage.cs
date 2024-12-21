@@ -44,7 +44,9 @@ public class CustomExecutes
         CustomExecuteList.Add(new CustomExecute{ 
             Arguments = customExecute.Arguments.Value,
             Root = customExecute.Root.Value,
-            ExeName = customExecute.ExeName.Value
+            ExeName = customExecute.ExeName.Value,
+            Step = customExecute.Step.Value,
+            Schedule = customExecute.Schedule.Value
         });
         return Result.Success();
     }
@@ -63,5 +65,11 @@ public class CustomExecute
 
     [XmlAttribute("exeName")]
     public string ExeName { get; set; }
+
+    [XmlAttribute("step")]
+    public string Step { get; set; }
+
+    [XmlAttribute("schedule")]
+    public string Schedule { get; set; }
 }
 

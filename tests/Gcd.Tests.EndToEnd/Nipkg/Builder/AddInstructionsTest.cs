@@ -55,6 +55,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg
             result.Return.Should().Be(0);
 
             File.Exists($"{packageBuilderDir}\\data\\instructions");
+            var content = File.ReadAllText($"{packageBuilderDir}\\data\\instructions");
         }
 
         private string GetPackageContentDir()
