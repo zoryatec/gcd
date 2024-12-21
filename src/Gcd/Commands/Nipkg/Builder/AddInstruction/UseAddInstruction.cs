@@ -19,7 +19,7 @@ public static class UseAddInstructionCmdExtensions
         var mediator = serviceProvider.GetRequiredService<IMediator>();
         var factory = serviceProvider.GetRequiredService<IControlPropertyFactory>();
 
-        app.Command("add-instr", command =>
+        app.Command("add-instruction", command =>
         {
             command.Description = "COMMAND_DESCRIPTION";
             var builderRootDirArg = new PackageBuilderRootDirArgument();

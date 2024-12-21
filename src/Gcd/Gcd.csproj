@@ -36,6 +36,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Gcd.Contract\Gcd.Contract.csproj" />
       <ProjectReference Include="..\Gcd.LabViewProject\Gcd.LabViewProject.csproj" />
+      <ProjectReference Include="..\Gcd.Nipkg.Instructions\Gcd.Nipkg.Instructions.csproj" />
     </ItemGroup>
 
 </Project>
