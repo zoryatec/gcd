@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gcd.Nipkg.Instructions.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,15 +17,20 @@ namespace Gcd.Tests.UnitTest
         public void SerializerCreatesDefaultContent_WhenNoParamtersSpecified()
         {
             var instr = new InstructionsFilePackage();
-            var custExe = new CustomExecutes();
 
-            instr.AddCustomExecute(new CustomExecute { Arguments = "dfdf", ExeName = "ddfdf", Root = "dfdsfd" });
+            var root = new CustomExecuteRoot("ddfdffdf");
+            var args = new CustomExecuteArguments("dfdfff");
+            var exeName = new CustomExecuteExeName("ddfdfssd");
+            var custExe = new FilePackageCustomeExecute(root, exeName,args);
+  
+
+            instr.AddCustomExecute(custExe);
 
             var serailizer = new InstructionsSerializer();
             var serialized = serailizer.Serialize(instr);
 
 
-            XDocument doc = XDocument.Parse(serialized);
+            XDocument doc = XDocument.Parse(serialized.Value);
 
             // Query all customExecute elements
             var customExecutes = doc.Descendants("customExecute")
@@ -34,7 +40,7 @@ namespace Gcd.Tests.UnitTest
                                         ExeName = x.Attribute("exeName").Value
                                     });
 
-            var deserialized = serailizer.Deserialize(serialized);
+            var deserialized = serailizer.Deserialize(serialized.Value);
 
         }
     }

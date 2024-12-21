@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CSharpFunctionalExtensions;
+using Gcd.Nipkg.Instructions.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,13 +16,16 @@ public class InstructionsFilePackage
     [XmlElement("customExecutes")]
     public CustomExecutes CustomExecutes { get; set; }
 
-    public void AddCustomExecute(CustomExecute customExecute)
+    public Result<InstructionsFilePackage> AddCustomExecute(FilePackageCustomeExecute customExecute)
     {
         if(CustomExecutes == null)
         { 
             CustomExecutes = new CustomExecutes();
         }
         CustomExecutes.AddCustomExecute(customExecute);
+
+        return Result.Success(this);
+
     }
 
 }
@@ -29,13 +34,19 @@ public class CustomExecutes
 {
     [XmlElement("customExecute")]
     public List<CustomExecute> CustomExecuteList { get; set; } = new List<CustomExecute>();
-    public void AddCustomExecute(CustomExecute customExecute)
+    public Result AddCustomExecute(FilePackageCustomeExecute customExecute)
     {
         if (CustomExecuteList == null)
         {
             CustomExecuteList = new List<CustomExecute>();
         }
-        CustomExecuteList.Add(customExecute);
+
+        CustomExecuteList.Add(new CustomExecute{ 
+            Arguments = customExecute.Arguments.Value,
+            Root = customExecute.Root.Value,
+            ExeName = customExecute.ExeName.Value
+        });
+        return Result.Success();
     }
 
 

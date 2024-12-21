@@ -37,24 +37,23 @@ namespace Gcd.Menu
         public static CommandLineApplication UseBuilderCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
         {
             var console = serviceProvider.GetRequiredService<IConsole>();
-            app.Command("builder", template =>
+            app.Command("builder", cmd =>
             {
-                template.OnExecute(() =>
+                cmd.OnExecute(() =>
                 {
                     console.WriteLine("Specify a subcommand");
-                    template.ShowHelp();
+                    cmd.ShowHelp();
                     return 1;
                 });
-                template.UseNipkgPackageBuilderInitmd(serviceProvider);
-                template.UseNipkgPackageBuilderSetPropertyCmd(serviceProvider);
-                template.UseAddContentCmd(serviceProvider);
+                cmd.UseNipkgPackageBuilderInitmd(serviceProvider);
+                cmd.UseNipkgPackageBuilderSetPropertyCmd(serviceProvider);
+                cmd.UseAddContentCmd(serviceProvider);
+                cmd.UseFilePackageInstructionsCmd(serviceProvider);
+                cmd.UseMsiPackageInstructionsCmd(serviceProvider);
             });
 
             return app;
         }
-
-
-
         public static CommandLineApplication UseFeedCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
         {
             var console = serviceProvider.GetRequiredService<IConsole>();
@@ -77,7 +76,40 @@ namespace Gcd.Menu
             return app;
         }
 
+        public static CommandLineApplication UseFilePackageInstructionsCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+        {
+            var console = serviceProvider.GetRequiredService<IConsole>();
+            app.Command("instructions-file-pkg", cmd =>
+            {
 
+                cmd.OnExecute(() =>
+                {
+                    console.WriteLine("Specify a subcommand");
+                    cmd.ShowHelp();
+                    return 1;
+                });
 
+            });
+
+            return app;
+        }
+
+        public static CommandLineApplication UseMsiPackageInstructionsCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+        {
+            var console = serviceProvider.GetRequiredService<IConsole>();
+            app.Command("instructions-msi-pkg", cmd =>
+            {
+
+                cmd.OnExecute(() =>
+                {
+                    console.WriteLine("Specify a subcommand");
+                    cmd.ShowHelp();
+                    return 1;
+                });
+
+            });
+
+            return app;
+        }
     }
 }

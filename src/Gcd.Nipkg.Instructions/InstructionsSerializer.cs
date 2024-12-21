@@ -5,18 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.Xml;
+using CSharpFunctionalExtensions;
 
 namespace Gcd.Tests.UnitTest;
 
 public interface IInstructionsSerializer
 {
-    public string Serialize(InstructionsFilePackage instrFilePckg);
-    public InstructionsFilePackage Deserialize(string content);
+    public Result<string> Serialize(InstructionsFilePackage instrFilePckg);
+    public Result<InstructionsFilePackage> Deserialize(string content);
 }
 
 public class InstructionsSerializer : IInstructionsSerializer
 {
-    public InstructionsFilePackage Deserialize(string content)
+    public Result<InstructionsFilePackage> Deserialize(string content)
     {
         // Set up the XmlSerializer for the Instructions type
         var serializer = new XmlSerializer(typeof(InstructionsFilePackage));
@@ -25,12 +26,12 @@ public class InstructionsSerializer : IInstructionsSerializer
         using (var stringReader = new StringReader(content))
         {
             var obj = (InstructionsFilePackage)serializer.Deserialize(stringReader) ?? throw new NullReferenceException(nameof(InstructionsFilePackage));
-            return obj;
+            return Result.Success(obj);
 
         }
     }
 
-    public string Serialize(InstructionsFilePackage instrFilePckg)
+    public Result<string> Serialize(InstructionsFilePackage instrFilePckg)
     {
         var serializer = new XmlSerializer(typeof(InstructionsFilePackage));
 
