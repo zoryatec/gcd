@@ -15,21 +15,16 @@ jobs:
           name: gcd-bin
           path: "./gcd-bootstrap"
 
-      - name: Setup gcd
+      - name: Add GCD to path
         run: |
-          .\gcd.exe tools add-to-user-path "$env:GITHUB_WORKSPACE\\gcd-bootstrap"
-          gcd --version  
-          .\gcd.exe config set --nipkg-installer-uri  "https://download.ni.com/support/nipkg/products/ni-package-manager/installers/NIPackageManager21.3.0_online.exe"
-          .\gcd.exe config get --nipkg-installer-uri
-          .\gcd.exe config set --nipkg-cmd-path  "C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe"
-          .\gcd.exe config get --nipkg-cmd-path
-
+          echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
         working-directory: ./gcd-bootstrap
 
-      # - name: add to path
-      #   run: |
-      #     echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
-      #   working-directory: ./gcd-bootstrap
+      - name: Setup gcd
+        run: |
+          gcd --version  
+          gcd config set --nipkg-installer-uri  "https://download.ni.com/support/nipkg/products/ni-package-manager/installers/NIPackageManager21.3.0_online.exe"
+          gcd config set --nipkg-cmd-path  "C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe"
 
       - name: Install NIPKG
         run: |
