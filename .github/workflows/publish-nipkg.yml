@@ -46,7 +46,7 @@ jobs:
         
     - name: Install NIPKG
       run: |
-        gcd nipkg install-nipkg             
+        gcd tools install-nipkg             
         
     - name: Build NIPKG package
       run:  |
