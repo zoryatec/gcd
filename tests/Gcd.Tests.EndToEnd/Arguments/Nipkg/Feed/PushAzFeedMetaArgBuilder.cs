@@ -1,5 +1,5 @@
 ﻿using static Gcd.Contract.Nipkg.PushAzBlobFeedMetaData;
-namespace Gcd.Tests.EndToEnd.Arguments.Nipkg;
+namespace Gcd.Tests.EndToEnd.Arguments.Nipkg.Feed;
 
 public class PushAzFeedMetaArgBuilder : ArgumentsBuilder
 {

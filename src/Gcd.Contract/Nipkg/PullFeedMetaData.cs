@@ -8,7 +8,7 @@ namespace Gcd.Contract.Nipkg
 {
     public static class PullFeedMetaData
     {
-        public const string COMMAND = "pull-feed-meta";
+        public const string COMMAND = "pull-feed-meta-az";
         public const string COMMAND_DESCRIPTION = "Pull metadata files from remote feed to local";
 
         public const string FEED_LOCAL_PATH_OPTION = "--feed-local-path";

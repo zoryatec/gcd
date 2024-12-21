@@ -1,5 +1,5 @@
 ﻿using static Gcd.Contract.Nipkg.PullFeedMetaData;
-namespace Gcd.Tests.EndToEnd.Arguments.Nipkg;
+namespace Gcd.Tests.EndToEnd.Arguments.Nipkg.Feed;
 
 public class PullFeedMetaArgBuilder : ArgumentsBuilder
 {
@@ -11,7 +11,7 @@ public class PullFeedMetaArgBuilder : ArgumentsBuilder
 
     public PullFeedMetaArgBuilder WithFeedLocalPath(string feedLocalPath)
     {
-        WithOption(FEED_LOCAL_PATH_OPTION,feedLocalPath);
+        WithOption(FEED_LOCAL_PATH_OPTION, feedLocalPath);
         return this;
     }
 

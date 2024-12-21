@@ -1,6 +1,6 @@
 using static Gcd.Contract.Nipkg.InstallNipkg;
 
-namespace Gcd.Tests.EndToEnd.Arguments.Nipkg
+namespace Gcd.Tests.EndToEnd.Arguments.Tools
 {
     public class InstallNipkgArgBuilder : ArgumentsBuilder
     {

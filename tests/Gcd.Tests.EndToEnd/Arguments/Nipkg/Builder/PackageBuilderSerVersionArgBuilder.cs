@@ -6,7 +6,7 @@ public class PackageBuilderSerVersionArgBuilder : ArgumentsBuilder
     public PackageBuilderSerVersionArgBuilder()
     {
         WithArg("nipkg");
-        WithArg("package-builder");
+        WithArg("builder");
         WithArg(COMMAND);
     }
 

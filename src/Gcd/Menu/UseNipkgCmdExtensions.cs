@@ -29,7 +29,7 @@ namespace Gcd.Menu
                 });
                 nipkg.UseInstallNipkgCmd(serviceProvider);
                 nipkg.UseDownloadNipkgCmd(serviceProvider);
-                nipkg.UseTemplatedCmd(serviceProvider);
+                nipkg.UseBuilderCmd(serviceProvider);
                 nipkg.UsePackageCmd(serviceProvider);
                 nipkg.UseNipkgAddPackageToAzFeedCmd(serviceProvider);
                 nipkg.UseNipkgPullFeedMetaCmd(serviceProvider);
@@ -38,10 +38,10 @@ namespace Gcd.Menu
             return app;
         }
 
-        public static CommandLineApplication UseTemplatedCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+        public static CommandLineApplication UseBuilderCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
         {
             var console = serviceProvider.GetRequiredService<IConsole>();
-            app.Command("package-builder", template =>
+            app.Command("builder", template =>
             {
                 template.OnExecute(() =>
                 {

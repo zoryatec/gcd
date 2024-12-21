@@ -1,10 +1,11 @@
 ﻿using FluentAssertions;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg;
+using Gcd.Tests.EndToEnd.Arguments.Nipkg.Feed;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Gcd.Tests.EndToEnd.Nipkg
+namespace Gcd.Tests.EndToEnd.Nipkg.Feed
 {
-    public class PullFeedMetaDataTests  : IClassFixture<TestFixture>
+    public class PullFeedMetaDataTests : IClassFixture<TestFixture>
     {
         IGcdProcess _gcd;
         GcdArgsBuilder _args;
@@ -25,7 +26,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg
             var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
             var feedUri = _config.GetAzurePullTestFeedUri();
 
-            var args = (new PullFeedMetaArgBuilder())
+            var args = new PullFeedMetaArgBuilder()
                 .WithFeedLocalPath(feedDestinationDirectory)
                 .WithFeedUri(feedUri)
                 .Build();
@@ -57,7 +58,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg
             var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
             var feedUri = _config.GetAzurePublicFeedUri();
 
-            var args = (new PullFeedMetaArgBuilder())
+            var args = new PullFeedMetaArgBuilder()
                 .WithFeedUri(feedUri)
                 .Build();
 

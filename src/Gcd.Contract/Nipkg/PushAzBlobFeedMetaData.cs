@@ -8,7 +8,7 @@ namespace Gcd.Contract.Nipkg
 {
     public static class PushAzBlobFeedMetaData
     {
-        public const string COMMAND_NAME = "push-feed-meta";
+        public const string COMMAND_NAME = "push-feed-meta-az";
         public const string COMMAND_DESCRIPTION = "push-feed-meta";
 
         public const string LOCAL_FEED_PATH_OPTION = "--feed-local-path";

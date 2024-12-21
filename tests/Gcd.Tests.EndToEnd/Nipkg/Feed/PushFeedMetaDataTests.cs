@@ -1,8 +1,9 @@
 ﻿using FluentAssertions;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg;
+using Gcd.Tests.EndToEnd.Arguments.Nipkg.Feed;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Gcd.Tests.EndToEnd.Nipkg
+namespace Gcd.Tests.EndToEnd.Nipkg.Feed
 {
     public class PushFeedMetaDataTests : IClassFixture<TestFixture>
     {
@@ -21,7 +22,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg
         [Fact]
         public void Push_ShouldReturnEror_WhenPathIsEmpty()
         {
-            var args = (new PushAzFeedMetaArgBuilder())
+            var args = new PushAzFeedMetaArgBuilder()
                 .WithFeedLocalPath("dd")
                 .WithFeedUri("dd")
                 .Build();
@@ -72,7 +73,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg
         {
             // Arrange
 
-            var args = (new PullFeedMetaArgBuilder())
+            var args = new PullFeedMetaArgBuilder()
                 .WithFeedLocalPath(feedDirectory)
                 .WithFeedUri(feedUri)
                 .Build();
@@ -88,7 +89,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg
         private void Push(string feedDirectory, string feedUri)
         {
             // Arrange
-            var args = (new PushAzFeedMetaArgBuilder())
+            var args = new PushAzFeedMetaArgBuilder()
                 .WithFeedLocalPath(feedDirectory)
                 .WithFeedUri(feedUri)
                 .Build();

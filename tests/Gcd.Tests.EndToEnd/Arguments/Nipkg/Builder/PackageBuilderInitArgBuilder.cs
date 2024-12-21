@@ -7,7 +7,7 @@ public class PackageBuilderInitArgBuilder : ArgumentsBuilder
     public PackageBuilderInitArgBuilder()
     {
         WithArg("nipkg");
-        WithArg("package-builder");
+        WithArg("builder");
         WithArg(COMMAND);
     }
 

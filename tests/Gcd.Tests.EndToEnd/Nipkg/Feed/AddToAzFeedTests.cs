@@ -1,8 +1,9 @@
 ﻿using FluentAssertions;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg;
+using Gcd.Tests.EndToEnd.Arguments.Nipkg.Feed;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Gcd.Tests.EndToEnd.Nipkg;
+namespace Gcd.Tests.EndToEnd.Nipkg.Feed;
 
 public class AddToAzFeedTests : IClassFixture<TestFixture>
 {
@@ -72,7 +73,7 @@ public class AddToAzFeedTests : IClassFixture<TestFixture>
         var packageContentDirectory = GetPackageContentDir();
         var packageDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
 
-        var args = (new PackageBuildArgBuilder())
+        var args = new PackageBuildArgBuilder()
             .WithPackageContentDirectory(packageContentDirectory)
             .WithPackageName(packageName)
             .WithPackageVersion(packageVersion)
@@ -102,7 +103,7 @@ public class AddToAzFeedTests : IClassFixture<TestFixture>
     private void PullMetaData(string feedDirectory, string feedUri)
     {
         // Arrange
-        var args = (new PullFeedMetaArgBuilder())
+        var args = new PullFeedMetaArgBuilder()
             .WithFeedLocalPath(feedDirectory)
             .WithFeedUri(feedUri)
             .Build();
@@ -118,7 +119,7 @@ public class AddToAzFeedTests : IClassFixture<TestFixture>
     private void PushMetadata(string feedDirectory, string feedUri)
     {
         // Arrange
-        var args = (new PushAzFeedMetaArgBuilder())
+        var args = new PushAzFeedMetaArgBuilder()
             .WithFeedLocalPath(feedDirectory)
             .WithFeedUri(feedUri)
             .Build();
@@ -135,7 +136,7 @@ public class AddToAzFeedTests : IClassFixture<TestFixture>
     {
         // Arrange
 
-        var args = (new AddToAzFeedArgBuilder())
+        var args = new AddToAzFeedArgBuilder()
             .WithPackagePath(packagePath)
             .WithAzFeedUri(feedUri)
             .Build();

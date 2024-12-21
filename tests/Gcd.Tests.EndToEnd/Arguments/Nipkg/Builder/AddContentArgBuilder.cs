@@ -7,7 +7,7 @@ public class AddContentArgBuilder : ArgumentsBuilder
     public AddContentArgBuilder()
     {
         WithArg("nipkg");
-        WithArg("package-builder");
+        WithArg("builder");
         WithArg("add-content");
     }
     public AddContentArgBuilder WithPackageBuilderRootDir(string value)

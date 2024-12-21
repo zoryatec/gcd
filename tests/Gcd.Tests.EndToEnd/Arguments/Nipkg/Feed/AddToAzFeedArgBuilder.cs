@@ -1,5 +1,5 @@
 ﻿using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
-namespace Gcd.Tests.EndToEnd.Arguments.Nipkg;
+namespace Gcd.Tests.EndToEnd.Arguments.Nipkg.Feed;
 
 public class AddToAzFeedArgBuilder : ArgumentsBuilder
 {

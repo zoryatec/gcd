@@ -8,7 +8,7 @@ namespace Gcd.Contract.Nipkg
 {
     public static class AddPackageToAzFeed
     {
-        public const string COMMAND_NAME = "add-package-blob-feed";
+        public const string COMMAND_NAME = "add-package-az";
         public const string COMMAND_DESCRIPTION = "desc TODO add-package-blob-feed";
 
         public const string PACKAGE_PATH_OPTION = "--package-path";
