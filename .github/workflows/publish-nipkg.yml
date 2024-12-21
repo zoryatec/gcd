@@ -51,11 +51,11 @@ jobs:
     - name: Build NIPKG package
       run:  |
         gcd nipkg build `
-        --package-sourec-dir "package-content" `
+        --package-sourec-dir "D:\\a\\gcd\\gcd\\package\\package-content" `
         --package-name "gcd" `
         --package-version "0.5.0-${{github.run_number}}" `
         --package-instalation-dir "BootVolume/Program Files/gcd" `
-        --package-destination-dir "package"
+        --package-destination-dir "D:\\a\\gcd\\gcd\\package\\package"
 
     - name: Upload package
       uses: actions/upload-artifact@v4.4.3
