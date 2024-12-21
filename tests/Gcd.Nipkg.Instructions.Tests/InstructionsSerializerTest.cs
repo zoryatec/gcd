@@ -21,7 +21,9 @@ namespace Gcd.Tests.UnitTest
             var root = new CustomExecuteRoot("ddfdffdf");
             var args = new CustomExecuteArguments("dfdfff");
             var exeName = new CustomExecuteExeName("ddfdfssd");
-            var custExe = new FilePackageCustomeExecute(root, exeName,args);
+            var step = new CustomExecuteStep("dfdfff");
+            var schedule = new CustomExecuteSchedule("ddfdfssd");
+            var custExe = new FilePackageCustomeExecute(root, exeName,args,step, schedule);
   
 
             instr.AddCustomExecute(custExe);

@@ -55,7 +55,7 @@ jobs:
         --package-name "gcd" `
         --package-version "0.5.0-${{github.run_number}}" `
         --package-instalation-dir "BootVolume/Program Files/gcd" `
-        --package-destination-dir "D:\\a\\gcd\\gcd\\package\\package"
+        --package-destination-dir "D:\\a\\gcd\\gcd\\package"
 
     - name: Upload package
       uses: actions/upload-artifact@v4.4.3
