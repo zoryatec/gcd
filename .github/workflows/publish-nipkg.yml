@@ -20,13 +20,13 @@ jobs:
       uses: actions/download-artifact@v4.1.8
       with:
         name: gcd-bin
-        path: "./gcd-bootstrap"
+        path: "$env:GITHUB_WORKSPACE\\gcd-bootstrap"
 
     - name: Download gcd binary
       uses: actions/download-artifact@v4.1.8
       with:
         name: gcd-bin
-        path: "./package-content"
+        path: "$env:GITHUB_WORKSPACE\\package-content"
 
     - name: Add GCD to path
       run: |
@@ -43,31 +43,25 @@ jobs:
     - name: Build Nipkg
       run:  |
         gcd nipkg build `
-        --package-sourec-dir "D:\\a\\gcd\\gcd\\package-content" `
+        --package-sourec-dir "$env:GITHUB_WORKSPACE\\package-content" `
         --package-name "gcd" `
         --package-version "0.5.0-${{github.run_number}}" `
         --package-instalation-dir "BootVolume/Program Files/gcd" `
-        --package-destination-dir "D:\\a\\gcd\\gcd\\package"
+        --package-destination-dir "$env:GITHUB_WORKSPACE\\\package"
 
     - name: Publish Nipkg
       run:  |
         gcd nipkg feed add-package-az `
-        --package-path "D:\\a\\gcd\\gcd\\package\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" `
+        --package-path "$env:GITHUB_WORKSPACE\\package\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" `
         --feed-url "https://zoryatecartifacts.blob.core.windows.net/gcd-feed?${{ secrets.SAS_TOKEN }}"
 
   # POST
-        
-    - name: Upload feed
-      uses: actions/upload-artifact@v4.4.3
-      with:
-        name: gcd-feed-temp
-        path: "D:\\a\\gcd\\gcd\\tempFeed"
 
     - name: Upload package
       uses: actions/upload-artifact@v4.4.3
       with:
         name: gcd-pckg-temp
-        path: "D:\\a\\gcd\\gcd\\package"
+        path: "$env:GITHUB_WORKSPACE\\package"
 
 
 
