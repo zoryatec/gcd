@@ -9,6 +9,7 @@ using Gcd.Commands.Nipkg.Feed.PushMetaDataAz;
 using Gcd.Commands.Nipkg.Feed.AddPackageAz;
 using Gcd.Commands.Tools.InstallNipkg;
 using Gcd.Commands.Tools.DownloadNipkg;
+using Gcd.Commands.Nipkg.Builder.AddInstruction;
 
 
 namespace Gcd.Menu
@@ -88,6 +89,8 @@ namespace Gcd.Menu
                     cmd.ShowHelp();
                     return 1;
                 });
+
+                cmd.UseAddCustomExecuteCmd(serviceProvider);
 
             });
 
