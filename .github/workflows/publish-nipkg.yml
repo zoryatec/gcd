@@ -31,37 +31,22 @@ jobs:
       with:
         name: gcd-bin
         path: "./package-content"
-
-        
-    - name: Get Version of gcd
-      run: |
-        gcd --version  
-
-    - name: Set NIPKG into user path
-      run: |
-        gcd tools add-to-user-path "C:\Program Files\National Instruments\NI Package Manager"
-
-    - name: Set NIPKG into system path
-      run: |
-        gcd tools add-to-system-path "C:\Program Files\National Instruments\NI Package Manager"
         
     - name: Download gcd binary
       uses: actions/download-artifact@v4.1.8
       with:
         name: gcd-bin
         path: "./package/data/BootVolume/Program Files/gcd"
+
+    - name: Setup gcd
+      run: |
+        gcd --version  
+        gcd config set --nipkg-installer-uri  $secrets.NIPKG_INSTALLER_URI
+        gcd config set --nipkg-cmd-path  "C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe"
         
     - name: Install NIPKG
       run: |
-        gcd nipkg install-nipkg
-                
-    - name: Check NIPKG instalation dir
-      run: dir "C:\Program Files\National Instruments\NI Package Manager"
-      
-    - name: Check NIPKG version
-      run: |
-          $execPath = "C:\Program Files\National Instruments\NI Package Manager\nipkg.exe"
-          & "$execPath" --version  
+        gcd nipkg install-nipkg             
         
     - name: Build NIPKG package
       run:  |
