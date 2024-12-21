@@ -51,7 +51,7 @@ jobs:
     - name: Build NIPKG package
       run:  |
         gcd nipkg build `
-        --package-sourec-dir "D:\\a\\gcd\\gcd\\package\\package-content" `
+        --package-sourec-dir "D:\\a\\gcd\\gcd\\package-content" `
         --package-name "gcd" `
         --package-version "0.5.0-${{github.run_number}}" `
         --package-instalation-dir "BootVolume/Program Files/gcd" `
