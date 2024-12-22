@@ -23,7 +23,7 @@ public static class UsePackCmdExtensions
         var mediator = serviceProvider.GetRequiredService<IMediator>();
         var factory = serviceProvider.GetRequiredService<IControlPropertyFactory>();
 
-        app.Command(COMMAND, cmd =>
+        app.Command("pack", cmd =>
         {
             var packageDestinationOption = cmd
                 .Option(PACKAGE_DESTINATION_DIR_OPTION, PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
