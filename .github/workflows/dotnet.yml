@@ -34,7 +34,7 @@ jobs:
       run: dotnet test tests/Gcd.Tests/Gcd.Tests.csproj
 
     - name: Pack
-      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=0.5.0-${{github.run_number}}
+      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=0.5.0-${{github.run_number}} --output "./nuget"
 
       
 
@@ -43,11 +43,17 @@ jobs:
     - name: Publish
       run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true --output "./publish"
 
-    - name: Upload Published Artifacts
+    - name: Upload bin
       uses: actions/upload-artifact@v4.4.3
       with:
         name: gcd-bin
         path: "./publish" # Path to the published output director
+
+    - name: Upload nuget
+      uses: actions/upload-artifact@v4.4.3
+      with:
+        name: gcd-bin
+        path: "./nuget" # Path to the published output director
     
         
   test-end-to-end:
