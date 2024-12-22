@@ -1,0 +1,12 @@
+name: 'Publish '
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-new-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
