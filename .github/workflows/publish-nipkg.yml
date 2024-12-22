@@ -65,9 +65,9 @@ jobs:
         # --step "install" `
         # --schedule "post" 
 
-        # gcd nipkg builder pack `
-        # --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
-        # --package-destination-dir  "$env:GITHUB_WORKSPACE\package-output-dir"
+        gcd nipkg builder pack `
+        --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
+        --package-destination-dir  "$env:GITHUB_WORKSPACE\package-output-dir"
      
 
     - name: Build Nipkg
