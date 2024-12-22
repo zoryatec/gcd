@@ -11,6 +11,12 @@
         <FileVersion>0.5.0</FileVersion>
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>gcd</ToolCommandName>
+		<Company>Zoryatec</Company>
+		<Authors>Dawid Wozny</Authors>
+		<Copyright>Zoryatec</Copyright>
+		<RepositoryUrl>https://github.com/zoryatec/gcd</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageProjectUrl>https://github.com/zoryatec/gcd</PackageProjectUrl>
     </PropertyGroup>
 
     <ItemGroup>
