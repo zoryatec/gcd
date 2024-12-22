@@ -1,13 +1,16 @@
-name: 'Publish '
+name: Manual trigger
 
 on:
   workflow_dispatch:
-
+    inputs:
+      name:
+        description: "Who to greet"
+        default: "World"
 
 jobs:
-  publish-new-version:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
+    hello:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Hello Step
+          run: echo "Hello ${{ github.event.inputs.name }}"
