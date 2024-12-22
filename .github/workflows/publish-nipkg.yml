@@ -68,16 +68,16 @@ jobs:
 
         gcd nipkg builder pack `
         --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
-        --package-destination-dir  "$env:GITHUB_WORKSPACE\package-output-dir"  
+        --package-destination-dir  "$env:GITHUB_WORKSPACE\package"  
 
-    - name: Build Nipkg
-      run:  |
-        gcd nipkg build `
-        --package-sourec-dir "$env:GITHUB_WORKSPACE\\package-content" `
-        --package-name "gcd" `
-        --package-version "0.5.0-${{github.run_number}}" `
-        --package-instalation-dir "BootVolume/Program Files/gcd" `
-        --package-destination-dir "$env:GITHUB_WORKSPACE\package"
+    # - name: Build Nipkg
+    #   run:  |
+    #     gcd nipkg build `
+    #     --package-sourec-dir "$env:GITHUB_WORKSPACE\\package-content" `
+    #     --package-name "gcd" `
+    #     --package-version "0.5.0-${{github.run_number}}" `
+    #     --package-instalation-dir "BootVolume/Program Files/gcd" `
+    #     --package-destination-dir "$env:GITHUB_WORKSPACE\package"
 
     - name: Publish Nipkg
       run:  |
