@@ -19,7 +19,7 @@ jobs:
 
       - name: install nupkg
         run: |
-          dotnet tool install --global gcd --source "https://nuget.pkg.github.com/zoryatec/v3/index.json"
+          dotnet tool install --global gcd --source "https://nuget.pkg.github.com/zoryatec/index.json"
 
       - name: Setup gcd
         run: |
