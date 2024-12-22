@@ -54,7 +54,7 @@ public static class UseAddContentCmdExtensions
 
 public class PackageBuilderRootDirOption : CommandOption
 {
-    public static readonly string NAME = "--builder-root-dir";
+    public static readonly string NAME = "--package-builder-dir";
     public PackageBuilderRootDirOption() : base(NAME, CommandOptionType.SingleValue)
     {
         this.Description = "Description Arg";
