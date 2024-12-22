@@ -50,7 +50,8 @@ namespace Gcd.Menu
                 cmd.UseNipkgPackageBuilderSetPropertyCmd(serviceProvider);
                 cmd.UseAddContentCmd(serviceProvider);
                 cmd.UseFilePackageInstructionsCmd(serviceProvider);
-                cmd.UseMsiPackageInstructionsCmd(serviceProvider);
+                //cmd.UseMsiPackageInstructionsCmd(serviceProvider);
+                cmd.UsePackCmd(serviceProvider);
             });
 
             return app;

@@ -43,6 +43,7 @@ jobs:
     - name: Demo Builder
       run:  |
         mkdir "$env:GITHUB_WORKSPACE\package-builder"
+        mkdir "$env:GITHUB_WORKSPACE\package-output-dir"
 
         gcd nipkg builder init `
         --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
@@ -63,7 +64,11 @@ jobs:
         --exe-name "Program Files\\gcd\\gcd.exe" `
         --step "install" `
         --schedule "post" 
-        
+
+        gcd nipkg builder pack `
+        --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
+        --package-destination-dir  "$env:GITHUB_WORKSPACE\package-output-dir"
+     
 
     - name: Build Nipkg
       run:  |
