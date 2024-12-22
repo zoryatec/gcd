@@ -12,7 +12,7 @@ public class PackageBuilderSerVersionArgBuilder : ArgumentsBuilder
 
     public PackageBuilderSerVersionArgBuilder WithPackageBuilderDirectory(string value)
     {
-        WithOption(PACKAGE_PATH_OPTION, value);
+        WithOption(PACKAGE_BUILDER_DIR_OPTION, value);
         return this;
     }
     public PackageBuilderSerVersionArgBuilder WithVersion(string value)

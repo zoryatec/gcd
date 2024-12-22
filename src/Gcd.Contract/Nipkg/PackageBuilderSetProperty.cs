@@ -11,7 +11,7 @@ namespace Gcd.Contract.Nipkg
         public const string COMMAND = "set-property";
         public const string COMMAND_DESCRIPTION = "set version package builder directory";
 
-        public const string PACKAGE_PATH_OPTION = "--package-path";
+        public const string PACKAGE_BUILDER_DIR_OPTION = "--package-builder-dir";
         public const string PACKAGE_PATH_DESCRIPTION = "Path to a package";
 
         public const string PACKAGE_ARCHITECTURE_OPTION = "--package-architecture";

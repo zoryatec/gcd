@@ -18,7 +18,7 @@ public static class UseNipkgPackageBuilderSetPropertyCmdExtensions
 
         app.Command(COMMAND, command =>
         {
-            var rootDirOpt = command.Option(PACKAGE_PATH_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue)
+            var rootDirOpt = command.Option(PACKAGE_BUILDER_DIR_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
 
             var options = new List<ControlPropertyOption>

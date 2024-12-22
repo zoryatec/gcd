@@ -46,13 +46,23 @@ jobs:
 
         gcd nipkg builder init `
         --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
-        --package-name "gcd" `
-        --package-version "0.5.0-${{github.run_number}}" 
 
         gcd nipkg builder add-content `
         --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
         --content-src-dir "$env:GITHUB_WORKSPACE\\package-content" `
         --target-root-dir "BootVolume/Program Files/gcd" 
+
+        gcd nipkg builder set-property `
+        --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
+        --package-name "gcd" `
+        --package-version "0.5.0-${{github.run_number}}" 
+
+        gcd nipkg builder instructions-file-pkg add-custom-execute `
+        --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
+        --root "BootVolume" `
+        --exe-name "Program Files\\gcd\\gcd.exe" `
+        --step "install" `
+        --schedule "post" 
         
 
     - name: Build Nipkg
