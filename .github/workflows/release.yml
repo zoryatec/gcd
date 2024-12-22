@@ -13,6 +13,11 @@ jobs:
       - name: Install Versionize
         run: dotnet tool install --global Versionize
 
+      - name: Setup git
+        run: |
+          git config --local user.email "dawid.wozny@zoryatec.com"
+          git config --local user.name "github-actions[bot]"
+
       - name: Versionize Release
         id: versionize
         run: versionize --exit-insignificant-commits
