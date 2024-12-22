@@ -2,10 +2,6 @@ name: Manual trigger
 
 on:
   workflow_dispatch:
-    inputs:
-      name:
-        description: "Who to greeta"
-        default: "World"
 
 jobs:
     hello:
