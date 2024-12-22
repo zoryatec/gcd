@@ -34,8 +34,7 @@ jobs:
       run: dotnet test tests/Gcd.Tests/Gcd.Tests.csproj
 
     - name: Pack
-      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=0.5.0-prerelease --output "./nuget"
-
+      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=0.5.0-${{github.run_number}} --output "./nuget"
       
     - name: Publish
       run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:Version=0.5.0-${{github.run_number}} -p:PublishSingleFile=true --output "./publish"
