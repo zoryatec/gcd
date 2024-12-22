@@ -1,12 +1,37 @@
-name: release
+name: 'release'
 
 on:
   workflow_dispatch:
 
 jobs:
-    hello:
-        runs-on: ubuntu-latest
+  publish-new-version:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+      - name: Install Versionize
+        run: dotnet tool install --global Versionize
 
-        steps:
-        - name: Hello Step
-          run: echo "Hello ${{ github.event.inputs.name }}"
+      - name: Versionize Release
+        id: versionize
+        run: versionize --exit-insignificant-commits
+        continue-on-error: true
+
+      - name: No release required
+        if: steps.versionize.outcome != 'success'
+        run: echo "Skipping publishing. No release required."
+
+      - name: Build Package
+        if: steps.versionize.outcome == 'success'
+        run: dotnet pack --output nupkgs --configuration Release
+      - name: Push to Nuget
+        if: steps.versionize.outcome == 'success'
+        run: dotnet nuget push "nupkgs/*.nupkg" -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}}
+      - name: Push changes to GitHub
+        if: steps.versionize.outcome == 'success'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          tags: true
