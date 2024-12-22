@@ -58,12 +58,13 @@ jobs:
         --package-name "gcd" `
         --package-version "0.5.0-${{github.run_number}}"
 
-        # gcd nipkg builder instructions-file-pkg add-custom-execute `
-        # --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
-        # --root "BootVolume" `
-        # --exe-name "Program Files\\gcd\\gcd.exe" `
-        # --step "install" `
-        # --schedule "post"
+        gcd nipkg builder instructions-file-pkg add-custom-execute `
+        --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
+        --root "BootVolume" `
+        --arguments "tools add-to-user-path C:\\PROGRA~1\\gcd" `
+        --exe-name "Program Files\\gcd\\gcd.exe" `
+        --step "install" `
+        --schedule "post"
 
         gcd nipkg builder pack `
         --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
