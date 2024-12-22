@@ -1,4 +1,4 @@
-name: Publish to NIPKG
+name: ci-cd-publish-nipkg
 
 on:
   workflow_call: # This allows this workflow to be called by other workflows

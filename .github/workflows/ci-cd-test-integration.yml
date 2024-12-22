@@ -1,4 +1,4 @@
-name: Integration Test Stage
+name: ci-cd-test-integration
 
 on:
   workflow_call: # This allows this workflow to be called by other workflows
