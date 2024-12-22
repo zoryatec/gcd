@@ -32,6 +32,12 @@ jobs:
       
     - name: Test
       run: dotnet test tests/Gcd.Tests/Gcd.Tests.csproj
+
+    - name: Pack
+      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=0.5.0-${{github.run_number}}
+
+      
+
   
       
     - name: Publish
