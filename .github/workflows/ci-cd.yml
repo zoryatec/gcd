@@ -54,17 +54,17 @@ jobs:
         path: "./nuget" # Path to the published output director
 
   test-nuget:
-    uses: ./.github/workflows/ci-cd/test-nuget.yml  # Reference the reusable build workflow
+    uses: ./.github/workflows/ci-cd-test-nuget.yml  # Reference the reusable build workflow
     needs: build
     secrets: inherit
     
         
   test-end-to-end:
-    uses: ./.github/workflows/ci-cd/test-integration.yml  # Reference the reusable build workflow
+    uses: ./.github/workflows/ci-cd-test-integration.yml  # Reference the reusable build workflow
     needs: build
     secrets: inherit
     
   publish-nipkg:
-    uses: ./.github/workflows/ci-cd/publish-nipkg.yml  # Reference the reusable build workflow
+    uses: ./.github/workflows/ci-cd-publish-nipkg.yml  # Reference the reusable build workflow
     needs: test-end-to-end
     secrets: inherit
