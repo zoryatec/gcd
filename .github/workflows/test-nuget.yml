@@ -9,9 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Add GitHub Packages feed
-        run: |
-          dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+      # - name: Add GitHub Packages feed
+      #   run: |
+      #     dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
 
       # - name: Add GCD to path
       #   run: |
@@ -19,7 +19,7 @@ jobs:
 
       - name: install nupkg
         run: |
-          dotnet tool install --global gcd
+          dotnet tool install --global gcd --source "https://nuget.pkg.github.com/zoryatec/v3/index.json"
 
       - name: Setup gcd
         run: |
