@@ -17,6 +17,9 @@
 		<RepositoryUrl>https://github.com/zoryatec/gcd</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageProjectUrl>https://github.com/zoryatec/gcd</PackageProjectUrl>
+		<PackageId>gcd</PackageId>
+		<Title>G CI/CD command line tool</Title>
+		<Description>G CI/CD command line tool to do what LabVIEW should</Description>
     </PropertyGroup>
 
     <ItemGroup>
