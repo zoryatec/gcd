@@ -11,7 +11,7 @@ jobs:
 
       - name: Add GitHub Packages feed
         run: |
-          dotnet nuget add source --name github --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+          dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --name github 
 
       # - name: Add GCD to path
       #   run: |
