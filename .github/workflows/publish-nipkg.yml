@@ -20,13 +20,13 @@ jobs:
       uses: actions/download-artifact@v4.1.8
       with:
         name: gcd-bin
-        path: "$env:GITHUB_WORKSPACE\\gcd-bootstrap"
+        path: "gcd-bootstrap"
 
     - name: Download gcd binary
       uses: actions/download-artifact@v4.1.8
       with:
         name: gcd-bin
-        path: "$env:GITHUB_WORKSPACE\\package-content"
+        path: "package-content"
 
     - name: Add GCD to path
       run: |
@@ -62,7 +62,7 @@ jobs:
       uses: actions/upload-artifact@v4.4.3
       with:
         name: gcd-pckg-temp
-        path: "$env:GITHUB_WORKSPACE\\package"
+        path: "package"
 
 
 
