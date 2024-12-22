@@ -41,8 +41,8 @@ namespace Gcd.Tests.EndToEnd.Nipkg
             var result = _gcd.Run(args);
 
             // Asssert
-            result.Return.Should().Be(0);
             result.Error.Should().BeEmpty();
+            result.Return.Should().Be(0);
             File.Exists($"{packageBuilderDir}\\data\\BootVolume\\Zoryatec\\sample-package\\content-of-test-package.txt");
         }
 

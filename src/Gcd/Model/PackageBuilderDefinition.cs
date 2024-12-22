@@ -11,8 +11,8 @@ public sealed record PackageBuilderContentDir : LocalDirPath
 {
     public static Result<PackageBuilderContentDir> Of(PackageBuilderRootDir rootDir, InatallationTargetRootDir packageInstalatioDir)
     {
-        string windPath = packageInstalatioDir.Value.Replace('/', '\\');
-        var dir = LocalDirPath.Parse($"{rootDir.Value}");
+        var windPath = packageInstalatioDir.Value.Replace('/', '\\');
+        var dir = LocalDirPath.Parse($"{rootDir.Value}\\{windPath}");
         return dir.Map((dir) => new PackageBuilderContentDir(dir));
     }
     private PackageBuilderContentDir(LocalDirPath value) : base(value) { }
