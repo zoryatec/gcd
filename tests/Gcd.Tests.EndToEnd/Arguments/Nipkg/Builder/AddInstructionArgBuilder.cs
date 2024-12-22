@@ -14,7 +14,7 @@ public class AddInstructionArgBuilder : ArgumentsBuilder
     }
     public AddInstructionArgBuilder WithPackageBuilderRootDir(string value)
     {
-        WithArg(value); ;
+        WithOption(PackageBuilderRootDirOption.NAME, value);
         return this;
     }
 

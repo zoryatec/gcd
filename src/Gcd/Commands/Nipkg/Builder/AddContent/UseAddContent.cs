@@ -23,14 +23,18 @@ public static class UseAddContentCmdExtensions
             command.Description = "COMMAND_DESCRIPTION";
             var contentSrcDirOpt = new BuilderContentSourceDirOption();
             var targetDirOpt = new InatallationTargetRootDirOption();
-            var builderRootDirArg = new PackageBuilderRootDirArgument();
-            command.AddArgument(builderRootDirArg.IsRequired());
-            command.AddOptions(contentSrcDirOpt.IsRequired(), targetDirOpt.IsRequired());
+            var builderRootOpt = new PackageBuilderRootDirOption();
+
+            command.AddOptions(
+                builderRootOpt.IsRequired(),
+                contentSrcDirOpt.IsRequired(),
+                targetDirOpt.IsRequired()
+                );
 
 
             command.OnExecuteAsync(async cancelationToken =>
             {
-                var builderRootDir = builderRootDirArg.Map();
+                var builderRootDir = builderRootOpt.Map();
                 var contentSrcDir = contentSrcDirOpt.Map();
                 var targetDir = targetDirOpt.Map();
 
@@ -48,16 +52,16 @@ public static class UseAddContentCmdExtensions
     }
 }
 
-public class PackageBuilderRootDirArgument :  CommandArgument
+public class PackageBuilderRootDirOption : CommandOption
 {
     public static readonly string NAME = "--builder-root-dir";
-    public PackageBuilderRootDirArgument() : base()
+    public PackageBuilderRootDirOption() : base(NAME, CommandOptionType.SingleValue)
     {
         this.Description = "Description Arg";
     }
 
     public Result<PackageBuilderRootDir> Map() =>
-        PackageBuilderRootDir.Of(this.Value);
+        PackageBuilderRootDir.Of(this.Value());
 }
 
 public class BuilderContentSourceDirOption : CommandOption

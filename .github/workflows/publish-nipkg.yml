@@ -40,12 +40,19 @@ jobs:
         gcd tools install-nipkg   
         mkdir "$env:GITHUB_WORKSPACE\package"
 
-    - name: Demo Builder - init
+    - name: Demo Builder
       run:  |
         mkdir "$env:GITHUB_WORKSPACE\package-builder"
+
         gcd nipkg builder init `
+        --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
         --package-name "gcd" `
         --package-version "0.5.0-${{github.run_number}}" 
+
+        gcd nipkg builder add-content `
+        --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
+        --content-src-dir "$env:GITHUB_WORKSPACE\\package-content" `
+        --target-root-dir "BootVolume/Program Files/gcd" 
         
 
     - name: Build Nipkg

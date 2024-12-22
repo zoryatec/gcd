@@ -23,14 +23,14 @@ public static class UseAddInstructionCmdExtensions
         app.Command("add-custom-execute", command =>
         {
             command.Description = "COMMAND_DESCRIPTION";
-            var builderRootDirArg = new PackageBuilderRootDirArgument();
+            var builderRootDirOpt= new PackageBuilderRootDirOption();
             var rootOpt = new CustomExecuteRootOption();
             var argsOpt = new CustomExecuteArgumentsOption();
             var exeNameOpt = new CustomExecuteExeNameOption();
             var stepOpt = new CustomExecuteStepOption();
             var scheduleOpt = new CustomExecuteScheduleOption();
-            command.AddArgument(builderRootDirArg.IsRequired());
             command.AddOptions(
+                builderRootDirOpt.IsRequired(),
                 rootOpt.IsRequired(),
                 argsOpt.IsRequired(),
                 exeNameOpt.IsRequired(),
@@ -47,8 +47,8 @@ public static class UseAddInstructionCmdExtensions
                 var exeName = exeNameOpt.Map();
                 var step = stepOpt.Map();
                 var schedule = scheduleOpt.Map();
-                var value = builderRootDirArg.Value;
-                var builderRootDir = builderRootDirArg.Map();
+                //var value = builderRootDirArg.Value;
+                var builderRootDir = builderRootDirOpt.Map();
 
 
                 return await Result
