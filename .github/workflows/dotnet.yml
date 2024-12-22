@@ -37,11 +37,13 @@ jobs:
       run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=0.5.0-${{github.run_number}} --output "./nuget"
 
       
-
-  
-      
     - name: Publish
       run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:Version=0.5.0-${{github.run_number}} -p:PublishSingleFile=true --output "./publish"
+
+    - name: Publish to GitHub Packages
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: dotnet nuget push bin/Release/*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key $GITHUB_TOKEN
 
     - name: Upload bin
       uses: actions/upload-artifact@v4.4.3
