@@ -38,7 +38,7 @@ jobs:
         gcd config set --nipkg-installer-uri  "https://download.ni.com/support/nipkg/products/ni-package-manager/installers/NIPackageManager21.3.0_online.exe"
         gcd config set --nipkg-cmd-path  "C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe"
         gcd tools install-nipkg   
-        mkdir "$env:GITHUB_WORKSPACE\\package"
+        mkdir "$env:GITHUB_WORKSPACE\package"
         
 
     - name: Build Nipkg
@@ -48,7 +48,7 @@ jobs:
         --package-name "gcd" `
         --package-version "0.5.0-${{github.run_number}}" `
         --package-instalation-dir "BootVolume/Program Files/gcd" `
-        --package-destination-dir "$env:GITHUB_WORKSPACE\\package"
+        --package-destination-dir "$env:GITHUB_WORKSPACE\package"
 
     - name: Publish Nipkg
       run:  |
