@@ -1,0 +1,73 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "*" ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+    env:
+      VERSION: "0.5.0"
+
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+       
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build src/Gcd/Gcd.csproj  --no-restore
+      
+    - name: Test
+      run: dotnet test tests/Gcd.Tests/Gcd.Tests.csproj
+
+    - name: Pack
+      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=0.5.0-${{github.run_number}} --output "./nuget"
+      
+    - name: Publish
+      run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:Version=0.5.0-${{github.run_number}} -p:PublishSingleFile=true --output "./publish"
+
+    - name: Publish to GitHub Packages
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: dotnet nuget push .\nuget\*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload bin
+      uses: actions/upload-artifact@v4.4.3
+      with:
+        name: gcd-bin
+        path: "./publish" # Path to the published output director
+
+    - name: Upload nuget
+      uses: actions/upload-artifact@v4.4.3
+      with:
+        name: gcd-nuget
+        path: "./nuget" # Path to the published output director
+
+  test-nuget:
+    uses: ./.github/workflows/test-nuget.yml  # Reference the reusable build workflow
+    needs: build
+    secrets: inherit
+    
+        
+  test-end-to-end:
+    uses: ./.github/workflows/test-integration.yml  # Reference the reusable build workflow
+    needs: build
+    secrets: inherit
+    
+  publish-nipkg:
+    uses: ./.github/workflows/publish-nipkg.yml  # Reference the reusable build workflow
+    needs: test-end-to-end
+    secrets: inherit

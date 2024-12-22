@@ -1,0 +1,44 @@
+name: Integration Test Stage
+
+on:
+  workflow_call: # This allows this workflow to be called by other workflows
+
+jobs:
+  test-end-to-end:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add GitHub Packages feed
+        run: |
+          dotnet nuget add source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: install nupkg
+        run: |
+          dotnet tool install --global gcd
+
+      - name: Setup gcd
+        run: |
+          gcd --version  
+          gcd config set --nipkg-installer-uri "https://download.ni.com/support/nipkg/products/ni-package-manager/installers/NIPackageManager21.3.0_online.exe"
+          gcd config set --nipkg-cmd-path  "C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe"
+
+      - name: Install NIPKG
+        run: |
+          gcd tools install-nipkg
+        working-directory: ./gcd-bootstrap
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build src/Gcd/Gcd.csproj  --no-restore
+
+      - name: Test
+        run: dotnet test tests/Gcd.Tests.EndToEnd/Gcd.Tests.EndToEnd.csproj
