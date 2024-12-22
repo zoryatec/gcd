@@ -29,7 +29,7 @@ jobs:
 
       - name: Build Package
         if: steps.versionize.outcome == 'success'
-        run: dotnet pack --output nupkgs --configuration Release
+        run: dotnet pack src/Gcd/Gcd.csproj --output nupkgs --configuration Release
       - name: Push to Nuget
         if: steps.versionize.outcome == 'success'
         run: dotnet nuget push "nupkgs\*.nupkg" -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}}
