@@ -41,7 +41,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg
                 .WithPackageBuilderDirectory(packageBuilderDir)
                 .WithPackageName(packageName)
                 .WithPackageVersion(packageVersion)
-                .WithPackageBuilderInstalationDir(packageInstalationDir)
+                //.WithPackageBuilderInstalationDir(packageInstalationDir)
                 .Build();
 
             var result = _gcd.Run(args);
@@ -90,7 +90,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg
                 .WithPackageBuilderDirectory(packageBuilderDir)
                 .WithPackageName(packageName)
                 .WithPackageVersion(packageVersion)
-                .WithPackageBuilderInstalationDir(packageInstalationDir)
+                //.WithPackageBuilderInstalationDir(packageInstalationDir)
                 .Build();
 
             var result = _gcd.Run(args);

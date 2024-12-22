@@ -70,7 +70,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg
         {
             var packageName = "sample-package";
             var packageVersion = "99.88.77.66";
-            var packageInstalationDir = "BootVolume/Zoryatec/sample-package";
+            //var packageInstalationDir = "BootVolume/Zoryatec/sample-package";
             var packageHomePage = Guid.NewGuid().ToString();
             var packageMaintainer = Guid.NewGuid().ToString();
 
@@ -81,7 +81,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg
                 .WithPackageBuilderDirectory(packageBuilderPath)
                 .WithPackageName(packageName)
                 .WithPackageVersion(packageVersion)
-                .WithPackageBuilderInstalationDir(packageInstalationDir)
+                //.WithPackageBuilderInstalationDir(packageInstalationDir)
                 .Build();
 
             var result = _gcd.Run(args);

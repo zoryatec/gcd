@@ -8,10 +8,10 @@ namespace Gcd.Contract.Nipkg
 {
     public class PackageBuilderInit
     {
-        public const string COMMAND = "create";
+        public const string COMMAND = "init";
         public const string COMMAND_DESCRIPTION = "Create package template";
 
-        public const string PACKAGE_PATH_OPTION = "--package-path";
+        public const string PACKAGE_BUILDER_DIR_OPTION = "--package-builder-dir";
         public const string PACKAGE_PATH_DESCRIPTION = "Path to a package";
 
         public const string PACKAGE_NAME_OPTION = "--package-name";

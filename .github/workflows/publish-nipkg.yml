@@ -39,6 +39,13 @@ jobs:
         gcd config set --nipkg-cmd-path  "C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe"
         gcd tools install-nipkg   
         mkdir "$env:GITHUB_WORKSPACE\package"
+
+    - name: Demo Builder - init
+      run:  |
+        mkdir "$env:GITHUB_WORKSPACE\package-builder"
+        gcd nipkg builder init `
+        --package-name "gcd" `
+        --package-version "0.5.0-${{github.run_number}}" 
         
 
     - name: Build Nipkg

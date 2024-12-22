@@ -13,7 +13,7 @@ public class PackageBuilderInitArgBuilder : ArgumentsBuilder
 
     public PackageBuilderInitArgBuilder WithPackageBuilderDirectory(string value)
     {
-        WithOption(PACKAGE_PATH_OPTION, value);
+        WithOption(PACKAGE_BUILDER_DIR_OPTION, value);
         return this;
     }
     public PackageBuilderInitArgBuilder WithPackageName(string value)
@@ -29,9 +29,9 @@ public class PackageBuilderInitArgBuilder : ArgumentsBuilder
     }
 
 
-    public PackageBuilderInitArgBuilder WithPackageBuilderInstalationDir(string value)
-    {
-        WithOption(PACKAGE_DESTINATION_DIR_OPTION, value);
-        return this;
-    }
+    //public PackageBuilderInitArgBuilder WithPackageBuilderInstalationDir(string value)
+    //{
+    //    WithOption(PACKAGE_DESTINATION_DIR_OPTION, value);
+    //    return this;
+    //}
 }

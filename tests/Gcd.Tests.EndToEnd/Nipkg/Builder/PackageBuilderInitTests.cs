@@ -33,15 +33,15 @@ namespace Gcd.Tests.EndToEnd.Nipkg
                 .WithPackageBuilderDirectory(packageBuilderDir)
                 .WithPackageName(packageName)
                 .WithPackageVersion(packageVersion)
-                .WithPackageBuilderInstalationDir(packageInstalationDir)
+                //.WithPackageBuilderInstalationDir(packageInstalationDir)
                 .Build();
 
             // Act
             var result = _gcd.Run(args);
 
             // Asssert
-            result.Return.Should().Be(0);
             result.Error.Should().BeEmpty();
+            result.Return.Should().Be(0);
             Directory.Exists($"{packageBuilderDir}\\data\\BootVolume\\Zoryatec\\sample-package");
         }
 

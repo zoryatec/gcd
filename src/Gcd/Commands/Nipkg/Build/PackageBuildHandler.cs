@@ -34,7 +34,7 @@ public class PackageBuildHandler(IMediator _mediator, IFileSystem _fs)
 
         // build package
         return await _mediator
-            .PackageBuilderInitAsync(rootDirTemp, installationDir, controlProp)
+            .PackageBuilderInitAsync(rootDirTemp, controlProp)
             .Bind(() => _mediator.AddContentAsync(rootDirTemp, installationDir, contentSrcDir))
             .Bind(() => _mediator.BuilderPackAsync(rootDirTemp, outputDir,cmd));
     }
