@@ -31,6 +31,8 @@ public static class UsePackCmdExtensions
 
             var builderRootDirOpt = new PackageBuilderRootDirOption();
 
+            cmd.AddOption(builderRootDirOpt);
+
 
             cmd.OnExecuteAsync(async cancellationToken =>
             {
