@@ -2,6 +2,10 @@ name: 'Publish '
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "*" ]
 
 jobs:
   publish-new-version:
