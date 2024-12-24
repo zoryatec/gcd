@@ -42,4 +42,8 @@ jobs:
         run: dotnet build src/Gcd/Gcd.csproj  --no-restore
 
       - name: Test
+        env:
+          AZUREADDPKGTESTFEEDURI: ${{ secrets.AZUREADDPKGTESTFEEDURI }}
+          AZUREFEEDURI: ${{ secrets.AZUREFEEDURI }}
+          AZUREPUSHPULLTESTFEEDURI: ${{ secrets.AZUREPUSHPULLTESTFEEDURI }}
         run: dotnet test tests/Gcd.Tests.EndToEnd/Gcd.Tests.EndToEnd.csproj
