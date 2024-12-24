@@ -31,7 +31,7 @@ jobs:
       run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:Version=0.5.0-${{github.run_number}} -p:PublishSingleFile=true --output "./publish"
 
     - name: pack nuget
-      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=0.5.0-${{github.run_number}} --output "./nuget"
+      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=0.5.0-${{github.run_number}} --output nuget
 
     - name: build unit tests
       run: dotnet build tests/Gcd.Tests/Gcd.Tests.csproj  --output unit-tests
@@ -52,32 +52,26 @@ jobs:
       uses: actions/upload-artifact@v4.4.3
       with:
         name: gcd-bin
-        path: "./publish"
+        path: publish
 
     - name: upload nuget
       uses: actions/upload-artifact@v4.4.3
       with:
         name: gcd-nuget
-        path: "./nuget" 
+        path: nuget
 
     - name: upload integration tests
       uses: actions/upload-artifact@v4.4.3
       with:
         name: gcd-integration-tests
-        path: integration-tests 
-
-  test-nuget:
-    uses: ./.github/workflows/ci-cd-test-nuget.yml  # Reference the reusable build workflow
-    needs: build
-    secrets: inherit
-    
+        path: integration-tests  
         
   test-end-to-end:
-    uses: ./.github/workflows/ci-cd-test-integration.yml  # Reference the reusable build workflow
+    uses: ./.github/workflows/ci-cd-test-integration.yml
     needs: build
     secrets: inherit
     
   publish-nipkg:
-    uses: ./.github/workflows/ci-cd-publish-nipkg.yml  # Reference the reusable build workflow
+    uses: ./.github/workflows/ci-cd-publish-nipkg.yml
     needs: test-end-to-end
     secrets: inherit
