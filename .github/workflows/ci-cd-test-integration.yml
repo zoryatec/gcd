@@ -36,23 +36,16 @@ jobs:
           gcd tools install-nipkg
         working-directory: ./gcd-bootstrap
 
-      - name: Setup .NET
+      - name: setup dotnet
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
 
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build src/Gcd/Gcd.csproj  --no-restore
-
-      - name: Test
+      - name: test
         env:
           AZUREADDPKGTESTFEEDURI: ${{ secrets.AZUREADDPKGTESTFEEDURI }}
           AZUREFEEDURI: ${{ secrets.AZUREFEEDURI }}
           AZUREPUSHPULLTESTFEEDURI: ${{ secrets.AZUREPUSHPULLTESTFEEDURI }}
           NIPKGINSTALLERURI: ${{ secrets.NIPKGINSTALLERURI }}
           NIPKGCMDPATH: ${{ secrets.NIPKGCMDPATH }}
-
-        run: dotnet test tests/Gcd.Tests.EndToEnd/Gcd.Tests.EndToEnd.csproj
+        run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll
