@@ -9,23 +9,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download gcd for bootstraping
+      - name: download gcd 
         uses: actions/download-artifact@v4.1.8
         with:
           name: gcd-bin
-          path: "./gcd-bootstrap"
+          path: gcd-bootstrap
 
-      - name: Add GCD to path
+      - name: download integration tests
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: gcd-integration-tests
+          path: integration-tests 
+
+      - name: add gcd to path
         run: |
           echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
 
-      - name: Setup gcd
+      - name: setup gcd
         run: |
           gcd --version  
           gcd config set --nipkg-installer-uri "https://download.ni.com/support/nipkg/products/ni-package-manager/installers/NIPackageManager21.3.0_online.exe"
           gcd config set --nipkg-cmd-path  "C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe"
 
-      - name: Install NIPKG
+      - name: install nipkg
         run: |
           gcd tools install-nipkg
         working-directory: ./gcd-bootstrap
