@@ -37,7 +37,7 @@ jobs:
       run: dotnet build tests/Gcd.Tests/Gcd.Tests.csproj  --output unit-tests
 
     - name: run unit tests
-      run: dotnet test unit-tests
+      run: dotnet test unit-tests/gcd.tests.dll
 
     - name: build integration tests
       run: dotnet tests/Gcd.Tests.EndToEnd/Gcd.Tests.EndToEnd.csproj  --output integration-tests
