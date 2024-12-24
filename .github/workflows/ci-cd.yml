@@ -16,25 +16,32 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       
-    - name: Setup .NET
+    - name: setup dotnet
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
        
-    - name: Restore dependencies
+    - name: restore dependencies
       run: dotnet restore
       
-    - name: Build
+    - name: build app
       run: dotnet build src/Gcd/Gcd.csproj  --no-restore
-      
-    - name: Test
-      run: dotnet test tests/Gcd.Tests/Gcd.Tests.csproj
 
-    - name: Pack
-      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=0.5.0-${{github.run_number}} --output "./nuget"
-      
-    - name: Publish
+    - name: publish app
       run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:Version=0.5.0-${{github.run_number}} -p:PublishSingleFile=true --output "./publish"
+
+    - name: pack nuget
+      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=0.5.0-${{github.run_number}} --output "./nuget"
+
+    - name: build unit tests
+      run: dotnet build tests/Gcd.Tests/Gcd.Tests.csproj  --output unit-tests
+
+    - name: run unit tests
+      run: dotnet test unit-tests
+
+    - name: build integration tests
+      run: dotnet tests/Gcd.Tests.EndToEnd/Gcd.Tests.EndToEnd.csproj  --output integration-tests
+   
 
     - name: Publish to GitHub Packages
       env:
@@ -45,13 +52,19 @@ jobs:
       uses: actions/upload-artifact@v4.4.3
       with:
         name: gcd-bin
-        path: "./publish" # Path to the published output director
+        path: "./publish"
 
     - name: Upload nuget
       uses: actions/upload-artifact@v4.4.3
       with:
         name: gcd-nuget
-        path: "./nuget" # Path to the published output director
+        path: "./nuget" 
+
+    - name: Upload tests
+      uses: actions/upload-artifact@v4.4.3
+      with:
+        name: gcd-tests
+        path: tests 
 
   test-nuget:
     uses: ./.github/workflows/ci-cd-test-nuget.yml  # Reference the reusable build workflow
