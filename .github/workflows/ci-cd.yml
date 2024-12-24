@@ -40,7 +40,7 @@ jobs:
       run: dotnet test unit-tests/gcd.tests.dll
 
     - name: build integration tests
-      run: dotnet tests/Gcd.Tests.EndToEnd/Gcd.Tests.EndToEnd.csproj  --output integration-tests
+      run: dotnet build tests/Gcd.Tests.EndToEnd/Gcd.Tests.EndToEnd.csproj  --output integration-tests
    
 
     - name: Publish to GitHub Packages
