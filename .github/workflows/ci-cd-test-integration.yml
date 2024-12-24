@@ -51,4 +51,4 @@ jobs:
           AZUREPUSHPULLTESTFEEDURI: ${{ secrets.AZUREPUSHPULLTESTFEEDURI }}
           NipkgInstallerUri: ${{ secrets.NIPKGINSTALLERURI }}
           NipkgCmdPath: ${{ secrets.NIPKGCMDPATH }}
-        run: dotnet test tests/Gcd.Tests.EndToEnd/Gcd.Tests.EndToEnd.csproj
+        run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll
