@@ -43,28 +43,28 @@ jobs:
       run: dotnet build tests/Gcd.Tests.EndToEnd/Gcd.Tests.EndToEnd.csproj  --output integration-tests
    
 
-    - name: Publish to GitHub Packages
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: dotnet nuget push .\nuget\*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GITHUB_TOKEN }}
+    # - name: Publish to GitHub Packages
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   run: dotnet nuget push .\nuget\*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Upload bin
+    - name: upload bin
       uses: actions/upload-artifact@v4.4.3
       with:
         name: gcd-bin
         path: "./publish"
 
-    - name: Upload nuget
+    - name: upload nuget
       uses: actions/upload-artifact@v4.4.3
       with:
         name: gcd-nuget
         path: "./nuget" 
 
-    - name: Upload tests
+    - name: upload integration tests
       uses: actions/upload-artifact@v4.4.3
       with:
-        name: gcd-tests
-        path: tests 
+        name: gcd-integration-tests
+        path: integration-tests 
 
   test-nuget:
     uses: ./.github/workflows/ci-cd-test-nuget.yml  # Reference the reusable build workflow
