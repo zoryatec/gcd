@@ -32,7 +32,7 @@ jobs:
         run: |
           gcd --version  
           gcd config set --nipkg-installer-uri ${{env.NIPKGINSTALLERURI}}
-          gcd config set --nipkg-cmd-path  ${{env.NIPKGCMDPATH}}
+          gcd config set --nipkg-cmd-path  "${{env.NIPKGCMDPATH}}"
 
       - name: install nipkg
         run: |
