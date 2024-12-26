@@ -37,7 +37,7 @@ jobs:
           gcd tools install-nipkg
         working-directory: ./gcd-bootstrap
 
-      - name: test
+      - name: dev test
         env:
           AZUREADDPKGTESTFEEDURI: ${{ secrets.AZUREADDPKGTESTFEEDURI }}
           AZUREFEEDURI: ${{ secrets.AZUREFEEDURI }}
@@ -46,4 +46,15 @@ jobs:
           NipkgCmdPath: ${{ secrets.NIPKGCMDPATH }}
           DevMode : true
           GcdPath: "gcd.exe"
+        run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll
+
+      - name: app test
+        env:
+          AZUREADDPKGTESTFEEDURI: ${{ secrets.AZUREADDPKGTESTFEEDURI }}
+          AZUREFEEDURI: ${{ secrets.AZUREFEEDURI }}
+          AZUREPUSHPULLTESTFEEDURI: ${{ secrets.AZUREPUSHPULLTESTFEEDURI }}
+          NipkgInstallerUri: ${{ secrets.NIPKGINSTALLERURI }}
+          NipkgCmdPath: ${{ secrets.NIPKGCMDPATH }}
+          DevMode : false
+          GcdPath: "gcd-bootstrap\\gcd.exe"
         run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll
