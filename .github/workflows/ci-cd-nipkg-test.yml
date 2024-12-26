@@ -36,6 +36,8 @@ jobs:
           gcd tools install-nipkg
           nipkg -v
           nipkg feed-add "${{ env.DEVFEED }}" --name=gcd-dev
+          nipkg feed-list
+          nipkg list
           nipkg install gcd -y
 
       - name: app test
