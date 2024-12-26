@@ -20,7 +20,7 @@ public class SetConfigTests(TestFixture testFixture) : BaseTest(testFixture)
     public void SetConfigTest()
     {
         //Arange
-        string path = "\"C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe\"";
+        string path = "C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe";
         var args = (new SetConfigArgBuilder())
             .WithNipkgCmdPath(path)
             //.WithNipkgInstallerUri(NipkgInstallerUri.None.ToString())

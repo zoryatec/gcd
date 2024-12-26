@@ -20,7 +20,13 @@ namespace Gcd.Tests.EndToEnd
 
         public GcdProcessResponse Run(GcdProcessRequest request)
         {
-            var arguments = string.Join(" ", request.Arguments);
+            var arugmentss = new List<string>();
+            foreach(var arg in request.Arguments) // envelop args with quotation mark
+            {
+                arugmentss.Add($"\"{arg}\"");
+            }
+
+            var arguments = string.Join(" ", arugmentss);
             ProcessStartInfo processStartInfo = new ProcessStartInfo
             {
                 FileName = GcdPath,
