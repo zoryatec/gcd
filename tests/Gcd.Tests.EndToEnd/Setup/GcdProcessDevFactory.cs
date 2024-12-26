@@ -4,6 +4,6 @@ public class GcdProcessDevFactory : IGcdProcessFactory
 {
     public IGcdProcess Create()
     {
-        return new GcdProcess();
+        return new GcdProcessApp();
     }
 }
