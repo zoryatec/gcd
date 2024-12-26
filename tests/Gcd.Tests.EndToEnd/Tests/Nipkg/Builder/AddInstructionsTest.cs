@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg.Builder;
+using Gcd.Tests.EndToEnd.Setup;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Gcd.Tests.EndToEnd.Nipkg;

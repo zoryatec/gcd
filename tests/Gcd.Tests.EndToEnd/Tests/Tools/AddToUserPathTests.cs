@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Gcd.Model;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg;
+using Gcd.Tests.EndToEnd.Setup;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

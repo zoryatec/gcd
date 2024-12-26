@@ -1,7 +1,6 @@
-using Gcd.Tests.EndToEnd.Setup;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Gcd.Tests.EndToEnd;
+namespace Gcd.Tests.EndToEnd.Setup;
 
 public class BaseTest : IClassFixture<TestFixture>
 {
