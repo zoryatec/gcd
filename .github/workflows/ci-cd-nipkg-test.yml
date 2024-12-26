@@ -34,7 +34,7 @@ jobs:
           gcd config set --nipkg-cmd-path  "${{env.NIPKGCMDPATH}}"
           gcd tools install-nipkg
           nipkg -v
-          nipkg feed-add "${{ secrets.NIPKG_DEV_FEED }}" --name dev-feed
+          nipkg feed-add "${{ secrets.NIPKG_DEV_FEED_READ }}" --name dev-feed
           nipkg install gcd
 
       - name: app test
