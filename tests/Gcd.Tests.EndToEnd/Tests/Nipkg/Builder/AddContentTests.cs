@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg.Builder;
+using Gcd.Tests.EndToEnd.Setup;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Gcd.Tests.EndToEnd.Nipkg
@@ -12,9 +13,11 @@ namespace Gcd.Tests.EndToEnd.Nipkg
         TestConfiguration _config;
         public AddContentTests(TestFixture testFixture)
         {
-            _gcd = new GcdProcessApp();
+            // _gcd = new GcdProcessApp();
             _tempDirectoryGenerator = new TempDirectoryGenerator();
             _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
+            var procFactory = testFixture.ServiceProvider.GetRequiredService<IGcdProcessFactory>();
+            _gcd = procFactory.Create();
         }
 
         [Fact]

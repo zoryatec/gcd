@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Runtime;
+using Gcd.Tests.EndToEnd.Setup;
 
 public class TestFixture
 {
@@ -20,6 +21,7 @@ public class TestFixture
         // Setup DI
 
         var serviceCollection = new ServiceCollection();
+        serviceCollection.AddScoped<IGcdProcessFactory, GcdProcessDevFactory>();
         serviceCollection.AddScoped<IConfiguration>(x => configuration);
         serviceCollection.AddScoped<TestConfiguration>();
 
