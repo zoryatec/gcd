@@ -26,7 +26,7 @@ namespace Gcd.Tests.EndToEnd.Project
 
             var args = new[] { "project", "build-spec", "set-version",
             "--project-path", $"{tempProjectpath}",
-            "--build-spec-name", "sample application",
+            "--build-spec-name", "\"sample application\"",
             "--build-spec-type", "invalidForNow",
             "--build-spec-target", "invalidForNow",
             "--version", "99.88.77.66"};

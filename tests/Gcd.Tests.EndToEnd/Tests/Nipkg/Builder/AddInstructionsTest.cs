@@ -21,8 +21,8 @@ public class AddInstructionsTest(TestFixture testFixture) : BaseTest(testFixture
         InitialiseDir(packageBuilderDir);
 
         var root = "BootVolume";
-        var arguments = "tools add-to-user-path C:\\PROGRA~1\\gcd";
-        var exeName = "Program Files\\gcd\\gcd.exe";
+        var arguments = "\"tools add-to-user-path C:\\PROGRA~1\\gcd\"";
+        var exeName = "\"Program Files\\gcd\\gcd.exe\"";
         var step = "install";
         var schedule = "post";
 
