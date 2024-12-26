@@ -67,11 +67,11 @@ jobs:
         path: integration-tests  
         
   test-end-to-end:
-    uses: ./.github/workflows/ci-cd-test-integration.yml
+    uses: ./.github/workflows/ci-cd-test.yml
     needs: build
     secrets: inherit
     
   publish-nipkg:
-    uses: ./.github/workflows/ci-cd-publish-nipkg.yml
+    uses: ./.github/workflows/ci-cd-nipkg-publish.yml
     needs: test-end-to-end
     secrets: inherit

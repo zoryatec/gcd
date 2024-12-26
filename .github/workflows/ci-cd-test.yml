@@ -1,4 +1,4 @@
-name: ci-cd-test-integration
+name: ci-cd-test
 
 on:
   workflow_call:
@@ -19,11 +19,9 @@ jobs:
           name: gcd-integration-tests
           path: integration-tests 
 
-      - name: add gcd to path
-        env:
-          GCD_DIR: ${{ github.workspace }}\gcd-bootstrap
+      - name: add to path
         run: |
-          echo "${{ env.GCD_DIR }}" >> $env:GITHUB_PATH
+          echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
          
       - name: setup
         env:
