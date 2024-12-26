@@ -18,14 +18,18 @@ jobs:
         with:
           name: gcd-integration-tests
           path: integration-tests 
+
+      - name: add gcd to path
+        env:
+          GCD_DIR: ${{ github.workspace }}\gcd-bootstrap
+        run: |
+          echo "${{ env.GCD_DIR }}" >> $env:GITHUB_PATH
          
       - name: setup
         env:
           NIPKGINSTALLERURI: ${{ secrets.NIPKGINSTALLERURI }}
           NIPKGCMDPATH: ${{ secrets.NIPKGCMDPATH }}
-          GCD_DIR: ${{ github.workspace }}\gcd-bootstrap
         run: |
-          echo "${{ env.GCD_DIR }}" >> $env:GITHUB_PATH
           gcd --version  
           gcd config set --nipkg-installer-uri ${{env.NIPKGINSTALLERURI}}
           gcd config set --nipkg-cmd-path  "${{env.NIPKGCMDPATH}}"
