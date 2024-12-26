@@ -55,5 +55,5 @@ jobs:
           NipkgInstallerUri: ${{ secrets.NIPKGINSTALLERURI }}
           NipkgCmdPath: ${{ secrets.NIPKGCMDPATH }}
           DevMode : false
-          GcdPath: "$env:GITHUB_WORKSPACE\\gcd-bootstrap\\gcd.exe"
+          GcdPath: "${{ env.GITHUB_WORKSPACE }}\\gcd-bootstrap\\gcd.exe"
         run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll
