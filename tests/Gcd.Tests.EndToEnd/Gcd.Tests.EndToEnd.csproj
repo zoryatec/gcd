@@ -10,8 +10,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Include="testdata\labview\sample.lvproj" />
-      <Content Include="testdata\nipkg\test-pkg\data\BootVolume\Program Files\test-package\test-purpose-package-file.txt" />
+      <Content Include="Setup\testdata\labview\sample.lvproj" />
+      <Content Include="Setup\testdata\nipkg\test-pkg\data\BootVolume\Program Files\test-package\test-purpose-package-file.txt" />
     </ItemGroup>
 
     <ItemGroup>
@@ -34,7 +34,7 @@
     </ItemGroup>
 
 	<ItemGroup>
-		<testdata Include="testdata\**\*.*">
+		<testdata Include="Setup\testdata\**\*.*">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</testdata>
 	</ItemGroup>
