@@ -23,8 +23,9 @@ jobs:
         env:
           NIPKGINSTALLERURI: ${{ secrets.NIPKGINSTALLERURI }}
           NIPKGCMDPATH: ${{ secrets.NIPKGCMDPATH }}
+          GCD_DIR: ${{ github.workspace }}\gcd-bootstrap
         run: |
-          echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
+          echo "${{ env.GCD_DIR }}" >> $env:GITHUB_PATH
           gcd --version  
           gcd config set --nipkg-installer-uri ${{env.NIPKGINSTALLERURI}}
           gcd config set --nipkg-cmd-path  "${{env.NIPKGCMDPATH}}"
