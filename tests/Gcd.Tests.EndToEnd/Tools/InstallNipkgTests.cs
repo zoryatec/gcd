@@ -14,13 +14,11 @@ namespace Gcd.Tests.EndToEnd.Tools;
 public class InstallNipkgTests : IClassFixture<TestFixture>
 {
     IGcdProcess _gcd;
-    GcdArgsBuilder _args;
     ITempDirectoryGenerator _tempDirectoryGenerator;
     TestConfiguration _config;
     public InstallNipkgTests(TestFixture testFixture)
     {
         _gcd = new GcdProcessApp();
-        _args = new GcdArgsBuilder();
         _tempDirectoryGenerator = new TempDirectoryGenerator();
         _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
     }

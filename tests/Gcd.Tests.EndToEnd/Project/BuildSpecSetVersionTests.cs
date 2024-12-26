@@ -11,13 +11,11 @@ namespace Gcd.Tests.EndToEnd.Project
     public class BuildSpecSetVersionTests : IClassFixture<TestFixture>
     {
         IGcdProcess _gcd;
-        GcdArgsBuilder _args;
         ITempDirectoryGenerator _tempDirectoryGenerator;
         TestConfiguration _config;
         public BuildSpecSetVersionTests(TestFixture testFixture)
         {
             _gcd = new GcdProcessApp();
-            _args = new GcdArgsBuilder();
             _tempDirectoryGenerator = new TempDirectoryGenerator();
             _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
         }

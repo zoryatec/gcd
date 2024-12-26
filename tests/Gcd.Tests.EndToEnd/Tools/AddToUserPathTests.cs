@@ -13,13 +13,11 @@ namespace Gcd.Tests.EndToEnd.System
     public class AddToUserPathTests : IClassFixture<TestFixture>
     {
         IGcdProcess _gcd;
-        GcdArgsBuilder _args;
         ITempDirectoryGenerator _tempDirectoryGenerator;
         TestConfiguration _config;
         public AddToUserPathTests(TestFixture testFixture)
         {
             _gcd = new GcdProcessApp();
-            _args = new GcdArgsBuilder();
             _tempDirectoryGenerator = new TempDirectoryGenerator();
             _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
         }

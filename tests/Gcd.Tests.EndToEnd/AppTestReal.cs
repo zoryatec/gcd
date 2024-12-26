@@ -11,13 +11,11 @@ namespace Gcd.Tests.EndToEnd
     public class AppTestReal
     {
         IGcdProcess _gcd;
-        GcdArgsBuilder _args;
         ITempDirectoryGenerator _tempDirectoryGenerator;
         public  AppTestReal()
         {
             //_gcd = new GcdProcess();
             _gcd = new GcdProcessApp();
-            _args = new GcdArgsBuilder();
             _tempDirectoryGenerator = new TempDirectoryGenerator();
         }
 
