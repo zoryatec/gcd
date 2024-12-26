@@ -11,17 +11,8 @@ using System.Threading.Tasks;
 
 namespace Gcd.Tests.EndToEnd.Nipkg;
 
-public class SetConfigTests : IClassFixture<TestFixture>
+public class SetConfigTests(TestFixture testFixture) : BaseTest(testFixture)
 {
-    IGcdProcess _gcd;
-    ITempDirectoryGenerator _tempDirectoryGenerator;
-    TestConfiguration _config;
-    public SetConfigTests(TestFixture testFixture)
-    {
-        _gcd = new GcdProcessApp();
-        _tempDirectoryGenerator = new TempDirectoryGenerator();
-        _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
-    }
 
     //[Fact(Skip ="for now")]
     [Fact]
@@ -41,14 +32,14 @@ public class SetConfigTests : IClassFixture<TestFixture>
         result.Return.Should().Be(0);
         result.Out.Should().NotBeEmpty();
 
-        _gcd = new GcdProcessApp();
+        var gcd = _procFactory.Create();
         //Arange
         var args2 = (new GetConfigArgBuilder())
             .WithNipkgCmdPath()
                 .Build();
 
         // Act
-        var result2 = _gcd.Run(args2);
+        var result2 = gcd.Run(args2);
 
         // Asssert
         result2.Error.Should().BeEmpty();
@@ -60,14 +51,14 @@ public class SetConfigTests : IClassFixture<TestFixture>
     public void GetConfigTestUnfound()
     {
 
-        _gcd = new GcdProcessApp();
+        var gcd = _procFactory.Create();
         //Arange
         var args2 = (new GetConfigArgBuilder())
             .WithNipkgInstallerUri()
                 .Build();
 
         // Act
-        var result2 = _gcd.Run(args2);
+        var result2 = gcd.Run(args2);
 
         // Asssert
         //result2.Error.Should().BeEmpty();

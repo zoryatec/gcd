@@ -5,17 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Gcd.Tests.EndToEnd.Nipkg.Feed
 {
-    public class PushFeedMetaDataTests : IClassFixture<TestFixture>
+    public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixture)
     {
-        IGcdProcess _gcd;
-        ITempDirectoryGenerator _tempDirectoryGenerator;
-        TestConfiguration _config;
-        public PushFeedMetaDataTests(TestFixture testFixture)
-        {
-            _gcd = new GcdProcessApp();
-            _tempDirectoryGenerator = new TempDirectoryGenerator();
-            _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
-        }
 
         [Fact]
         public void Push_ShouldReturnEror_WhenPathIsEmpty()

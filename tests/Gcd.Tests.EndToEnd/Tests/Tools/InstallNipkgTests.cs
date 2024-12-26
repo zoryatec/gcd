@@ -11,17 +11,8 @@ using System.Threading.Tasks;
 
 namespace Gcd.Tests.EndToEnd.Tools;
 
-public class InstallNipkgTests : IClassFixture<TestFixture>
+public class InstallNipkgTests(TestFixture testFixture) : BaseTest(testFixture)
 {
-    IGcdProcess _gcd;
-    ITempDirectoryGenerator _tempDirectoryGenerator;
-    TestConfiguration _config;
-    public InstallNipkgTests(TestFixture testFixture)
-    {
-        _gcd = new GcdProcessApp();
-        _tempDirectoryGenerator = new TempDirectoryGenerator();
-        _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
-    }
 
     [Fact(Skip = "for now")]
     public void NipkgInstall_ShouldSucceed_WhenLinkIsValid()

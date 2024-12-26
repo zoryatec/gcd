@@ -5,17 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Gcd.Tests.EndToEnd.Nipkg.Feed;
 
-public class AddToAzFeedTests : IClassFixture<TestFixture>
+public class AddToAzFeedTests(TestFixture testFixture) : BaseTest(testFixture)
 {
-    IGcdProcess _gcd;
-    ITempDirectoryGenerator _tempDirectoryGenerator;
-    TestConfiguration _config;
-    public AddToAzFeedTests(TestFixture testFixture)
-    {
-        _gcd = new GcdProcessApp();
-        _tempDirectoryGenerator = new TempDirectoryGenerator();
-        _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
-    }
 
     [Fact]
     public void AddPackageToAZ()

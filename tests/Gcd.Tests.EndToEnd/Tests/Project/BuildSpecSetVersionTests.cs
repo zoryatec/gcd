@@ -8,17 +8,8 @@ using System.Threading.Tasks;
 
 namespace Gcd.Tests.EndToEnd.Project
 {
-    public class BuildSpecSetVersionTests : IClassFixture<TestFixture>
+    public class BuildSpecSetVersionTests(TestFixture testFixture) : BaseTest(testFixture)
     {
-        IGcdProcess _gcd;
-        ITempDirectoryGenerator _tempDirectoryGenerator;
-        TestConfiguration _config;
-        public BuildSpecSetVersionTests(TestFixture testFixture)
-        {
-            _gcd = new GcdProcessApp();
-            _tempDirectoryGenerator = new TempDirectoryGenerator();
-            _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
-        }
 
         [Fact]
         public void ProjectBuildSpecSetVersion_ShouldExecuteWithoutErrors_WhenValidVersionProvided()

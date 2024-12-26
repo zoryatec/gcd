@@ -10,17 +10,8 @@ using System.Threading.Tasks;
 
 namespace Gcd.Tests.EndToEnd.System
 {
-    public class AddToUserPathTests : IClassFixture<TestFixture>
+    public class AddToUserPathTests(TestFixture testFixture) : BaseTest(testFixture)
     {
-        IGcdProcess _gcd;
-        ITempDirectoryGenerator _tempDirectoryGenerator;
-        TestConfiguration _config;
-        public AddToUserPathTests(TestFixture testFixture)
-        {
-            _gcd = new GcdProcessApp();
-            _tempDirectoryGenerator = new TempDirectoryGenerator();
-            _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
-        }
 
         [Fact(Skip ="for now")]
         public void SystemAddToUserPath()

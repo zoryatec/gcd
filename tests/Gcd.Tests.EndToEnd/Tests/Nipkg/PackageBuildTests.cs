@@ -5,17 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Gcd.Tests.EndToEnd.Nipkg;
 
-public class PackageBuildTests : IClassFixture<TestFixture>
+public class PackageBuildTests(TestFixture testFixture) : BaseTest(testFixture)
 {
-    IGcdProcess _gcd;
-    ITempDirectoryGenerator _tempDirectoryGenerator;
-    TestConfiguration _config;
-    public PackageBuildTests(TestFixture testFixture)
-    {
-        _gcd = new GcdProcessApp();
-        _tempDirectoryGenerator = new TempDirectoryGenerator();
-        _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
-    }
 
     [Fact]
     public void NipkgBuildPackageTest()

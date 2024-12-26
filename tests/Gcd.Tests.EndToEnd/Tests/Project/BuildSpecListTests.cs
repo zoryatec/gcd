@@ -8,17 +8,8 @@ using System.Threading.Tasks;
 
 namespace Gcd.Tests.EndToEnd.Project
 {
-    public class BuildSpecListTests : IClassFixture<TestFixture>
-    { 
-        IGcdProcess _gcd;
-        ITempDirectoryGenerator _tempDirectoryGenerator;
-        TestConfiguration _config;
-        public BuildSpecListTests(TestFixture testFixture)
-        {
-            _gcd = new GcdProcessApp();
-            _tempDirectoryGenerator = new TempDirectoryGenerator();
-            _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
-        }
+    public class BuildSpecListTests(TestFixture testFixture) : BaseTest(testFixture)
+    {
 
         [Fact]
         public void ProjectBuildSpecList_ShouldReturnCorrectList_WhenValidProjectSpecified()

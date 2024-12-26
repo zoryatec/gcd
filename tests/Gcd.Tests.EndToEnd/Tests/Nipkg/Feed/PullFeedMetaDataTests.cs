@@ -5,17 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Gcd.Tests.EndToEnd.Nipkg.Feed
 {
-    public class PullFeedMetaDataTests : IClassFixture<TestFixture>
+    public class PullFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixture)
     {
-        IGcdProcess _gcd;
-        ITempDirectoryGenerator _tempDirectoryGenerator;
-        TestConfiguration _config;
-        public PullFeedMetaDataTests(TestFixture testFixture)
-        {
-            _gcd = new GcdProcessApp();
-            _tempDirectoryGenerator = new TempDirectoryGenerator();
-            _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
-        }
 
         [Fact]
         public void PullFeedMetaData_ShouldDownloadFiles_WhenFeedIsValid()
