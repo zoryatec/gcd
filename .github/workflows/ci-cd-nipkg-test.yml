@@ -28,13 +28,14 @@ jobs:
         env:
           NIPKGINSTALLERURI: ${{ secrets.NIPKGINSTALLERURI }}
           NIPKGCMDPATH: ${{ secrets.NIPKGCMDPATH }}
+          DEVFEED: ${{ secrets.NIPKG_DEV_FEED_READ }}
         run: |
           gcd --version  
           gcd config set --nipkg-installer-uri ${{env.NIPKGINSTALLERURI}}
           gcd config set --nipkg-cmd-path  "${{env.NIPKGCMDPATH}}"
           gcd tools install-nipkg
           nipkg -v
-          nipkg feed-add "${{ secrets.NIPKG_DEV_FEED_READ }}" --name=gcd-dev
+          nipkg feed-add "${{ env.DEVFEED }}" --name=gcd-dev
           nipkg install gcd -y
 
       - name: app test
