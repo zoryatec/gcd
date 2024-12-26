@@ -1,28 +1,55 @@
-name: 'release-nuget-test'
+name: ci-cd-nipkg-test
 
 on:
-  workflow_dispatch:
-    inputs:
-        version :
-          description: "Version of package to be tested"
-          default: "0.1.0"
+  workflow_call:
 
 jobs:
-  publish-new-version:
+  test-end-to-end:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: download gcd 
+        uses: actions/download-artifact@v4.1.8
         with:
-          fetch-depth: '0'
+          name: gcd-bin
+          path: gcd-bootstrap
 
-      - name: install gcd
-        run: |
-            dotnet tool install --global gcd --version ${{ github.event.inputs.version }}
+      - name: download integration tests
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: gcd-integration-tests
+          path: integration-tests 
 
-      - name: setup gcd
+      - name: add to path
         run: |
-            gcd --version  
-            gcd config set --nipkg-installer-uri "https://download.ni.com/support/nipkg/products/ni-package-manager/installers/NIPackageManager21.3.0_online.exe"
-            gcd config set --nipkg-cmd-path  "C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe"
-            gcd tools install-nipkg
-            gcd --version  
+          echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
+         
+      - name: setup
+        env:
+          NIPKGINSTALLERURI: ${{ secrets.NIPKGINSTALLERURI }}
+          NIPKGCMDPATH: ${{ secrets.NIPKGCMDPATH }}
+        run: |
+          gcd --version  
+          gcd config set --nipkg-installer-uri ${{env.NIPKGINSTALLERURI}}
+          gcd config set --nipkg-cmd-path  "${{env.NIPKGCMDPATH}}"
+          gcd tools install-nipkg
+
+      - name: dev test
+        env:
+          AZUREADDPKGTESTFEEDURI: ${{ secrets.AZUREADDPKGTESTFEEDURI }}
+          AZUREFEEDURI: ${{ secrets.AZUREFEEDURI }}
+          AZUREPUSHPULLTESTFEEDURI: ${{ secrets.AZUREPUSHPULLTESTFEEDURI }}
+          NipkgInstallerUri: ${{ secrets.NIPKGINSTALLERURI }}
+          NipkgCmdPath: ${{ secrets.NIPKGCMDPATH }}
+          DevMode : true
+        run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll
+
+      - name: app test
+        env:
+          AZUREADDPKGTESTFEEDURI: ${{ secrets.AZUREADDPKGTESTFEEDURI }}
+          AZUREFEEDURI: ${{ secrets.AZUREFEEDURI }}
+          AZUREPUSHPULLTESTFEEDURI: ${{ secrets.AZUREPUSHPULLTESTFEEDURI }}
+          NipkgInstallerUri: ${{ secrets.NIPKGINSTALLERURI }}
+          NipkgCmdPath: ${{ secrets.NIPKGCMDPATH }}
+          DevMode : false
+          GcdPath: ${{ github.workspace }}\gcd-bootstrap\gcd.exe
+        run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll

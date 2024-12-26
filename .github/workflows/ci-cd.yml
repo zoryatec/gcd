@@ -71,7 +71,12 @@ jobs:
     needs: build
     secrets: inherit
     
-  publish-nipkg:
+  nipkg-publish:
     uses: ./.github/workflows/ci-cd-nipkg-publish.yml
     needs: test-end-to-end
+    secrets: inherit
+
+  nipkg-test:
+    uses: ./.github/workflows/ci-cd-nipkg-test.yml
+    needs: nipkg-publish
     secrets: inherit
