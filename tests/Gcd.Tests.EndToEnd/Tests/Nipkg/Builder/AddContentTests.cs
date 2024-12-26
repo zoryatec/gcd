@@ -6,20 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Gcd.Tests.EndToEnd.Nipkg
 {
-    public class AddContentTests : IClassFixture<TestFixture>
+    public class AddContentTests(TestFixture testFixture) : BaseTest(testFixture)
     {
-        IGcdProcess _gcd;
-        ITempDirectoryGenerator _tempDirectoryGenerator;
-        TestConfiguration _config;
-        public AddContentTests(TestFixture testFixture)
-        {
-            // _gcd = new GcdProcessApp();
-            _tempDirectoryGenerator = new TempDirectoryGenerator();
-            _config = testFixture.ServiceProvider.GetRequiredService<TestConfiguration>();
-            var procFactory = testFixture.ServiceProvider.GetRequiredService<IGcdProcessFactory>();
-            _gcd = procFactory.Create();
-        }
-
         [Fact]
         public void AddContentTest()
         {

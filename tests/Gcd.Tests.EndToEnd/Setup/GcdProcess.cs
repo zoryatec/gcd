@@ -11,19 +11,19 @@ namespace Gcd.Tests.EndToEnd
 {
     public class GcdProcess : IGcdProcess
     {
-        public GcdProcess()
+        public GcdProcess(string gcdPath)
         {
-            
+            GcdPath = gcdPath;
         }
+
+        private readonly string GcdPath;
+
         public GcdProcessResponse Run(GcdProcessRequest request)
         {
-            //string command = @"C:\Projects\_Repos\gcd\src\Gcd\bin\Debug\net8.0\Gcd.exe";
-            string command = @"D:\a\gcd\gcd\gcd-bin\gcd.exe";
-
             var arguments = string.Join(" ", request.Arguments);
             ProcessStartInfo processStartInfo = new ProcessStartInfo
             {
-                FileName = command,
+                FileName = GcdPath,
                 Arguments = arguments,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,

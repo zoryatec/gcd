@@ -20,8 +20,18 @@ public class TestFixture
 
         // Setup DI
 
+        var devMode = configuration.GetValue("DevMode", false);
+
         var serviceCollection = new ServiceCollection();
-        serviceCollection.AddScoped<IGcdProcessFactory, GcdProcessDevFactory>();
+        if (devMode)
+        {
+            serviceCollection.AddScoped<IGcdProcessFactory, GcdProcessDevFactory>();
+        }
+        else
+        {
+            serviceCollection.AddScoped<IGcdProcessFactory, GcdProcessFactory>();
+        }
+
         serviceCollection.AddScoped<IConfiguration>(x => configuration);
         serviceCollection.AddScoped<TestConfiguration>();
 
