@@ -1,7 +1,7 @@
 name: ci-cd-test-integration
 
 on:
-  workflow_call: # This allows this workflow to be called by other workflows
+  workflow_call:
 
 jobs:
   test-end-to-end:
@@ -45,7 +45,6 @@ jobs:
           NipkgInstallerUri: ${{ secrets.NIPKGINSTALLERURI }}
           NipkgCmdPath: ${{ secrets.NIPKGCMDPATH }}
           DevMode : true
-          GcdPath: "gcd.exe"
         run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll
 
       - name: app test
@@ -56,5 +55,5 @@ jobs:
           NipkgInstallerUri: ${{ secrets.NIPKGINSTALLERURI }}
           NipkgCmdPath: ${{ secrets.NIPKGCMDPATH }}
           DevMode : false
-          GcdPath: "gcd-bootstrap\\gcd.exe"
+          GcdPath: "$env:GITHUB_WORKSPACE\\gcd-bootstrap\\gcd.exe"
         run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll
