@@ -22,6 +22,7 @@ jobs:
       - name: add to path
         run: |
           echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
+          echo "C:\\Program Files\\National Instruments\\NI Package Manager" >> $env:GITHUB_PATH
          
       - name: setup
         env:
@@ -32,16 +33,9 @@ jobs:
           gcd config set --nipkg-installer-uri ${{env.NIPKGINSTALLERURI}}
           gcd config set --nipkg-cmd-path  "${{env.NIPKGCMDPATH}}"
           gcd tools install-nipkg
-
-      - name: dev test
-        env:
-          AZUREADDPKGTESTFEEDURI: ${{ secrets.AZUREADDPKGTESTFEEDURI }}
-          AZUREFEEDURI: ${{ secrets.AZUREFEEDURI }}
-          AZUREPUSHPULLTESTFEEDURI: ${{ secrets.AZUREPUSHPULLTESTFEEDURI }}
-          NipkgInstallerUri: ${{ secrets.NIPKGINSTALLERURI }}
-          NipkgCmdPath: ${{ secrets.NIPKGCMDPATH }}
-          DevMode : true
-        run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll
+          nipkg -v
+          nipkg feed-add "${{ secrets.NIPKG_DEV_FEED }}" --name dev-feed
+          nipkg install gcd
 
       - name: app test
         env:
@@ -51,5 +45,5 @@ jobs:
           NipkgInstallerUri: ${{ secrets.NIPKGINSTALLERURI }}
           NipkgCmdPath: ${{ secrets.NIPKGCMDPATH }}
           DevMode : false
-          GcdPath: ${{ github.workspace }}\gcd-bootstrap\gcd.exe
+          GcdPath: "C:\\Program Files\\gcd\\gcd.exe"
         run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll
