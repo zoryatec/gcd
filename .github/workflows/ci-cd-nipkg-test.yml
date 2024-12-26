@@ -28,7 +28,7 @@ jobs:
         env:
           NIPKGINSTALLERURI: ${{ secrets.NIPKGINSTALLERURI }}
           NIPKGCMDPATH: ${{ secrets.NIPKGCMDPATH }}
-          DEVFEED: ${{ secrets.NIPKG_DEV_FEED_READ }}
+          DEVFEED: ${{ env.NIPK_DEV_FEED_READABLE }}
         run: |
           gcd --version  
           gcd config set --nipkg-installer-uri ${{env.NIPKGINSTALLERURI}}
