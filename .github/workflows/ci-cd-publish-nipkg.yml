@@ -83,7 +83,7 @@ jobs:
       run:  |
         gcd nipkg feed add-package-az `
         --package-path "$env:GITHUB_WORKSPACE\\package\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" `
-        --feed-url "https://zoryatecartifacts.blob.core.windows.net/gcd-feed?${{ secrets.SAS_TOKEN }}"
+        --feed-url "${{ secrets.NIPKG_DEV_FEED }}"
 
   # POST
 
