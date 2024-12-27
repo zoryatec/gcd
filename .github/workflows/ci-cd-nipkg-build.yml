@@ -1,7 +1,16 @@
-name: ci-cd-nipkg-publish
+name: ci-cd-nipkg-build
 
 on:
   workflow_call: # This allows this workflow to be called by other workflows
+    inputs:
+      version:
+        description: "package version"
+        required: true
+        type: string
+      name:
+        description: "package name"
+        required: true
+        type: string
 
 jobs:
   publish:
@@ -66,8 +75,8 @@ jobs:
         --package-xb-user-visible "yes" `
         --package-xb-store-product "yes" `
         --package-xb-section "tools" `
-        --package-name "gcd" `
-        --package-version "0.5.0-${{github.run_number}}" 
+        --package-name ${{inputs.name}}  `
+        --package-version ${{inputs.version}} 
 
         gcd nipkg builder instructions-file-pkg add-custom-execute `
         --package-builder-dir "$env:GITHUB_WORKSPACE\\package-builder" `

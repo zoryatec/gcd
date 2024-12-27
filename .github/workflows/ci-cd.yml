@@ -75,6 +75,9 @@ jobs:
     uses: ./.github/workflows/ci-cd-nipkg-build.yml
     needs: test-end-to-end
     secrets: inherit
+    with:
+      version: "0.5.0-${{github.run_number}}"
+      name: gcd
     
   nipkg-publish:
     uses: ./.github/workflows/ci-cd-nipkg-publish.yml
