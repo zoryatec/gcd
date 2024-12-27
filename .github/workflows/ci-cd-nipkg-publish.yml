@@ -1,4 +1,4 @@
-name: ci-cd-publish-nipkg
+name: ci-cd-nipkg-publish
 
 on:
   workflow_call: # This allows this workflow to be called by other workflows
@@ -16,23 +16,23 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    - name: Download gcd binary
+    - name: download gcd bootstrap
       uses: actions/download-artifact@v4.1.8
       with:
         name: gcd-bin
         path: "gcd-bootstrap"
 
-    - name: Download gcd binary
+    - name: download gcd bin
       uses: actions/download-artifact@v4.1.8
       with:
         name: gcd-bin
         path: "package-content"
 
-    - name: Add GCD to path
+    - name: add to path
       run: |
         echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
         
-    - name: Setup
+    - name: setup
       run: |
         gcd --version  
         gcd config set --nipkg-installer-uri  "https://download.ni.com/support/nipkg/products/ni-package-manager/installers/NIPackageManager21.3.0_online.exe"
@@ -40,7 +40,7 @@ jobs:
         gcd tools install-nipkg   
         mkdir "$env:GITHUB_WORKSPACE\\package"
 
-    - name: Demo Builder
+    - name: demo build
       run:  |
         mkdir "$env:GITHUB_WORKSPACE\\package-builder"
         mkdir "$env:GITHUB_WORKSPACE\\package-output-dir"
@@ -88,7 +88,7 @@ jobs:
     #     --package-instalation-dir "BootVolume/Program Files/gcd" `
     #     --package-destination-dir "$env:GITHUB_WORKSPACE\package"
 
-    - name: Publish Nipkg
+    - name: publish to feed
       run:  |
         gcd nipkg feed add-package-az `
         --package-path "$env:GITHUB_WORKSPACE\\package\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" `
@@ -96,7 +96,7 @@ jobs:
 
   # POST
 
-    - name: Upload package
+    - name: upload package artifact
       uses: actions/upload-artifact@v4.4.3
       with:
         name: gcd-pckg-temp
