@@ -4,7 +4,7 @@ on:
   workflow_call: # This allows this workflow to be called by other workflows
     inputs:
       version:
-        description: "bin version"
+        description: "nuget version"
         required: true
         type: string
 
@@ -28,30 +28,19 @@ jobs:
     - name: publish app
       run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:Version=${{ inputs.version }} -p:PublishSingleFile=true --output "./publish"
 
-    - name: build unit tests
-      run: dotnet build tests/Gcd.Tests/Gcd.Tests.csproj  --output unit-tests
-
-    - name: run unit tests
-      run: dotnet test unit-tests/gcd.tests.dll
-
-    - name: build integration tests
-      run: dotnet build tests/Gcd.Tests.EndToEnd/Gcd.Tests.EndToEnd.csproj  --output integration-tests
-   
+    - name: pack nuget
+      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=${{ inputs.version }} --output nuget
+  
 
     # - name: Publish to GitHub Packages
     #   env:
     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     #   run: dotnet nuget push .\nuget\*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GITHUB_TOKEN }}
 
-    - name: upload bin
-      uses: actions/upload-artifact@v4.4.3
-      with:
-        name: gcd-bin
-        path: publish
 
-    - name: upload integration tests
+    - name: upload nuget
       uses: actions/upload-artifact@v4.4.3
       with:
-        name: gcd-test
-        path: integration-tests  
+        name: gcd-nuget
+        path: nuget
         

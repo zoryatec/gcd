@@ -1,10 +1,10 @@
-name: ci-cd-test
+name: ci-cd-bin-test
 
 on:
   workflow_call:
 
 jobs:
-  test-end-to-end:
+  test:
     runs-on: windows-latest
     steps:
       - name: download gcd 

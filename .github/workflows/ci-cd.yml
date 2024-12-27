@@ -25,16 +25,22 @@ jobs:
     secrets: inherit
     with:
       version: "0.5.0-${{github.run_number}}"
-
-        
-  test-end-to-end:
-    uses: ./.github/workflows/ci-cd-test.yml
+      
+  bin-test:
+    uses: ./.github/workflows/ci-cd-bin-test.yml
     needs: bin-build
     secrets: inherit
 
+  nuget-build:
+    uses: ./.github/workflows/ci-cd-nuget-build.yml
+    needs: bin-test
+    secrets: inherit
+    with:
+      version: "0.5.0-${{github.run_number}}"
+
   nipkg-build:
     uses: ./.github/workflows/ci-cd-nipkg-build.yml
-    needs: test-end-to-end
+    needs: bin-test
     secrets: inherit
     with:
       version: "0.5.0-${{github.run_number}}"
