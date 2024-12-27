@@ -26,8 +26,8 @@ jobs:
       - name: output version
         id: versionize
         run: |
-          VERSION=$(versionize inspect)
-          echo "VERSION=$VERSION"
+          $VERSION = versionize inspect
+          Write-Host "VERSION=$VERSION"
           echo "::set-output name=version::$VERSION"
         continue-on-error: true
 
