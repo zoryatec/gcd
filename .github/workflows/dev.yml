@@ -24,28 +24,24 @@ jobs:
           git config --local user.email "dawid.wozny@zoryatec.com"
           git config --local user.name "github-actions[bot]"
 
-      - name: output version
+      - name: Run versionize and debug output
         id: versionize
         run: |
-          $VERSION = versionize inspect
-          Write-Host "VERSION=$VERSION"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "BASE_VERSION=$VERSION" >> $GITHUB_OUTPUT
-        continue-on-error: true
-
-      - name: Use version in next steps
+          VERSION=$(versionize inspect)
+          echo "VERSION is: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        shell: bash
+  
+      - name: Debug environment variable
         run: |
-          echo "The version is ${{ env.VERSION }}"
-
-      - name: Use the environment variable in shell
-        run: |
-          echo "The version is $MY_VERSION"
+          echo "Captured VERSION from env: $VERSION"
         env:
-          MY_VERSION: ${{ env.VERSION }}
+          VERSION: ${{ env.version }}
 
-      - name: Use output in workflow syntax
+      - name: Debug output value
         run: |
-          echo "The version is ${{ steps.versionize.outputs.version }}"
+          echo "Captured VERSION from step output: ${{ steps.versionize.outputs.version }}"
 
 
     
