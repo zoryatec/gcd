@@ -38,23 +38,23 @@ jobs:
         gcd config set --nipkg-installer-uri  "https://download.ni.com/support/nipkg/products/ni-package-manager/installers/NIPackageManager21.3.0_online.exe"
         gcd config set --nipkg-cmd-path  "C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe"
         gcd tools install-nipkg   
-        mkdir "$env:GITHUB_WORKSPACE\package"
+        mkdir "$env:GITHUB_WORKSPACE\\package"
 
     - name: Demo Builder
       run:  |
-        mkdir "$env:GITHUB_WORKSPACE\package-builder"
-        mkdir "$env:GITHUB_WORKSPACE\package-output-dir"
+        mkdir "$env:GITHUB_WORKSPACE\\package-builder"
+        mkdir "$env:GITHUB_WORKSPACE\\package-output-dir"
 
         gcd nipkg builder init `
-        --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
+        --package-builder-dir "$env:GITHUB_WORKSPACE\\package-builder" `
 
         gcd nipkg builder add-content `
-        --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
+        --package-builder-dir "$env:GITHUB_WORKSPACE\\package-builder" `
         --content-src-dir "$env:GITHUB_WORKSPACE\\package-content" `
         --target-root-dir "BootVolume/Program Files/gcd"
 
         gcd nipkg builder set-property `
-        --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
+        --package-builder-dir "$env:GITHUB_WORKSPACE\\package-builder" `
         --package-architecture "windows_x64" `
         --package-home-page "https://github.com/zoryatec/gcd" `
         --package-maintainer "Dawid Wozny" `
@@ -68,7 +68,7 @@ jobs:
         --package-dependencies" ""
 
         gcd nipkg builder instructions-file-pkg add-custom-execute `
-        --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
+        --package-builder-dir "$env:GITHUB_WORKSPACE\\package-builder" `
         --root "BootVolume" `
         --arguments "tools add-to-user-path C:\\PROGRA~1\\gcd" `
         --exe-name "Program Files\\gcd\\gcd.exe" `
@@ -76,8 +76,8 @@ jobs:
         --schedule "post"
 
         gcd nipkg builder pack `
-        --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
-        --package-destination-dir  "$env:GITHUB_WORKSPACE\package"  
+        --package-builder-dir "$env:GITHUB_WORKSPACE\\package-builder" `
+        --package-destination-dir  "$env:GITHUB_WORKSPACE\\package"  
 
     # - name: Build Nipkg
     #   run:  |
