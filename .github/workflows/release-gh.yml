@@ -3,26 +3,31 @@ name: 'release-gh'
 on:
   workflow_dispatch:
     inputs:
-        version :
-          description: "Version of package to be tested"
-          default: "0.1.0"
+        tag:
+          required: true
+          type: string
 
 jobs:
   publish-new-version:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: '0'
+    - name: download gcd 
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: gcd-bin
+        path: gcd-bin
 
-      - name: install gcd
-        run: |
-            dotnet tool install --global gcd --version ${{ github.event.inputs.version }}
+    - name: download integration tests
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: gcd-test
+        path: gcd-test
 
-      - name: setup gcd
-        run: |
-            gcd --version  
-            gcd config set --nipkg-installer-uri "https://download.ni.com/support/nipkg/products/ni-package-manager/installers/NIPackageManager21.3.0_online.exe"
-            gcd config set --nipkg-cmd-path  "C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe"
-            gcd tools install-nipkg
-            gcd --version  
+    - name: create release
+      id: create_release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ inputs.tag }}  
+        files: gcd-bin/** 
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
