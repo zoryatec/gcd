@@ -23,7 +23,7 @@ jobs:
 
       - name: output version
         id: versionize
-        run: versionize -v
+        run: versionize inspect
         continue-on-error: true
     
         
