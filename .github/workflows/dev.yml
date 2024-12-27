@@ -57,6 +57,7 @@ jobs:
 
 
   release-setup:
+    needs: ci-cd
     if: ${{ github.actor != 'github-actions[bot]' && github.ref == 'refs/heads/main' }} 
     runs-on: windows-latest
     steps:
