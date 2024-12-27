@@ -16,7 +16,7 @@ jobs:
       - name: download integration tests
         uses: actions/download-artifact@v4.1.8
         with:
-          name: gcd-integration-tests
+          name: gcd-test
           path: integration-tests 
 
       - name: add to path

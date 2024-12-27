@@ -63,7 +63,7 @@ jobs:
     - name: upload integration tests
       uses: actions/upload-artifact@v4.4.3
       with:
-        name: gcd-integration-tests
+        name: gcd-test
         path: integration-tests  
         
   test-end-to-end:

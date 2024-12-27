@@ -19,7 +19,7 @@ jobs:
     - name: download gcd bootstrap
       uses: actions/download-artifact@v4.1.8
       with:
-        name: gcd-package
+        name: gcd-nipkg
         path: "package"
 
     - name: add to path
