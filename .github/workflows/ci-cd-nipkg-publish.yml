@@ -47,7 +47,6 @@ jobs:
         PACKAGE_OUTPUT_DIR: ${{github.workspace}}\package
       run:  |
         mkdir ${{env.PACKAGE_BUILDER_DIR}}
-        mkdir "${{github.workspace}}\\package-output-dir"
 
         gcd nipkg builder init `
         --package-builder-dir ${{env.PACKAGE_BUILDER_DIR}} `
