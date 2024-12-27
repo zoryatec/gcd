@@ -25,7 +25,7 @@ jobs:
       run: dotnet restore
       
     - name: build app
-      run: dotnet build src/Gcd/Gcd.csproj  --no-restore
+      run: dotnet build src/Gcd/Gcd.csproj -p:Version=0.5.0-${{github.run_number}} --no-restore
 
     - name: publish app
       run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:Version=0.5.0-${{github.run_number}} -p:PublishSingleFile=true --output "./publish"
