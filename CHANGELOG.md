@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.3.0"></a>
+## [0.3.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.3.0) (2024-12-27)
+
+### Features
+
+* sample feature trigger ([41d160c](https://www.github.com/zoryatec/gcd/commit/41d160c6a61ab917c02c428c502e3da21e648350))
+
 <a name="0.2.0"></a>
 ## [0.2.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.2.0) (2024-12-22)
 
