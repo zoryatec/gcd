@@ -5,6 +5,9 @@ on:
     branches-ignore:
       - 'main'
 
+vars:
+  VERSION: "0.5.0-${{ github.run_number }}"
+
 jobs:
   build:
     runs-on: windows-latest
@@ -12,6 +15,7 @@ jobs:
       VERSION: "0.5.0-${{ github.run_number }}"
     outputs:
       VERSION: ${{ env.VERSION }}
+      NAME: "gcd-dev"
     steps:
       - uses: actions/checkout@v4
         
