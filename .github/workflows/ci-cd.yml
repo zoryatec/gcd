@@ -8,10 +8,16 @@ on:
 
 jobs:
   build:
-
     runs-on: windows-latest
     env:
       VERSION: "0.5.0"
+    steps:
+      - uses: actions/checkout@v4
+        
+      - name: setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
 
   bin-build:
     uses: ./.github/workflows/ci-cd-bin-build.yml
@@ -19,6 +25,7 @@ jobs:
     secrets: inherit
     with:
       version: "0.5.0-${{github.run_number}}"
+
         
   test-end-to-end:
     uses: ./.github/workflows/ci-cd-test.yml
