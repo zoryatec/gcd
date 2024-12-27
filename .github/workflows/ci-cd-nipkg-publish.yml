@@ -35,7 +35,7 @@ jobs:
     - name: setup
       run: |
         gcd --version  
-        gcd config set --nipkg-installer-uri  "https://download.ni.com/support/nipkg/products/ni-package-manager/installers/NIPackageManager21.3.0_online.exe"
+        gcd config set --nipkg-installer-uri  ${{secrets.NIPKGINSTALLERURI}}
         gcd config set --nipkg-cmd-path  "C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe"
         gcd tools install-nipkg   
         mkdir "$env:GITHUB_WORKSPACE\\package"
