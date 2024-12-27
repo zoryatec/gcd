@@ -11,6 +11,10 @@ jobs:
   publish-new-version:
     runs-on: windows-latest
     steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: '0'
+        
     - name: download gcd 
       uses: actions/download-artifact@v4.1.8
       with:
