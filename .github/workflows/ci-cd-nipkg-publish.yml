@@ -41,20 +41,24 @@ jobs:
         mkdir "$env:GITHUB_WORKSPACE\\package"
 
     - name: demo build
+      env:
+        PACKAGE_BUILDER_DIR: ${{github.workspace}}\package-builder
+        PACKAGE_CONTENT_DIR: ${{github.workspace}}\package-content
+        PACKAGE_OUTPUT_DIR: ${{github.workspace}}\package
       run:  |
-        mkdir "${{github.workspace}}\\package-builder"
+        mkdir ${{env.PACKAGE_BUILDER_DIR}}
         mkdir "${{github.workspace}}\\package-output-dir"
 
         gcd nipkg builder init `
-        --package-builder-dir "$env:GITHUB_WORKSPACE\\package-builder" `
+        --package-builder-dir ${{env.PACKAGE_BUILDER_DIR}} `
 
         gcd nipkg builder add-content `
-        --package-builder-dir "$env:GITHUB_WORKSPACE\\package-builder" `
-        --content-src-dir "$env:GITHUB_WORKSPACE\\package-content" `
+        --package-builder-dir ${{env.PACKAGE_BUILDER_DIR}} `
+        --content-src-dir ${{env.PACKAGE_CONTENT_DIR}} `
         --target-root-dir "BootVolume/Program Files/gcd"
 
         gcd nipkg builder set-property `
-        --package-builder-dir "$env:GITHUB_WORKSPACE\\package-builder" `
+        --package-builder-dir ${{env.PACKAGE_BUILDER_DIR}} `
         --package-architecture "windows_x64" `
         --package-home-page "https://github.com/zoryatec/gcd" `
         --package-maintainer "Dawid Wozny" `
