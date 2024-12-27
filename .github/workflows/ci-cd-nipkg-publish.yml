@@ -42,8 +42,8 @@ jobs:
 
     - name: demo build
       run:  |
-        mkdir "$env:GITHUB_WORKSPACE\\package-builder"
-        mkdir "$env:GITHUB_WORKSPACE\\package-output-dir"
+        mkdir "${{github.workspace}}\\package-builder"
+        mkdir "${{github.workspace}}\\package-output-dir"
 
         gcd nipkg builder init `
         --package-builder-dir "$env:GITHUB_WORKSPACE\\package-builder" `
@@ -75,8 +75,8 @@ jobs:
         --schedule "post"
 
         gcd nipkg builder pack `
-        --package-builder-dir "$env:GITHUB_WORKSPACE\\package-builder" `
-        --package-destination-dir  "$env:GITHUB_WORKSPACE\\package"  
+        --package-builder-dir "${{github.workspace}}\\package-builder" `
+        --package-destination-dir  "${{github.workspace}}\package"  
 
     # - name: Build Nipkg
     #   run:  |
