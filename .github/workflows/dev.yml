@@ -1,0 +1,129 @@
+name: dev
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+
+jobs:
+  setup:
+    if: ${{ github.actor != 'github-actions[bot]'}} 
+    runs-on: windows-latest
+    outputs:
+      VERSION: ${{ steps.versionize.outputs.version }}.${{ github.run_number}}
+      NAME: "gcd-dev"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+          
+      - name: install versionize
+        run: dotnet tool install --global Versionize
+
+      - name: setup git
+        run: |
+          git config --local user.email "dawid.wozny@zoryatec.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Run versionize and debug output
+        id: versionize
+        run: |
+          VERSION=$(versionize inspect)
+          echo "VERSION is: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        shell: bash
+  
+      - name: Debug environment variable
+        run: |
+          echo "Captured VERSION from env: $VERSION"
+        env:
+          VERSION: ${{ env.version }}
+
+      - name: Debug output value
+        run: |
+          echo "Captured VERSION from step output: ${{ steps.versionize.outputs.version }}"
+
+     
+  ci-cd:
+    uses: ./.github/workflows/ci-cd.yml
+    needs: setup
+    secrets: inherit
+    with:
+      version: ${{needs.setup.outputs.VERSION}}
+      name: ${{needs.setup.outputs.NAME}}
+      nuget-feed: ""
+      nipkg-feed: ${{vars.NIPK_DEV_FEED_READABLE}}
+
+
+  release-setup:
+    outputs:
+      VERSION: ${{ steps.versionize.outputs.version }}.${{ github.run_number}}
+      NAME: "gcd"
+    needs: ci-cd
+    if: ${{ github.actor != 'github-actions[bot]' && github.ref == 'refs/heads/main' }} 
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+      - name: Install Versionize
+        run: dotnet tool install --global Versionize
+
+      - name: Setup git
+        run: |
+          git config --local user.email "dawid.wozny@zoryatec.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Versionize Release
+        id: versionize
+        run: versionize --exit-insignificant-commits
+        continue-on-error: true
+
+      - name: No release required
+        if: steps.versionize.outcome != 'success'
+        run: echo "Skipping publishing. No release required."
+
+      - name: Build Package
+        if: steps.versionize.outcome == 'success'
+        run: dotnet pack src/Gcd/Gcd.csproj --output nupkgs --configuration Release
+      # - name: Push to Nuget
+      #   if: steps.versionize.outcome == 'success'
+      #   run: dotnet nuget push "nupkgs\*.nupkg" -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}}
+      - name: Push changes to GitHub
+        if: steps.versionize.outcome == 'success'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          tags: true
+
+      - name: Run versionize and debug output
+        id: versionize2
+        run: |
+          VERSION=$(versionize inspect)
+          echo "VERSION is: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        shell: bash
+    
+      - name: Debug environment variable
+        run: |
+          echo "Captured VERSION from env: $VERSION"
+        env:
+          VERSION: ${{ env.version }}
+
+      - name: Debug output value
+        run: |
+          echo "Captured VERSION from step output: ${{ steps.versionize2.outputs.version }}"
+
+      
+  release:
+    uses: ./.github/workflows/ci-cd.yml
+    needs: release-setup
+    secrets: inherit
+    with:
+      version: ${{needs.setup.outputs.VERSION}}
+      name: ${{needs.setup.outputs.NAME}}
+      nuget-feed: ""
+      nipkg-feed: ${{vars.NIPK_DEV_FEED_READABLE}}

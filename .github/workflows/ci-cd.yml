@@ -1,29 +1,33 @@
 name: ci-cd
 
 on:
-  push:
-    branches-ignore:
-      - 'main'
+  workflow_call: # This allows this workflow to be called by other workflows
+    inputs:
+      version:
+        required: true
+        type: string
+      name:
+        required: true
+        type: string
+      nuget-feed:
+        required: true
+        type: string
+      nipkg-feed:
+        required: true
+        type: string
 
 jobs:
-  build:
+  ci-cd-setup:
     runs-on: windows-latest
-    env:
-      VERSION: "0.5.0-${{ github.run_number }}"
     steps:
       - uses: actions/checkout@v4
-        
-      - name: setup dotnet
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
 
   bin-build:
     uses: ./.github/workflows/ci-cd-bin-build.yml
-    needs: build
+    needs: ci-cd-setup
     secrets: inherit
     with:
-      version: ${{ env.VERSION }}
+      version: ${{ inputs.version }}
       
   bin-test:
     uses: ./.github/workflows/ci-cd-bin-test.yml
@@ -35,23 +39,23 @@ jobs:
     needs: bin-test
     secrets: inherit
     with:
-      version: "0.5.0-${{github.run_number}}"
+      version: ${{ inputs.version }}
 
   nipkg-build:
     uses: ./.github/workflows/ci-cd-nipkg-build.yml
     needs: bin-test
     secrets: inherit
     with:
-      version: "0.5.0-${{github.run_number}}"
-      name: gcd
+      version: ${{ inputs.version }}
+      name: ${{ inputs.name }}
     
   nipkg-publish:
     uses: ./.github/workflows/ci-cd-nipkg-publish.yml
     needs: nipkg-build
     secrets: inherit
     with:
-      version: "0.5.0-${{github.run_number}}"
-      name: gcd
+      version: ${{ inputs.version }}
+      name: ${{ inputs.name }}
       feed: ${{ vars.NIPK_DEV_FEED_READABLE }}
   
 
@@ -60,6 +64,6 @@ jobs:
     needs: nipkg-publish
     secrets: inherit
     with:
-      version: "0.5.0-${{github.run_number}}"
-      name: gcd
+      version: ${{ inputs.version }}
+      name: ${{ inputs.name }}
       feed: ${{ vars.NIPK_DEV_FEED_READABLE }}
