@@ -58,3 +58,5 @@ jobs:
       test-feed-add-pkg: ${{ secrets.AZUREADDPKGTESTFEEDURI }}
       test-feed-push-pull: ${{ secrets.AZUREPUSHPULLTESTFEEDURI }}
       test-feed-generic: ${{ secrets.AZUREFEEDURI }}
+      nuget-feed: ${{ secrets.NUGET_DEV_FEED }}
+      nuget-feed-key: ${{ secrets.GITHUB_TOKEN}}

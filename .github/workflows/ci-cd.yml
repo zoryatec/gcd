@@ -13,6 +13,10 @@ on:
         required: true
         type: string
     secrets:
+      nuget-feed:
+        required: true
+      nuget-feed-key:
+        required: true
       nipkg-feed:
         required: true
       nipkg-feed-sas:

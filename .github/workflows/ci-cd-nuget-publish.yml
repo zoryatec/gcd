@@ -9,7 +9,7 @@ on:
         type: string
 
 jobs:
-  build:
+  publish:
     runs-on: windows-latest
     steps:
     - name: download nuget
