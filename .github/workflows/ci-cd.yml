@@ -17,6 +17,12 @@ on:
         required: true
       nipkg-feed-sas:
         required: true
+      test-feed-add-pkg:
+        required: true
+      test-feed-push-pull:
+        required: true
+      test-feed-generic:
+        required: true
 
 
 jobs:

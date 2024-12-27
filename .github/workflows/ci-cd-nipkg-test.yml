@@ -34,13 +34,10 @@ jobs:
           echo "C:\\Program Files\\National Instruments\\NI Package Manager" >> $env:GITHUB_PATH
          
       - name: setup
-        env:
-          NIPKGINSTALLERURI: ${{ vars.NIPKGI_NSTALLER_DOWNLOAD_URI }}
-          NIPKGCMDPATH: ${{ secrets.NIPKGCMDPATH }}
         run: |
           gcd --version  
           gcd config set --nipkg-installer-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
-          gcd config set --nipkg-cmd-path  "${{vars.NIPKG_INSTALATION_DIR}}"
+          gcd config set --nipkg-cmd-path ${{vars.NIPKG_INSTALATION_DIR}}
           gcd tools install-nipkg
           nipkg -v
           nipkg feed-add "${{ secrets.nipkg-feed }}" --name=gcd-dev --system

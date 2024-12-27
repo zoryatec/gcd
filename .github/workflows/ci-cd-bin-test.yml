@@ -35,21 +35,21 @@ jobs:
 
       - name: dev test
         env:
-          AZUREADDPKGTESTFEEDURI: ${{ secrets.AZUREADDPKGTESTFEEDURI }}
-          AZUREFEEDURI: ${{ secrets.AZUREFEEDURI }}
-          AZUREPUSHPULLTESTFEEDURI: ${{ secrets.AZUREPUSHPULLTESTFEEDURI }}
-          NipkgInstallerUri: ${{ secrets.NIPKGINSTALLERURI }}
-          NipkgCmdPath: ${{ secrets.NIPKGCMDPATH }}
+          AZUREADDPKGTESTFEEDURI: ${{ secrets.test-feed-add-pkg }}
+          AZUREFEEDURI: ${{ secrets.test-feed-generic }}
+          AZUREPUSHPULLTESTFEEDURI: ${{ secrets.test-feed-push-pull }}
+          NipkgInstallerUri: ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
+          NipkgCmdPath: ${{vars.NIPKG_INSTALATION_DIR}}
           DevMode : true
         run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll
 
       - name: app test
         env:
-          AZUREADDPKGTESTFEEDURI: ${{ secrets.AZUREADDPKGTESTFEEDURI }}
-          AZUREFEEDURI: ${{ secrets.AZUREFEEDURI }}
-          AZUREPUSHPULLTESTFEEDURI: ${{ secrets.AZUREPUSHPULLTESTFEEDURI }}
-          NipkgInstallerUri: ${{ secrets.NIPKGINSTALLERURI }}
-          NipkgCmdPath: ${{ secrets.NIPKGCMDPATH }}
+          AZUREADDPKGTESTFEEDURI: ${{ secrets.test-feed-add-pkg }}
+          AZUREFEEDURI: ${{ secrets.test-feed-generic }}
+          AZUREPUSHPULLTESTFEEDURI: ${{ secrets.test-feed-push-pull }}
+          NipkgInstallerUri: ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
+          NipkgCmdPath: ${{vars.NIPKG_INSTALATION_DIR}}
           DevMode : false
           GcdPath: ${{ github.workspace }}\gcd-bootstrap\gcd.exe
         run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll

@@ -55,3 +55,6 @@ jobs:
     secrets:
       nipkg-feed: ${{secrets.NIPKG_DEV_FEED}}
       nipkg-feed-sas: ${{secrets.NIPKG_DEV_FEED_SAS}}
+      test-feed-add-pkg: ${{ secrets.AZUREADDPKGTESTFEEDURI }}
+      test-feed-push-pull: ${{ secrets.AZUREPUSHPULLTESTFEEDURI }}
+      test-feed-generic: ${{ secrets.AZUREFEEDURI }}
