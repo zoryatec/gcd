@@ -83,6 +83,11 @@ jobs:
     uses: ./.github/workflows/ci-cd-nipkg-publish.yml
     needs: nipkg-build
     secrets: inherit
+    with:
+      version: "0.5.0-${{github.run_number}}"
+      name: gcd
+      feed: ${{ vars.NIPK_DEV_FEED_READABLE }}
+  
 
   nipkg-test:
     uses: ./.github/workflows/ci-cd-nipkg-test.yml
