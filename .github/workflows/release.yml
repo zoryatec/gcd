@@ -87,4 +87,4 @@ jobs:
     uses: ./.github/workflows/release-gh.yml
     needs: release
     with:
-      tag: "v0.4.0"
+      tag: "v0.5.0"
