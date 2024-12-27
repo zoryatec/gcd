@@ -39,6 +39,8 @@ jobs:
           nipkg list-installed
           nipkg feed-list
           nipkg list
+          nipkg config-get
+          nipkg update
           nipkg install gcd -y
 
       - name: app test
