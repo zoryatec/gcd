@@ -30,11 +30,22 @@ jobs:
           $VERSION = versionize inspect
           Write-Host "VERSION=$VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "BASE_VERSION=$VERSION" >> $GITHUB_OUTPUT
         continue-on-error: true
 
       - name: Use version in next steps
         run: |
           echo "The version is ${{ env.VERSION }}"
+
+      - name: Use the environment variable in shell
+        run: |
+          echo "The version is $MY_VERSION"
+        env:
+          MY_VERSION: ${{ env.VERSION }}
+
+      - name: Use output in workflow syntax
+        run: |
+          echo "The version is ${{ steps.versionize.outputs.version }}"
 
 
     
