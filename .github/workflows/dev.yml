@@ -1,0 +1,20 @@
+name: dev
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+
+jobs:
+  setup:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        
+  ci-cd:
+    uses: ./.github/workflows/ci-cd.yml
+    needs: setup
+    secrets: inherit
+    with:
+      version: "0.5.0-${{github.run_number}}"
+      name: gcd

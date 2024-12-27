@@ -1,12 +1,19 @@
 name: ci-cd
 
 on:
-  push:
-    branches-ignore:
-      - 'main'
+  workflow_call: # This allows this workflow to be called by other workflows
+    inputs:
+      version:
+        description: "package version"
+        required: true
+        type: string
+      name:
+        description: "package name"
+        required: true
+        type: string
 
 jobs:
-  setup:
+  ci-cd-setup:
     runs-on: windows-latest
     env:
       VERSION: "0.5.0-${{ github.run_number }}"
@@ -24,7 +31,7 @@ jobs:
 
   bin-build:
     uses: ./.github/workflows/ci-cd-bin-build.yml
-    needs: setup
+    needs: ci-cd-setup
     secrets: inherit
     with:
       version: "0.5.0-${{github.run_number}}"
