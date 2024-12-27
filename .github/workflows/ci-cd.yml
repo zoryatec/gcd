@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: windows-latest
     env:
-      VERSION: "0.5.0"
+      VERSION: "0.5.0-${{ github.run_number }}"
     steps:
       - uses: actions/checkout@v4
         
@@ -23,7 +23,7 @@ jobs:
     needs: build
     secrets: inherit
     with:
-      version: "0.5.0-${{github.run_number}}"
+      version: ${{ env.VERSION }}
       
   bin-test:
     uses: ./.github/workflows/ci-cd-bin-test.yml
