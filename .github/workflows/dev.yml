@@ -8,6 +8,8 @@ on:
 jobs:
   setup:
     runs-on: windows-latest
+    outputs:
+      VERSION: ${{ steps.version_inspect.outputs.version }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -23,8 +25,17 @@ jobs:
 
       - name: output version
         id: versionize
-        run: versionize inspect
+        run: |
+          VERSION=$(versionize inspect)
+          echo "VERSION=$VERSION"
+          echo "::set-output name=version::$VERSION"
         continue-on-error: true
+
+      - name: Use version in next steps
+        run: |
+          echo "The version is ${{ steps.version_inspect.outputs.version }}"
+
+
     
         
   ci-cd:
