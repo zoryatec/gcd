@@ -29,7 +29,7 @@ jobs:
         
   test-end-to-end:
     uses: ./.github/workflows/ci-cd-test.yml
-    needs: build
+    needs: bin-build
     secrets: inherit
 
   nipkg-build:
