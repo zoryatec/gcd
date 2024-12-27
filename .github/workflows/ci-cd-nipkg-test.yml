@@ -11,10 +11,6 @@ on:
         description: "package name"
         required: true
         type: string
-      feed:
-        description: "package feed"
-        required: true
-        type: string
 
 jobs:
   test:
@@ -47,7 +43,7 @@ jobs:
           gcd config set --nipkg-cmd-path  "${{env.NIPKGCMDPATH}}"
           gcd tools install-nipkg
           nipkg -v
-          nipkg feed-add "${{ inputs.feed}}" --name=gcd-dev --system
+          nipkg feed-add "${{ secrets.nipkg-feed }}" --name=gcd-dev --system
           nipkg list-installed
           nipkg feed-list
           nipkg list

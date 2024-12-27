@@ -11,10 +11,6 @@ on:
         description: "package name"
         required: true
         type: string
-      feed:
-        description: "package feed"
-        required: true
-        type: string
 
 jobs:
   publish:
@@ -50,7 +46,7 @@ jobs:
       run:  |
         gcd nipkg feed add-package-az `
         --package-path "$env:GITHUB_WORKSPACE\\package\\${{inputs.name}}_${{inputs.version}}_windows_x64.nipkg" `
-        --feed-url "${{ secrets.NIPKG_DEV_FEED }}"
+        --feed-url "${{ secrets.nipkg-feed }}?${{ secrets.nipkg-feed-sas}}" `
 
 
 

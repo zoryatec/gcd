@@ -12,9 +12,12 @@ on:
       nuget-feed:
         required: true
         type: string
+    secrets:
       nipkg-feed:
         required: true
-        type: string
+      nipkg-feed-sas:
+        required: true
+
 
 jobs:
   ci-cd-setup:
@@ -56,7 +59,6 @@ jobs:
     with:
       version: ${{ inputs.version }}
       name: ${{ inputs.name }}
-      feed: ${{ vars.NIPK_DEV_FEED_READABLE }}
   
 
   nipkg-test:
@@ -66,4 +68,3 @@ jobs:
     with:
       version: ${{ inputs.version }}
       name: ${{ inputs.name }}
-      feed: ${{ vars.NIPK_DEV_FEED_READABLE }}
