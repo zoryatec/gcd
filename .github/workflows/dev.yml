@@ -9,7 +9,7 @@ jobs:
   setup:
     runs-on: windows-latest
     outputs:
-      VERSION: ${{ steps.version_inspect.outputs.version }}
+      VERSION: ${{ env.VERSION }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -28,12 +28,12 @@ jobs:
         run: |
           $VERSION = versionize inspect
           Write-Host "VERSION=$VERSION"
-          echo "::set-output name=version::$VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
         continue-on-error: true
 
       - name: Use version in next steps
         run: |
-          echo "The version is ${{ steps.version_inspect.outputs.version }}"
+          echo "The version is ${{ env.VERSION }}
 
 
     
