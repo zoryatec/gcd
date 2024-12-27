@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.6.0"></a>
+## [0.6.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.6.0) (2024-12-27)
+
+### Features
+
+* match with prev tag ([7663b97](https://www.github.com/zoryatec/gcd/commit/7663b976a6679b4f104a758f493e97c72dc78e77))
+* trigger ([ed6a433](https://www.github.com/zoryatec/gcd/commit/ed6a4330b4e30a9fda7507b548d33d64dd3f141a))
+
 <a name="0.5.0"></a>
 ## [0.5.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.5.0) (2024-12-27)
 
