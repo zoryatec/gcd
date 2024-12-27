@@ -35,7 +35,7 @@ jobs:
           gcd config set --nipkg-cmd-path  "${{env.NIPKGCMDPATH}}"
           gcd tools install-nipkg
           nipkg -v
-          nipkg feed-add "${{ env.DEVFEED }}" --name=gcd-dev
+          nipkg feed-add "${{ env.DEVFEED }}" --name=gcd-dev --system
           nipkg list-installed
           nipkg feed-list
           nipkg list
