@@ -1,4 +1,4 @@
-name: ci-cd-test-nuget
+name: ci-cd-nuget-test
 
 on:
   workflow_call: # This allows this workflow to be called by other workflows

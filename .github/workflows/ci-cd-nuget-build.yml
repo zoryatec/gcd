@@ -1,4 +1,4 @@
-name: ci-cd-bin-build
+name: ci-cd-nuget-build
 
 on:
   workflow_call: # This allows this workflow to be called by other workflows

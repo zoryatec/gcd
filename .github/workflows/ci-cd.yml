@@ -50,6 +50,18 @@ jobs:
     with:
       version: ${{ inputs.version }}
 
+  nuget-publish:
+    uses: ./.github/workflows/ci-cd-nuget-publish.yml
+    needs: bin-test
+    secrets: inherit
+    with:
+      version: ${{ inputs.version }}
+
+  nuget-test:
+    uses: ./.github/workflows/ci-cd-nuget-test.yml
+    needs: bin-test
+    secrets: inherit
+
   nipkg-build:
     uses: ./.github/workflows/ci-cd-nipkg-build.yml
     needs: bin-test
@@ -57,6 +69,7 @@ jobs:
     with:
       version: ${{ inputs.version }}
       name: ${{ inputs.name }}
+
     
   nipkg-publish:
     uses: ./.github/workflows/ci-cd-nipkg-publish.yml

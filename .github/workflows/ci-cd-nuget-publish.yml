@@ -1,0 +1,26 @@
+name: ci-cd-bin-build
+
+on:
+  workflow_call: # This allows this workflow to be called by other workflows
+    inputs:
+      version:
+        description: "nuget version"
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: download nuget
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: gcd-nuget
+        path: nuget
+
+    - name: publish nuget
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: dotnet nuget push .\nuget\*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GITHUB_TOKEN }}
+
+        
