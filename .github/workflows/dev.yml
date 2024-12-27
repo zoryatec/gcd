@@ -10,6 +10,7 @@ jobs:
     runs-on: windows-latest
     outputs:
       VERSION: ${{ env.VERSION }}
+      NAME: "gcd-dev"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -28,12 +29,12 @@ jobs:
         run: |
           $VERSION = versionize inspect
           Write-Host "VERSION=$VERSION"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "VERSION=$VERSION.${{github.run_id}}" >> $GITHUB_ENV
         continue-on-error: true
 
       - name: Use version in next steps
         run: |
-          echo "The version is ${{ env.VERSION }}
+          echo "The version is ${{ env.VERSION }}"
 
 
     
@@ -43,7 +44,7 @@ jobs:
     needs: setup
     secrets: inherit
     with:
-      version: "0.5.0-${{github.run_number}}"
-      name: gcd
+      version: ${{needs.setup.outputs.VERSION}}
+      name: ${{needs.setup.outputs.NAME}}
       nuget-feed: ""
       nipkg-feed: ${{vars.NIPK_DEV_FEED_READABLE}}
