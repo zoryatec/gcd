@@ -2,10 +2,10 @@ name: ci-cd
 
 on:
   push:
-    branches: [ "*" ]
-  pull_request:
-    branches: [ "*" ]
-
+    branches:
+      - '*'
+    branches-ignore:
+      - 'main'
 
 jobs:
   build:

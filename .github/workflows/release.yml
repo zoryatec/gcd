@@ -1,10 +1,13 @@
 name: 'release'
 
 on:
+  push:
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
-  publish-new-version:
+  release:
+    if: ${{ github.actor != 'github-actions' }}
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,9 +33,9 @@ jobs:
       - name: Build Package
         if: steps.versionize.outcome == 'success'
         run: dotnet pack src/Gcd/Gcd.csproj --output nupkgs --configuration Release
-      - name: Push to Nuget
-        if: steps.versionize.outcome == 'success'
-        run: dotnet nuget push "nupkgs\*.nupkg" -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}}
+      # - name: Push to Nuget
+      #   if: steps.versionize.outcome == 'success'
+      #   run: dotnet nuget push "nupkgs\*.nupkg" -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}}
       - name: Push changes to GitHub
         if: steps.versionize.outcome == 'success'
         uses: ad-m/github-push-action@master
