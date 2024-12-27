@@ -70,9 +70,15 @@ jobs:
   release:
     uses: ./.github/workflows/ci-cd.yml
     needs: setup
-    secrets: inherit
     with:
       version: ${{needs.setup.outputs.VERSION}}
       name: ${{needs.setup.outputs.NAME}}
       nuget-feed: ""
-      nipkg-feed: ${{vars.NIPK_DEV_FEED_READABLE}}
+    secrets:
+      nipkg-feed: ${{secrets.NIPKG_PROD_FEED}}
+      nipkg-feed-sas: ${{secrets.NIPKG_PROD_FEED_SAS}}
+      test-feed-add-pkg: ${{ secrets.AZUREADDPKGTESTFEEDURI }}
+      test-feed-push-pull: ${{ secrets.AZUREPUSHPULLTESTFEEDURI }}
+      test-feed-generic: ${{ secrets.AZUREFEEDURI }}
+      nuget-feed: ${{ secrets.NUGET_PROD_FEED }}
+      nuget-feed-key: ${{ secrets.NUGET_API_KEY}}

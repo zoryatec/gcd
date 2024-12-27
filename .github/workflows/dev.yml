@@ -33,17 +33,6 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "version=$VERSION" >> $GITHUB_OUTPUT
         shell: bash
-  
-      - name: Debug environment variable
-        run: |
-          echo "Captured VERSION from env: $VERSION"
-        env:
-          VERSION: ${{ env.version }}
-
-      - name: Debug output value
-        run: |
-          echo "Captured VERSION from step output: ${{ steps.versionize.outputs.version }}"
-
      
   ci-cd:
     uses: ./.github/workflows/ci-cd.yml
