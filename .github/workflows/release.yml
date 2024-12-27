@@ -6,8 +6,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  release:
-    if: ${{ github.actor != 'github-actions[bot]' }}
+  setup:
+    outputs:
+      VERSION: ${{ steps.versionize.outputs.version }}.${{ github.run_number}}
+      NAME: "gcd"
+    if: ${{ github.actor != 'github-actions[bot]' && github.ref == 'refs/heads/main' }} 
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,3 +46,33 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
           tags: true
+
+      - name: Run versionize and debug output
+        id: versionize2
+        run: |
+          VERSION=$(versionize inspect)
+          echo "VERSION is: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        shell: bash
+    
+      - name: Debug environment variable
+        run: |
+          echo "Captured VERSION from env: $VERSION"
+        env:
+          VERSION: ${{ env.version }}
+
+      - name: Debug output value
+        run: |
+          echo "Captured VERSION from step output: ${{ steps.versionize2.outputs.version }}"
+
+      
+  release:
+    uses: ./.github/workflows/ci-cd.yml
+    needs: setup
+    secrets: inherit
+    with:
+      version: ${{needs.setup.outputs.VERSION}}
+      name: ${{needs.setup.outputs.NAME}}
+      nuget-feed: ""
+      nipkg-feed: ${{vars.NIPK_DEV_FEED_READABLE}}
