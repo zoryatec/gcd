@@ -4,11 +4,15 @@ on:
   workflow_call: # This allows this workflow to be called by other workflows
     inputs:
       version:
-        description: "package version"
         required: true
         type: string
       name:
-        description: "package name"
+        required: true
+        type: string
+      nuget-feed:
+        required: true
+        type: string
+      nipkg-feed:
         required: true
         type: string
 
@@ -47,8 +51,8 @@ jobs:
     needs: bin-test
     secrets: inherit
     with:
-      version:  $env:VERSION
-      name: gcd
+      version: ${{ inputs.version }}
+      name: ${{ inputs.name }}
     
   nipkg-publish:
     uses: ./.github/workflows/ci-cd-nipkg-publish.yml
@@ -56,7 +60,7 @@ jobs:
     secrets: inherit
     with:
       version: ${{ inputs.version }}
-      name: gcd
+      name: ${{ inputs.name }}
       feed: ${{ vars.NIPK_DEV_FEED_READABLE }}
   
 
@@ -66,5 +70,5 @@ jobs:
     secrets: inherit
     with:
       version: ${{ inputs.version }}
-      name: gcd
+      name: ${{ inputs.name }}
       feed: ${{ vars.NIPK_DEV_FEED_READABLE }}
