@@ -1,20 +1,11 @@
 name: ci-cd
 
 on:
-  workflow_call:
-    inputs:
-      version:
-        description: "package version"
-        required: true
-        type: string
-      name:
-        description: "package name"
-        required: true
-        type: string
-      feed:
-        description: "package feed"
-        required: true
-        type: string
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "*" ]
+
 
 jobs:
   build:
