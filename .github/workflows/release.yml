@@ -8,7 +8,8 @@ on:
 jobs:
   setup:
     outputs:
-      VERSION: ${{ steps.versionize.outputs.version }}.${{ github.run_number}}
+      VERSION: ${{ steps.versionize.outputs.version }}
+      TAG: v${{ steps.versionize.outputs.version }}
       NAME: "gcd"
     if: ${{ github.actor != 'github-actions[bot]' && github.ref == 'refs/heads/main' }} 
     runs-on: windows-latest
@@ -86,4 +87,4 @@ jobs:
     uses: ./.github/workflows/release-gh.yml
     needs: setup
     with:
-      tag: ${{needs.setup.outputs.VERSION}}
+      tag: ${{needs.setup.outputs.TAG}}
