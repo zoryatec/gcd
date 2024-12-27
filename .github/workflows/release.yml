@@ -85,6 +85,6 @@ jobs:
 
   release-gh:
     uses: ./.github/workflows/release-gh.yml
-    needs: setup
+    needs: release
     with:
       tag: "v0.4.0"
