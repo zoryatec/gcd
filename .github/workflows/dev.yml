@@ -52,6 +52,6 @@ jobs:
       version: ${{needs.setup.outputs.VERSION}}
       name: ${{needs.setup.outputs.NAME}}
       nuget-feed: ""
-      nipkg-feed: ${{vars.NIPK_DEV_FEED_READABLE}}
     secrets:
+      nipkg-feed: ${{secrets.NIPKG_DEV_FEED}}
       nipkg-feed-sas: ${{secrets.NIPKG_DEV_FEED_SAS}}
