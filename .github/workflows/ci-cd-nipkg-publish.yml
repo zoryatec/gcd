@@ -10,23 +10,17 @@ jobs:
       VERSION: "0.5.0"
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-
     - name: download gcd bootstrap
       uses: actions/download-artifact@v4.1.8
       with:
         name: gcd-bin
         path: "gcd-bootstrap"
 
-    - name: download gcd bin
+    - name: download gcd bootstrap
       uses: actions/download-artifact@v4.1.8
       with:
-        name: gcd-bin
-        path: "package-content"
+        name: gcd-package
+        path: "package"
 
     - name: add to path
       run: |
@@ -39,70 +33,11 @@ jobs:
         gcd config set --nipkg-cmd-path  "C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe"
         gcd tools install-nipkg
 
-    - name: demo build
-      env:
-        PACKAGE_BUILDER_DIR: ${{github.workspace}}\package-builder
-        PACKAGE_CONTENT_DIR: ${{github.workspace}}\package-content
-        PACKAGE_OUTPUT_DIR: ${{github.workspace}}\package
-      run:  |
-        mkdir ${{env.PACKAGE_BUILDER_DIR}}
-        mkdir ${{env.PACKAGE_OUTPUT_DIR}}
-
-        gcd nipkg builder init `
-        --package-builder-dir ${{env.PACKAGE_BUILDER_DIR}} `
-
-        gcd nipkg builder add-content `
-        --package-builder-dir ${{env.PACKAGE_BUILDER_DIR}} `
-        --content-src-dir ${{env.PACKAGE_CONTENT_DIR}} `
-        --target-root-dir "BootVolume/Program Files/gcd"
-
-        gcd nipkg builder set-property `
-        --package-builder-dir ${{env.PACKAGE_BUILDER_DIR}} `
-        --package-architecture "windows_x64" `
-        --package-home-page "https://github.com/zoryatec/gcd" `
-        --package-maintainer "Dawid Wozny" `
-        --package-description "G CI/CD tool" `
-        --package-xb-plugin "file" `
-        --package-xb-user-visible "yes" `
-        --package-xb-store-product "yes" `
-        --package-xb-section "tools" `
-        --package-name "gcd" `
-        --package-version "0.5.0-${{github.run_number}}" 
-
-        gcd nipkg builder instructions-file-pkg add-custom-execute `
-        --package-builder-dir "$env:GITHUB_WORKSPACE\\package-builder" `
-        --root "BootVolume" `
-        --arguments "tools add-to-user-path C:\\PROGRA~1\\gcd" `
-        --exe-name "Program Files\\gcd\\gcd.exe" `
-        --step "install" `
-        --schedule "post"
-
-        gcd nipkg builder pack `
-        --package-builder-dir ${{github.workspace}}\package-builder `
-        --package-destination-dir  ${{github.workspace}}\package
-
-    # - name: Build Nipkg
-    #   run:  |
-    #     gcd nipkg build `
-    #     --package-sourec-dir "$env:GITHUB_WORKSPACE\\package-content" `
-    #     --package-name "gcd" `
-    #     --package-version "0.5.0-${{github.run_number}}" `
-    #     --package-instalation-dir "BootVolume/Program Files/gcd" `
-    #     --package-destination-dir "$env:GITHUB_WORKSPACE\package"
-
     - name: publish to feed
       run:  |
         gcd nipkg feed add-package-az `
         --package-path "$env:GITHUB_WORKSPACE\\package\\gcd_0.5.0-${{github.run_number}}_windows_x64.nipkg" `
         --feed-url "${{ secrets.NIPKG_DEV_FEED }}"
-
-  # POST
-
-    - name: upload package artifact
-      uses: actions/upload-artifact@v4.4.3
-      with:
-        name: gcd-pckg-temp
-        path: "package"
 
 
 

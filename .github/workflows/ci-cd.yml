@@ -70,10 +70,15 @@ jobs:
     uses: ./.github/workflows/ci-cd-test.yml
     needs: build
     secrets: inherit
+
+  nipkg-build:
+    uses: ./.github/workflows/ci-cd-nipkg-build.yml
+    needs: test-end-to-end
+    secrets: inherit
     
   nipkg-publish:
     uses: ./.github/workflows/ci-cd-nipkg-publish.yml
-    needs: test-end-to-end
+    needs: nipkg-build
     secrets: inherit
 
   nipkg-test:
