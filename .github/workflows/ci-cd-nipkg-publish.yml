@@ -75,8 +75,8 @@ jobs:
         --schedule "post"
 
         gcd nipkg builder pack `
-        --package-builder-dir "${{github.workspace}}\\package-builder" `
-        --package-destination-dir  "${{github.workspace}}\package"  
+        --package-builder-dir ${{github.workspace}}\package-builder `
+        --package-destination-dir  ${{github.workspace}}\package
 
     # - name: Build Nipkg
     #   run:  |
