@@ -13,58 +13,12 @@ jobs:
     env:
       VERSION: "0.5.0"
 
-    steps:
-    - uses: actions/checkout@v4
-      
-    - name: setup dotnet
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-       
-    - name: restore dependencies
-      run: dotnet restore
-      
-    - name: build app
-      run: dotnet build src/Gcd/Gcd.csproj -p:Version=0.5.0.${{github.run_number}} --no-restore
-
-    - name: publish app
-      run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:Version=0.5.0.${{github.run_number}} -p:PublishSingleFile=true --output "./publish"
-
-    - name: pack nuget
-      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=0.5.0-${{github.run_number}} --output nuget
-
-    - name: build unit tests
-      run: dotnet build tests/Gcd.Tests/Gcd.Tests.csproj  --output unit-tests
-
-    - name: run unit tests
-      run: dotnet test unit-tests/gcd.tests.dll
-
-    - name: build integration tests
-      run: dotnet build tests/Gcd.Tests.EndToEnd/Gcd.Tests.EndToEnd.csproj  --output integration-tests
-   
-
-    # - name: Publish to GitHub Packages
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   run: dotnet nuget push .\nuget\*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GITHUB_TOKEN }}
-
-    - name: upload bin
-      uses: actions/upload-artifact@v4.4.3
-      with:
-        name: gcd-bin
-        path: publish
-
-    - name: upload nuget
-      uses: actions/upload-artifact@v4.4.3
-      with:
-        name: gcd-nuget
-        path: nuget
-
-    - name: upload integration tests
-      uses: actions/upload-artifact@v4.4.3
-      with:
-        name: gcd-test
-        path: integration-tests  
+  bin-build:
+    uses: ./.github/workflows/ci-cd-bin-build.yml
+    needs: build
+    secrets: inherit
+    with:
+      version: "0.5.0-${{github.run_number}}"
         
   test-end-to-end:
     uses: ./.github/workflows/ci-cd-test.yml
