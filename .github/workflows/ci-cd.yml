@@ -52,14 +52,14 @@ jobs:
 
   nuget-publish:
     uses: ./.github/workflows/ci-cd-nuget-publish.yml
-    needs: bin-test
+    needs: nuget-build
     secrets: inherit
     with:
       version: ${{ inputs.version }}
 
   nuget-test:
     uses: ./.github/workflows/ci-cd-nuget-test.yml
-    needs: bin-test
+    needs: nuget-publish
     secrets: inherit
 
   nipkg-build:
