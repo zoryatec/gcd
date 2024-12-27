@@ -55,8 +55,19 @@ jobs:
 
         gcd nipkg builder set-property `
         --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
+        --package-architecture "windows_x64" `
+        --package-home-page "https://github.com/zoryatec/gcd" `
+        --package-maintainer "Dawid Wozny" `
+        --package-description "G CI/CD tool" `
+        --package-xb-plugin "file" `
+        --package-xb-user-visible "yes"
+        --package-xb-store-product "yes"
+        --package-xb-section "tools"
         --package-name "gcd" `
-        --package-version "0.5.0-${{github.run_number}}"
+        --package-version "0.5.0-${{github.run_number}}" `
+        --package-dependencies" ""
+
+
 
         gcd nipkg builder instructions-file-pkg add-custom-execute `
         --package-builder-dir "$env:GITHUB_WORKSPACE\package-builder" `
