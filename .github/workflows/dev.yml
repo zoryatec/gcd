@@ -9,7 +9,7 @@ jobs:
   setup:
     runs-on: windows-latest
     outputs:
-      VERSION: ${{ env.VERSION }}
+      VERSION: ${{ steps.versionize.outputs.version }}.${{ github.run_number}}
       NAME: "gcd-dev"
     steps:
       - uses: actions/checkout@v4
