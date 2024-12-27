@@ -2,6 +2,19 @@ name: ci-cd-nipkg-test
 
 on:
   workflow_call:
+    inputs:
+      version:
+        description: "package version"
+        required: true
+        type: string
+      name:
+        description: "package name"
+        required: true
+        type: string
+      feed:
+        description: "package feed"
+        required: true
+        type: string
 
 jobs:
   test-end-to-end:
@@ -28,14 +41,13 @@ jobs:
         env:
           NIPKGINSTALLERURI: ${{ secrets.NIPKGINSTALLERURI }}
           NIPKGCMDPATH: ${{ secrets.NIPKGCMDPATH }}
-          DEVFEED: ${{ vars.NIPK_DEV_FEED_READABLE }}
         run: |
           gcd --version  
           gcd config set --nipkg-installer-uri ${{env.NIPKGINSTALLERURI}}
           gcd config set --nipkg-cmd-path  "${{env.NIPKGCMDPATH}}"
           gcd tools install-nipkg
           nipkg -v
-          nipkg feed-add "${{ env.DEVFEED }}" --name=gcd-dev --system
+          nipkg feed-add "${{ inputs.feed}}" --name=gcd-dev --system
           nipkg list-installed
           nipkg feed-list
           nipkg list
