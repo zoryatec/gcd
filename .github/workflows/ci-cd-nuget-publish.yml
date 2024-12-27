@@ -19,8 +19,6 @@ jobs:
         path: nuget
 
     - name: publish nuget
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: dotnet nuget push .\nuget\*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GITHUB_TOKEN }}
+      run: dotnet nuget push .\nuget\*.nupkg --source ${{secrets.nuget-feed}} --api-key ${{ secrets.nuget-feed-key }}
 
         
