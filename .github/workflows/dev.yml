@@ -43,12 +43,21 @@ jobs:
         run: |
           echo "Captured VERSION from step output: ${{ steps.versionize.outputs.version }}"
 
-
-    
-        
+     
   ci-cd:
     uses: ./.github/workflows/ci-cd.yml
     needs: setup
+    secrets: inherit
+    with:
+      version: ${{needs.setup.outputs.VERSION}}
+      name: ${{needs.setup.outputs.NAME}}
+      nuget-feed: ""
+      nipkg-feed: ${{vars.NIPK_DEV_FEED_READABLE}}
+
+  release-setup:
+    if: ${{ github.actor != 'github-actions[bot]' && github.ref == 'refs/heads/main' }} 
+    uses: ./.github/workflows/ci-cd.yml
+    needs: ci-cd
     secrets: inherit
     with:
       version: ${{needs.setup.outputs.VERSION}}
