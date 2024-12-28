@@ -36,12 +36,6 @@ jobs:
 
     - name: build integration tests
       run: dotnet build tests/Gcd.Tests.EndToEnd/Gcd.Tests.EndToEnd.csproj  --output integration-tests
-   
-
-    # - name: Publish to GitHub Packages
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   run: dotnet nuget push .\nuget\*.nupkg --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --api-key ${{ secrets.GITHUB_TOKEN }}
 
     - name: upload bin
       uses: actions/upload-artifact@v4.4.3

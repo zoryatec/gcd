@@ -7,40 +7,30 @@ on:
 
 jobs:
   setup:
-    outputs:
-      VERSION: ${{ steps.versionize.outputs.version }}
-      TAG: v${{ steps.versionize.outputs.version }}
-      NAME: "gcd"
     if: ${{ github.actor != 'github-actions[bot]' && github.ref == 'refs/heads/main' }} 
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: '0'
-      - name: Install Versionize
+      - name: install versionize
         run: dotnet tool install --global Versionize
 
-      - name: Setup git
+      - name: setup git
         run: |
           git config --local user.email "dawid.wozny@zoryatec.com"
           git config --local user.name "github-actions[bot]"
 
-      - name: Versionize Release
+      - name: run versionize
         id: versionize
         run: versionize --exit-insignificant-commits
         continue-on-error: true
 
-      - name: No release required
+      - name: no release required
         if: steps.versionize.outcome != 'success'
         run: echo "Skipping publishing. No release required."
-
-      - name: Build Package
-        if: steps.versionize.outcome == 'success'
-        run: dotnet pack src/Gcd/Gcd.csproj --output nupkgs --configuration Release
-      # - name: Push to Nuget
-      #   if: steps.versionize.outcome == 'success'
-      #   run: dotnet nuget push "nupkgs\*.nupkg" -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}}
-      - name: Push changes to GitHub
+ 
+      - name: push changes
         if: steps.versionize.outcome == 'success'
         uses: ad-m/github-push-action@master
         with:
@@ -48,7 +38,7 @@ jobs:
           branch: ${{ github.ref }}
           tags: true
 
-      - name: Run versionize and debug output
+      - name: get current version
         id: versionize2
         run: |
           VERSION=$(versionize inspect)
@@ -56,16 +46,10 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "version=$VERSION" >> $GITHUB_OUTPUT
         shell: bash
-    
-      - name: Debug environment variable
-        run: |
-          echo "Captured VERSION from env: $VERSION"
-        env:
-          VERSION: ${{ env.version }}
-
-      - name: Debug output value
-        run: |
-          echo "Captured VERSION from step output: ${{ steps.versionize2.outputs.version }}"
+    outputs:
+      VERSION: ${{ steps.versionize.outputs.version }}
+      TAG: v${{ steps.versionize.outputs.version }}
+      NAME: "gcd"
 
       
   release:
