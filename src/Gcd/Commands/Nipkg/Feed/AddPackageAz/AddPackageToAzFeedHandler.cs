@@ -10,16 +10,16 @@ using System.IO.Compression;
 
 namespace Gcd.Commands.Nipkg.Feed.AddPackageAz;
 
-public record AddPackageToFeedRequest(AzBlobFeedDefinition AzFeedDef, PackageFilePath PackagePath, NipkgCmdPath CmdPath) : IRequest<Result>;
-public record AddPackageToFeedResponse(string Result);
+public record AddPackageToAzFeedRequest(AzBlobFeedDefinition AzFeedDef, PackageFilePath PackagePath, NipkgCmdPath CmdPath) : IRequest<Result>;
+public record AddPackageToAzFeedResponse(string Result);
 
-public class AddPackageToFeedHandler(
+public class AddPackageToAzFeedHandler(
     IMediator _mediator,
     IUploadAzBlobService _uploadService,
     IFileSystem _fs)
-    : IRequestHandler<AddPackageToFeedRequest, Result>
+    : IRequestHandler<AddPackageToAzFeedRequest, Result>
 {
-    public async Task<Result> Handle(AddPackageToFeedRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(AddPackageToAzFeedRequest request, CancellationToken cancellationToken)
     {
         var (azFeedDef, packagePath, cmdPath) = request;
 

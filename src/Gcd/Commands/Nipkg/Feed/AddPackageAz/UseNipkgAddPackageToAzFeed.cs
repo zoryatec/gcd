@@ -29,7 +29,7 @@ public static class UseNipkgAddPackageToAzFeedCmdExtensions
 
                 return await Result
                     .Combine(azFeedDef, pathToPackage)
-                    .Map(() => new AddPackageToFeedRequest(azFeedDef.Value, pathToPackage.Value, cmdPath))
+                    .Map(() => new AddPackageToAzFeedRequest(azFeedDef.Value, pathToPackage.Value, cmdPath))
                     .Bind((req1) => mediator.Send(req1, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
