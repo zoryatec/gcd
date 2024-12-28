@@ -29,8 +29,8 @@ jobs:
 
     - name: zip files
       run: |
-       zip -r gcd-bin.zip gcd-bin/
-       zip -r gcd-test.zip gcd-test/
+       Compress-Archive -Path gcd-bin/* -DestinationPath gcd-bin.zip
+       Compress-Archive -Path gcd-test/* -DestinationPath gcd-test.zip
 
     - name: create release
       id: create_release
