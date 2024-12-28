@@ -26,6 +26,7 @@ jobs:
           gcd config set --nipkg-installer-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
           gcd config set --nipkg-cmd-path "${{env.NIPKG_CMD_PATH}}"
           gcd tools install-nipkg
+          Get-Command gcd
 
       - name: app test
         env:
