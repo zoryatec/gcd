@@ -9,6 +9,10 @@ jobs:
   setup:
     if: ${{ github.actor != 'github-actions[bot]' && github.ref == 'refs/heads/main' }} 
     runs-on: windows-latest
+    outputs:
+      VERSION: ${{ steps.versionize2.outputs.version }}
+      TAG: v${{ steps.versionize2.outputs.version }}
+      NAME: "gcd"
     steps:
       - uses: actions/checkout@v4
         with:
@@ -46,10 +50,6 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_ENV
           echo "version=$VERSION" >> $GITHUB_OUTPUT
         shell: bash
-    outputs:
-      VERSION: ${{ steps.versionize.outputs.version }}
-      TAG: v${{ steps.versionize.outputs.version }}
-      NAME: "gcd"
 
       
   release:
