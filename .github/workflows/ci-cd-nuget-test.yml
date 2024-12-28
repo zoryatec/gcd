@@ -13,10 +13,12 @@ jobs:
           dotnet tool install --global gcd
 
       - name: setup
+        env:
+          NIPKG_CMD_PATH: "${{vars.NIPKG_INSTALATION_DIR}}\\nipkg.exe"
         run: |
           gcd --version  
           gcd config set --nipkg-installer-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
-          gcd config set --nipkg-cmd-path "${{vars.NIPKG_INSTALATION_DIR}}"
+          gcd config set --nipkg-cmd-path ${{env.NIPKG_CMD_PATH}}
           gcd tools install-nipkg
 
       - name: app test
