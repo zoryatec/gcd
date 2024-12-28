@@ -40,5 +40,7 @@ jobs:
         files: |
           gcd-bin.zip
           gcd-test.zip
+        body_path: ${{ github.workspace }}/CHANGELOG.md
+        repository: zoryatec/gcd
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
