@@ -65,7 +65,6 @@ jobs:
 
   nipkg-build:
     uses: ./.github/workflows/ci-cd-nipkg-build.yml
-    if: false
     needs: bin-test
     secrets: inherit
     with:

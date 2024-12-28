@@ -27,7 +27,7 @@ jobs:
           AZUREFEEDURI: ${{ secrets.test-feed-generic }}
           AZUREPUSHPULLTESTFEEDURI: ${{ secrets.test-feed-push-pull }}
           NipkgInstallerUri: ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
-          NipkgCmdPath: ${{vars.NIPKG_INSTALATION_DIR}}
+          NipkgCmdPath: "${{vars.NIPKG_INSTALATION_DIR}}\\nipkg.exe"
           DevMode : false
           GcdPath: "C:\\Users\runneradmin\\.dotnet\\tools\\gcd.exe"
         run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll
