@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.13.0"></a>
+## [0.13.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.13.0) (2024-12-28)
+
+### Features
+
+* release with nupkg and nipkg ([7aea84a](https://www.github.com/zoryatec/gcd/commit/7aea84aa9a65acef6d3d075c29855dadd69319af))
+
 <a name="0.12.0"></a>
 ## [0.12.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.12.0) (2024-12-28)
 
