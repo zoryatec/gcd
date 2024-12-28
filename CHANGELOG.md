@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.12.0"></a>
+## [0.12.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.12.0) (2024-12-28)
+
+### Features
+
+* using compress archive ([960a216](https://www.github.com/zoryatec/gcd/commit/960a2162ec2a85eb037ee1848e2b54940e0565be))
+
 <a name="0.11.0"></a>
 ## [0.11.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.11.0) (2024-12-28)
 
