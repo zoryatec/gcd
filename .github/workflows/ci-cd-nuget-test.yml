@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: install gcd
         run: |
-          dotnet nuget add source ${{secrets.nuget-feed}} --api-key ${{ secrets.nuget-feed-key }}
+          dotnet nuget add source ${{secrets.nuget-feed}} --username "anyusername" --password  ${{ secrets.nuget-feed-key }}
           dotnet tool install --global gcd
 
       - name: setup
