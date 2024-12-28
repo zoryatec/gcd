@@ -12,8 +12,6 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
-      with:
-        fetch-depth: '0'
         
     - name: download gcd 
       uses: actions/download-artifact@v4.1.8
@@ -21,11 +19,23 @@ jobs:
         name: gcd-bin
         path: gcd-bin       
 
-    - name: download integration tests
+    - name: download test
       uses: actions/download-artifact@v4.1.8
       with:
         name: gcd-test
         path: gcd-test
+
+    - name: download nipkg
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: gcd-nipkg
+        path: gcd-nipkg
+
+    - name: download nuget
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: gcd-nuget
+        path: gcd-nuget
 
     - name: zip files
       run: |
@@ -40,6 +50,8 @@ jobs:
         files: |
           gcd-bin.zip
           gcd-test.zip
+          gcd-nipkg/*.nipkg
+          gcd-nuget/*.nupkg
         body_path: ${{ github.workspace }}/CHANGELOG.md
         repository: zoryatec/gcd
       env:
