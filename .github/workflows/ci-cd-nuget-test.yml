@@ -7,6 +7,12 @@ jobs:
   test-end-to-end:
     runs-on: windows-latest
     steps:
+      - name: download tests
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: gcd-test
+          path: gcd-test
+
       - name: install gcd
         run: |
           dotnet nuget add source ${{secrets.nuget-feed}} --username "anyusername" --password  ${{ secrets.nuget-feed-key }}
@@ -18,7 +24,7 @@ jobs:
         run: |
           gcd --version  
           gcd config set --nipkg-installer-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
-          gcd config set --nipkg-cmd-path ${{env.NIPKG_CMD_PATH}}
+          gcd config set --nipkg-cmd-path "${{env.NIPKG_CMD_PATH}}"
           gcd tools install-nipkg
 
       - name: app test
@@ -30,5 +36,5 @@ jobs:
           NipkgCmdPath: "${{vars.NIPKG_INSTALATION_DIR}}\\nipkg.exe"
           DevMode : false
           GcdPath: "C:\\Users\runneradmin\\.dotnet\\tools\\gcd.exe"
-        run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll
+        run: dotnet test gcd-test/Gcd.Tests.EndToEnd.dll
 
