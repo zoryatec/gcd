@@ -34,7 +34,7 @@ public class AddPackageToAzFeedHandler(
 
         return await Result.Combine(localFeedDef, insideFeedPkgPath)
             .Bind(() => _mediator.PullFeedMetaDataAsync(azFeedDef, localFeedDef.Value))
-            .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value,packagePath, cmdPath))
+            .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value,packagePath, cmdPath, UseAbsolutePath.No))
             //.Bind(() => DownloadFile(packagePath, insideFeedPkgPath.Value, overwrite: true))
             //.Bind(() => _mediator.AddPackageToLcalFeedAsync(localFeedDef.Value, insideFeedPkgPath.Value, cmdPath))
             .Bind(() => UpdateToAbsPath(localFeedDef.Value, azFeedDef as FeedDefinitionAzBlob ?? throw new NullReferenceException(), packagePath.FileName))

@@ -18,12 +18,22 @@ public static class MediatorExtensions
         FeedDefinitionLocal localFeedDefinition,
         IPackageFileDescriptor packageFileDescriptor,
         NipkgCmdPath CmdPath,
+        UseAbsolutePath useAbsolutePath,
         bool createFeed = false,
         CancellationToken cancellationToken = default)
-        => await mediator.Send(new AddPackageToLocalRequest(localFeedDefinition, packageFileDescriptor, CmdPath, createFeed), cancellationToken);
+        => await mediator.Send(new AddPackageToLocalRequest(localFeedDefinition, packageFileDescriptor, CmdPath, createFeed, useAbsolutePath), cancellationToken);
 }
 
-public record AddPackageToLocalRequest(FeedDefinitionLocal AzFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath CmdPath, bool createFeed) : IRequest<Result>;
+public record UseAbsolutePath
+{
+    private string _value;
+    public UseAbsolutePath(string value) { _value = value;}
+
+    public static UseAbsolutePath Yes = new UseAbsolutePath("yes");
+    public static UseAbsolutePath No = new UseAbsolutePath("yes");
+}
+
+public record AddPackageToLocalRequest(FeedDefinitionLocal AzFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath CmdPath, bool createFeed, UseAbsolutePath UseAbsolutePath) : IRequest<Result>;
 public record AddPackageToLocalResponse(string Result);
 
 public class AddPackageToLocalHandler(
@@ -35,14 +45,20 @@ public class AddPackageToLocalHandler(
 {
     public async Task<Result> Handle(AddPackageToLocalRequest request, CancellationToken cancellationToken)
     {
-        var (localFeedDef, packagePath, cmdPath, createFeed) = request;
+        var (localFeedDef, packagePath, cmdPath, createFeed, useAbsPath) = request;
 
 
 
         var insideFeedPkgPath = PackageFilePath.Of(localFeedDef.Feed, packagePath.FileName);
 
-        return await DownloadFile(packagePath, insideFeedPkgPath, overwrite: true)
+        var result =  await DownloadFile(packagePath, insideFeedPkgPath, overwrite: true)
             .Bind(() => _mediator.AddPackageToLcalFeedAsync(localFeedDef, insideFeedPkgPath, cmdPath, createFeed));
+
+        if(result.IsFailure) return result;
+
+        if(useAbsPath.Equals(UseAbsolutePath.Yes))  return result;
+
+        return result;
         //.Bind(() => UpdateToAbsPath(localFeedDef.Value, azFeedDef, packagePath.FileName))
     }
 

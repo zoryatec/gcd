@@ -40,7 +40,7 @@ public static class UUseAddLocalPackageCmdExtensions
 
                 return await Result
                     .Combine(locPath, feedDef)
-                    .Bind(() => mediator.AddToLocalFeedAsync(feedDef.Value, locPath.Value, cmdPath, feedCreate, cancelationToken))
+                    .Bind(() => mediator.AddToLocalFeedAsync(feedDef.Value, locPath.Value, cmdPath, UseAbsolutePath.No, feedCreate, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);
