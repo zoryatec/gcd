@@ -11,7 +11,7 @@ namespace Gcd.Commands.Nipkg.Feed.PullMetaDataAz;
 
 public static class UseNipkgPullFeedMetaCmdExtensions
 {
-    public static CommandLineApplication UseNipkgPullFeedMetaCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UsePullFeedMetaCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
@@ -30,7 +30,7 @@ public static class UseNipkgPullFeedMetaCmdExtensions
 
                 return await Result
                     .Combine(azFeedDef, localFeedDef)
-                    .Bind(() => mediator.PullFeedMetaDataAsync(azFeedDef.Value, localFeedDef.Value, cancelationToken))
+                    .Bind(() => mediator.PullFeedMetaAsync(azFeedDef.Value, localFeedDef.Value, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

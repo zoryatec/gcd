@@ -33,7 +33,7 @@ public class AddPackageToAzFeedHandler(
             .Map((arg) => PackageFilePath.Of(arg.Feed, packagePath.FileName));
 
         return await Result.Combine(localFeedDef, insideFeedPkgPath)
-            .Bind(() => _mediator.PullFeedMetaDataAsync(azFeedDef, localFeedDef.Value))
+            .Bind(() => _mediator.PullFeedMetaAsync(azFeedDef, localFeedDef.Value))
             .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value,packagePath, cmdPath, UseAbsolutePath.No))
             //.Bind(() => DownloadFile(packagePath, insideFeedPkgPath.Value, overwrite: true))
             //.Bind(() => _mediator.AddPackageToLcalFeedAsync(localFeedDef.Value, insideFeedPkgPath.Value, cmdPath))

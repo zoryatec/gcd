@@ -72,7 +72,7 @@ namespace Gcd.Menu
                 });
 
                 cmd.UseNipkgAddPackageToAzFeedCmd(serviceProvider);
-                cmd.UseNipkgPullFeedMetaCmd(serviceProvider);
+                cmd.UsePullFeedMetaCmd(serviceProvider);
                 cmd.UseNipkgPushAzBlobFeedMetaCmd(serviceProvider);
 
             });
