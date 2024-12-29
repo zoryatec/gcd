@@ -3,7 +3,7 @@ using CSharpFunctionalExtensions;
 
 namespace Gcd.Model.File;
 
-public record LocalDirPath
+public record LocalDirPath : IDirectoryDescriptor
 {
     public static Result<LocalDirPath> Parse(Maybe<string> maybeValue)
     {

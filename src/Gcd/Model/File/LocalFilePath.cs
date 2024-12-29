@@ -2,7 +2,7 @@
 
 namespace Gcd.Model.File;
 
-public record LocalFilePath
+public record LocalFilePath : IFileDescriptor
 {
     public static Result<LocalFilePath> Offf(Maybe<string> maybeValue)
     {

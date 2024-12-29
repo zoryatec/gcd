@@ -1,8 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Model.File;
 
 namespace Gcd.Model;
 
-public record AzBlobContainerUri
+public record AzBlobContainerUri : IDirectoryDescriptor
 {
     public static Result<AzBlobContainerUri> Of(Maybe<string> feedUriOrNothing)
     {

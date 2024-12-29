@@ -6,7 +6,7 @@ using System.Net;
 namespace Gcd.Services;
 
 
-public record AzBlobUri
+public record AzBlobUri : IFileDescriptor
 {
     public static Result<AzBlobUri> Create(Maybe<string> maybeBlobUri)
     {

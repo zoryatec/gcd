@@ -1,14 +1,20 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Model.File;
 using Gcd.Services;
 
 namespace Gcd.Model.FeedDefinition;
 
-public record FeedDefinitionAzBlob
+public record FeedDefinitionAzBlob : IFeedDefinition
 {
     public AzBlobContainerUri Feed { get; }
     public AzBlobUri Package { get; }
     public AzBlobUri PackageGz { get; }
     public AzBlobUri PackageStamps { get; }
+
+    IDirectoryDescriptor IFeedDefinition.Feed => Feed;
+    IFileDescriptor IFeedDefinition.Package => Package;
+    IFileDescriptor IFeedDefinition.PackageGz => PackageGz;
+    IFileDescriptor IFeedDefinition.PackageStamps => PackageStamps;
 
     public static Result<FeedDefinitionAzBlob> Of(AzBlobFeedUri feedUri)
     {
