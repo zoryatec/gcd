@@ -131,6 +131,7 @@ namespace Gcd.Menu
                 });
 
                 cmd.UseAddLocalPackageCmd(serviceProvider);
+                cmd.UseAddHttpPackageCmd(serviceProvider);
 
             });
 

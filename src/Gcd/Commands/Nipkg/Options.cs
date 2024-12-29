@@ -15,6 +15,13 @@ public sealed class PackageLocalPathOption() : CommandOption(NAME, CommandOption
         PackageFilePath.Of(this.Value());
 }
 
+public sealed class PackageHttpPathOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-http-path";
+    public Result<PackageHttpPath> ToPackageHttpPath() =>
+         PackageHttpPath.Of(this.Value());
+}
+
 public sealed class FeedLocalDirOption() : CommandOption(NAME, CommandOptionType.SingleValue)
 {
     public static readonly string NAME = "--feed-local-path";

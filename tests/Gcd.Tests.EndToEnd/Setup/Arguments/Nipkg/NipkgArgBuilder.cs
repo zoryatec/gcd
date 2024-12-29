@@ -9,6 +9,8 @@ public class NipkgArgBuilder : ArgumentsBuilder
     {
     }
 
+
+    // cmd
     public NipkgArgBuilder WithNipkgCmd()
     {
         WithArg("nipkg");
@@ -27,9 +29,24 @@ public class NipkgArgBuilder : ArgumentsBuilder
         return this;
     }
 
+    public NipkgArgBuilder WithAddHttpPackageCmd()
+    {
+        WithArg("add-http-package");
+        return this;
+    }
+
+
+    // options
+
     public NipkgArgBuilder WithPackageLocalPathOpt(string value)
     {
         WithOption(PackageLocalPathOption.NAME, value);
+        return this;
+    }
+
+    public NipkgArgBuilder WithPackageHttpOpt(string value)
+    {
+        WithOption(PackageHttpPathOption.NAME, value);
         return this;
     }
 

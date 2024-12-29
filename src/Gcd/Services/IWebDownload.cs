@@ -12,7 +12,7 @@ public record WebUri
         .MapTry((arg) => new Uri(arg), ex => ex.Message)
         .Map(arg => new WebUri(arg));
     }
-    private WebUri(Uri value) => _uri = value;
+    protected WebUri(Uri value) => _uri = value;
     private Uri _uri;
     public string Value { get => _uri.AbsoluteUri; }
 }

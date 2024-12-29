@@ -28,7 +28,8 @@ public record  AddPackageToLocalResponse(string Result);
 public class  AddPackageToLocalHandler(
     IMediator _mediator,
     IUploadAzBlobService _uploadService,
-    IFileSystem _fs)
+    IFileSystem _fs,
+    IWebDownload _webDownload)
     : IRequestHandler< AddPackageToLocalRequest, Result>
 {
     public async Task<Result> Handle( AddPackageToLocalRequest request, CancellationToken cancellationToken)
@@ -54,6 +55,7 @@ public class  AddPackageToLocalHandler(
         return sourceDescriptor switch
         {
             LocalFilePath source => await _fs.CopyFileAsync(source, destinationPath, overwrite: overwrite),
+            WebUri source => await _webDownload.DownloadFileAsync(source, destinationPath),
             _ => throw new InvalidOperationException(sourceDescriptor.GetType().Name)
         };
     }
