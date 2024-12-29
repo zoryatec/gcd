@@ -39,7 +39,7 @@ public class AddPackageToAzFeedHandler(
             //.Bind(() => _mediator.AddPackageToLcalFeedAsync(localFeedDef.Value, insideFeedPkgPath.Value, cmdPath))
             .Bind(() => UpdateToAbsPath(localFeedDef.Value, azFeedDef as FeedDefinitionAzBlob ?? throw new NullReferenceException(), packagePath.FileName))
             .Bind(() => _mediator.PushFeedMetaDataAsync(azFeedDef, localFeedDef.Value, cancellationToken))
-            .Bind(() => UploadPackage(azFeedDef as FeedDefinitionAzBlob ?? throw new NullReferenceException(), insideFeedPkgPath.Value));
+            .Bind(() => UploadPackage(azFeedDef.Feed, insideFeedPkgPath.Value));
     }
 
     private async Task<Result<FeedDefinitionLocal>> CreateTempFeedDefinition() =>
@@ -79,13 +79,12 @@ public class AddPackageToAzFeedHandler(
         
     }
 
-    private async Task<Result> UploadPackage(FeedDefinitionAzBlob azFeedDef, PackageFilePath packagePath)
+    private async Task<Result> UploadPackage(IDirectoryDescriptor dirDescriptor, PackageFilePath packagePath)
     {
-        var azblob = AzBlobFeedUri.Create(azFeedDef.Feed.Full); ;
-        string nipkgUrl = CreateSubUrl(azblob.Value, packagePath.FileName.Value);
 
-        var blobUri = AzBlobUri.Create(nipkgUrl);
-        var result = await _rfs.UploadFileAsync(blobUri.Value, packagePath);
+        var blorUriRes = _rfs.CreateFileDescriptor(dirDescriptor, packagePath.FileName);
+
+        var result = await _rfs.UploadFileAsync(blorUriRes.Value, packagePath);
         return result;
     }
 

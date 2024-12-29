@@ -1,4 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Model;
+using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;
 using Gcd.Services.FileSystem;
 using System;
@@ -37,5 +39,27 @@ namespace Gcd.Services.RemoteFileSystem
                 _ => throw new InvalidOperationException(sourceDescriptor.GetType().Name)
             };
         }
+
+        public Result<IFileDescriptor> CreateFileDescriptor(IDirectoryDescriptor dirDescriptor, FileName fileName)
+        {
+            return dirDescriptor switch
+            {
+                AzBlobContainerUri source => CreateBlobURI(source,fileName).Map((x) => x as IFileDescriptor),
+                _ => throw new InvalidOperationException(dirDescriptor.GetType().Name)
+            };
+
+        }
+
+        private Result<AzBlobUri> CreateBlobURI(AzBlobContainerUri azBlobContainerUri, FileName fileName)
+        {
+            string nipkgUrl = CreateSubUrl(azBlobContainerUri, fileName.Value);
+
+            return AzBlobUri.Create(nipkgUrl);
+        }
+
+        private string CreateSubUrl(AzBlobContainerUri feedUri, string subPath) =>
+            $"{feedUri.BaseUri}/{subPath}{feedUri.Query}";
+
+
     }
 }
