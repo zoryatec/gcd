@@ -10,6 +10,7 @@ using System.IO.Compression;
 using Gcd.Model.File;
 using Gcd.Commands.Nipkg.FeedLocal.AddPackageLocal;
 using Gcd.Model.FeedDefinition;
+using Gcd.Services.RemoteFileSystem;
 
 namespace Gcd.Commands.Nipkg.Feed.AddPackageAz;
 
@@ -18,8 +19,8 @@ public record AddPackageToAzFeedResponse(string Result);
 
 public class AddPackageToAzFeedHandler(
     IMediator _mediator,
-    IUploadAzBlobService _uploadService,
-    IFileSystem _fs)
+    IFileSystem _fs,
+    IRemoteFileSystem _rfs)
     : IRequestHandler<AddPackageToAzFeedRequest, Result>
 {
     public async Task<Result> Handle(AddPackageToAzFeedRequest request, CancellationToken cancellationToken)
@@ -36,7 +37,7 @@ public class AddPackageToAzFeedHandler(
             .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value,packagePath, cmdPath))
             //.Bind(() => DownloadFile(packagePath, insideFeedPkgPath.Value, overwrite: true))
             //.Bind(() => _mediator.AddPackageToLcalFeedAsync(localFeedDef.Value, insideFeedPkgPath.Value, cmdPath))
-            //.Bind(() => UpdateToAbsPath(localFeedDef.Value, azFeedDef,packagePath.FileName))
+            .Bind(() => UpdateToAbsPath(localFeedDef.Value, azFeedDef as FeedDefinitionAzBlob ?? throw new NullReferenceException(), packagePath.FileName))
             .Bind(() => _mediator.PushFeedMetaDataAsync(azFeedDef, localFeedDef.Value, cancellationToken))
             .Bind(() => UploadPackage(azFeedDef as FeedDefinitionAzBlob ?? throw new NullReferenceException(), insideFeedPkgPath.Value));
     }
@@ -45,23 +46,6 @@ public class AddPackageToAzFeedHandler(
         await _fs.CreateTempDirPathAsync()
             .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 
-
-    private async Task<Result> DownloadFile(IFileDescriptor sourceDescriptor, LocalFilePath destinationPath, bool overwrite = false)
-    {
-        return sourceDescriptor switch
-        {
-            LocalFilePath source => await _fs.CopyFileAsync(source, destinationPath, overwrite: overwrite),
-            _ => throw new InvalidOperationException(sourceDescriptor.GetType().Name)
-        };
-    }
-    private async Task<Result> UploadFile(IFileDescriptor destinationDescriptor, LocalFilePath destinationPath)
-    {
-        return destinationDescriptor switch
-        {
-            LocalFilePath source => await _fs.CopyFileAsync(source, destinationPath, overwrite: true),
-            _ => throw new InvalidOperationException(destinationDescriptor.GetType().Name)
-        };
-    }
 
     private async Task<Result> UpdateToAbsPath(FeedDefinitionLocal localFeedDefinition, FeedDefinitionAzBlob azFeedDefinition, PackageFileName packageFileName)
     {
@@ -101,7 +85,7 @@ public class AddPackageToAzFeedHandler(
         string nipkgUrl = CreateSubUrl(azblob.Value, packagePath.FileName.Value);
 
         var blobUri = AzBlobUri.Create(nipkgUrl);
-        var result = await _uploadService.UploadFileAsync(blobUri.Value, packagePath);
+        var result = await _rfs.UploadFileAsync(blobUri.Value, packagePath);
         return result;
     }
 
