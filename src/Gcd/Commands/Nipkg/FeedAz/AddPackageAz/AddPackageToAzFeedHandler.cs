@@ -8,7 +8,7 @@ using Gcd.Model.Config;
 using Gcd.Services.FileSystem;
 using System.IO.Compression;
 using Gcd.Model.File;
-using Gcd.Commands.Nipkg.Feed.AddPackageLocal;
+using Gcd.Commands.Nipkg.FeedLocal.AddPackageLocal;
 
 namespace Gcd.Commands.Nipkg.Feed.AddPackageAz;
 

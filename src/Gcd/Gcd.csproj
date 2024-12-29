@@ -50,9 +50,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Commands\Nipkg\Feed\AddPackageGit\" />
-      <Folder Include="Commands\Nipkg\Feed\UpdatePackageUri\" />
-      <Folder Include="Commands\Nipkg\FeedLocal\" />
+      <Folder Include="Commands\Nipkg\FeedGit\" />
       <Folder Include="Model\NewFolder\" />
     </ItemGroup>
 

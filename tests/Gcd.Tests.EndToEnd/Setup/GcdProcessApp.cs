@@ -21,7 +21,7 @@ namespace Gcd.Tests
             var services = new ServiceCollection()
                 .AddScoped<IDownloadAzBlobService, AzBlobService>()
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
-                .AddScoped<IWebDownload, WebDownload>()
+                .AddSingleton<IWebDownload, WebDownload>()
                 .AddScoped<IFileSystem, LocalFileService>()
                 .RegisterInstructions()
                 .RegisterConfiguration()

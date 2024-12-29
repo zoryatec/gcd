@@ -10,6 +10,7 @@ using Gcd.Commands.Nipkg.Feed.AddPackageAz;
 using Gcd.Commands.Tools.InstallNipkg;
 using Gcd.Commands.Tools.DownloadNipkg;
 using Gcd.Commands.Nipkg.Builder.AddInstruction;
+using Gcd.Commands.Nipkg.FeedLocal.AddPackageLocal;
 
 
 namespace Gcd.Menu

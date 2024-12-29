@@ -9,7 +9,7 @@ using Gcd.Services.FileSystem;
 using System.IO.Compression;
 using Gcd.Model.File;
 
-namespace Gcd.Commands.Nipkg.Feed.AddPackageLocal;
+namespace Gcd.Commands.Nipkg.FeedLocal.AddPackageLocal;
 
 public static class MediatorExtensions
 {
@@ -22,27 +22,27 @@ public static class MediatorExtensions
         => await mediator.Send(new AddPackageToLocalRequest(localFeedDefinition, packageFileDescriptor, CmdPath, createFeed), cancellationToken);
 }
 
-public record  AddPackageToLocalRequest(LocalFeedDefinition AzFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath CmdPath, bool createFeed) : IRequest<Result>;
-public record  AddPackageToLocalResponse(string Result);
+public record AddPackageToLocalRequest(LocalFeedDefinition AzFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath CmdPath, bool createFeed) : IRequest<Result>;
+public record AddPackageToLocalResponse(string Result);
 
-public class  AddPackageToLocalHandler(
+public class AddPackageToLocalHandler(
     IMediator _mediator,
     IUploadAzBlobService _uploadService,
     IFileSystem _fs,
     IWebDownload _webDownload)
-    : IRequestHandler< AddPackageToLocalRequest, Result>
+    : IRequestHandler<AddPackageToLocalRequest, Result>
 {
-    public async Task<Result> Handle( AddPackageToLocalRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(AddPackageToLocalRequest request, CancellationToken cancellationToken)
     {
         var (localFeedDef, packagePath, cmdPath, createFeed) = request;
 
- 
+
 
         var insideFeedPkgPath = PackageFilePath.Of(localFeedDef.Feed, packagePath.FileName);
 
         return await DownloadFile(packagePath, insideFeedPkgPath, overwrite: true)
             .Bind(() => _mediator.AddPackageToLcalFeedAsync(localFeedDef, insideFeedPkgPath, cmdPath, createFeed));
-            //.Bind(() => UpdateToAbsPath(localFeedDef.Value, azFeedDef, packagePath.FileName))
+        //.Bind(() => UpdateToAbsPath(localFeedDef.Value, azFeedDef, packagePath.FileName))
     }
 
     private async Task<Result<LocalFeedDefinition>> CreateTempFeedDefinition() =>
