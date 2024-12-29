@@ -6,6 +6,7 @@ using CSharpFunctionalExtensions.ValueTasks;
 using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
 using Gcd.Model;
 using Gcd.Model.Config;
+using Gcd.Model.FeedDefinition;
 
 namespace Gcd.Commands.Nipkg.Feed.AddPackageAz;
 
@@ -23,7 +24,7 @@ public static class UseNipkgAddPackageToAzFeedCmdExtensions
             subCmd.OnExecuteAsync(async cancelationToken =>
             {
                 var azFeedDef = AzBlobFeedUri.Create(feedUrlOption.Value())
-                    .Bind(feedUri => AzBlobFeedDefinition.Of(feedUri));
+                    .Bind(feedUri => FeedDefinitionAzBlob.Of(feedUri));
                 var pathToPackage = PackageFilePath.Of(packagePathOption.Value());
                 var cmdPath = NipkgCmdPath.None;
 

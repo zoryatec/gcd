@@ -51,6 +51,7 @@
 
     <ItemGroup>
       <Folder Include="Commands\Nipkg\FeedGit\" />
+      <Folder Include="Commands\Nipkg\FeedSmb\" />
       <Folder Include="Model\NewFolder\" />
     </ItemGroup>
 

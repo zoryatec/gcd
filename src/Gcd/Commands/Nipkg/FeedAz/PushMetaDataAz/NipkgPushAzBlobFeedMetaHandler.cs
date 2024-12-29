@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
-using Gcd.Model;
+using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;
 using Gcd.Services;
 using MediatR;
@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Gcd.Commands.Nipkg.Feed.PushMetaDataAz;
 
-public record NipkgPushAzBlobFeedMetaRequest(AzBlobFeedDefinition AzFeedDefinition, LocalFeedDefinition LocalFeedDefinition) : IRequest<Result>;
+public record NipkgPushAzBlobFeedMetaRequest(FeedDefinitionAzBlob AzFeedDefinition, FeedDefinitionLocal LocalFeedDefinition) : IRequest<Result>;
 public record NipkgPushAzBlobFeedMetaRespons(string Result);
 
 public class NipkgPushAzBlobFeedMetaHandler(IUploadAzBlobService uploadService)
@@ -28,6 +28,6 @@ public class NipkgPushAzBlobFeedMetaHandler(IUploadAzBlobService uploadService)
 
 public static class MediatorExtensions
 {
-    public static async Task<Result> PushAzBlobFeedMetaDataAsync(this IMediator mediator, AzBlobFeedDefinition AzFeedDef, LocalFeedDefinition LocalFeedDef, CancellationToken cancellationToken = default)
+    public static async Task<Result> PushAzBlobFeedMetaDataAsync(this IMediator mediator, FeedDefinitionAzBlob AzFeedDef, FeedDefinitionLocal LocalFeedDef, CancellationToken cancellationToken = default)
         => await mediator.Send(new NipkgPushAzBlobFeedMetaRequest(AzFeedDef, LocalFeedDef), cancellationToken);
 }

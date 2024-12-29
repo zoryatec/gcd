@@ -8,13 +8,14 @@ using Gcd.Model.Config;
 using Gcd.Services.FileSystem;
 using System.IO.Compression;
 using Gcd.Model.File;
+using Gcd.Model.FeedDefinition;
 
 namespace Gcd.Commands.Nipkg.FeedLocal.AddPackageLocal;
 
 public static class MediatorExtensions
 {
     public static async Task<Result> AddToLocalFeedAsync(this IMediator mediator,
-        LocalFeedDefinition localFeedDefinition,
+        FeedDefinitionLocal localFeedDefinition,
         IPackageFileDescriptor packageFileDescriptor,
         NipkgCmdPath CmdPath,
         bool createFeed = false,
@@ -22,7 +23,7 @@ public static class MediatorExtensions
         => await mediator.Send(new AddPackageToLocalRequest(localFeedDefinition, packageFileDescriptor, CmdPath, createFeed), cancellationToken);
 }
 
-public record AddPackageToLocalRequest(LocalFeedDefinition AzFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath CmdPath, bool createFeed) : IRequest<Result>;
+public record AddPackageToLocalRequest(FeedDefinitionLocal AzFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath CmdPath, bool createFeed) : IRequest<Result>;
 public record AddPackageToLocalResponse(string Result);
 
 public class AddPackageToLocalHandler(
@@ -45,9 +46,9 @@ public class AddPackageToLocalHandler(
         //.Bind(() => UpdateToAbsPath(localFeedDef.Value, azFeedDef, packagePath.FileName))
     }
 
-    private async Task<Result<LocalFeedDefinition>> CreateTempFeedDefinition() =>
+    private async Task<Result<FeedDefinitionLocal>> CreateTempFeedDefinition() =>
         await _fs.CreateTempDirPathAsync()
-            .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
+            .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 
 
     private async Task<Result> DownloadFile(IFileDescriptor sourceDescriptor, LocalFilePath destinationPath, bool overwrite = false)
@@ -68,7 +69,7 @@ public class AddPackageToLocalHandler(
         };
     }
 
-    private async Task<Result> UpdateToAbsPath(LocalFeedDefinition localFeedDefinition, AzBlobFeedDefinition azFeedDefinition, PackageFileName packageFileName)
+    private async Task<Result> UpdateToAbsPath(FeedDefinitionLocal localFeedDefinition, FeedDefinitionAzBlob azFeedDefinition, PackageFileName packageFileName)
     {
         string absoluteUri = $"{azFeedDefinition.Feed.BaseUri}/{packageFileName.Value}";
         var contentR = await _fs.ReadTextFileAsync(localFeedDefinition.Package);
@@ -84,7 +85,7 @@ public class AddPackageToLocalHandler(
         return resultWriteStamps;
     }
 
-    private void RecreateGz(LocalFeedDefinition localFeedDefinition)
+    private void RecreateGz(FeedDefinitionLocal localFeedDefinition)
     {
         string sourceFile = localFeedDefinition.Package.Value; // Path to the file to be compressed
         string destinationFile = localFeedDefinition.PackageGz.Value; // Path for the compressed file
@@ -100,7 +101,7 @@ public class AddPackageToLocalHandler(
 
     }
 
-    private async Task<Result> UploadPackage(AzBlobFeedDefinition azFeedDef, PackageFilePath packagePath)
+    private async Task<Result> UploadPackage(FeedDefinitionAzBlob azFeedDef, PackageFilePath packagePath)
     {
         var azblob = AzBlobFeedUri.Create(azFeedDef.Feed.Full); ;
         string nipkgUrl = CreateSubUrl(azblob.Value, packagePath.FileName.Value);

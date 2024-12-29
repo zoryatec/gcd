@@ -1,6 +1,7 @@
 ﻿
 using CSharpFunctionalExtensions;
 using Gcd.Model;
+using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;
 using McMaster.Extensions.CommandLineUtils;
 
@@ -25,9 +26,9 @@ public sealed class PackageHttpPathOption() : CommandOption(NAME, CommandOptionT
 public sealed class FeedLocalDirOption() : CommandOption(NAME, CommandOptionType.SingleValue)
 {
     public static readonly string NAME = "--feed-local-path";
-    public Result<LocalFeedDefinition> ToLocalFeedDefinition() =>
+    public Result<FeedDefinitionLocal> ToLocalFeedDefinition() =>
                  LocalDirPath.Parse(this.Value())
-                    .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
+                    .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 }
 
 public sealed class FeedCreateOption() : CommandOption(NAME, CommandOptionType.NoValue)

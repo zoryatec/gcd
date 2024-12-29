@@ -9,10 +9,11 @@ using Gcd.Services.FileSystem;
 using System.IO.Compression;
 using Gcd.Model.File;
 using Gcd.Commands.Nipkg.FeedLocal.AddPackageLocal;
+using Gcd.Model.FeedDefinition;
 
 namespace Gcd.Commands.Nipkg.Feed.AddPackageAz;
 
-public record AddPackageToAzFeedRequest(AzBlobFeedDefinition AzFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath CmdPath) : IRequest<Result>;
+public record AddPackageToAzFeedRequest(FeedDefinitionAzBlob AzFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath CmdPath) : IRequest<Result>;
 public record AddPackageToAzFeedResponse(string Result);
 
 public class AddPackageToAzFeedHandler(
@@ -40,9 +41,9 @@ public class AddPackageToAzFeedHandler(
             .Bind(() => UploadPackage(azFeedDef, insideFeedPkgPath.Value));
     }
 
-    private async Task<Result<LocalFeedDefinition>> CreateTempFeedDefinition() =>
+    private async Task<Result<FeedDefinitionLocal>> CreateTempFeedDefinition() =>
         await _fs.CreateTempDirPathAsync()
-            .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
+            .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 
 
     private async Task<Result> DownloadFile(IFileDescriptor sourceDescriptor, LocalFilePath destinationPath, bool overwrite = false)
@@ -62,7 +63,7 @@ public class AddPackageToAzFeedHandler(
         };
     }
 
-    private async Task<Result> UpdateToAbsPath(LocalFeedDefinition localFeedDefinition, AzBlobFeedDefinition azFeedDefinition, PackageFileName packageFileName)
+    private async Task<Result> UpdateToAbsPath(FeedDefinitionLocal localFeedDefinition, FeedDefinitionAzBlob azFeedDefinition, PackageFileName packageFileName)
     {
         string absoluteUri = $"{azFeedDefinition.Feed.BaseUri}/{packageFileName.Value}";
         var contentR = await _fs.ReadTextFileAsync(localFeedDefinition.Package);
@@ -78,7 +79,7 @@ public class AddPackageToAzFeedHandler(
         return resultWriteStamps;
     }
 
-    private void RecreateGz(LocalFeedDefinition localFeedDefinition)
+    private void RecreateGz(FeedDefinitionLocal localFeedDefinition)
     {
         string sourceFile = localFeedDefinition.Package.Value; // Path to the file to be compressed
         string destinationFile = localFeedDefinition.PackageGz.Value; // Path for the compressed file
@@ -94,7 +95,7 @@ public class AddPackageToAzFeedHandler(
         
     }
 
-    private async Task<Result> UploadPackage(AzBlobFeedDefinition azFeedDef, PackageFilePath packagePath)
+    private async Task<Result> UploadPackage(FeedDefinitionAzBlob azFeedDef, PackageFilePath packagePath)
     {
         var azblob = AzBlobFeedUri.Create(azFeedDef.Feed.Full); ;
         string nipkgUrl = CreateSubUrl(azblob.Value, packagePath.FileName.Value);

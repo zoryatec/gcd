@@ -2,6 +2,7 @@
 using CSharpFunctionalExtensions;
 using Gcd.Model;
 using Gcd.Model.Config;
+using Gcd.Model.FeedDefinition;
 using MediatR;
 
 namespace Gcd.Services;
@@ -73,7 +74,7 @@ public static class MediatorExtensions
 {
     public static async Task<Result> RunNipkgRequestAsync(this IMediator mediator, string[] arguments, NipkgCmdPath cmd, CancellationToken cancellationToken = default)
         => await mediator.Send(new RunNipkgRequest(arguments, cmd), cancellationToken);
-    public static async Task<Result> AddPackageToLcalFeedAsync(this IMediator mediator, LocalFeedDefinition feedDefinition, PackageFilePath packagePath, NipkgCmdPath cmd, bool createFeed = false, CancellationToken cancellationToken = default)
+    public static async Task<Result> AddPackageToLcalFeedAsync(this IMediator mediator, FeedDefinitionLocal feedDefinition, PackageFilePath packagePath, NipkgCmdPath cmd, bool createFeed = false, CancellationToken cancellationToken = default)
     {
         if (createFeed) return await mediator.RunNipkgRequestAsync(new string[] { "feed-add-pkg", feedDefinition.Feed.Value, packagePath.Value, "--create" }, cmd, cancellationToken);
         else return await mediator.RunNipkgRequestAsync(new string[] { "feed-add-pkg", feedDefinition.Feed.Value, packagePath.Value }, cmd, cancellationToken);

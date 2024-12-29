@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Model;
+using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;
 using Gcd.Services;
 using Gcd.Services.FileSystem;
@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Gcd.Commands.Nipkg.Feed.PullMetaDataAz;
 
-public record NipkgPullFeedMetaRequest(AzBlobFeedDefinition AzFeedDef, LocalFeedDefinition LocalFeedDef) : IRequest<Result>;
+public record NipkgPullFeedMetaRequest(FeedDefinitionAzBlob AzFeedDef, FeedDefinitionLocal LocalFeedDef) : IRequest<Result>;
 
 public class NipkgPullFeedMetaHandler(IDownloadAzBlobService _ds, IFileSystem _fs)
     : IRequestHandler<NipkgPullFeedMetaRequest, Result>
@@ -24,6 +24,6 @@ public class NipkgPullFeedMetaHandler(IDownloadAzBlobService _ds, IFileSystem _f
 
 public static class MediatorExtensions
 {
-    public static async Task<Result> PullAzBlobFeedMetaDataAsync(this IMediator mediator, AzBlobFeedDefinition AzFeedDef, LocalFeedDefinition LocalFeedDef, CancellationToken cancellationToken = default)
+    public static async Task<Result> PullAzBlobFeedMetaDataAsync(this IMediator mediator, FeedDefinitionAzBlob AzFeedDef, FeedDefinitionLocal LocalFeedDef, CancellationToken cancellationToken = default)
         => await mediator.Send(new NipkgPullFeedMetaRequest(AzFeedDef, LocalFeedDef), cancellationToken);
 }

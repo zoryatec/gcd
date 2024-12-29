@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
 using Gcd.Model;
+using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
@@ -24,10 +25,10 @@ public static class UUseNipkgPushAzBlobFeedMetaaCmdExtensions
             subCmd.OnExecuteAsync(async cancelationToken =>
             {
                 var azFeedDef = AzBlobFeedUri.Create(feedUrl.Value())
-                    .Bind(feedUri => AzBlobFeedDefinition.Of(feedUri));
+                    .Bind(feedUri => FeedDefinitionAzBlob.Of(feedUri));
 
                 var localFeedDef = LocalDirPath.Parse(feedPatht.Value())
-                    .Bind(feedPath => LocalFeedDefinition.Of(feedPath));
+                    .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 
                 return await Result
                     .Combine(azFeedDef, localFeedDef)
