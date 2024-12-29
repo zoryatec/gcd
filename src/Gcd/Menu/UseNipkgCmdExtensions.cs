@@ -31,6 +31,7 @@ namespace Gcd.Menu
                 cmd.UseBuilderCmd(serviceProvider);
                 cmd.UseFeedCmd(serviceProvider);
                 cmd.UseNipkgPackageBuildCmd(serviceProvider);
+                cmd.UseFeedLocal(serviceProvider);
             });
             return app;
         }
@@ -110,6 +111,26 @@ namespace Gcd.Menu
                     cmd.ShowHelp();
                     return 1;
                 });
+
+            });
+
+            return app;
+        }
+
+        public static CommandLineApplication UseFeedLocal(this CommandLineApplication app, IServiceProvider serviceProvider)
+        {
+            var console = serviceProvider.GetRequiredService<IConsole>();
+            app.Command("feed-local", cmd =>
+            {
+
+                cmd.OnExecute(() =>
+                {
+                    console.WriteLine("Specify a subcommand");
+                    cmd.ShowHelp();
+                    return 1;
+                });
+
+                cmd.UseAddLocalPackageCmd(serviceProvider);
 
             });
 
