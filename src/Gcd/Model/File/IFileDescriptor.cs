@@ -8,5 +8,6 @@ namespace Gcd.Model.File
 {
     public interface IFileDescriptor
     {
+        string Value { get; }
     }
 }

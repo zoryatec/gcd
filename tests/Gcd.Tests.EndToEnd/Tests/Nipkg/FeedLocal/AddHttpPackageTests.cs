@@ -51,6 +51,43 @@ public class AddHttpPackageTests(TestFixture testFixture) : BaseTest(testFixture
         destinationPackagesStampsContent.Should().Contain(packageName);
 
     }
+
+    [Fact]
+    private void AddHttpPackageTestUseAbs()
+    {
+
+        var feedDir = _tempDirectoryGenerator.GenerateTempDirectory();
+        // Arrange
+        string packageUri = "https://github.com/zoryatec/gcd/releases/download/v0.13.0/gcd_0.13.0_windows_x64.nipkg";
+
+        var args = new NipkgArgBuilder()
+            .WithNipkgCmd()
+            .WithFeedLocalCmd()
+            .WithAddHttpPackageCmd()
+            .WithPackageHttpOpt(packageUri)
+            .WithFeedLocalDirOpt(feedDir)
+            .WithFeedCreateFlag()
+            .WithUseAbsolutePathFlag()
+            .Build();
+
+        // Act
+        var result = _gcd.Run(args);
+
+        // Asssert
+
+
+
+        result.Error.Should().BeEmpty();
+        result.Return.Should().Be(0);
+
+        var destinationPackagesContent = File.ReadAllText($"{feedDir}\\Packages");
+        var destinationPackagesGzContent = File.ReadAllText($"{feedDir}\\Packages.gz");
+        var destinationPackagesStampsContent = File.ReadAllText($"{feedDir}\\Packages.stamps");
+
+        destinationPackagesContent.Should().Contain(packageUri);
+        destinationPackagesStampsContent.Should().Contain(packageUri);
+
+    }
     public string BuildPackage()
     {
         // Arrange

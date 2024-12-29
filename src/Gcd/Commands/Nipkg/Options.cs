@@ -1,5 +1,6 @@
 ﻿
 using CSharpFunctionalExtensions;
+using Gcd.Commands.Nipkg.FeedLocal.AddPackageLocal;
 using Gcd.Model;
 using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;
@@ -36,4 +37,14 @@ public sealed class FeedCreateOption() : CommandOption(NAME, CommandOptionType.N
     public static readonly string NAME = "--feed-create";
     public bool IsSet() =>
         this.HasValue();
+}
+
+public sealed class UseAbsolutePathOption() : CommandOption(NAME, CommandOptionType.NoValue)
+{
+    public static readonly string NAME = "--use-absolute-path";
+    public UseAbsolutePath Map()
+    {
+        if (this.HasValue()) return UseAbsolutePath.Yes;
+        else return UseAbsolutePath.No;
+    }
 }

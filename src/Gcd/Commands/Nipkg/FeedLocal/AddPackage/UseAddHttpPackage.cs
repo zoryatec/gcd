@@ -25,11 +25,13 @@ public static class UseAddHttpPackageCmdExtensions
             var locPathOpt = new PackageHttpPathOption();
             var feedDirOpt = new FeedLocalDirOption();
             var feedCreateOpt = new FeedCreateOption();
+            var useAbsPathOpt = new UseAbsolutePathOption();
 
             cmd.AddOptions(
                 locPathOpt.IsRequired(),
                 feedDirOpt.IsRequired(),
-                feedCreateOpt
+                feedCreateOpt,
+                useAbsPathOpt
                 );
 
             cmd.OnExecuteAsync(async cancelationToken =>
@@ -37,11 +39,12 @@ public static class UseAddHttpPackageCmdExtensions
                 var locPath = locPathOpt.ToPackageHttpPath();
                 var feedDef = feedDirOpt.ToLocalFeedDefinition();
                 var cmdPath = NipkgCmdPath.None;
+                var useAbsPath = useAbsPathOpt.Map();
                 var feedCreate = feedCreateOpt.IsSet();
 
                 return await Result
                     .Combine(locPath, feedDef)
-                    .Bind(() => mediator.AddToLocalFeedAsync(feedDef.Value, locPath.Value, cmdPath, UseAbsolutePath.No, feedCreate, cancelationToken))
+                    .Bind(() => mediator.AddToLocalFeedAsync(feedDef.Value, locPath.Value, cmdPath, useAbsPath, feedCreate, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

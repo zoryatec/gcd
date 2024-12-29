@@ -55,9 +55,16 @@ public class NipkgArgBuilder : ArgumentsBuilder
         WithOption(FeedLocalDirOption.NAME, value);
         return this;
     }
+
+    // flags
     public NipkgArgBuilder WithFeedCreateFlag()
     {
         WithArg(FeedCreateOption.NAME);
+        return this;
+    }
+    public NipkgArgBuilder WithUseAbsolutePathFlag()
+    {
+        WithArg(UseAbsolutePathOption.NAME);
         return this;
     }
 }

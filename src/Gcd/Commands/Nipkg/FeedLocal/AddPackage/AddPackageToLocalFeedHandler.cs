@@ -56,7 +56,7 @@ public class AddPackageToLocalHandler(
 
         if(result.IsFailure) return result;
 
-        if(useAbsPath.Equals(UseAbsolutePath.Yes))  return result;
+        if(useAbsPath.Equals(UseAbsolutePath.Yes))  return await UpdateToAbsPath(localFeedDef,packagePath);
 
         return result;
         //.Bind(() => UpdateToAbsPath(localFeedDef.Value, azFeedDef, packagePath.FileName))
@@ -65,6 +65,7 @@ public class AddPackageToLocalHandler(
     private async Task<Result<FeedDefinitionLocal>> CreateTempFeedDefinition() =>
         await _fs.CreateTempDirPathAsync()
             .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
+
 
 
     private async Task<Result> DownloadFile(IFileDescriptor sourceDescriptor, LocalFilePath destinationPath, bool overwrite = false)
@@ -85,17 +86,17 @@ public class AddPackageToLocalHandler(
         };
     }
 
-    private async Task<Result> UpdateToAbsPath(FeedDefinitionLocal localFeedDefinition, FeedDefinitionAzBlob azFeedDefinition, PackageFileName packageFileName)
+    private async Task<Result> UpdateToAbsPath(FeedDefinitionLocal localFeedDefinition, IPackageFileDescriptor descriptor)
     {
-        string absoluteUri = $"{azFeedDefinition.Feed.BaseUri}/{packageFileName.Value}";
+        string absoluteUri = descriptor.Value;
         var contentR = await _fs.ReadTextFileAsync(localFeedDefinition.Package);
-        var content = contentR.Value.Replace(packageFileName.Value, absoluteUri);
+        var content = contentR.Value.Replace(descriptor.FileName.Value, absoluteUri);
         var resultWrite = await _fs.WriteTextFileAsync(localFeedDefinition.Package, content);
 
         RecreateGz(localFeedDefinition);
 
         var stampsContentR = await _fs.ReadTextFileAsync(localFeedDefinition.PackageStamps);
-        var stampsContent = stampsContentR.Value.Replace(packageFileName.Value, absoluteUri);
+        var stampsContent = stampsContentR.Value.Replace(descriptor.FileName.Value, absoluteUri);
         var resultWriteStamps = await _fs.WriteTextFileAsync(localFeedDefinition.PackageStamps, stampsContent);
 
         return resultWriteStamps;

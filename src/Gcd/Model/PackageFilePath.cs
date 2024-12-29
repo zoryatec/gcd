@@ -36,5 +36,6 @@ namespace Gcd.Model
 
         public LocalDirPath Directory { get; }
         public PackageFileName FileName { get; }
+
     }
 }
