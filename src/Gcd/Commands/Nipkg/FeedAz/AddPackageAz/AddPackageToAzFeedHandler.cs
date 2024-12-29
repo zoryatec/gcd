@@ -13,7 +13,7 @@ using Gcd.Model.FeedDefinition;
 
 namespace Gcd.Commands.Nipkg.Feed.AddPackageAz;
 
-public record AddPackageToAzFeedRequest(FeedDefinitionAzBlob AzFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath CmdPath) : IRequest<Result>;
+public record AddPackageToAzFeedRequest(IFeedDefinition AzFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath CmdPath) : IRequest<Result>;
 public record AddPackageToAzFeedResponse(string Result);
 
 public class AddPackageToAzFeedHandler(
@@ -32,13 +32,13 @@ public class AddPackageToAzFeedHandler(
             .Map((arg) => PackageFilePath.Of(arg.Feed, packagePath.FileName));
 
         return await Result.Combine(localFeedDef, insideFeedPkgPath)
-            .Bind(() => _mediator.PullAzBlobFeedMetaDataAsync(azFeedDef, localFeedDef.Value))
+            .Bind(() => _mediator.PullFeedMetaDataAsync(azFeedDef, localFeedDef.Value))
             .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value,packagePath, cmdPath))
             //.Bind(() => DownloadFile(packagePath, insideFeedPkgPath.Value, overwrite: true))
             //.Bind(() => _mediator.AddPackageToLcalFeedAsync(localFeedDef.Value, insideFeedPkgPath.Value, cmdPath))
-            .Bind(() => UpdateToAbsPath(localFeedDef.Value, azFeedDef,packagePath.FileName))
-            .Bind(() => _mediator.PushAzBlobFeedMetaDataAsync(azFeedDef, localFeedDef.Value, cancellationToken))
-            .Bind(() => UploadPackage(azFeedDef, insideFeedPkgPath.Value));
+            //.Bind(() => UpdateToAbsPath(localFeedDef.Value, azFeedDef,packagePath.FileName))
+            .Bind(() => _mediator.PushFeedMetaDataAsync(azFeedDef, localFeedDef.Value, cancellationToken))
+            .Bind(() => UploadPackage(azFeedDef as FeedDefinitionAzBlob ?? throw new NullReferenceException(), insideFeedPkgPath.Value));
     }
 
     private async Task<Result<FeedDefinitionLocal>> CreateTempFeedDefinition() =>

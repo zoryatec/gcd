@@ -30,7 +30,7 @@ public static class UseNipkgPullFeedMetaCmdExtensions
 
                 return await Result
                     .Combine(azFeedDef, localFeedDef)
-                    .Bind(() => mediator.PullAzBlobFeedMetaDataAsync(azFeedDef.Value, localFeedDef.Value, cancelationToken))
+                    .Bind(() => mediator.PullFeedMetaDataAsync(azFeedDef.Value, localFeedDef.Value, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

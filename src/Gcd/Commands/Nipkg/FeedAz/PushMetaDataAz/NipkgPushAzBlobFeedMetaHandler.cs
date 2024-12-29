@@ -39,6 +39,6 @@ public class NipkgPushAzBlobFeedMetaHandler(IUploadAzBlobService uploadService, 
 
 public static class MediatorExtensions
 {
-    public static async Task<Result> PushAzBlobFeedMetaDataAsync(this IMediator mediator, IFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDef, CancellationToken cancellationToken = default)
+    public static async Task<Result> PushFeedMetaDataAsync(this IMediator mediator, IFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDef, CancellationToken cancellationToken = default)
         => await mediator.Send(new NipkgPushAzBlobFeedMetaRequest(FeedDefinition, LocalFeedDef), cancellationToken);
 }
