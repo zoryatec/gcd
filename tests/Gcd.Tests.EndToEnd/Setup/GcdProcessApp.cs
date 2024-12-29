@@ -50,7 +50,7 @@ namespace Gcd.Tests
         }
         public GcdProcessResponse Run(GcdProcessRequest request)
         {
-            var result = _app.Execute(request.Arguments);
+            var result = _app.ExecuteAsync(request.Arguments).GetAwaiter().GetResult();
 
             return new GcdProcessResponse
             {
