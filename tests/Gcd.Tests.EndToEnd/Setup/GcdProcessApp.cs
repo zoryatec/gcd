@@ -5,6 +5,7 @@ using Gcd.Model.Config;
 using Gcd.Services;
 using Gcd.Services.DI;
 using Gcd.Services.FileSystem;
+using Gcd.Services.RemoteFileSystem;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,6 +24,7 @@ namespace Gcd.Tests
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddSingleton<IWebDownload, WebDownload>()
                 .AddScoped<IFileSystem, LocalFileService>()
+                .AddScoped<IRemoteFileSystem, RemoteFileSystem>()
                 .RegisterInstructions()
                 .RegisterConfiguration()
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()

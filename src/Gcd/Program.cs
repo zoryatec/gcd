@@ -9,6 +9,7 @@ using Gcd.Model.Config;
 using Microsoft.Extensions.Configuration;
 using Gcd.Services.DI;
 using Gcd.Services.FileSystem;
+using Gcd.Services.RemoteFileSystem;
 
 
 namespace Gcd
@@ -29,6 +30,7 @@ namespace Gcd
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddScoped<IWebDownload, WebDownload>()
                 .AddScoped<IFileSystem, LocalFileService>()
+                .AddScoped<IRemoteFileSystem,RemoteFileSystem>()
                 .RegisterInstructions()
                 .RegisterConfiguration()
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
