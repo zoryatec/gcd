@@ -8,36 +8,35 @@ using Gcd.Model.Config;
 using Gcd.Services.FileSystem;
 using System.IO.Compression;
 using Gcd.Model.File;
-using Gcd.Commands.Nipkg.Feed.AddPackageLocal;
 
-namespace Gcd.Commands.Nipkg.Feed.AddPackageAz;
+namespace Gcd.Commands.Nipkg.Feed.AddPackageLocal;
 
-public record AddPackageToAzFeedRequest(AzBlobFeedDefinition AzFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath CmdPath) : IRequest<Result>;
-public record AddPackageToAzFeedResponse(string Result);
+public static class MediatorExtensions
+{
+    public static async Task<Result> AddToLocalFeedAsync(this IMediator mediator, LocalFeedDefinition localFeedDefinition, IPackageFileDescriptor packageFileDescriptor, NipkgCmdPath CmdPath, CancellationToken cancellationToken = default)
+        => await mediator.Send(new AddPackageToLocalRequest(localFeedDefinition, packageFileDescriptor, CmdPath), cancellationToken);
+}
 
-public class AddPackageToAzFeedHandler(
+public record  AddPackageToLocalRequest(LocalFeedDefinition AzFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath CmdPath) : IRequest<Result>;
+public record  AddPackageToLocalResponse(string Result);
+
+public class  AddPackageToLocalHandler(
     IMediator _mediator,
     IUploadAzBlobService _uploadService,
     IFileSystem _fs)
-    : IRequestHandler<AddPackageToAzFeedRequest, Result>
+    : IRequestHandler< AddPackageToLocalRequest, Result>
 {
-    public async Task<Result> Handle(AddPackageToAzFeedRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle( AddPackageToLocalRequest request, CancellationToken cancellationToken)
     {
-        var (azFeedDef, packagePath, cmdPath) = request;
+        var (localFeedDef, packagePath, cmdPath) = request;
 
-        var localFeedDef = await CreateTempFeedDefinition();
+ 
 
-        var insideFeedPkgPath = localFeedDef
-            .Map((arg) => PackageFilePath.Of(arg.Feed, packagePath.FileName));
+        var insideFeedPkgPath = PackageFilePath.Of(localFeedDef.Feed, packagePath.FileName);
 
-        return await Result.Combine(localFeedDef, insideFeedPkgPath)
-            .Bind(() => _mediator.PullAzBlobFeedMetaDataAsync(azFeedDef, localFeedDef.Value))
-            .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value,packagePath, cmdPath))
-            //.Bind(() => DownloadFile(packagePath, insideFeedPkgPath.Value, overwrite: true))
-            //.Bind(() => _mediator.AddPackageToLcalFeedAsync(localFeedDef.Value, insideFeedPkgPath.Value, cmdPath))
-            .Bind(() => UpdateToAbsPath(localFeedDef.Value, azFeedDef,packagePath.FileName))
-            .Bind(() => _mediator.PushAzBlobFeedMetaDataAsync(azFeedDef, localFeedDef.Value, cancellationToken))
-            .Bind(() => UploadPackage(azFeedDef, insideFeedPkgPath.Value));
+        return await DownloadFile(packagePath, insideFeedPkgPath, overwrite: true)
+            .Bind(() => _mediator.AddPackageToLcalFeedAsync(localFeedDef, insideFeedPkgPath, cmdPath));
+            //.Bind(() => UpdateToAbsPath(localFeedDef.Value, azFeedDef, packagePath.FileName))
     }
 
     private async Task<Result<LocalFeedDefinition>> CreateTempFeedDefinition() =>
@@ -67,7 +66,7 @@ public class AddPackageToAzFeedHandler(
         string absoluteUri = $"{azFeedDefinition.Feed.BaseUri}/{packageFileName.Value}";
         var contentR = await _fs.ReadTextFileAsync(localFeedDefinition.Package);
         var content = contentR.Value.Replace(packageFileName.Value, absoluteUri);
-        var resultWrite =  await _fs.WriteTextFileAsync(localFeedDefinition.Package, content);
+        var resultWrite = await _fs.WriteTextFileAsync(localFeedDefinition.Package, content);
 
         RecreateGz(localFeedDefinition);
 
@@ -82,7 +81,7 @@ public class AddPackageToAzFeedHandler(
     {
         string sourceFile = localFeedDefinition.Package.Value; // Path to the file to be compressed
         string destinationFile = localFeedDefinition.PackageGz.Value; // Path for the compressed file
-        if(File.Exists(destinationFile)) File.Delete(destinationFile);
+        if (File.Exists(destinationFile)) File.Delete(destinationFile);
 
 
         using (FileStream sourceStream = new FileStream(sourceFile, FileMode.Open, FileAccess.Read))
@@ -91,7 +90,7 @@ public class AddPackageToAzFeedHandler(
         {
             sourceStream.CopyTo(gzipStream);
         }
-        
+
     }
 
     private async Task<Result> UploadPackage(AzBlobFeedDefinition azFeedDef, PackageFilePath packagePath)
@@ -108,6 +107,3 @@ public class AddPackageToAzFeedHandler(
         $"{feedUri.BaseUri}/{subPath}{feedUri.Query}";
 
 }
-
-
-

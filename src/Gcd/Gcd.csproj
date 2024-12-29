@@ -52,6 +52,7 @@
     <ItemGroup>
       <Folder Include="Commands\Nipkg\Feed\AddPackageGit\" />
       <Folder Include="Commands\Nipkg\Feed\UpdatePackageUri\" />
+      <Folder Include="Model\NewFolder\" />
     </ItemGroup>
 
 </Project>

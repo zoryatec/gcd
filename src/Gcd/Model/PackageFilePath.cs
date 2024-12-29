@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Gcd.Model
 {
-    public record PackageFilePath : LocalFilePath
+    public record PackageFilePath : LocalFilePath, IPackageFileDescriptor
     {
         public PackageFilePath(LocalDirPath directory, PackageFileName fileName) : base($"{directory.Value}\\{fileName.Value}")
         {
