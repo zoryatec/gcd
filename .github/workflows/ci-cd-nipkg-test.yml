@@ -46,7 +46,7 @@ jobs:
           nipkg list
           nipkg config-get
           nipkg update
-          nipkg install gcd -y
+          nipkg install ${{inputs.name}} -y
 
       - name: app test
         env:
