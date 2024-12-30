@@ -52,7 +52,8 @@ jobs:
         --git-committer-name "test gcd"`
         --git-committer-email "mail@mail.com" `
         --package-path "$env:GITHUB_WORKSPACE\\package\\${{inputs.name}}_${{inputs.version}}_windows_x64.nipkg" `
-        --feed-url "${{ secrets.nipkg-feed }}?${{ secrets.nipkg-feed-sas}}" `
+        --feed-create
+
 
 
 

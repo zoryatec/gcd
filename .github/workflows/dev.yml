@@ -51,6 +51,7 @@ jobs:
       test-git-repo: ${{ secrets.TEST_GIT_REPO}}
       test-git-user: "any"
       test-git-password: ${{ secrets.GITHUB_TOKEN}}
+      nipkg-git-feed: "https://raw.githubusercontent.com/zoryatec/gcd-feed/refs/heads/anotherTest"
       nipkg-git-feed-repo: ${{ secrets.TEST_GIT_REPO}}
       nipkg-git-feed-branch: "def-feed"
       nipkg-git-feed-user: "any"

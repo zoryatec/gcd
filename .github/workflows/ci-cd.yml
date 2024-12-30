@@ -18,6 +18,8 @@ on:
         required: true
       nipkg-feed-sas:
         required: true
+      nipkg-git-feed:
+        required: true
       nipkg-git-feed-repo:
         required: true
       nipkg-git-feed-branch:
@@ -94,15 +96,6 @@ jobs:
       version: ${{ inputs.version }}
       name: ${{ inputs.name }}
 
-  nipkg-git-publish:
-    uses: ./.github/workflows/ci-cd-nipkg-git-publish.yml
-    needs: nipkg-build
-    secrets: inherit
-    with:
-      version: ${{ inputs.version }}
-      name: ${{ inputs.name }}
-  
-
   nipkg-test:
     uses: ./.github/workflows/ci-cd-nipkg-test.yml
     needs: nipkg-publish
@@ -110,3 +103,20 @@ jobs:
     with:
       version: ${{ inputs.version }}
       name: ${{ inputs.name }}
+
+  nipkg-git-publish:
+    uses: ./.github/workflows/ci-cd-nipkg-git-publish.yml
+    needs: nipkg-build
+    secrets: inherit
+    with:
+      version: ${{ inputs.version }}
+      name: ${{ inputs.name }}
+
+  nipkg-git-test:
+    uses: ./.github/workflows/ci-cd-nipkg-git-test.yml
+    needs: nipkg-git-publish
+    secrets: inherit
+    with:
+      version: ${{ inputs.version }}
+      name: ${{ inputs.name }}
+
