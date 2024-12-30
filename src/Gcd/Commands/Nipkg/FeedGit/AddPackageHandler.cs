@@ -57,7 +57,7 @@ public class AddPackageHandler(
             .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 
     private async Task<Result> PullFeed(FeedDefinitionGit feedDefinition,LocalDirPath checkoutPath)=>
-        Result.Try(() => CloneRepositoryWithCredentials(feedDefinition, checkoutPath), ex => ex.Message);
+        Result.Try(() => CloneRepositoryWithCredentials(feedDefinition, checkoutPath), ex => ex.Message).MapError(errr => $"PULL:{errr}");
 
 
     public void CloneRepositoryWithCredentials(FeedDefinitionGit feedDefinition,LocalDirPath checkoutPath)
@@ -83,7 +83,7 @@ public class AddPackageHandler(
     }
 
     private async Task<Result> PushFeed(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath) =>
-       Result.Try(() => CommitAndPush(feedDefinition, checkoutPath));
+       Result.Try(() => CommitAndPush(feedDefinition, checkoutPath)).MapError(errr => $"PUSH:{errr}");
         
 
     public void CommitAndPush(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath)
