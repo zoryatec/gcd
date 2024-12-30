@@ -66,6 +66,9 @@ jobs:
       test-feed-generic: ${{ secrets.AZUREFEEDURI }}
       nuget-feed: ${{ secrets.NUGET_DEV_FEED  }} # dev for now
       nuget-feed-key: ${{ secrets.GITHUB_TOKEN}}
+      test-git-repo: ${{ secrets.TEST_GIT_REPO}}
+      test-git-user: "any"
+      test-git-password: ${{ secrets.GITHUB_TOKEN}}
 
       
   release-gh:
