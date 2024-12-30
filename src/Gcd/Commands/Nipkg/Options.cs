@@ -32,10 +32,18 @@ public sealed class FeedLocalDirOption() : CommandOption(NAME, CommandOptionType
                     .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 }
 
+#region git
+
 public sealed class GitRepoAddressOption() : CommandOption(NAME, CommandOptionType.SingleValue)
 {
     public static readonly string NAME = "--git-repo-address";
     public Result<GitRepoAddress> Map() => GitRepoAddress.Of(this.Value());
+}
+
+public sealed class GitBranchNameOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--git-branch-name";
+    public Result<GitLocalBranch> Map() => GitLocalBranch.Of(this.Value());
 }
 
 public sealed class GitUserNameOption() : CommandOption(NAME, CommandOptionType.SingleValue)
@@ -61,6 +69,7 @@ public sealed class GitCommiterEmailOption() : CommandOption(NAME, CommandOption
     public static readonly string NAME = "--git-committer-email";
     public Result<GitCommiterEmail> Map() => GitCommiterEmail.Of(this.Value());
 }
+#endregion
 
 // flags
 public sealed class FeedCreateOption() : CommandOption(NAME, CommandOptionType.NoValue)

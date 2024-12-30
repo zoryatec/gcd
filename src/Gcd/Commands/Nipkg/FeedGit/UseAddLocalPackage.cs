@@ -29,6 +29,7 @@ public static class UUseAddLocalPackageCmdExtensions
             var gitPasswordOpt = new GitPasswordOption();
             var gitCommiterNameOpt = new GitCommitterNameOption();
             var gitCommiterEmailOpt = new GitCommiterEmailOption();
+            var gitBranchNameOption = new GitBranchNameOption();
             var useAbsOpt = new UseAbsolutePathOption();
             var feedCreateOpt = new FeedCreateOption();
 
@@ -39,6 +40,7 @@ public static class UUseAddLocalPackageCmdExtensions
                 gitPasswordOpt.IsRequired(),
                 gitCommiterNameOpt.IsRequired(),
                 gitCommiterEmailOpt.IsRequired(),
+                gitBranchNameOption.IsRequired(),
                 useAbsOpt,
                 feedCreateOpt
                 );
@@ -51,13 +53,14 @@ public static class UUseAddLocalPackageCmdExtensions
                 var gitPassword = gitPasswordOpt.Map();
                 var gitCommiterName = gitCommiterNameOpt.Map();
                 var gitCommiterEmail = gitCommiterEmailOpt.Map();
+                var giBranchName = gitBranchNameOption.Map();
                 var cmdPath = NipkgCmdPath.None;
                 var useAbs = useAbsOpt.Map();
                 var feedCreate = feedCreateOpt.IsSet();
 
                 return await Result
-                    .Combine(locPath, gitRepoAddress, gitUserName, gitPassword, gitCommiterName, gitCommiterEmail)
-                    .Bind(() => Result.Success(new FeedDefinitionGit(gitRepoAddress.Value, gitUserName.Value,gitPassword.Value,gitCommiterName.Value,gitCommiterEmail.Value)))
+                    .Combine(locPath, gitRepoAddress, gitUserName, gitPassword, gitCommiterName, gitCommiterEmail, giBranchName)
+                    .Bind(() => Result.Success(new FeedDefinitionGit(gitRepoAddress.Value, giBranchName.Value,gitUserName.Value,gitPassword.Value,gitCommiterName.Value,gitCommiterEmail.Value)))
                     .Bind((x) => mediator.AddToGitlFeedAsync(x, locPath.Value, cmdPath, useAbs, feedCreate, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
@@ -68,21 +71,3 @@ public static class UUseAddLocalPackageCmdExtensions
         return app;
     }
 }
-
-
-
-
-
-
-public sealed class GitCommitterNameOption() : CommandOption(NAME, CommandOptionType.SingleValue)
-{
-    public static readonly string NAME = "--git-committer-name";
-    public Result<GitCommitterName> Map() => GitCommitterName.Of(this.Value());
-}
-
-public sealed class GitCommiterEmailOption() : CommandOption(NAME, CommandOptionType.SingleValue)
-{
-    public static readonly string NAME = "--git-committer-email";
-    public Result<GitCommiterEmail> Map() => GitCommiterEmail.Of(this.Value());
-}
-

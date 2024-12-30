@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Gcd.Model.FeedDefinition;
 
-public record FeedDefinitionGit(GitRepoAddress Address, GitUserName UserName, GitPassword Password, GitCommitterName CommitterName, GitCommiterEmail CommitterEmail)
+public record FeedDefinitionGit(GitRepoAddress Address, GitLocalBranch BrancName, GitUserName UserName, GitPassword Password, GitCommitterName CommitterName, GitCommiterEmail CommitterEmail)
 {
 
 }
@@ -68,5 +68,16 @@ public record GitRepoAddress
             .Map(x => new GitRepoAddress(x));
     }
     private GitRepoAddress(string value) => Value = value;
+    public string Value { get; }
+}
+
+public record GitLocalBranch
+{
+    public static Result<GitLocalBranch> Of(Maybe<string> UserName)
+    {
+        return UserName.ToResult($"{nameof(GitLocalBranch)} cannot be empty")
+            .Map(x => new GitLocalBranch(x));
+    }
+    private GitLocalBranch(string value) => Value = value;
     public string Value { get; }
 }

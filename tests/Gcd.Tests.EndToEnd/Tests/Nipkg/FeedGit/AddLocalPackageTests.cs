@@ -14,7 +14,8 @@ namespace Gcd.Tests.EndToEnd.Tests.Nipkg.FeedGit;
 public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
-    [Fact(Skip ="temp disable")]
+    [Fact(Skip = "temp disable")]
+    //[Fact]
     private void AddLocalPackageTest()
     {
 
@@ -27,12 +28,14 @@ public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixtur
         string password = _config.GetGitPassword();
         string committerName = "GCD Test";
         string committerEmail = "gcd@zoratec.com";
+        string branchName = "anotherTest";
 
         var args = new NipkgArgBuilder()
             .WithNipkgCmd()
             .WithFeedGitCmd()
             .WithAddLocalPackageCmd()
             .WithGitRepoAddressOpt(repoAddress)
+            .WithGitBranchNameOpt(branchName)
             .WithGitUserNameOpt(username)
             .WithGitPasswordOpt(password)
             .WithGitCommitterNameOpt(committerName)

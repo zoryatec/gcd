@@ -49,6 +49,12 @@ public class NipkgArgBuilder : ArgumentsBuilder
         WithOption(GitRepoAddressOption.NAME, value);
         return this;
     }
+
+    public NipkgArgBuilder WithGitBranchNameOpt(string value)
+    {
+        WithOption(GitBranchNameOption.NAME, value);
+        return this;
+    }
     public NipkgArgBuilder WithGitUserNameOpt(string value)
     {
         WithOption(GitUserNameOption.NAME, value);

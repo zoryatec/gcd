@@ -57,87 +57,69 @@ public class AddPackageHandler(
         await _fs.CreateTempDirPathAsync()
             .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 
-    private async Task<Result> PullFeed(FeedDefinitionGit feedDefinition,LocalDirPath checkoutPath)
-    {
-        CloneRepositoryWithCredentials(
-            feedDefinition.Address.Value,
-            checkoutPath.Value,
-            feedDefinition.UserName.Value,
-            feedDefinition.Password.Value);
-        return Result.Success();
-    }
+    private async Task<Result> PullFeed(FeedDefinitionGit feedDefinition,LocalDirPath checkoutPath)=>
+        Result.Try(() => CloneRepositoryWithCredentials(feedDefinition, checkoutPath), ex => ex.Message);
 
-    public void CloneRepositoryWithCredentials(string cloneUrl, string localPath, string username, string password)
+
+    public void CloneRepositoryWithCredentials(FeedDefinitionGit feedDefinition,LocalDirPath checkoutPath)
     {
+        var (address, branch, username, password, _, _) = feedDefinition;
         var fetchOptions = new FetchOptions
         {
             CredentialsProvider = (url, user, cred) =>
                 new UsernamePasswordCredentials
                 {
-                    Username = username,
-                    Password = password
+                    Username = username.Value,
+                    Password = password.Value
                 }
         };
 
         var cloneOptions = new CloneOptions(fetchOptions)
         {
-            BranchName = "initiaDev"
+            BranchName = branch.Value
         };
 
 
-        Repository.Clone(cloneUrl, localPath, cloneOptions);
+        Repository.Clone(address.Value, checkoutPath.Value, cloneOptions);
 
         
     }
 
-    private async Task<Result> PushFeed(FeedDefinitionGit feedDefinition,LocalDirPath checkoutPath)
-    {
-        CommitAndPush(
-            checkoutPath.Value,
-            "test",
-            feedDefinition.UserName.Value,
-            feedDefinition.Password.Value);
-        return Result.Success();
-    }
+    private async Task<Result> PushFeed(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath) =>
+       Result.Try(() => CommitAndPush(feedDefinition, checkoutPath));
+        
 
-
-    public void CommitAndPush(string repoPath, string commitMessage, string username, string password)
+    public void CommitAndPush(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath)
     {
-        using (var repo = new Repository(repoPath))
+        var (address, branch, username, password, committerName, committerEmail) = feedDefinition;
+        using (var repo = new Repository(checkoutPath.Value))
         {
             LibGit2Sharp.Commands.Stage(repo, "*");
 
-            // Check if there are staged changes
             var status = repo.RetrieveStatus();
             if (status.IsDirty)
             {
-                // Create a signature for the commit
-                var author = new Signature("Your Name", "your-email@example.com", DateTime.Now);
+                var author = new Signature(committerName.Value, committerEmail.Value, DateTime.Now);
                 var committer = author;
-
-                // Commit the changes
-                repo.Commit(commitMessage, author, committer);
-                Console.WriteLine("Changes committed.");
+                repo.Commit("gcd-commit", author, committer);
             }
             else
             {
-                Console.WriteLine("No changes to commit.");
+                throw new Exception("No changes to commit."); // replace with result
             }
 
-            // Push changes to the remote repository
             var pushOptions = new PushOptions
             {
                 CredentialsProvider = (url, usernameFromUrl, types) =>
                     new UsernamePasswordCredentials
                     {
-                        Username = username,
-                        Password = password
+                        Username = username.Value,
+                        Password = password.Value
                     }
             };
-            Remote remote = repo.Network.Remotes["origin"];
-            // Push the current branch
-            repo.Network.Push(repo.Branches["initiaDev"], pushOptions);
-            Console.WriteLine("Changes pushed to remote repository.");
+
+            repo.Network.Push(repo.Branches[branch.Value], pushOptions);
+
         }
     }
 
