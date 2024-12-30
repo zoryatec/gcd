@@ -54,5 +54,5 @@ jobs:
       nipkg-git-feed: "https://raw.githubusercontent.com/zoryatec/gcd-feed/refs/heads/anotherTest"
       nipkg-git-feed-repo: ${{ secrets.TEST_GIT_REPO}}
       nipkg-git-feed-branch: "def-feed"
-      nipkg-git-feed-user: "any"
+      nipkg-git-feed-user: ${{ secrets.NIPKG_GIT_USER}}
       nipkg-git-feed-password: ${{ secrets.GITHUB_TOKEN}}
