@@ -51,7 +51,7 @@ jobs:
         --git-user-password ${{ secrets.nipkg-git-feed-password }} `
         --git-committer-name "test gcd"`
         --git-committer-email "mail@mail.com" `
-        --package-path "$env:GITHUB_WORKSPACE\\package\\${{inputs.name}}_${{inputs.version}}_windows_x64.nipkg" `
+        --package-local-path "$env:GITHUB_WORKSPACE\\package\\${{inputs.name}}_${{inputs.version}}_windows_x64.nipkg" `
         --feed-create
 
 
