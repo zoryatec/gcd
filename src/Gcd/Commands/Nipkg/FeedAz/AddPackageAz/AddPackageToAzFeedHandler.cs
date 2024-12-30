@@ -35,9 +35,6 @@ public class AddPackageToAzFeedHandler(
         return await Result.Combine(localFeedDef, insideFeedPkgPath)
             .Bind(() => _mediator.PullFeedMetaAsync(azFeedDef, localFeedDef.Value))
             .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value,packagePath, cmdPath, UseAbsolutePath.No))
-            //.Bind(() => DownloadFile(packagePath, insideFeedPkgPath.Value, overwrite: true))
-            //.Bind(() => _mediator.AddPackageToLcalFeedAsync(localFeedDef.Value, insideFeedPkgPath.Value, cmdPath))
-            .Bind(() => UpdateToAbsPath(localFeedDef.Value, azFeedDef as FeedDefinitionAzBlob ?? throw new NullReferenceException(), packagePath.FileName))
             .Bind(() => _mediator.PushFeedMetaDataAsync(azFeedDef, localFeedDef.Value, cancellationToken))
             .Bind(() => UploadPackage(azFeedDef.Feed, insideFeedPkgPath.Value));
     }
@@ -47,38 +44,6 @@ public class AddPackageToAzFeedHandler(
             .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 
 
-    private async Task<Result> UpdateToAbsPath(FeedDefinitionLocal localFeedDefinition, FeedDefinitionAzBlob azFeedDefinition, PackageFileName packageFileName)
-    {
-        string absoluteUri = $"{azFeedDefinition.Feed.BaseUri}/{packageFileName.Value}";
-        var contentR = await _fs.ReadTextFileAsync(localFeedDefinition.Package);
-        var content = contentR.Value.Replace(packageFileName.Value, absoluteUri);
-        var resultWrite =  await _fs.WriteTextFileAsync(localFeedDefinition.Package, content);
-
-        RecreateGz(localFeedDefinition);
-
-        var stampsContentR = await _fs.ReadTextFileAsync(localFeedDefinition.PackageStamps);
-        var stampsContent = stampsContentR.Value.Replace(packageFileName.Value, absoluteUri);
-        var resultWriteStamps = await _fs.WriteTextFileAsync(localFeedDefinition.PackageStamps, stampsContent);
-
-        return resultWriteStamps;
-    }
-
-    private void RecreateGz(FeedDefinitionLocal localFeedDefinition)
-    {
-        string sourceFile = localFeedDefinition.Package.Value; // Path to the file to be compressed
-        string destinationFile = localFeedDefinition.PackageGz.Value; // Path for the compressed file
-        if(File.Exists(destinationFile)) File.Delete(destinationFile);
-
-
-        using (FileStream sourceStream = new FileStream(sourceFile, FileMode.Open, FileAccess.Read))
-        using (FileStream destinationStream = new FileStream(destinationFile, FileMode.Create, FileAccess.Write))
-        using (GZipStream gzipStream = new GZipStream(destinationStream, CompressionMode.Compress))
-        {
-            sourceStream.CopyTo(gzipStream);
-        }
-        
-    }
-
     private async Task<Result> UploadPackage(IDirectoryDescriptor dirDescriptor, PackageFilePath packagePath)
     {
 
@@ -87,10 +52,6 @@ public class AddPackageToAzFeedHandler(
         var result = await _rfs.UploadFileAsync(blorUriRes.Value, packagePath);
         return result;
     }
-
-    private string CreateSubUrl(AzBlobFeedUri feedUri, string subPath) =>
-        $"{feedUri.BaseUri}/{subPath}{feedUri.Query}";
-
 }
 
 

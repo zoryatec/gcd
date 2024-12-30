@@ -32,6 +32,37 @@ public sealed class FeedLocalDirOption() : CommandOption(NAME, CommandOptionType
                     .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 }
 
+public sealed class GitRepoAddressOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--git-repo-address";
+    public Result<GitRepoAddress> Map() => GitRepoAddress.Of(this.Value());
+}
+
+public sealed class GitUserNameOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--git-user-name";
+    public Result<GitUserName> Map() => GitUserName.Of(this.Value());
+}
+
+public sealed class GitPasswordOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--git-user-password";
+    public Result<GitPassword> Map() => GitPassword.Of(this.Value());
+}
+
+public sealed class GitCommitterNameOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--git-committer-name";
+    public Result<GitCommitterName> Map() => GitCommitterName.Of(this.Value());
+}
+
+public sealed class GitCommiterEmailOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--git-committer-email";
+    public Result<GitCommiterEmail> Map() => GitCommiterEmail.Of(this.Value());
+}
+
+// flags
 public sealed class FeedCreateOption() : CommandOption(NAME, CommandOptionType.NoValue)
 {
     public static readonly string NAME = "--feed-create";
@@ -48,3 +79,6 @@ public sealed class UseAbsolutePathOption() : CommandOption(NAME, CommandOptionT
         else return UseAbsolutePath.No;
     }
 }
+
+
+

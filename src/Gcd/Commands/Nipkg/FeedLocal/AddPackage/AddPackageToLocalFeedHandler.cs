@@ -30,7 +30,7 @@ public record UseAbsolutePath
     public UseAbsolutePath(string value) { _value = value;}
 
     public static UseAbsolutePath Yes = new UseAbsolutePath("yes");
-    public static UseAbsolutePath No = new UseAbsolutePath("yes");
+    public static UseAbsolutePath No = new UseAbsolutePath("no");
 }
 
 public record AddPackageToLocalRequest(FeedDefinitionLocal AzFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath CmdPath, bool createFeed, UseAbsolutePath UseAbsolutePath) : IRequest<Result>;
@@ -59,7 +59,6 @@ public class AddPackageToLocalHandler(
         if(useAbsPath.Equals(UseAbsolutePath.Yes))  return await UpdateToAbsPath(localFeedDef,packagePath);
 
         return result;
-        //.Bind(() => UpdateToAbsPath(localFeedDef.Value, azFeedDef, packagePath.FileName))
     }
 
     private async Task<Result<FeedDefinitionLocal>> CreateTempFeedDefinition() =>

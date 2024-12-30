@@ -24,6 +24,12 @@ on:
         required: true
       test-feed-generic:
         required: true
+      test-git-repo:
+        required: true
+      test-git-user:
+        required: true
+      test-git-password:
+        required: true
 
 
 jobs:

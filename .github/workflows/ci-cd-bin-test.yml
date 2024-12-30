@@ -45,6 +45,9 @@ jobs:
 
       - name: app test
         env:
+          GitRepoAddress: ${{ secrets.test-git-repo }}
+          GitUserName: ${{ secrets.test-git-user }}
+          GitPassword: ${{ secrets.test-git-password }}  
           AZUREADDPKGTESTFEEDURI: ${{ secrets.test-feed-add-pkg }}
           AZUREFEEDURI: ${{ secrets.test-feed-generic }}
           AZUREPUSHPULLTESTFEEDURI: ${{ secrets.test-feed-push-pull }}

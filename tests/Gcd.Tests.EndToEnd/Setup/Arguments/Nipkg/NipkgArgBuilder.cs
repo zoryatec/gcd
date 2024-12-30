@@ -23,6 +23,12 @@ public class NipkgArgBuilder : ArgumentsBuilder
         return this;
     }
 
+    public NipkgArgBuilder WithFeedGitCmd()
+    {
+        WithArg("feed-git");
+        return this;
+    }
+
     public NipkgArgBuilder WithAddLocalPackageCmd()
     {
         WithArg("add-local-package");
@@ -37,7 +43,37 @@ public class NipkgArgBuilder : ArgumentsBuilder
 
 
     // options
+    #region git
+    public NipkgArgBuilder WithGitRepoAddressOpt(string value)
+    {
+        WithOption(GitRepoAddressOption.NAME, value);
+        return this;
+    }
+    public NipkgArgBuilder WithGitUserNameOpt(string value)
+    {
+        WithOption(GitUserNameOption.NAME, value);
+        return this;
+    }
 
+    public NipkgArgBuilder WithGitPasswordOpt(string value)
+    {
+        WithOption(GitPasswordOption.NAME, value);
+        return this;
+    }
+
+    public NipkgArgBuilder WithGitCommitterNameOpt(string value)
+    {
+        WithOption(GitCommitterNameOption.NAME, value);
+        return this;
+    }
+    public NipkgArgBuilder WithGitCommitterEmailOpt(string value)
+    {
+        WithOption(GitCommiterEmailOption.NAME, value);
+        return this;
+    }
+
+    #endregion
+    #region local
     public NipkgArgBuilder WithPackageLocalPathOpt(string value)
     {
         WithOption(PackageLocalPathOption.NAME, value);
@@ -55,6 +91,7 @@ public class NipkgArgBuilder : ArgumentsBuilder
         WithOption(FeedLocalDirOption.NAME, value);
         return this;
     }
+    #endregion
 
     // flags
     public NipkgArgBuilder WithFeedCreateFlag()
