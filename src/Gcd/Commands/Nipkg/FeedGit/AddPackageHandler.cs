@@ -50,7 +50,6 @@ public class AddPackageHandler(
             .Bind(() => PullFeed(feedDefinition,localFeedDef.Value.Feed))
             .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value, packagePath, cmdPath, useAbs, createFeed: true))
             .Bind(() => PushFeed(feedDefinition,localFeedDef.Value.Feed));
-
     }
 
     private async Task<Result<FeedDefinitionLocal>> CreateTempFeedDefinition() =>
@@ -79,9 +78,7 @@ public class AddPackageHandler(
             BranchName = branch.Value
         };
 
-
         Repository.Clone(address.Value, checkoutPath.Value, cloneOptions);
-
         
     }
 
@@ -119,7 +116,6 @@ public class AddPackageHandler(
             };
 
             repo.Network.Push(repo.Branches[branch.Value], pushOptions);
-
         }
     }
 
