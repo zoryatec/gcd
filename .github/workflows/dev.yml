@@ -56,3 +56,4 @@ jobs:
       nipkg-git-feed-branch: "def-feed"
       nipkg-git-feed-user: ${{ secrets.NIPKG_GIT_USER }}
       nipkg-git-feed-password: ${{ secrets.NIPKG_GIT_PASSWORD }}
+      
