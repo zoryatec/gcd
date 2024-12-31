@@ -155,6 +155,7 @@ namespace Gcd.Menu
                 });
 
                 cmd.UseAddLocalPackageToGitCmd(serviceProvider);
+                cmd.UseAddHttpPackageCmdToGit(serviceProvider);
             });
 
             return app;

@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Gcd.Model;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg.Builder;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg.Feed;
@@ -11,18 +12,16 @@ using System.Threading.Tasks;
 
 namespace Gcd.Tests.EndToEnd.Tests.Nipkg.FeedGit;
 
-public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixture)
+public class AddHttpPackageTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
-    [Fact(Skip = "temp disable")]
-    //[Fact]
-    private void AddLocalPackageTest()
+    [Fact (Skip ="for now")]
+    private void AddHttpPackageTest()
     {
 
         var feedDir = _tempDirectoryGenerator.GenerateTempDirectory();
-        var feedUri = _config.GetAzureAddPkgTestFeedUri();
         // Arrange
-        string packagePath = BuildPackage();
+        string packageUri = "https://github.com/zoryatec/gcd/releases/download/v0.13.0/gcd_0.13.0_windows_x64.nipkg";
         string repoAddress = _config.GetGitRepoAddress();
         string username = _config.GetGitUserName();
         string password = _config.GetGitPassword();
@@ -33,14 +32,14 @@ public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixtur
         var args = new NipkgArgBuilder()
             .WithNipkgCmd()
             .WithFeedGitCmd()
-            .WithAddLocalPackageCmd()
+            .WithAddHttpPackageCmd()
             .WithGitRepoAddressOpt(repoAddress)
             .WithGitBranchNameOpt(branchName)
             .WithGitUserNameOpt(username)
             .WithGitPasswordOpt(password)
             .WithGitCommitterNameOpt(committerName)
             .WithGitCommitterEmailOpt(committerEmail)
-            .WithPackageLocalPathOpt(packagePath)
+            .WithPackageHttpOpt(packageUri)
             .WithFeedCreateFlag()
             .Build();
 
@@ -54,19 +53,52 @@ public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixtur
         result.Error.Should().BeEmpty();
         result.Return.Should().Be(0);
 
-        //var packageName = Path.GetFileName(packagePath);
-        //var destinationPackagesContent = File.ReadAllText($"{feedDir}\\Packages");
-        //var destinationPackagesGzContent = File.ReadAllText($"{feedDir}\\Packages.gz");
-        //var destinationPackagesStampsContent = File.ReadAllText($"{feedDir}\\Packages.stamps");
+    }
 
-        //destinationPackagesContent.Should().Contain(packageName);
-        //destinationPackagesStampsContent.Should().Contain(packageName);
+    [Fact(Skip = "for now")]
+    private void AddHttpPackageTestUseAbs()
+    {
+
+        var feedDir = _tempDirectoryGenerator.GenerateTempDirectory();
+        // Arrange
+        string packageUri = "https://github.com/zoryatec/gcd/releases/download/v0.13.0/gcd_0.13.0_windows_x64.nipkg";
+        string repoAddress = _config.GetGitRepoAddress();
+        string username = _config.GetGitUserName();
+        string password = _config.GetGitPassword();
+        string committerName = "test gcd";
+        string committerEmail = "mail@mail.com";
+        string branchName = "anotherTest";
+
+        var args = new NipkgArgBuilder()
+            .WithNipkgCmd()
+            .WithFeedGitCmd()
+            .WithAddHttpPackageCmd()
+            .WithGitRepoAddressOpt(repoAddress)
+            .WithGitBranchNameOpt(branchName)
+            .WithGitUserNameOpt(username)
+            .WithGitPasswordOpt(password)
+            .WithGitCommitterNameOpt(committerName)
+            .WithGitCommitterEmailOpt(committerEmail)
+            .WithPackageHttpOpt(packageUri)
+            .WithFeedCreateFlag()
+            .WithUseAbsolutePathFlag()
+            .Build();
+
+        // Act
+        var result = _gcd.Run(args);
+
+        // Asssert
+
+
+
+        result.Error.Should().BeEmpty();
+        result.Return.Should().Be(0);
 
     }
     public string BuildPackage()
     {
         // Arrange
-        var packageName = Guid.NewGuid().ToString();
+        var packageName = "sample-package";
         var packageVersion = "99.88.77.66";
         var packageInstalationDir = "BootVolume/Zoryatec/sample-package";
 
@@ -99,4 +131,5 @@ public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixtur
         return packageContentDirectory;
     }
 }
+
 
