@@ -10,7 +10,7 @@ using MediatR;
 
 namespace Gcd.Handlers.Nipkg.RemoteFeed;
 
-public record PushFeedMetaDataRequest<TFeedDefinition>(IFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDefinition)
+public record PushFeedMetaDataRequest<TFeedDefinition>(TFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDefinition)
         : IRequest<Result> where TFeedDefinition : IFeedDefinition;
 
 

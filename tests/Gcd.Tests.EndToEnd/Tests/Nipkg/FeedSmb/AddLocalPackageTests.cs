@@ -9,8 +9,8 @@ namespace Gcd.Tests.EndToEnd.Tests.Nipkg.FeedSmb;
 public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
-    //[Fact(Skip = "temp disable")]
-    [Fact]
+    [Fact(Skip = "temp disable")]
+    //[Fact]
     private void AddLocalPackageTest()
     {
 

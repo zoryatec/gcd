@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Gcd.Services.RemoteFileSystem
 {
-    public class RemoteFileSystemGit
+    public class RemoteFileSystemGit : IRemoteFileSystemGit
     {
         public Result<IFileDescriptor> CreateFileDescriptor(IDirectoryDescriptor dirDescriptor, FileName fileName)
         {

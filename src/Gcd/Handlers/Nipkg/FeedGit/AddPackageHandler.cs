@@ -31,78 +31,14 @@ public class AddPackageHandler(
             .Map((arg) => PackageFilePath.Of(arg.Feed, packagePath.FileName));
 
         return await Result.Combine(localFeedDef, insideFeedPkgPath)
-            .Bind(() => PullFeed(feedDefinition, localFeedDef.Value.Feed))
-            .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value, packagePath, cmdPath, useAbs, createFeed: true))
-            .Bind(() => PushFeed(feedDefinition, localFeedDef.Value.Feed));
-        return Result.Success();
+            .Bind(() => _mediator.PullFeedMetaAsync(feedDefinition, localFeedDef.Value))
+            .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value, packagePath, cmdPath, useAbs, createFeed))
+            .Bind(() => _mediator.PushFeedMetaDataAsync(feedDefinition, localFeedDef.Value, cancellationToken));
     }
 
     private async Task<Result<FeedDefinitionLocal>> CreateTempFeedDefinition() =>
         await _fs.CreateTempDirPathAsync()
             .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
-
-    private async Task<Result> PullFeed(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath) =>
-        Result.Try(() => CloneRepositoryWithCredentials(feedDefinition, checkoutPath), ex => ex.Message).MapError(errr => $"PULL:{errr}");
-
-
-    public void CloneRepositoryWithCredentials(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath)
-    {
-        var (address, branch, username, password, _, _) = feedDefinition;
-        var fetchOptions = new FetchOptions
-        {
-            CredentialsProvider = (url, user, cred) =>
-                new UsernamePasswordCredentials
-                {
-                    Username = username.Value,
-                    Password = password.Value
-                }
-        };
-
-        var cloneOptions = new CloneOptions(fetchOptions)
-        {
-            BranchName = branch.Value
-        };
-
-        Repository.Clone(address.Value, checkoutPath.Value, cloneOptions);
-
-    }
-
-    private async Task<Result> PushFeed(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath) =>
-       Result.Try(() => CommitAndPush(feedDefinition, checkoutPath)).MapError(errr => $"PUSH:{errr}");
-
-
-    public void CommitAndPush(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath)
-    {
-        var (address, branch, username, password, committerName, committerEmail) = feedDefinition;
-        using (var repo = new Repository(checkoutPath.Value))
-        {
-            LibGit2Sharp.Commands.Stage(repo, "*");
-
-            var status = repo.RetrieveStatus();
-            if (status.IsDirty)
-            {
-                var author = new Signature(committerName.Value, committerEmail.Value, DateTime.Now);
-                var committer = author;
-                repo.Commit("gcd-commit", author, committer);
-            }
-            else
-            {
-                throw new Exception("No changes to commit."); // replace with result
-            }
-
-            var pushOptions = new PushOptions
-            {
-                CredentialsProvider = (url, usernameFromUrl, types) =>
-                    new UsernamePasswordCredentials
-                    {
-                        Username = username.Value,
-                        Password = password.Value
-                    }
-            };
-
-            repo.Network.Push(repo.Branches[branch.Value], pushOptions);
-        }
-    }
 
 }
 
