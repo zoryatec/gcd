@@ -16,11 +16,23 @@ public class PullFeedMetaHandler(IFileSystem _fs, RemoteFileSystemGit _rfs)
     public async Task<Result> Handle(PullFeedMetaRequest<FeedDefinitionGit> request, CancellationToken cancellationToken)
     {
         var (remoteFeedDef, localFeedDef) = request;
-        return await PullFeed(remoteFeedDef, localFeedDef.Feed);
+
+        var checkoutFeed = FeedDefinitionLocal.Of(_rfs.GlobalCheckoutDir);
+
+        var pullResult = await checkoutFeed
+            .Bind((x) => _rfs.Clone(remoteFeedDef.Address, remoteFeedDef.BrancName, remoteFeedDef.UserName, remoteFeedDef.Password));
+
+
+         return await pullResult
+            .Bind(() => _fs.CreateDirAsync(localFeedDef.Feed))
+            .Bind(() => _fs.CopyFileAsync(checkoutFeed.Value.Package, localFeedDef.Package, overwrite: true))
+            .Bind(() => _fs.CopyFileAsync(checkoutFeed.Value.PackageGz, localFeedDef.PackageGz, overwrite: true))
+            .Bind(() => _fs.CopyFileAsync(checkoutFeed.Value.PackageStamps, localFeedDef.PackageStamps, overwrite: true));
     }
 
     private async Task<Result> PullFeed(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath) =>
     Result.Try(() => CloneRepositoryWithCredentials(feedDefinition, checkoutPath), ex => ex.Message).MapError(errr => $"PULL:{errr}");
+
 
 
     public void CloneRepositoryWithCredentials(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath)

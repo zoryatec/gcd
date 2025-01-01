@@ -15,7 +15,7 @@ namespace Gcd.Services.RemoteFileSystem
     public class RemoteFileSystemGit : IRemoteFileSystemGit
     {
 
-        private readonly LocalDirPath GlobalCheckoutDir;
+        public readonly LocalDirPath GlobalCheckoutDir;
         public RemoteFileSystemGit(IFileSystem fs) 
         {
             GlobalCheckoutDir = fs.CreateTempDirPathAsync().GetAwaiter().GetResult().Value;
@@ -26,7 +26,7 @@ namespace Gcd.Services.RemoteFileSystem
             return Result.Try(() => CloneRepositoryWithCredentials(address, branch, username, password, GlobalCheckoutDir), ex => ex.Message).MapError(errr => $"PULL:{errr}");
         }
 
-        public async Task<Result> Push(GitRepoAddress address, GitLocalBranch branch, GitUserName username, GitPassword password, GitCommitterName committerName, GitCommiterEmail committerEmail, LocalDirPath checkoutPath)
+        public async Task<Result> Push(GitRepoAddress address, GitLocalBranch branch, GitUserName username, GitPassword password, GitCommitterName committerName, GitCommiterEmail committerEmail)
         {
             return Result.Try(() => CommitAndPush(address, branch, username, password, committerName, committerEmail, GlobalCheckoutDir)).MapError(errr => $"PUSH:{errr}");
         }

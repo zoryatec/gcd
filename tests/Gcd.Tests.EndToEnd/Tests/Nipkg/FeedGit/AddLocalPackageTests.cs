@@ -28,7 +28,7 @@ public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixtur
         string password = _config.GetGitPassword();
         string committerName = "test gcd";
         string committerEmail = "mail@mail.com";
-        string branchName = "anotherTest";
+        string branchName = "initiaDev";
 
         var args = new NipkgArgBuilder()
             .WithNipkgCmd()
