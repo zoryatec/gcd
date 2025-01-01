@@ -1,15 +1,14 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
+namespace Gcd.Commands.Nipkg.FeedGit;
 
-namespace Gcd.Commands.Nipkg.FeedAzBlob;
-
-public static class UseMenuFeedAzBlobExt
+public static class UseMenuFeedGitlExt
 {
-    public static CommandLineApplication UseMenuFeedAzBlob(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseMenuFeedGit(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
-        app.Command("feed", cmd =>
+        app.Command("feed-git", cmd =>
         {
 
             cmd.OnExecute(() =>
@@ -19,10 +18,8 @@ public static class UseMenuFeedAzBlobExt
                 return 1;
             });
 
-            cmd.UseCmdAddLocalPackage(serviceProvider);
-            cmd.UseCmdPullMetaData(serviceProvider);
-            cmd.UseCmdPushMetaData(serviceProvider);
-
+            cmd.UseAddLocalPackageToGitCmd(serviceProvider);
+            cmd.UseAddHttpPackageCmdToGit(serviceProvider);
         });
 
         return app;

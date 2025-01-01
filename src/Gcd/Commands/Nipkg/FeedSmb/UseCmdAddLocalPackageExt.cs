@@ -11,9 +11,9 @@ using Gcd.Handlers.Nipkg.RemoteFeed;
 
 namespace Gcd.Commands.Nipkg.FeedSmb;
 
-public static class UseAddLocalPackageCmdExtensions
+public static class UseCmdAddLocalPackageExt
 {
-    public static CommandLineApplication UseAddLocalPackageCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseCmdAddLocalPackage(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();

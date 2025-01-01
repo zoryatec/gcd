@@ -1,15 +1,14 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
+namespace Gcd.Commands.Nipkg.FeedSmb;
 
-namespace Gcd.Commands.Nipkg.FeedAzBlob;
-
-public static class UseMenuFeedAzBlobExt
+public static class UseMenuFeedSmbExt
 {
-    public static CommandLineApplication UseMenuFeedAzBlob(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseMenuFeedSmb(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
-        app.Command("feed", cmd =>
+        app.Command("feed-smb", cmd =>
         {
 
             cmd.OnExecute(() =>
@@ -20,9 +19,6 @@ public static class UseMenuFeedAzBlobExt
             });
 
             cmd.UseCmdAddLocalPackage(serviceProvider);
-            cmd.UseCmdPullMetaData(serviceProvider);
-            cmd.UseCmdPushMetaData(serviceProvider);
-
         });
 
         return app;

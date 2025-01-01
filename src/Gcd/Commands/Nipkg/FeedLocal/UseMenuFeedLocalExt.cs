@@ -5,7 +5,7 @@ namespace Gcd.Commands.Nipkg.FeedLocal;
 
 public static class UseMenuFeedLocalExt
 {
-    public static CommandLineApplication UseFeedLocal(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseMenuFeedLocal(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         app.Command("feed-local", cmd =>

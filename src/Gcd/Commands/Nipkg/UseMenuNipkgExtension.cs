@@ -9,6 +9,7 @@ using Gcd.Commands.Nipkg.FeedGit;
 using Gcd.Commands.Nipkg.Builder;
 using Gcd.Commands.Nipkg.FeedAzBlob;
 using Gcd.Commands.Nipkg.FeedLocal;
+using Gcd.Commands.Nipkg.FeedSmb;
 
 
 namespace Gcd.Commands.Nipkg
@@ -28,15 +29,14 @@ namespace Gcd.Commands.Nipkg
                     return 1;
                 });
                 cmd.UseMenuBuilder(serviceProvider);
-                cmd.UseFeedAzBlob(serviceProvider);
+                cmd.UseMenuFeedAzBlob(serviceProvider);
+                cmd.UseMenuFeedLocal(serviceProvider);
+                cmd.UseMenuFeedGit(serviceProvider);
+                cmd.UseMenuFeedSmb(serviceProvider);
                 cmd.UseCmdBuild(serviceProvider);
-                cmd.UseFeedLocal(serviceProvider);
-                cmd.UseFeedGit(serviceProvider);
             });
             return app;
         }
-
-
 
 
         public static CommandLineApplication UseFilePackageInstructionsCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
@@ -77,26 +77,5 @@ namespace Gcd.Commands.Nipkg
             return app;
         }
 
-
-
-        public static CommandLineApplication UseFeedGit(this CommandLineApplication app, IServiceProvider serviceProvider)
-        {
-            var console = serviceProvider.GetRequiredService<IConsole>();
-            app.Command("feed-git", cmd =>
-            {
-
-                cmd.OnExecute(() =>
-                {
-                    console.WriteLine("Specify a subcommand");
-                    cmd.ShowHelp();
-                    return 1;
-                });
-
-                cmd.UseAddLocalPackageToGitCmd(serviceProvider);
-                cmd.UseAddHttpPackageCmdToGit(serviceProvider);
-            });
-
-            return app;
-        }
     }
 }
