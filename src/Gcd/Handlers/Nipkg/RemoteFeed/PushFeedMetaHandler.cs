@@ -13,7 +13,7 @@ namespace Gcd.Handlers.Nipkg.RemoteFeed;
 public record NipkgPushAzBlobFeedMetaRequest(IFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDefinition) : IRequest<Result>;
 public record NipkgPushAzBlobFeedMetaRespons(string Result);
 
-public class NipkgPushAzBlobFeedMetaHandler(IFileSystem _fs, IRemoteFileSystem _rfs)
+public class PushFeedMetaHandler(IFileSystem _fs, IRemoteFileSystem _rfs)
     : IRequestHandler<NipkgPushAzBlobFeedMetaRequest, Result>
 {
     public async Task<Result> Handle(NipkgPushAzBlobFeedMetaRequest request, CancellationToken cancellationToken)
