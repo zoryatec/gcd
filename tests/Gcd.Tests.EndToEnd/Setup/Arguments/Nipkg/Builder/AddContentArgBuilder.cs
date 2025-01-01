@@ -1,4 +1,4 @@
-﻿using Gcd.Commands.Nipkg.Builder.Init;
+﻿using Gcd.Handlers.Nipkg.Builder;
 
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg.Builder;
 

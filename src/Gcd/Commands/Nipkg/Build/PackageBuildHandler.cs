@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.Nipkg.Builder.AddContent;
-using Gcd.Commands.Nipkg.Builder.Init;
-using Gcd.Commands.Nipkg.Builder.Pack;
+using Gcd.Handlers.Nipkg.Builder;
 using Gcd.Model;
 using Gcd.Model.Config;
 using Gcd.Services.FileSystem;

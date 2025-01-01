@@ -8,6 +8,7 @@ using Gcd.Extensions;
 using Gcd.Commands.Nipkg.Builder.AddContent;
 using Gcd.Commands.Nipkg.Builder.Init;
 using Gcd.Nipkg.Instructions.Model;
+using Gcd.Handlers.Nipkg.Builder;
 
 
 namespace Gcd.Commands.Nipkg.Builder.AddInstruction;

@@ -1,6 +1,7 @@
 ﻿using Gcd.Commands.Nipkg.Build;
 using Gcd.Commands.Nipkg.Builder.Init;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
+using Gcd.Handlers.Nipkg.Builder;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 

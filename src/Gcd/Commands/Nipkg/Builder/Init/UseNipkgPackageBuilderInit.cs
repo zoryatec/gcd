@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Extensions;
+using Gcd.Handlers.Nipkg.Builder;
 using Gcd.Model;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;

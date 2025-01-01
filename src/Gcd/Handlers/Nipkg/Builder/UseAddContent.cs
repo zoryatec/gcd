@@ -8,7 +8,7 @@ using Gcd.Model;
 using Gcd.Commands.Nipkg.Builder.AddContent;
 
 
-namespace Gcd.Commands.Nipkg.Builder.Init;
+namespace Gcd.Handlers.Nipkg.Builder;
 
 public static class UseAddContentCmdExtensions
 {
@@ -40,7 +40,7 @@ public static class UseAddContentCmdExtensions
 
                 return await Result
                     .Combine(builderRootDir, contentSrcDir, targetDir)
-                    .Map(() => ContentLink.Of(targetDir.Value,contentSrcDir.Value))
+                    .Map(() => ContentLink.Of(targetDir.Value, contentSrcDir.Value))
                     .Bind((link) => mediator.AddContentAsync(builderRootDir.Value, link, cancelationToken))
                     .Tap(() => console.Write("SUCESS_MESSAGE"))
                     .TapError(error => console.Error.Write(error))
@@ -57,11 +57,11 @@ public class PackageBuilderRootDirOption : CommandOption
     public static readonly string NAME = "--package-builder-dir";
     public PackageBuilderRootDirOption() : base(NAME, CommandOptionType.SingleValue)
     {
-        this.Description = "Description Arg";
+        Description = "Description Arg";
     }
 
     public Result<PackageBuilderRootDir> Map() =>
-        PackageBuilderRootDir.Of(this.Value());
+        PackageBuilderRootDir.Of(Value());
 }
 
 public class BuilderContentSourceDirOption : CommandOption
@@ -69,10 +69,10 @@ public class BuilderContentSourceDirOption : CommandOption
     public static readonly string NAME = "--content-src-dir";
     public BuilderContentSourceDirOption() : base(NAME, CommandOptionType.SingleValue)
     {
-        this.Description = "Description";
+        Description = "Description";
     }
     public Result<PackageBuilderContentSourceDir> Map() =>
-        PackageBuilderContentSourceDir.Of(this.Value());
+        PackageBuilderContentSourceDir.Of(Value());
 }
 
 public class InatallationTargetRootDirOption : CommandOption
@@ -80,8 +80,8 @@ public class InatallationTargetRootDirOption : CommandOption
     public static readonly string NAME = "--target-root-dir";
     public InatallationTargetRootDirOption() : base(NAME, CommandOptionType.SingleValue)
     {
-        this.Description = "Description";
+        Description = "Description";
     }
     public Result<InatallationTargetRootDir> Map() =>
-    InatallationTargetRootDir.Create(this.Value());
+    InatallationTargetRootDir.Create(Value());
 }

@@ -5,7 +5,7 @@ using Gcd.Services.FileSystem;
 using MediatR;
 using System.Threading;
 
-namespace Gcd.Commands.Nipkg.Builder.Init;
+namespace Gcd.Handlers.Nipkg.Builder;
 
 public record PackageBuilderInitRequest(PackageBuilderRootDir RootDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
 
@@ -45,7 +45,7 @@ public class PackageBuilderInitHandler(IMediator _mediator, IFileSystem _writer)
     }
 }
 
-public static class MediatorExtensions
+public static class MediatorExtensionsInit
 {
     public static async Task<Result> PackageBuilderInitAsync(
         this IMediator mediator,

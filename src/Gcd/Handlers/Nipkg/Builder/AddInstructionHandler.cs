@@ -9,7 +9,7 @@ using MediatR;
 
 
 
-namespace Gcd.Commands.Nipkg.Builder.AddInstruction;
+namespace Gcd.Handlers.Nipkg.Builder;
 
 public record AddInstructionRequest(PackageBuilderRootDir rootDir, FilePackageCustomeExecute customExecute) : IRequest<Result>;
 

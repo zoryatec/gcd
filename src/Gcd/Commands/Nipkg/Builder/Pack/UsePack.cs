@@ -2,9 +2,9 @@
 
 using CSharpFunctionalExtensions;
 using Gcd.Commands.Nipkg.Builder.Init;
-using Gcd.Commands.Nipkg.Builder.Pack;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Extensions;
+using Gcd.Handlers.Nipkg.Builder;
 using Gcd.Model;
 using Gcd.Model.Config;
 using McMaster.Extensions.CommandLineUtils;
