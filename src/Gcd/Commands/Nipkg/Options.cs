@@ -10,6 +10,7 @@ using McMaster.Extensions.CommandLineUtils;
 namespace Gcd.Commands.Nipkg;
 
 
+#region package source
 public sealed class PackageLocalPathOption() : CommandOption(NAME, CommandOptionType.SingleValue)
 {
     public static readonly string NAME = "--package-local-path";
@@ -23,7 +24,29 @@ public sealed class PackageHttpPathOption() : CommandOption(NAME, CommandOptionT
     public Result<PackageHttpPath> ToPackageHttpPath() =>
          PackageHttpPath.Of(this.Value());
 }
+#endregion 
+#region smb
+public sealed class SmbUserNameOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--smb-user-name";
+    public Result<SmbUserName> Map() => SmbUserName.Of(this.Value());
+}
 
+public sealed class SmbPasswordOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--smb-user-password";
+    public Result<SmbPassword> Map() => SmbPassword.Of(this.Value());
+}
+
+public sealed class SmbShareAddressOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--smb-share-address";
+    public Result<SmbShareAddress> Map() => SmbShareAddress.Of(this.Value());
+}
+
+
+#endregion
+#region local
 public sealed class FeedLocalDirOption() : CommandOption(NAME, CommandOptionType.SingleValue)
 {
     public static readonly string NAME = "--feed-local-path";
@@ -31,7 +54,23 @@ public sealed class FeedLocalDirOption() : CommandOption(NAME, CommandOptionType
                  LocalDirPath.Parse(this.Value())
                     .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 }
+public sealed class FeedCreateOption() : CommandOption(NAME, CommandOptionType.NoValue)
+{
+    public static readonly string NAME = "--feed-create";
+    public bool IsSet() =>
+        this.HasValue();
+}
 
+public sealed class UseAbsolutePathOption() : CommandOption(NAME, CommandOptionType.NoValue)
+{
+    public static readonly string NAME = "--use-absolute-path";
+    public UseAbsolutePath Map()
+    {
+        if (this.HasValue()) return UseAbsolutePath.Yes;
+        else return UseAbsolutePath.No;
+    }
+}
+#endregion
 #region git
 
 public sealed class GitRepoAddressOption() : CommandOption(NAME, CommandOptionType.SingleValue)
@@ -70,24 +109,6 @@ public sealed class GitCommiterEmailOption() : CommandOption(NAME, CommandOption
     public Result<GitCommiterEmail> Map() => GitCommiterEmail.Of(this.Value());
 }
 #endregion
-
-// flags
-public sealed class FeedCreateOption() : CommandOption(NAME, CommandOptionType.NoValue)
-{
-    public static readonly string NAME = "--feed-create";
-    public bool IsSet() =>
-        this.HasValue();
-}
-
-public sealed class UseAbsolutePathOption() : CommandOption(NAME, CommandOptionType.NoValue)
-{
-    public static readonly string NAME = "--use-absolute-path";
-    public UseAbsolutePath Map()
-    {
-        if (this.HasValue()) return UseAbsolutePath.Yes;
-        else return UseAbsolutePath.No;
-    }
-}
 
 
 

@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Model.File;
 using Gcd.Services;
+using McMaster.Extensions.CommandLineUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,9 @@ namespace Gcd.Model.FeedDefinition;
 
 public record FeedDefinitionSmb : IFeedDefinition
 {
+    SmbShareAddress SmbShareAddress { get; }
+    SmbUserName SmbUserName { get; }
+    SmbPassword SmbPassword { get; }
     public SmbDir Feed { get; }
     public SmbPath Package { get; }
     public SmbPath PackageGz { get; }
@@ -21,22 +25,25 @@ public record FeedDefinitionSmb : IFeedDefinition
     IFileDescriptor IFeedDefinition.PackageGz => PackageGz;
     IFileDescriptor IFeedDefinition.PackageStamps => PackageStamps;
 
-    public static Result<FeedDefinitionSmb> Of(AzBlobFeedUri feedUri)
+    public static Result<FeedDefinitionSmb> Of(SmbShareAddress smbaddress, SmbUserName smbUserName, SmbPassword smbPassword)
     {
-        var feed = SmbDir.Of(feedUri.Full);
-        var package = SmbPath.Of($"{feedUri.BaseUri}/Packages{feedUri.Query}");
-        var packageGz = SmbPath.Of($"{feedUri.BaseUri}/Packages.gz{feedUri.Query}");
-        var packageStamps = SmbPath.Of($"{feedUri.BaseUri}/Packages.stamps{feedUri.Query}");
+        var feed = SmbDir.Of(smbaddress.Value);
+        var package = SmbPath.Of($"{smbaddress.Value}\\Packages");
+        var packageGz = SmbPath.Of($"{smbaddress.Value}\\Packages.gz");
+        var packageStamps = SmbPath.Of($"{smbaddress.Value}\\Packages.stamps");
         return Result
             .Combine(feed, package, packageGz, packageStamps)
-            .Map(() => new FeedDefinitionSmb(feed.Value, package.Value, packageGz.Value, packageStamps.Value));
+            .Map(() => new FeedDefinitionSmb(feed.Value, package.Value, packageGz.Value, packageStamps.Value,smbaddress,smbPassword,smbUserName));
     }
-    private FeedDefinitionSmb(SmbDir feed, SmbPath package, SmbPath packageGz, SmbPath packageStamps)
+    private FeedDefinitionSmb(SmbDir feed, SmbPath package, SmbPath packageGz, SmbPath packageStamps, SmbShareAddress shareAddress, SmbPassword smbPassword, SmbUserName smbUserName)
     {
         Feed = feed;
         Package = package;
         PackageGz = packageGz;
         PackageStamps = packageStamps;
+        SmbPassword = smbPassword;
+        SmbUserName = smbUserName;
+        SmbShareAddress = shareAddress;
     }
 }
 
@@ -71,3 +78,40 @@ public record SmbDir : IDirectoryDescriptor
     public string BaseUri { get => _uri.GetLeftPart(UriPartial.Path); }
     public string Query { get => _uri.Query; }
 }
+
+
+public record SmbUserName
+{
+    public static Result<SmbUserName> Of(Maybe<string> UserName)
+    {
+        return UserName.ToResult($"{nameof(SmbUserName)} cannot be empty")
+            .Map(x => new SmbUserName(x));
+    }
+    public SmbUserName(string value) => Value = value;
+    public string Value { get; }
+}
+
+public record SmbPassword
+{
+    public static Result<SmbPassword> Of(Maybe<string> UserName)
+    {
+        return UserName.ToResult($"{nameof(SmbPassword)} cannot be empty")
+            .Map(x => new SmbPassword(x));
+    }
+    private SmbPassword(string value) => Value = value;
+    public string Value { get; }
+}
+
+public record SmbShareAddress
+{
+    public static Result<SmbShareAddress> Of(Maybe<string> UserName)
+    {
+        return UserName.ToResult($"{nameof(GitRepoAddress)} cannot be empty")
+            .Map(x => new SmbShareAddress(x));
+    }
+    private SmbShareAddress(string value) => Value = value;
+    public string Value { get; }
+}
+
+
+
