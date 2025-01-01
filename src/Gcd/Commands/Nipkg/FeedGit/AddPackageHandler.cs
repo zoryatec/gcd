@@ -4,30 +4,15 @@ using Gcd.Model;
 using MediatR;
 using Gcd.Model.Config;
 using Gcd.Services.FileSystem;
-using System.IO.Compression;
 using Gcd.Model.File;
 using Gcd.Model.FeedDefinition;
 using Gcd.Services.RemoteFileSystem;
 using LibGit2Sharp;
-using System.Reflection.Metadata;
 using Gcd.Handlers.Nipkg.FeedLocal;
 using Gcd.Handlers.Nipkg.RemoteFeed;
 
 namespace Gcd.Commands.Nipkg.FeedGit;
 
-//public static class MediatorExtensions
-//{
-//    public static async Task<Result> AddToGitlFeedAsync(this IMediator mediator,
-//        FeedDefinitionGit feedDefinition,
-//        IPackageFileDescriptor packageFileDescriptor,
-//        NipkgCmdPath CmdPath,
-//        UseAbsolutePath useAbsolutePath,
-//        bool createFeed = false,
-//        CancellationToken cancellationToken = default)
-//        => await mediator.Send(new AddPackageRequest(feedDefinition, packageFileDescriptor, createFeed, useAbsolutePath, CmdPath), cancellationToken);
-//}
-
-//public record AddPackageRequest(FeedDefinitionGit FeedDefinition, IPackageFileDescriptor PackagePath,bool createFeed, UseAbsolutePath useAbsolutePath, NipkgCmdPath CmdPath) : IRequest<Result>;
 public record AddPackageResponse(string Result);
 
 public class AddPackageHandler(
@@ -38,17 +23,17 @@ public class AddPackageHandler(
 {
     public async Task<Result> Handle(AddPackageToRemoteFeedRequest<FeedDefinitionGit> request, CancellationToken cancellationToken)
     {
-        //var (feedDefinition, packagePath, createFeed, useAbs, cmdPath) = request;
+        var (feedDefinition, packagePath, cmdPath, useAbs, createFeed) = request;
 
-        //var localFeedDef = await CreateTempFeedDefinition();
+        var localFeedDef = await CreateTempFeedDefinition();
 
-        //var insideFeedPkgPath = localFeedDef
-        //    .Map((arg) => PackageFilePath.Of(arg.Feed, packagePath.FileName));
+        var insideFeedPkgPath = localFeedDef
+            .Map((arg) => PackageFilePath.Of(arg.Feed, packagePath.FileName));
 
-        //return await Result.Combine(localFeedDef, insideFeedPkgPath)
-        //    .Bind(() => PullFeed(feedDefinition,localFeedDef.Value.Feed))
-        //    .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value, packagePath, cmdPath, useAbs, createFeed: true))
-        //    .Bind(() => PushFeed(feedDefinition,localFeedDef.Value.Feed));
+        return await Result.Combine(localFeedDef, insideFeedPkgPath)
+            .Bind(() => PullFeed(feedDefinition, localFeedDef.Value.Feed))
+            .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value, packagePath, cmdPath, useAbs, createFeed: true))
+            .Bind(() => PushFeed(feedDefinition, localFeedDef.Value.Feed));
         return Result.Success();
     }
 
