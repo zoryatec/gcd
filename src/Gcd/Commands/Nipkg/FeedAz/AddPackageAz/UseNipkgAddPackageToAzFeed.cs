@@ -30,8 +30,7 @@ public static class UseNipkgAddPackageToAzFeedCmdExtensions
 
                 return await Result
                     .Combine(azFeedDef, pathToPackage)
-                    .Map(() => new AddPackageToAzFeedRequest(azFeedDef.Value, pathToPackage.Value, cmdPath))
-                    .Bind((req1) => mediator.Send(req1, cancelationToken))
+                    .Bind(() => mediator.AddPackageToRemoteFeedAsync(azFeedDef.Value, pathToPackage.Value, cmdPath, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

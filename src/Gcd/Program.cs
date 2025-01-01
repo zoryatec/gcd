@@ -31,6 +31,8 @@ namespace Gcd
                 .AddScoped<IWebDownload, WebDownload>()
                 .AddScoped<IFileSystem, LocalFileService>()
                 .AddScoped<IRemoteFileSystem,RemoteFileSystem>()
+                .AddScoped<RemoteFileSystemSmb, RemoteFileSystemSmb>()
+                .AddScoped<RemoteFileSystemGit, RemoteFileSystemGit>()
                 .RegisterInstructions()
                 .RegisterConfiguration()
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()

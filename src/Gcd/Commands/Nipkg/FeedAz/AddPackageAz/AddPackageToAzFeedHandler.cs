@@ -54,5 +54,11 @@ public class AddPackageToAzFeedHandler(
     }
 }
 
+public static class MediatorExtensions
+{
+    public static async Task<Result> AddPackageToRemoteFeedAsync(this IMediator mediator, IFeedDefinition remoteFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath cmdPath, CancellationToken cancellationToken = default)
+        => await mediator.Send(new AddPackageToAzFeedRequest(remoteFeedDef, PackagePath,cmdPath), cancellationToken);
+}
+
 
 

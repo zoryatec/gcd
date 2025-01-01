@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;
 using System;
 using System.Collections.Generic;
@@ -8,19 +9,19 @@ using System.Threading.Tasks;
 
 namespace Gcd.Services.RemoteFileSystem
 {
-    public class RemoteFileSystemSmb : IRemoteFileSystem
+    public class RemoteFileSystemSmb
     {
-        public Result<IFileDescriptor> CreateFileDescriptor(IDirectoryDescriptor dirDescriptor, FileName fileName)
+        public Result<IFileDescriptor> CreateFileDescriptor(SmbDir dirDescriptor, FileName fileName)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result> DownloadFileAsync(IFileDescriptor sourceDescriptor, LocalFilePath destinationPath, bool overwrite = false)
+        public Task<Result> DownloadFileAsync(SmbPath sourceDescriptor, LocalFilePath destinationPath, bool overwrite = false)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result> UploadFileAsync(IFileDescriptor sourceDescriptor, LocalFilePath sourcePath, bool overwrite = false)
+        public Task<Result> UploadFileAsync(SmbPath sourceDescriptor, LocalFilePath sourcePath, bool overwrite = false)
         {
             throw new NotImplementedException();
         }

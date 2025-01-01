@@ -25,6 +25,8 @@ namespace Gcd.Tests
                 .AddSingleton<IWebDownload, WebDownload>()
                 .AddScoped<IFileSystem, LocalFileService>()
                 .AddScoped<IRemoteFileSystem, RemoteFileSystem>()
+                .AddScoped<RemoteFileSystemSmb, RemoteFileSystemSmb>()
+                .AddScoped<RemoteFileSystemGit, RemoteFileSystemGit>()
                 .RegisterInstructions()
                 .RegisterConfiguration()
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
