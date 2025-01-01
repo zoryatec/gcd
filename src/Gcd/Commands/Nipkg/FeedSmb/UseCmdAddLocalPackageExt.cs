@@ -8,6 +8,7 @@ using Gcd.Model;
 using Gcd.Model.Config;
 using Gcd.Model.FeedDefinition;
 using Gcd.Handlers.Nipkg.RemoteFeed;
+using Gcd.Handlers.Nipkg.FeedLocal;
 
 namespace Gcd.Commands.Nipkg.FeedSmb;
 
@@ -39,7 +40,7 @@ public static class UseCmdAddLocalPackageExt
                 return await Result
                     .Combine(smbShare, smbUser, smbPassword, pathToPackage)
                     .Bind(() => FeedDefinitionSmb.Of(smbShare.Value, smbUser.Value, smbPassword.Value))
-                    .Bind((feedDef) => mediator.AddPackageToRemoteFeedAsync(feedDef, pathToPackage.Value, cmdPath, cancelationToken))
+                    .Bind((feedDef) => mediator.AddPackageToRemoteFeedAsync(feedDef, pathToPackage.Value, cmdPath, UseAbsolutePath.No, false, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

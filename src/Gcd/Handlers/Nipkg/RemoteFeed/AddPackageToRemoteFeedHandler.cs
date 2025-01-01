@@ -12,9 +12,14 @@ using Gcd.Handlers.Nipkg.FeedLocal;
 
 namespace Gcd.Handlers.Nipkg.RemoteFeed;
 
-public record AddPackageToRemoteFeedRequest<TFeedDefinition>(TFeedDefinition AzFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath CmdPath) 
-        : IRequest<Result> where TFeedDefinition : IFeedDefinition;
-public record AddPackageToRemoteFeedResponse(string Result);
+public record AddPackageToRemoteFeedRequest<TFeedDefinition>(
+    TFeedDefinition AzFeedDef,
+    IPackageFileDescriptor PackagePath,
+    NipkgCmdPath CmdPath,
+    UseAbsolutePath useAbsolutePath,
+    bool createFeed = false
+    )
+    : IRequest<Result> where TFeedDefinition : IFeedDefinition;
 
 public class AddPackageToRemoteFeedHandler(
     IMediator _mediator,
@@ -24,7 +29,7 @@ public class AddPackageToRemoteFeedHandler(
 {
     public async Task<Result> Handle(AddPackageToRemoteFeedRequest<FeedDefinitionAzBlob> request, CancellationToken cancellationToken)
     {
-        var (azFeedDef, packagePath, cmdPath) = request;
+        var (azFeedDef, packagePath, cmdPath, useAbs, createFeed) = request;
 
         var localFeedDef = await CreateTempFeedDefinition();
 
@@ -33,7 +38,7 @@ public class AddPackageToRemoteFeedHandler(
 
         return await Result.Combine(localFeedDef, insideFeedPkgPath)
             .Bind(() => _mediator.PullFeedMetaAsync(azFeedDef, localFeedDef.Value))
-            .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value, packagePath, cmdPath, UseAbsolutePath.No))
+            .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value, packagePath, cmdPath, useAbs, createFeed))
             .Bind(() => _mediator.PushFeedMetaDataAsync(azFeedDef, localFeedDef.Value, cancellationToken))
             .Bind(() => UploadPackage(azFeedDef.Feed, insideFeedPkgPath.Value));
     }
@@ -55,8 +60,14 @@ public class AddPackageToRemoteFeedHandler(
 
 public static class MediatorExtensions
 {
-    public static async Task<Result> AddPackageToRemoteFeedAsync<TFeedDefinition>(this IMediator mediator, TFeedDefinition remoteFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath cmdPath, CancellationToken cancellationToken = default) where TFeedDefinition : IFeedDefinition
-        => await mediator.Send(new AddPackageToRemoteFeedRequest<TFeedDefinition>(remoteFeedDef, PackagePath, cmdPath), cancellationToken);
+    public static async Task<Result> AddPackageToRemoteFeedAsync<TFeedDefinition>(this IMediator mediator,
+        TFeedDefinition remoteFeedDef,
+        IPackageFileDescriptor PackagePath,
+        NipkgCmdPath cmdPath,
+        UseAbsolutePath useAbsolutePath,
+        bool createFeed = false,
+        CancellationToken cancellationToken = default) where TFeedDefinition : IFeedDefinition
+        => await mediator.Send(new AddPackageToRemoteFeedRequest<TFeedDefinition>(remoteFeedDef, PackagePath, cmdPath, useAbsolutePath, createFeed), cancellationToken);
 }
 
 
