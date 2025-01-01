@@ -3,17 +3,17 @@ using Gcd.Model.File;
 
 namespace Gcd.Model.FeedDefinition;
 
-public record FeedDefinitionLocal : IFeedDefinition
+public record FeedDefinitionLocal
 {
     public LocalDirPath Feed { get; }
     public LocalFilePath Package { get; }
     public LocalFilePath PackageGz { get; }
     public LocalFilePath PackageStamps { get; }
 
-    IFileDescriptor IFeedDefinition.Package => Package;
-    IFileDescriptor IFeedDefinition.PackageGz => PackageGz;
-    IFileDescriptor IFeedDefinition.PackageStamps => PackageStamps;
-    IDirectoryDescriptor IFeedDefinition.Feed => Feed;
+    //IFileDescriptor IFeedDefinition.Package => Package;
+    //IFileDescriptor IFeedDefinition.PackageGz => PackageGz;
+    //IFileDescriptor IFeedDefinition.PackageStamps => PackageStamps;
+    //IDirectoryDescriptor IFeedDefinition.Feed => Feed;
 
     public static Result<FeedDefinitionLocal> Of(LocalDirPath feedDirPath)
     {
