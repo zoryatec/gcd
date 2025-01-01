@@ -51,10 +51,6 @@
 		</Content>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Tests\Nipkg\FeedSmb\" />
-	</ItemGroup>
-
 
 	<Target Name="CopyDirectoryToBuildOutput" AfterTargets="Build">
 		<Copy SourceFiles="@(testdata)" DestinationFolder="$(OutDir)testdata\%(RecursiveDir)" SkipUnchangedFiles="false" />

@@ -11,7 +11,7 @@ using LibGit2Sharp;
 using Gcd.Handlers.Nipkg.FeedLocal;
 using Gcd.Handlers.Nipkg.RemoteFeed;
 
-namespace Gcd.Commands.Nipkg.FeedGit;
+namespace Gcd.Handlers.Nipkg.FeedGit;
 
 public record AddPackageResponse(string Result);
 
@@ -41,11 +41,11 @@ public class AddPackageHandler(
         await _fs.CreateTempDirPathAsync()
             .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 
-    private async Task<Result> PullFeed(FeedDefinitionGit feedDefinition,LocalDirPath checkoutPath)=>
+    private async Task<Result> PullFeed(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath) =>
         Result.Try(() => CloneRepositoryWithCredentials(feedDefinition, checkoutPath), ex => ex.Message).MapError(errr => $"PULL:{errr}");
 
 
-    public void CloneRepositoryWithCredentials(FeedDefinitionGit feedDefinition,LocalDirPath checkoutPath)
+    public void CloneRepositoryWithCredentials(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath)
     {
         var (address, branch, username, password, _, _) = feedDefinition;
         var fetchOptions = new FetchOptions
@@ -64,12 +64,12 @@ public class AddPackageHandler(
         };
 
         Repository.Clone(address.Value, checkoutPath.Value, cloneOptions);
-        
+
     }
 
     private async Task<Result> PushFeed(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath) =>
        Result.Try(() => CommitAndPush(feedDefinition, checkoutPath)).MapError(errr => $"PUSH:{errr}");
-        
+
 
     public void CommitAndPush(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath)
     {
@@ -104,7 +104,7 @@ public class AddPackageHandler(
         }
     }
 
- }
+}
 
 
 

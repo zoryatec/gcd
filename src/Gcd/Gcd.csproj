@@ -52,7 +52,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Handlers\Nipkg\FeedGit\" />
       <Folder Include="Model\NewFolder\" />
     </ItemGroup>
 

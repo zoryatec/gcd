@@ -27,6 +27,9 @@ namespace Gcd.Tests.EndToEnd
         public string GetGitRepoAddress() => _config["GitRepoAddress"] ?? throw new ArgumentNullException("_config[\"GitRepoAddress\"]");
         public string GetGitPassword() => _config["GitPassword"] ?? throw new ArgumentNullException("_config[\"GitPassword\"] ");
         public string GetGitUserName() => _config["GitUserName"] ?? throw new ArgumentNullException(" _config[\"GitUserName\"]");
+        public string GetSmbRepoAddress() => _config["SmbShareAddress"] ?? throw new ArgumentNullException("_config[\"SmbShareAddress\"]");
+        public string GetSmbPassword() => _config["SmbUserPass"] ?? throw new ArgumentNullException("_config[\"SmbUserPass\"] ");
+        public string GetSmbUserName() => _config["SmbUserName"] ?? throw new ArgumentNullException(" _config[\"SmbUserName\"]");
 
     }
 }

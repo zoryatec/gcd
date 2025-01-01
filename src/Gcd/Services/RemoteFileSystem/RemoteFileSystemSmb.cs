@@ -14,16 +14,21 @@ namespace Gcd.Services.RemoteFileSystem
         public Result<IFileDescriptor> CreateFileDescriptor(SmbDir dirDescriptor, FileName fileName)
         {
             throw new NotImplementedException();
+            //return Result.Success();
         }
 
-        public Task<Result> DownloadFileAsync(SmbPath sourceDescriptor, LocalFilePath destinationPath, bool overwrite = false)
+        public async Task<Result> DownloadFileAsync(SmbPath sourceDescriptor, LocalFilePath destinationPath, bool overwrite = false)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return Result.Success();
+
+
         }
 
-        public Task<Result> UploadFileAsync(SmbPath sourceDescriptor, LocalFilePath sourcePath, bool overwrite = false)
+        public async Task<Result> UploadFileAsync(SmbPath sourceDescriptor, LocalFilePath sourcePath, bool overwrite = false)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            return Result.Success();
         }
     }
 }

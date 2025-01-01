@@ -1,5 +1,6 @@
 ﻿using Gcd.Commands.Nipkg;
 using Gcd.Commands.Nipkg.Builder.Init;
+using Gcd.Model.FeedDefinition;
 
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg.Builder;
 
@@ -29,6 +30,12 @@ public class NipkgArgBuilder : ArgumentsBuilder
         return this;
     }
 
+    public NipkgArgBuilder WithFeedSmbCmd()
+    {
+        WithArg("feed-smb");
+        return this;
+    }
+
     public NipkgArgBuilder WithAddLocalPackageCmd()
     {
         WithArg("add-local-package");
@@ -41,6 +48,24 @@ public class NipkgArgBuilder : ArgumentsBuilder
         return this;
     }
 
+    #region smb
+    public NipkgArgBuilder WithSmbShareAddress(string value)
+    {
+        WithOption(SmbShareAddressOption.NAME, value);
+        return this;
+    }
+    public NipkgArgBuilder WithSmbUserName(string value)
+    {
+        WithOption(SmbUserNameOption.NAME, value);
+        return this;
+    }
+    public NipkgArgBuilder WithSmbUserPassword(string value)
+    {
+        WithOption(SmbPasswordOption.NAME, value);
+        return this;
+    }
+
+    #endregion
 
     // options
     #region git

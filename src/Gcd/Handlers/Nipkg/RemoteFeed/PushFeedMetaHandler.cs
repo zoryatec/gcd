@@ -10,13 +10,14 @@ using MediatR;
 
 namespace Gcd.Handlers.Nipkg.RemoteFeed;
 
-public record NipkgPushAzBlobFeedMetaRequest(IFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDefinition) : IRequest<Result>;
-public record NipkgPushAzBlobFeedMetaRespons(string Result);
+public record PushFeedMetaDataRequest<TFeedDefinition>(IFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDefinition)
+        : IRequest<Result> where TFeedDefinition : IFeedDefinition;
+
 
 public class PushFeedMetaHandler(IFileSystem _fs, IRemoteFileSystem _rfs)
-    : IRequestHandler<NipkgPushAzBlobFeedMetaRequest, Result>
+    : IRequestHandler<PushFeedMetaDataRequest<FeedDefinitionAzBlob>, Result>
 {
-    public async Task<Result> Handle(NipkgPushAzBlobFeedMetaRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(PushFeedMetaDataRequest<FeedDefinitionAzBlob> request, CancellationToken cancellationToken)
     {
         var (azFeedDef, localFeedDef) = request;
         return await _rfs.UploadFileAsync(azFeedDef.Package, localFeedDef.Package)
@@ -27,6 +28,6 @@ public class PushFeedMetaHandler(IFileSystem _fs, IRemoteFileSystem _rfs)
 
 public static class MediatorExtensionsPush
 {
-    public static async Task<Result> PushFeedMetaDataAsync(this IMediator mediator, IFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDef, CancellationToken cancellationToken = default)
-        => await mediator.Send(new NipkgPushAzBlobFeedMetaRequest(FeedDefinition, LocalFeedDef), cancellationToken);
+    public static async Task<Result> PushFeedMetaDataAsync<TFeedDefinition>(this IMediator mediator, TFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDef, CancellationToken cancellationToken = default) where TFeedDefinition : IFeedDefinition
+        => await mediator.Send(new PushFeedMetaDataRequest<TFeedDefinition>(FeedDefinition, LocalFeedDef), cancellationToken);
 }
