@@ -53,7 +53,6 @@
 
     <ItemGroup>
       <Folder Include="Model\NewFolder\" />
-      <Folder Include="Handlers\" />
     </ItemGroup>
 
 </Project>

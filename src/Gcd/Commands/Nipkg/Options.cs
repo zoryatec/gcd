@@ -1,6 +1,6 @@
 ﻿
 using CSharpFunctionalExtensions;
-using Gcd.Commands.Nipkg.FeedLocal.AddPackageLocal;
+using Gcd.Handlers.Nipkg.FeedLocal;
 using Gcd.Model;
 using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;

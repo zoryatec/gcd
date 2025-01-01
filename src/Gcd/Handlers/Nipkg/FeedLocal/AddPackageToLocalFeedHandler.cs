@@ -2,15 +2,13 @@
 using Gcd.Services;
 using Gcd.Model;
 using MediatR;
-using Gcd.Commands.Nipkg.Feed.PullMetaDataAz;
-using Gcd.Commands.Nipkg.Feed.PushMetaDataAz;
 using Gcd.Model.Config;
 using Gcd.Services.FileSystem;
 using System.IO.Compression;
 using Gcd.Model.File;
 using Gcd.Model.FeedDefinition;
 
-namespace Gcd.Commands.Nipkg.FeedLocal.AddPackageLocal;
+namespace Gcd.Handlers.Nipkg.FeedLocal;
 
 public static class MediatorExtensions
 {
@@ -27,7 +25,7 @@ public static class MediatorExtensions
 public record UseAbsolutePath
 {
     private string _value;
-    public UseAbsolutePath(string value) { _value = value;}
+    public UseAbsolutePath(string value) { _value = value; }
 
     public static UseAbsolutePath Yes = new UseAbsolutePath("yes");
     public static UseAbsolutePath No = new UseAbsolutePath("no");
@@ -51,12 +49,12 @@ public class AddPackageToLocalHandler(
 
         var insideFeedPkgPath = PackageFilePath.Of(localFeedDef.Feed, packagePath.FileName);
 
-        var result =  await DownloadFile(packagePath, insideFeedPkgPath, overwrite: true)
+        var result = await DownloadFile(packagePath, insideFeedPkgPath, overwrite: true)
             .Bind(() => _mediator.AddPackageToLcalFeedAsync(localFeedDef, insideFeedPkgPath, cmdPath, createFeed));
 
-        if(result.IsFailure) return result;
+        if (result.IsFailure) return result;
 
-        if(useAbsPath.Equals(UseAbsolutePath.Yes))  return await UpdateToAbsPath(localFeedDef,packagePath);
+        if (useAbsPath.Equals(UseAbsolutePath.Yes)) return await UpdateToAbsPath(localFeedDef, packagePath);
 
         return result;
     }

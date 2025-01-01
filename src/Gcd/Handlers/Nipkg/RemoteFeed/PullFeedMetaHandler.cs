@@ -6,7 +6,7 @@ using Gcd.Services.FileSystem;
 using Gcd.Services.RemoteFileSystem;
 using MediatR;
 
-namespace Gcd.Commands.Nipkg.Feed.PullMetaDataAz;
+namespace Gcd.Handlers.Nipkg.RemoteFeed;
 
 public record PullFeedMetaRequest(IFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDef) : IRequest<Result>;
 
@@ -24,7 +24,7 @@ public class PullFeedMetaHandler(IFileSystem _fs, IRemoteFileSystem _rfs)
 }
 
 
-public static class MediatorExtensions
+public static class MediatorExtensionsPull
 {
     public static async Task<Result> PullFeedMetaAsync(this IMediator mediator, IFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDef, CancellationToken cancellationToken = default)
         => await mediator.Send(new PullFeedMetaRequest(FeedDefinition, LocalFeedDef), cancellationToken);

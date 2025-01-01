@@ -8,7 +8,6 @@ using Gcd.Model;
 using Gcd.Model.Config;
 using Gcd.Commands.Nipkg.Builder.Init;
 using Gcd.Extensions;
-using Gcd.Commands.Nipkg.FeedLocal.AddPackageLocal;
 using Gcd.Model.FeedDefinition;
 
 namespace Gcd.Commands.Nipkg.FeedGit;

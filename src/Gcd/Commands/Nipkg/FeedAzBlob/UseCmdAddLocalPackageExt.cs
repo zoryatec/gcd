@@ -7,12 +7,13 @@ using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
 using Gcd.Model;
 using Gcd.Model.Config;
 using Gcd.Model.FeedDefinition;
+using Gcd.Handlers.Nipkg.RemoteFeed;
 
-namespace Gcd.Commands.Nipkg.Feed.AddPackageAz;
+namespace Gcd.Commands.Nipkg.FeedAzBlob;
 
-public static class UseNipkgAddPackageToAzFeedCmdExtensions
+public static class UseCmdAddLocalPackageExt
 {
-    public static CommandLineApplication UseNipkgAddPackageToAzFeedCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseCmdAddLocalPackage(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();

@@ -8,7 +8,7 @@ using Gcd.Services.RemoteFileSystem;
 using MediatR;
 
 
-namespace Gcd.Commands.Nipkg.Feed.PushMetaDataAz;
+namespace Gcd.Handlers.Nipkg.RemoteFeed;
 
 public record NipkgPushAzBlobFeedMetaRequest(IFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDefinition) : IRequest<Result>;
 public record NipkgPushAzBlobFeedMetaRespons(string Result);
@@ -25,7 +25,7 @@ public class NipkgPushAzBlobFeedMetaHandler(IFileSystem _fs, IRemoteFileSystem _
     }
 }
 
-public static class MediatorExtensions
+public static class MediatorExtensionsPush
 {
     public static async Task<Result> PushFeedMetaDataAsync(this IMediator mediator, IFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDef, CancellationToken cancellationToken = default)
         => await mediator.Send(new NipkgPushAzBlobFeedMetaRequest(FeedDefinition, LocalFeedDef), cancellationToken);

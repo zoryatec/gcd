@@ -7,7 +7,7 @@ using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
 using Gcd.Model;
 using Gcd.Model.Config;
 using Gcd.Model.FeedDefinition;
-using Gcd.Commands.Nipkg.Feed.AddPackageAz;
+using Gcd.Handlers.Nipkg.RemoteFeed;
 
 namespace Gcd.Commands.Nipkg.FeedSmb;
 

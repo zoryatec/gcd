@@ -1,13 +1,10 @@
-﻿using Gcd.Commands.Nipkg.Feed.AddPackageAz;
-using Gcd.Commands.Nipkg.Feed.PullMetaDataAz;
-using Gcd.Commands.Nipkg.Feed.PushMetaDataAz;
-using McMaster.Extensions.CommandLineUtils;
+﻿using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
 
 namespace Gcd.Commands.Nipkg.FeedAzBlob;
 
-public static class UseMenuFeedAzBlobExtension
+public static class UseMenuFeedAzBlobExt
 {
     public static CommandLineApplication UseFeedAzBlob(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
@@ -22,9 +19,9 @@ public static class UseMenuFeedAzBlobExtension
                 return 1;
             });
 
-            cmd.UseNipkgAddPackageToAzFeedCmd(serviceProvider);
-            cmd.UsePullFeedMetaCmd(serviceProvider);
-            cmd.UseNipkgPushAzBlobFeedMetaCmd(serviceProvider);
+            cmd.UseCmdAddLocalPackage(serviceProvider);
+            cmd.UseCmdPullMetaData(serviceProvider);
+            cmd.UseCmdPushMetaData(serviceProvider);
 
         });
 

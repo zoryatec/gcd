@@ -11,7 +11,7 @@ using static Gcd.Contract.Nipkg.PackageBuild;
 
 namespace Gcd.Commands.Nipkg.Build;
 
-public static class UseBuildExtension
+public static class UseCmdBuildExtension
 {
     public static CommandLineApplication UseCmdBuild(this CommandLineApplication app, IServiceProvider serviceProvider)
     {

@@ -1,10 +1,9 @@
-﻿using Gcd.Commands.Nipkg.FeedLocal.AddPackageLocal;
-using McMaster.Extensions.CommandLineUtils;
+﻿using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Gcd.Commands.Nipkg.FeedLocal;
 
-public static class UseMenuFeedLocalExtension
+public static class UseMenuFeedLocalExt
 {
     public static CommandLineApplication UseFeedLocal(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
@@ -19,8 +18,8 @@ public static class UseMenuFeedLocalExtension
                 return 1;
             });
 
-            cmd.UseAddLocalPackageCmd(serviceProvider);
-            cmd.UseAddHttpPackageCmd(serviceProvider);
+            cmd.UseCmdAddLocalPackage(serviceProvider);
+            cmd.UseCmdAddHttpPackage(serviceProvider);
 
         });
 

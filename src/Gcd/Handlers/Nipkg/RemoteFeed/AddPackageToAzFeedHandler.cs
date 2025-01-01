@@ -2,17 +2,15 @@
 using Gcd.Services;
 using Gcd.Model;
 using MediatR;
-using Gcd.Commands.Nipkg.Feed.PullMetaDataAz;
-using Gcd.Commands.Nipkg.Feed.PushMetaDataAz;
 using Gcd.Model.Config;
 using Gcd.Services.FileSystem;
 using System.IO.Compression;
 using Gcd.Model.File;
-using Gcd.Commands.Nipkg.FeedLocal.AddPackageLocal;
 using Gcd.Model.FeedDefinition;
 using Gcd.Services.RemoteFileSystem;
+using Gcd.Handlers.Nipkg.FeedLocal;
 
-namespace Gcd.Commands.Nipkg.Feed.AddPackageAz;
+namespace Gcd.Handlers.Nipkg.RemoteFeed;
 
 public record AddPackageToAzFeedRequest(IFeedDefinition AzFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath CmdPath) : IRequest<Result>;
 public record AddPackageToAzFeedResponse(string Result);
@@ -34,7 +32,7 @@ public class AddPackageToAzFeedHandler(
 
         return await Result.Combine(localFeedDef, insideFeedPkgPath)
             .Bind(() => _mediator.PullFeedMetaAsync(azFeedDef, localFeedDef.Value))
-            .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value,packagePath, cmdPath, UseAbsolutePath.No))
+            .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value, packagePath, cmdPath, UseAbsolutePath.No))
             .Bind(() => _mediator.PushFeedMetaDataAsync(azFeedDef, localFeedDef.Value, cancellationToken))
             .Bind(() => UploadPackage(azFeedDef.Feed, insideFeedPkgPath.Value));
     }
@@ -57,7 +55,7 @@ public class AddPackageToAzFeedHandler(
 public static class MediatorExtensions
 {
     public static async Task<Result> AddPackageToRemoteFeedAsync(this IMediator mediator, IFeedDefinition remoteFeedDef, IPackageFileDescriptor PackagePath, NipkgCmdPath cmdPath, CancellationToken cancellationToken = default)
-        => await mediator.Send(new AddPackageToAzFeedRequest(remoteFeedDef, PackagePath,cmdPath), cancellationToken);
+        => await mediator.Send(new AddPackageToAzFeedRequest(remoteFeedDef, PackagePath, cmdPath), cancellationToken);
 }
 
 
