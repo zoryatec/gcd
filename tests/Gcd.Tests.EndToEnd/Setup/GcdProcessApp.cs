@@ -1,12 +1,16 @@
-﻿using Gcd.Commands.Nipkg.Builder.SetProperty;
+﻿using CSharpFunctionalExtensions;
+using Gcd.Commands.Nipkg.Builder.SetProperty;
+using Gcd.Handlers.Nipkg.Shared;
 using Gcd.LabViewProject;
 using Gcd.Menu;
 using Gcd.Model.Config;
+using Gcd.Model.FeedDefinition;
 using Gcd.Services;
 using Gcd.Services.DI;
 using Gcd.Services.FileSystem;
 using Gcd.Services.RemoteFileSystem;
 using McMaster.Extensions.CommandLineUtils;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Gcd.Tests
@@ -35,7 +39,9 @@ namespace Gcd.Tests
                 .AddMediatR(config =>
                 {
                     config.RegisterServicesFromAssembly(assembly);
-                });
+                })
+               .AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionAzBlob>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionAzBlob>))
+               .AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionGit>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionGit>));
 
             var serviceProvider = services.BuildServiceProvider();
 

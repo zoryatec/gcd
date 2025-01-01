@@ -18,13 +18,14 @@ public record AddPackageToRemoteFeedRequest<TFeedDefinition>(
     )
     : IRequest<Result> where TFeedDefinition : IFeedDefinition;
 
-public class AddPackageToRemoteFeedHandler(
+public class AddPackageToRemoteFeedHandler<TFeedDefinition>(
     IMediator _mediator,
     IFileSystem _fs,
     IRemoteFileSystem _rfs)
-    : IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionAzBlob>, Result>
+    : IRequestHandler<AddPackageToRemoteFeedRequest<TFeedDefinition>,Result> where TFeedDefinition : IFeedDefinition
+
 {
-    public async Task<Result> Handle(AddPackageToRemoteFeedRequest<FeedDefinitionAzBlob> request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(AddPackageToRemoteFeedRequest<TFeedDefinition> request, CancellationToken cancellationToken)
     {
         var (azFeedDef, packagePath, cmdPath, useAbs, createFeed) = request;
 

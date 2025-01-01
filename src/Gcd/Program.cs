@@ -10,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Gcd.Services.DI;
 using Gcd.Services.FileSystem;
 using Gcd.Services.RemoteFileSystem;
+using CSharpFunctionalExtensions;
+using Gcd.Handlers.Nipkg.Shared;
+using Gcd.Model.FeedDefinition;
 
 
 namespace Gcd
@@ -41,8 +44,10 @@ namespace Gcd
                 .AddMediatR(config =>
                 {
                     config.RegisterServicesFromAssembly(assembly);
-                });
-            
+                })
+               .AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionAzBlob>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionAzBlob>))
+               .AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionGit>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionGit>));
+
             var serviceProvider = services.BuildServiceProvider();
             var console = serviceProvider.GetRequiredService<IConsole>();
 
