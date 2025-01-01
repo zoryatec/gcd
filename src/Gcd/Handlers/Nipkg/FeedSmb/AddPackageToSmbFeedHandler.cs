@@ -9,7 +9,7 @@ using Gcd.Model.File;
 using Gcd.Model.FeedDefinition;
 using Gcd.Services.RemoteFileSystem;
 using Gcd.Handlers.Nipkg.FeedLocal;
-using Gcd.Handlers.Nipkg.RemoteFeed;
+using Gcd.Handlers.Nipkg.Shared;
 
 namespace Gcd.Handlers.Nipkg.FeedSmb;
 

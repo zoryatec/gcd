@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
-using Gcd.Handlers.Nipkg.RemoteFeed;
+using Gcd.Handlers.Nipkg.Shared;
 using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;
 using Gcd.Services.FileSystem;
@@ -12,9 +12,9 @@ using MediatR;
 namespace Gcd.Handlers.Nipkg.FeedGit;
 
 public class PushFeedMetaHandler(IFileSystem _fs, RemoteFileSystemGit _rfs)
-    : IRequestHandler<PushFeedMetaDataRequest<FeedDefinitionGit>, Result>
+    : IRequestHandler<PushFeedMetaRequest<FeedDefinitionGit>, Result>
 {
-    public async Task<Result> Handle(PushFeedMetaDataRequest<FeedDefinitionGit> request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(PushFeedMetaRequest<FeedDefinitionGit> request, CancellationToken cancellationToken)
     {
         var (remoteFeedDef, localFeedDef) = request;
         return await PushFeed(remoteFeedDef, localFeedDef.Feed);

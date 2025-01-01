@@ -10,7 +10,7 @@ using Gcd.Model.Config;
 using Gcd.Commands.Nipkg.Builder.Init;
 using Gcd.Extensions;
 using Gcd.Model.FeedDefinition;
-using Gcd.Handlers.Nipkg.RemoteFeed;
+using Gcd.Handlers.Nipkg.Shared;
 
 namespace Gcd.Commands.Nipkg.FeedGit;
 

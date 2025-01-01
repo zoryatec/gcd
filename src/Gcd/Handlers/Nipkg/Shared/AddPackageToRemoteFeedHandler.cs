@@ -1,16 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Services;
 using Gcd.Model;
 using MediatR;
 using Gcd.Model.Config;
 using Gcd.Services.FileSystem;
-using System.IO.Compression;
-using Gcd.Model.File;
 using Gcd.Model.FeedDefinition;
 using Gcd.Services.RemoteFileSystem;
 using Gcd.Handlers.Nipkg.FeedLocal;
 
-namespace Gcd.Handlers.Nipkg.RemoteFeed;
+namespace Gcd.Handlers.Nipkg.Shared;
 
 public record AddPackageToRemoteFeedRequest<TFeedDefinition>(
     TFeedDefinition AzFeedDef,
@@ -40,35 +37,12 @@ public class AddPackageToRemoteFeedHandler(
             .Bind(() => _mediator.PullFeedMetaAsync(azFeedDef, localFeedDef.Value))
             .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value, packagePath, cmdPath, useAbs, createFeed))
             .Bind(() => _mediator.PushFeedMetaDataAsync(azFeedDef, localFeedDef.Value, cancellationToken))
-            .Bind(() => UploadPackage(azFeedDef.Feed, insideFeedPkgPath.Value));
+            .Bind(() => _mediator.UploadPackageAsync(azFeedDef, insideFeedPkgPath.Value));
     }
 
     private async Task<Result<FeedDefinitionLocal>> CreateTempFeedDefinition() =>
         await _fs.CreateTempDirPathAsync()
             .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 
-
-    private async Task<Result> UploadPackage(IDirectoryDescriptor dirDescriptor, PackageFilePath packagePath)
-    {
-
-        var blorUriRes = _rfs.CreateFileDescriptor(dirDescriptor, packagePath.FileName);
-
-        var result = await _rfs.UploadFileAsync(blorUriRes.Value, packagePath);
-        return result;
-    }
 }
-
-public static class MediatorExtensions
-{
-    public static async Task<Result> AddPackageToRemoteFeedAsync<TFeedDefinition>(this IMediator mediator,
-        TFeedDefinition remoteFeedDef,
-        IPackageFileDescriptor PackagePath,
-        NipkgCmdPath cmdPath,
-        UseAbsolutePath useAbsolutePath,
-        bool createFeed = false,
-        CancellationToken cancellationToken = default) where TFeedDefinition : IFeedDefinition
-        => await mediator.Send(new AddPackageToRemoteFeedRequest<TFeedDefinition>(remoteFeedDef, PackagePath, cmdPath, useAbsolutePath, createFeed), cancellationToken);
-}
-
-
 

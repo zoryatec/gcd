@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Handlers.Nipkg.RemoteFeed;
+using Gcd.Handlers.Nipkg.Shared;
 using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;
 using Gcd.Services.FileSystem;
