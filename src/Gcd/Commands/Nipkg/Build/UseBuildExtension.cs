@@ -11,9 +11,9 @@ using static Gcd.Contract.Nipkg.PackageBuild;
 
 namespace Gcd.Commands.Nipkg.Build;
 
-public static class UseNipkgPackageBuildCmdExtensions
+public static class UseBuildExtension
 {
-    public static CommandLineApplication UseNipkgPackageBuildCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseCmdBuild(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
