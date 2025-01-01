@@ -8,12 +8,16 @@ using MediatR;
 
 namespace Gcd.Handlers.Nipkg.RemoteFeed;
 
-public record PullFeedMetaRequest(IFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDef) : IRequest<Result>;
+//public record PullFeedMetaRequest(IFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDef) : IRequest<Result>;
+
+
+public record PullFeedMetaRequest<TFeedDefinition>(TFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDef)
+    : IRequest<Result> where TFeedDefinition : IFeedDefinition;
 
 public class PullFeedMetaHandler(IFileSystem _fs, IRemoteFileSystem _rfs)
-    : IRequestHandler<PullFeedMetaRequest, Result>
+    : IRequestHandler<PullFeedMetaRequest<FeedDefinitionAzBlob>, Result>
 {
-    public async Task<Result> Handle(PullFeedMetaRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(PullFeedMetaRequest<FeedDefinitionAzBlob> request, CancellationToken cancellationToken)
     {
         var (azFeedDef, localFeedDef) = request;
         return await _fs.CreateDirAsync(localFeedDef.Feed)
@@ -26,6 +30,6 @@ public class PullFeedMetaHandler(IFileSystem _fs, IRemoteFileSystem _rfs)
 
 public static class MediatorExtensionsPull
 {
-    public static async Task<Result> PullFeedMetaAsync(this IMediator mediator, IFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDef, CancellationToken cancellationToken = default)
-        => await mediator.Send(new PullFeedMetaRequest(FeedDefinition, LocalFeedDef), cancellationToken);
+    public static async Task<Result> PullFeedMetaAsync<TFeedDefinition>(this IMediator mediator, TFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDef, CancellationToken cancellationToken = default) where TFeedDefinition: IFeedDefinition
+        => await mediator.Send(new PullFeedMetaRequest<TFeedDefinition>(FeedDefinition, LocalFeedDef), cancellationToken);
 }
