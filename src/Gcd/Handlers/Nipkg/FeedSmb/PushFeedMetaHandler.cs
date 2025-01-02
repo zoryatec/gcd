@@ -9,7 +9,7 @@ using MediatR;
 
 namespace Gcd.Handlers.Nipkg.FeedSmb;
 
-public class PushFeedMetaHandler(IFileSystem _fs, IRemoteFileSystem _rfs)
+public class PushFeedMetaHandler(IFileSystem _fs, RemoteFileSystemSmb _rfs)
     : IRequestHandler<PushFeedMetaRequest<FeedDefinitionSmb>, Result>
 {
     public async Task<Result> Handle(PushFeedMetaRequest<FeedDefinitionSmb> request, CancellationToken cancellationToken)
