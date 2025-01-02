@@ -18,8 +18,10 @@ public static class UseMenuFeedGitlExt
                 return 1;
             });
 
-            cmd.UseAddLocalPackageToGitCmd(serviceProvider);
-            cmd.UseAddHttpPackageCmdToGit(serviceProvider);
+            cmd.UseCmdAddLocalPackage(serviceProvider);
+            cmd.UseCmdAddHttpPackage(serviceProvider);
+            cmd.UseCmdPullFeedMeta(serviceProvider);
+            cmd.UseCmdPushFeedMeta(serviceProvider);
         });
 
         return app;

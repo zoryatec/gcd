@@ -1,30 +1,27 @@
-
-using McMaster.Extensions.CommandLineUtils;
+﻿using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
-using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
-using Gcd.Model;
 using Gcd.Model.Config;
-using Gcd.Commands.Nipkg.Builder.Init;
 using Gcd.Extensions;
 using Gcd.Model.FeedDefinition;
 using Gcd.Handlers.Nipkg.Shared;
 
 namespace Gcd.Commands.Nipkg.FeedGit;
 
-public static class UseAddHttpPackageCmdExtensions
+public static class UUseAddLocalPackageCmdExtensions
 {
-    public static CommandLineApplication UseAddHttpPackageCmdToGit(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static string SUCESS_MESSAGE = "success";
+    public static CommandLineApplication UseCmdAddLocalPackage(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
-        app.Command("add-http-package", cmd =>
+        app.Command("add-local-package", cmd =>
         {
             cmd.Description = "add local package to local feed";
 
-            var locPathOpt = new PackageHttpPathOption();
+            var locPathOpt = new PackageLocalPathOption();
             var gitRepoAddressOpt = new GitRepoAddressOption();
             var gitUserNameOpt = new GitUserNameOption();
             var gitPasswordOpt = new GitPasswordOption();
@@ -48,7 +45,7 @@ public static class UseAddHttpPackageCmdExtensions
 
             cmd.OnExecuteAsync(async cancelationToken =>
             {
-                var locPath = locPathOpt.ToPackageHttpPath();
+                var locPath = locPathOpt.ToPackageLocalPath();
                 var gitRepoAddress = gitRepoAddressOpt.Map();
                 var gitUserName = gitUserNameOpt.Map();
                 var gitPassword = gitPasswordOpt.Map();
@@ -61,7 +58,7 @@ public static class UseAddHttpPackageCmdExtensions
 
                 return await Result
                     .Combine(locPath, gitRepoAddress, gitUserName, gitPassword, gitCommiterName, gitCommiterEmail, giBranchName)
-                    .Bind(() => Result.Success(new FeedDefinitionGit(gitRepoAddress.Value, giBranchName.Value, gitUserName.Value, gitPassword.Value, gitCommiterName.Value, gitCommiterEmail.Value)))
+                    .Bind(() => Result.Success(new FeedDefinitionGit(gitRepoAddress.Value, giBranchName.Value,gitUserName.Value,gitPassword.Value,gitCommiterName.Value,gitCommiterEmail.Value)))
                     .Bind((x) => mediator.AddPackageToRemoteFeedAsync(x, locPath.Value, cmdPath, useAbs, feedCreate, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
@@ -72,8 +69,3 @@ public static class UseAddHttpPackageCmdExtensions
         return app;
     }
 }
-
-
-
-
-

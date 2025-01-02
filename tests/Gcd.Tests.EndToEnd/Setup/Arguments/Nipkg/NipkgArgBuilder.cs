@@ -48,6 +48,18 @@ public class NipkgArgBuilder : ArgumentsBuilder
         return this;
     }
 
+    public NipkgArgBuilder WithPullMetaData()
+    {
+        WithArg("pull-meta-data");
+        return this;
+    }
+
+    public NipkgArgBuilder WithPushMetaData()
+    {
+        WithArg("push-meta-data");
+        return this;
+    }
+
     #region smb
     public NipkgArgBuilder WithSmbShareAddress(string value)
     {

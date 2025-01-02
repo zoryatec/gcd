@@ -21,12 +21,11 @@ public class PushFeedMetaHandler(IFileSystem _fs, RemoteFileSystemGit _rfs)
         var checkoutFeed = FeedDefinitionLocal.Of(_rfs.GlobalCheckoutDir);
 
         return await checkoutFeed
+        //.Bind((x) => _rfs.Clone(remoteFeedDef.Address, remoteFeedDef.BrancName, remoteFeedDef.UserName, remoteFeedDef.Password))
         .Bind((x) => _fs.CopyFileAsync(localFeedDef.Package, checkoutFeed.Value.Package, overwrite: true))
         .Bind(() => _fs.CopyFileAsync( localFeedDef.PackageGz, checkoutFeed.Value.PackageGz, overwrite: true))
         .Bind(() => _fs.CopyFileAsync(localFeedDef.PackageStamps,checkoutFeed.Value.PackageStamps, overwrite: true))
         .Bind(() => _rfs.Push(remoteFeedDef.Address, remoteFeedDef.BrancName, remoteFeedDef.UserName, remoteFeedDef.Password, remoteFeedDef.CommitterName, remoteFeedDef.CommitterEmail));
-
-        //return await PushFeed(remoteFeedDef, localFeedDef.Feed);
     }
 
     private async Task<Result> PushFeed(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath) =>

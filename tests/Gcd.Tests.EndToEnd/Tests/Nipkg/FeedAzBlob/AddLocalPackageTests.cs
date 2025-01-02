@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Gcd.Tests.EndToEnd.Nipkg.Feed;
 
-public class AddToAzFeedTests(TestFixture testFixture) : BaseTest(testFixture)
+public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
     [Fact]
