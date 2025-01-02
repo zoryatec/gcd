@@ -1,14 +1,6 @@
 ﻿using FluentAssertions;
-using Gcd.Model.Config;
-using Gcd.Tests.EndToEnd.Arguments.Nipkg;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg.Builder;
 using Gcd.Tests.EndToEnd.Setup;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gcd.Tests.EndToEnd.Nipkg;
 

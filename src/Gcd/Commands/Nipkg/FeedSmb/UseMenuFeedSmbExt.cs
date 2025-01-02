@@ -19,6 +19,7 @@ public static class UseMenuFeedSmbExt
             });
 
             cmd.UseCmdAddLocalPackage(serviceProvider);
+            cmd.UseCmdPushMeta(serviceProvider);
         });
 
         return app;

@@ -4,7 +4,7 @@ using Gcd.Tests.EndToEnd.Arguments.Nipkg.Builder;
 using Gcd.Tests.EndToEnd.Setup;
 
 
-namespace Gcd.Tests.EndToEnd.Tests.Nipkg.FeedSmb;
+namespace Gcd.Tests.EndToEnd.Nipkg.FeedSmb;
 
 public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixture)
 {
