@@ -87,8 +87,8 @@ public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
         var result = _gcd.Run(args);
 
         // Asssert
-        result.Return.Should().Be(0);
         result.Error.Should().BeEmpty();
+        result.Return.Should().Be(0);
     }
 
     private void Push(string feedDirectory, string branchName = "push-test")
