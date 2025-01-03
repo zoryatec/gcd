@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Extensions;
 using Gcd.Handlers.Nipkg.Shared;
 using Gcd.Model;
 using Gcd.Model.FeedDefinition;
@@ -12,21 +13,31 @@ namespace Gcd.Commands.Nipkg.FeedAzBlob;
 
 public static class UseCmdPullMetaDataExt
 {
+    public static string NAME = "pull-meta-data";
+    public static string DESCRIPTION = "pull-meta-data";
+    public static string SUCESS_MESSAGE = "success";
     public static CommandLineApplication UseCmdPullMetaData(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
 
-        app.Command(COMMAND, subCmd =>
+        app.Command(NAME, cmd =>
         {
-            var feedPatht = subCmd.Option(FEED_LOCAL_PATH_OPTION, FEED_LOCAL_PATH_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
-            var feedUrl = subCmd.Option(REMOTE_FEED_URI_OPTION, REMOTE_FEED_URI_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
-            subCmd.OnExecuteAsync(async cancelationToken =>
+            cmd.Description = DESCRIPTION;
+
+            var feedPathOpt = new FeedLocalDirOption();
+            var feedUrl = cmd.Option(REMOTE_FEED_URI_OPTION, REMOTE_FEED_URI_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
+
+            cmd.AddOptions(
+                feedPathOpt.IsRequired()
+                );
+
+            cmd.OnExecuteAsync(async cancelationToken =>
             {
                 var azFeedDef = AzBlobFeedUri.Create(feedUrl.Value())
                     .Bind(feedUri => FeedDefinitionAzBlob.Of(feedUri));
 
-                var localFeedDef = LocalDirPath.Parse(feedPatht.Value())
+                var localFeedDef = LocalDirPath.Parse(feedPathOpt.Value())
                     .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 
                 return await Result

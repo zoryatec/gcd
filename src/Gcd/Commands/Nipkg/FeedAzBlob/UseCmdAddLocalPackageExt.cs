@@ -9,25 +9,35 @@ using Gcd.Model.Config;
 using Gcd.Model.FeedDefinition;
 using Gcd.Handlers.Nipkg.Shared;
 using Gcd.Handlers.Nipkg.FeedLocal;
+using Gcd.Extensions;
 
 namespace Gcd.Commands.Nipkg.FeedAzBlob;
 
 public static class UseCmdAddLocalPackageExt
 {
+    public static string NAME = "add-local-package";
+    public static string DESCRIPTION = "add-local-package";
+    public static string SUCESS_MESSAGE = "success";
     public static CommandLineApplication UseCmdAddLocalPackage(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
-        app.Command(COMMAND_NAME, subCmd =>
+        app.Command(NAME, cmd =>
         {
-            subCmd.Description = COMMAND_DESCRIPTION;
-            var packagePathOption = subCmd.Option(PACKAGE_PATH_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
-            var feedUrlOption = subCmd.Option(AZ_FEED_URI_OPTION, AZ_FEED_URI_OPTION_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
-            subCmd.OnExecuteAsync(async cancelationToken =>
+            cmd.Description = DESCRIPTION;
+            var locPathOpt = new PackageLocalPathOption();
+            var feedUrlOption = cmd.Option(AZ_FEED_URI_OPTION, AZ_FEED_URI_OPTION_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
+
+
+            cmd.AddOptions(
+                locPathOpt.IsRequired()
+                );
+
+            cmd.OnExecuteAsync(async cancelationToken =>
             {
                 var azFeedDef = AzBlobFeedUri.Create(feedUrlOption.Value())
                     .Bind(feedUri => FeedDefinitionAzBlob.Of(feedUri));
-                var pathToPackage = PackageFilePath.Of(packagePathOption.Value());
+                var pathToPackage = locPathOpt.ToPackageLocalPath();
                 var cmdPath = NipkgCmdPath.None;
 
                 return await Result

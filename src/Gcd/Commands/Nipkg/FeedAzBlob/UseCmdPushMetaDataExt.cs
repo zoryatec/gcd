@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
+using Gcd.Extensions;
 using Gcd.Handlers.Nipkg.Shared;
 using Gcd.Model;
 using Gcd.Model.FeedDefinition;
@@ -13,22 +14,30 @@ namespace Gcd.Commands.Nipkg.FeedAzBlob;
 
 public static class UseCmdPushMetaDataExt
 {
+    public static string NAME = "push-meta-data";
+    public static string DESCRIPTION = "push-meta-data";
+    public static string SUCESS_MESSAGE = "success";
     public static CommandLineApplication UseCmdPushMetaData(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
 
-        app.Command(COMMAND_NAME, subCmd =>
+        app.Command(NAME, cmd =>
         {
-            subCmd.Description = COMMAND_DESCRIPTION;
-            var feedPatht = subCmd.Option(LOCAL_FEED_PATH_OPTION, LOCAL_FEED_PATH_OPTION_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
-            var feedUrl = subCmd.Option(REMOTE_FEED_URI_OPTION, REMOTE_FEED_PATH_OPTION_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
-            subCmd.OnExecuteAsync(async cancelationToken =>
+            cmd.Description = DESCRIPTION;
+            var feedPathOpt = new FeedLocalDirOption();
+            var feedUrlOpt = cmd.Option(REMOTE_FEED_URI_OPTION, REMOTE_FEED_PATH_OPTION_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
+
+            cmd.AddOptions(
+                feedPathOpt.IsRequired()
+                );
+
+            cmd.OnExecuteAsync(async cancelationToken =>
             {
-                var azFeedDef = AzBlobFeedUri.Create(feedUrl.Value())
+                var azFeedDef = AzBlobFeedUri.Create(feedUrlOpt.Value())
                     .Bind(feedUri => FeedDefinitionAzBlob.Of(feedUri));
 
-                var localFeedDef = LocalDirPath.Parse(feedPatht.Value())
+                var localFeedDef = LocalDirPath.Parse(feedPathOpt.Value())
                     .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 
                 return await Result

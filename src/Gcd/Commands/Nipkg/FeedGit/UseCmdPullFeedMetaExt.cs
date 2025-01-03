@@ -7,21 +7,22 @@ using Gcd.Model.Config;
 using Gcd.Extensions;
 using Gcd.Model.FeedDefinition;
 using Gcd.Handlers.Nipkg.Shared;
-using Gcd.Model.File;
 
 namespace Gcd.Commands.Nipkg.FeedGit;
 
 public static class UseCmdPullFeedMetaExt
 {
-    public static string SUCESS_MESSAGE = "success";
     public static string NAME = "pull-meta-data";
+    public static string DESCRIPTION = "pull-meta-data";
+    public static string SUCESS_MESSAGE = "success";
+
     public static CommandLineApplication UseCmdPullFeedMeta(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
         app.Command(NAME, cmd =>
         {
-            cmd.Description = "add local package to local feed";
+            cmd.Description = DESCRIPTION;
 
             var feedLocalOpt = new FeedLocalDirOption();
             var gitRepoAddressOpt = new GitRepoAddressOption();

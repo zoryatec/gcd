@@ -44,8 +44,8 @@ jobs:
 
     - name: publish to feed
       run:  |
-        gcd nipkg feed add-package-az `
-        --package-path "$env:GITHUB_WORKSPACE\\package\\${{inputs.name}}_${{inputs.version}}_windows_x64.nipkg" `
+        gcd nipkg feed-az-blob add-local-package `
+        --package-local-path "$env:GITHUB_WORKSPACE\\package\\${{inputs.name}}_${{inputs.version}}_windows_x64.nipkg" `
         --feed-url "${{ secrets.nipkg-feed }}?${{ secrets.nipkg-feed-sas}}" `
 
 
