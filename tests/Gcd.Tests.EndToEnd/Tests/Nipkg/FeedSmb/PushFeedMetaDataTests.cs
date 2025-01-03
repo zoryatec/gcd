@@ -7,14 +7,14 @@ namespace Gcd.Tests.EndToEnd.Nipkg.FeedSmb;
 
 public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixture)
 {
-
-    [Fact(Skip = "wont work for now")]
-    //[Fact]
+    [Fact]
     public void PushPull_ShouldMatch()
     {
         // Arrange
         var feedSourceDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
         var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
+        string shareAddress = _config.GetSmbRepoAddress();
+        shareAddress = $"{shareAddress}\\push-pull";
 
         var sourcePackageContent = Guid.NewGuid().ToString();
         var sourcePackageGzContent = Guid.NewGuid().ToString();
@@ -25,8 +25,8 @@ public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
         File.WriteAllText($"{feedSourceDirectory}\\Packages.stamps", sourcePackageStampsContent);
 
 
-        Push(feedSourceDirectory);
-        Pull(feedDestinationDirectory); // wont work with current implementation of git fs
+        Push(shareAddress, feedSourceDirectory);
+        Pull(shareAddress,feedDestinationDirectory); // wont work with current implementation of git fs
 
 
         var destinationPackagesContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages");
@@ -42,10 +42,9 @@ public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
 
     }
 
-    private void Pull(string feedDirectory)
+    private void Pull(string smbAddress, string feedDirectory)
     {
         // Arrange
-        string shareAddress = _config.GetSmbRepoAddress();
         string username = _config.GetSmbUserName();
         string password = _config.GetSmbPassword();
 
@@ -53,7 +52,7 @@ public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
             .WithNipkgCmd()
             .WithFeedSmbCmd()
             .WithPullMetaData()
-            .WithSmbShareAddress(shareAddress)
+            .WithSmbShareAddress(smbAddress)
             .WithSmbUserName(username)
             .WithSmbUserPassword(password)
             .WithFeedLocalDirOpt(feedDirectory)
@@ -67,10 +66,9 @@ public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
         result.Return.Should().Be(0);
     }
 
-    private void Push(string feedDirectory)
+    private void Push(string smbAddress, string feedDirectory)
     {
         // Arrange
-        string shareAddress = _config.GetSmbRepoAddress();
         string username = _config.GetSmbUserName();
         string password = _config.GetSmbPassword();
 
@@ -78,7 +76,7 @@ public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
             .WithNipkgCmd()
             .WithFeedSmbCmd()
             .WithPushMetaData()
-            .WithSmbShareAddress(shareAddress)
+            .WithSmbShareAddress(smbAddress)
             .WithSmbUserName(username)
             .WithSmbUserPassword(password)
             .WithFeedLocalDirOpt(feedDirectory)

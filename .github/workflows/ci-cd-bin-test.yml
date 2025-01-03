@@ -35,6 +35,9 @@ jobs:
 
       - name: dev test
         env:
+          SmbShareAddress: ${{ secrets.test-smb-share }}
+          SmbUserName: ${{ secrets.test-smb-user }}
+          SmbUserPass: ${{ secrets.test-smb-password }}  
           GITREPOADDRESS: ${{ secrets.test-git-repo }}
           GitUserName: ${{ secrets.test-git-user }}
           GitPassword: ${{ secrets.test-git-password }}  
@@ -48,6 +51,9 @@ jobs:
 
       - name: app test
         env:
+          SmbShareAddress: ${{ secrets.test-smb-share }}
+          SmbUserName: ${{ secrets.test-smb-user }}
+          SmbUserPass: ${{ secrets.test-smb-password }}  
           GITREPOADDRESS: ${{ secrets.test-git-repo }}
           GitUserName: ${{ secrets.test-git-user }}
           GitPassword: ${{ secrets.test-git-password }}  

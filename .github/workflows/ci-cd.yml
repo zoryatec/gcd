@@ -40,6 +40,12 @@ on:
         required: true
       test-git-password:
         required: true
+      test-smb-share:
+        required: true
+      test-smb-user:
+        required: true
+      test-smb-password:
+        required: true
 
 
 jobs:

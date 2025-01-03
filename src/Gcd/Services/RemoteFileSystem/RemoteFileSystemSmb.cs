@@ -1,20 +1,9 @@
-﻿using Azure.Storage.Files.Shares.Models;
-using Azure.Storage.Files.Shares;
+﻿
 using CSharpFunctionalExtensions;
 using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;
-using SMBLibrary;
-using SMBLibrary.Client;
-using SMBLibrary.Server;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using Azure;
-using Azure.Storage;
+
 
 namespace Gcd.Services.RemoteFileSystem
 {
@@ -26,32 +15,25 @@ namespace Gcd.Services.RemoteFileSystem
             //return Result.Success();
         }
 
-        public async Task<Result> DownloadFileAsync(SmbDirPath smbDir, SmbFilePath sourceDescriptor, LocalFilePath destinationPath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false)
+        public async Task<Result> DownloadFileAsync(SmbDirPath smbDir, SmbFilePath sourceDescriptor, LocalFilePath destinationPath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false) =>
+            await Result.Try(() => DownloadFilePrivAsync(smbDir, sourceDescriptor, destinationPath, SmbUserName, SmbPassword, overwrite), ex => ex.Message);
+
+
+        private async Task<Result> DownloadFilePrivAsync(SmbDirPath smbDir, SmbFilePath sourceDescriptor, LocalFilePath destinationPath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false)
         {
+            var credentials = new NetworkCredential(SmbUserName.Value, SmbPassword.Value, null);
 
-
-  
-                // Create a network credential
-                var credentials = new NetworkCredential(SmbUserName.Value, SmbPassword.Value, null);
-
-                // Use a network connection with SMB path
-                using (new NetworkConnection(smbDir.Value, credentials))
-                {
-                // Read the file from SMB and write it to the local path
-
+            using (new NetworkConnection(smbDir.Value, credentials))
+            {
                 File.Copy(sourceDescriptor.Value, destinationPath.Value, overwrite: true);
-                    Console.WriteLine("File downloaded successfully!");
-                }
+            }
 
             return Result.Success();
 
         }
 
-        public async Task<Result> UploadFileAsync(SmbDirPath smbDir, SmbFilePath smbPath, LocalFilePath sourcePath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false)
-        {
-            UploadFile( smbDir.Value,smbPath.Value, sourcePath.Value, SmbUserName.Value, SmbPassword.Value);
-            return Result.Success();
-        }
+        public async Task<Result> UploadFileAsync(SmbDirPath smbDir, SmbFilePath smbPath, LocalFilePath sourcePath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false) =>
+            Result.Try(() => UploadFile(smbDir.Value, smbPath.Value, sourcePath.Value, SmbUserName.Value, SmbPassword.Value), ex => ex.Message);
 
         public static void UploadFile(string smbSharePath, string smbFilePath, string localFilePath, string username, string password, string domain = null)
         {

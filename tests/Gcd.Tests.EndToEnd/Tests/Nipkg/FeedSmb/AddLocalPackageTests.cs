@@ -9,7 +9,6 @@ namespace Gcd.Tests.EndToEnd.Nipkg.FeedSmb;
 public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
-    [Fact(Skip = "temp disable")]
     //[Fact]
     private void AddLocalPackageTest()
     {
@@ -19,6 +18,7 @@ public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixtur
         // Arrange
         string packagePath = BuildPackage();
         string shareAddress = _config.GetSmbRepoAddress();
+        shareAddress = $"{shareAddress}\\add-pkg-nested";
         string username = _config.GetSmbUserName();
         string password = _config.GetSmbPassword();
 
@@ -43,13 +43,13 @@ public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixtur
         result.Error.Should().BeEmpty();
         result.Return.Should().Be(0);
 
-        //var packageName = Path.GetFileName(packagePath);
-        //var destinationPackagesContent = File.ReadAllText($"{feedDir}\\Packages");
-        //var destinationPackagesGzContent = File.ReadAllText($"{feedDir}\\Packages.gz");
-        //var destinationPackagesStampsContent = File.ReadAllText($"{feedDir}\\Packages.stamps");
+        var packageName = Path.GetFileName(packagePath);
+        var destinationPackagesContent = File.ReadAllText($"{feedDir}\\Packages");
+        var destinationPackagesGzContent = File.ReadAllText($"{feedDir}\\Packages.gz");
+        var destinationPackagesStampsContent = File.ReadAllText($"{feedDir}\\Packages.stamps");
 
-        //destinationPackagesContent.Should().Contain(packageName);
-        //destinationPackagesStampsContent.Should().Contain(packageName);
+        destinationPackagesContent.Should().Contain(packageName);
+        destinationPackagesStampsContent.Should().Contain(packageName);
 
     }
     public string BuildPackage()
