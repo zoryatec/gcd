@@ -1,5 +1,6 @@
 ﻿
 using CSharpFunctionalExtensions;
+using Gcd.Handlers.Tools;
 using Gcd.Model.Config;
 using Gcd.Model.File;
 using McMaster.Extensions.CommandLineUtils;
@@ -8,11 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 using static Gcd.Contract.Nipkg.DownloadNipkg;
 
 
-namespace Gcd.Commands.Tools.DownloadNipkg;
+namespace Gcd.Commands.Tools;
 
-public static class UseDownloadNipkgCmdExtensions
+public static class UseCmdDownloadNipkgExt
 {
-    public static CommandLineApplication UseDownloadNipkgCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseCmdDownloadNipkg(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();

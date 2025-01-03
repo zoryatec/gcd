@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using Gcd.Services;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
-using Gcd.Menu;
 using Gcd.Model.Config;
 using Microsoft.Extensions.Configuration;
 using Gcd.Services.DI;
@@ -13,6 +12,7 @@ using Gcd.Services.RemoteFileSystem;
 using CSharpFunctionalExtensions;
 using Gcd.Handlers.Nipkg.Shared;
 using Gcd.Model.FeedDefinition;
+using Gcd.Commands;
 
 
 namespace Gcd
@@ -57,7 +57,7 @@ namespace Gcd
                 Description = "CI/CD tool for G programmers with OCDddd",
             };
             
-            app.UseGcdCmd(serviceProvider);
+            app.UseMenuGcd(serviceProvider);
 
             try
             {

@@ -1,13 +1,12 @@
 ﻿using System.Diagnostics;
 using CSharpFunctionalExtensions;
-using Gcd.Commands.Tools.DownloadNipkg;
 using Gcd.Model.Config;
 using Gcd.Model.File;
 using Gcd.Services;
 using Gcd.Services.FileSystem;
 using MediatR;
 
-namespace Gcd.Commands.Tools.InstallNipkg;
+namespace Gcd.Handlers.Tools;
 
 public record InstallNinpkgRequest(NipkgCmdPath CmdPath) : IRequest<Result>;
 
@@ -28,7 +27,7 @@ public class InstallNinpkgHandler(IMediator _mediator, IFileSystem _fs)
     }
 
     private async Task<Result> CheckNipkgVersionAsync(NipkgCmdPath cmd) =>
-        await _mediator.RunNipkgRequestAsync(new string[] { "--version" },cmd);
+        await _mediator.RunNipkgRequestAsync(new string[] { "--version" }, cmd);
 
 
     static async Task<Result> InstallAsync(LocalFilePath nipkgInstaller)
@@ -73,8 +72,3 @@ public class InstallNinpkgHandler(IMediator _mediator, IFileSystem _fs)
     }
 }
 
-public static class MediatorExtensions
-{
-    public static async Task<Result> InstallNipkgInstallerAsync(this IMediator mediator,NipkgCmdPath cmdPath, CancellationToken cancellationToken = default)
-        => await mediator.Send(new InstallNinpkgRequest(cmdPath), cancellationToken);
-}

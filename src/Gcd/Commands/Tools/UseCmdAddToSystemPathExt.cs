@@ -2,12 +2,13 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
+using Gcd.Handlers.Tools;
 
-namespace Gcd.Commands.Tools.AddToPath;
+namespace Gcd.Commands.Tools;
 
-public static class UseAddToSystemPathCmdExtensions
+public static class UseCmdAddToSystemPathExt
 {
-    public static CommandLineApplication UseAddToSystemPathCmd(this CommandLineApplication app,
+    public static CommandLineApplication UseCmdAddToSystemPath(this CommandLineApplication app,
        IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();

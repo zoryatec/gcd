@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using MediatR;
 
-namespace Gcd.Commands.Tools.AddToPath;
+namespace Gcd.Handlers.Tools;
 
 public record AddToPathRequest(string PathToAdd, EnvironmentVariableTarget Target) : IRequest<Result>;
 
@@ -31,10 +31,3 @@ public class AddToPathHandler()
     }
 }
 
-public static class MediatorExtensions
-{
-    public static async Task<Result> AddToUserPath(this IMediator mediator, string pathToAdd, CancellationToken cancellationToken = default)
-        => await mediator.Send(new AddToPathRequest(pathToAdd,EnvironmentVariableTarget.User), cancellationToken);
-    public static async Task<Result> AddToSystemPath(this IMediator mediator, string pathToAdd, CancellationToken cancellationToken = default)
-        => await mediator.Send(new AddToPathRequest(pathToAdd, EnvironmentVariableTarget.Machine), cancellationToken);
-}

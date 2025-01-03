@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Commands;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Handlers.Nipkg.Shared;
 using Gcd.LabViewProject;
-using Gcd.Menu;
 using Gcd.Model.Config;
 using Gcd.Model.FeedDefinition;
 using Gcd.Services;
@@ -51,7 +51,7 @@ namespace Gcd.Tests
                 Description = "CI/CD tool for G programmers with OCDddd",
             };
 
-            _app.UseGcdCmd(serviceProvider);
+            _app.UseMenuGcd(serviceProvider);
         }
 
         public GcdProcessResponse Run(string[] request)

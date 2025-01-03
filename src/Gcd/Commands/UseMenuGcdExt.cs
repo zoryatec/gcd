@@ -1,13 +1,14 @@
 using Gcd.Commands.Nipkg;
 using Gcd.Commands.Project;
+using Gcd.Commands.Tools;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Gcd.Menu;
+namespace Gcd.Commands;
 
-public static class UseGcdCmdExtensions
+public static class UseMenuGcdExt
 {
-    public static CommandLineApplication UseGcdCmd(this CommandLineApplication app,
+    public static CommandLineApplication UseMenuGcd(this CommandLineApplication app,
         IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
@@ -21,7 +22,7 @@ public static class UseGcdCmdExtensions
 
         app.UseProjectCmd(serviceProvider);
         app.UseMenuNipkg(serviceProvider);
-        app.UseToolsCmd(serviceProvider);
+        app.UseMenuTools(serviceProvider);
         app.UseMenuConfig(serviceProvider);
 
 
