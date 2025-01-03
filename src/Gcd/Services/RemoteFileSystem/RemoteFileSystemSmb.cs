@@ -20,63 +20,59 @@ namespace Gcd.Services.RemoteFileSystem
 {
     public class RemoteFileSystemSmb : IRemoteFileSystemSmb
     {
-        public Result<IFileDescriptor> CreateFileDescriptor(SmbDir dirDescriptor, FileName fileName)
+        public Result<IFileDescriptor> CreateFileDescriptor(SmbDirPath dirDescriptor, FileName fileName)
         {
             throw new NotImplementedException();
             //return Result.Success();
         }
 
-        public async Task<Result> DownloadFileAsync(SmbPath sourceDescriptor, LocalFilePath destinationPath, bool overwrite = false)
+        public async Task<Result> DownloadFileAsync(SmbDirPath smbDir, SmbFilePath sourceDescriptor, LocalFilePath destinationPath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false)
         {
-            // Azure File Share details
-            //string connectionString = "your-azure-storage-connection-string"; // Azure Storage connection string
-            //string shareName = "your-file-share"; // Your file share name
-            //string fileName = "your-file.txt"; // File you want to download from Azure File Share
-            //string downloadFilePath = @"C:\path\to\local\downloaded\file.txt"; // Local path to save the downloaded file
 
-            //// Create a ShareServiceClient
-            //StorageSharedKeyCredential azureKeyCredential = new StorageSharedKeyCredential(fileName, shareName);
-            //var uri = new Uri("");
-            //var shareClient = new ShareClient(uri, azureKeyCredential);
 
-            //try
-            //{
-            //    // Get the file client for the specific file
-            //    var fileClient = shareClient.GetDirectoryClient("").GetFileClient(fileName);
+  
+                // Create a network credential
+                var credentials = new NetworkCredential(SmbUserName.Value, SmbPassword.Value, null);
 
-            //    // Check if the file exists
-            //    if (await fileClient.ExistsAsync())
-            //    {
-            //        Console.WriteLine($"Starting download of {fileName}...");
+                // Use a network connection with SMB path
+                using (new NetworkConnection(smbDir.Value, credentials))
+                {
+                // Read the file from SMB and write it to the local path
 
-            //        // Download the file
-            //        ShareFileDownloadInfo download = await fileClient.DownloadAsync();
-
-            //        // Open a local file stream to save the downloaded content
-            //        using (FileStream fs = File.OpenWrite(downloadFilePath))
-            //        {
-            //            await download.Content.CopyToAsync(fs);
-            //            Console.WriteLine($"File downloaded successfully to {downloadFilePath}");
-            //        }
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine($"File {fileName} does not exist in the share.");
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine($"Error: {ex.Message}");
-            //}
+                File.Copy(sourceDescriptor.Value, destinationPath.Value, overwrite: true);
+                    Console.WriteLine("File downloaded successfully!");
+                }
 
             return Result.Success();
 
         }
 
-        public async Task<Result> UploadFileAsync(SmbPath sourceDescriptor, LocalFilePath sourcePath, bool overwrite = false)
+        public async Task<Result> UploadFileAsync(SmbDirPath smbDir, SmbFilePath smbPath, LocalFilePath sourcePath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false)
         {
-            //throw new NotImplementedException();
+            UploadFile( smbDir.Value,smbPath.Value, sourcePath.Value, SmbUserName.Value, SmbPassword.Value);
             return Result.Success();
+        }
+
+        public static void UploadFile(string smbSharePath, string smbFilePath, string localFilePath, string username, string password, string domain = null)
+        {
+            // Validate inputs
+            if (string.IsNullOrWhiteSpace(smbFilePath)) throw new ArgumentNullException(nameof(smbFilePath));
+            if (string.IsNullOrWhiteSpace(localFilePath)) throw new ArgumentNullException(nameof(localFilePath));
+            if (!File.Exists(localFilePath)) throw new FileNotFoundException("Local file does not exist", localFilePath);
+
+            // Combine the file name with the SMB share path
+            string fileName = Path.GetFileName(localFilePath);
+            string destinationPath = Path.Combine(smbFilePath, fileName);
+
+            // Create network credentials
+            NetworkCredential credentials = new NetworkCredential(username, password, domain);
+
+            // Connect to the SMB share and copy the file
+            using (new NetworkConnection(smbSharePath, credentials))
+            {
+                File.Copy(localFilePath, smbFilePath, overwrite: true);
+                Console.WriteLine($"File uploaded successfully to {destinationPath}");
+            }
         }
     }
 }

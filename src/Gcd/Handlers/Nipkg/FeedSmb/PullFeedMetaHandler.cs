@@ -15,8 +15,8 @@ public class PullFeedMetaHandler(IFileSystem _fs, RemoteFileSystemSmb _rfs)
     {
         var (remoteFeedDef, localFeedDef) = request;
         return await _fs.CreateDirAsync(localFeedDef.Feed)
-            .Bind(() => _rfs.DownloadFileAsync(remoteFeedDef.Package, localFeedDef.Package))
-            .Bind(() => _rfs.DownloadFileAsync(remoteFeedDef.PackageGz, localFeedDef.PackageGz))
-            .Bind(() => _rfs.DownloadFileAsync(remoteFeedDef.PackageStamps, localFeedDef.PackageStamps));
+            .Bind(() => _rfs.DownloadFileAsync(remoteFeedDef.Feed, remoteFeedDef.Package, localFeedDef.Package, remoteFeedDef.SmbUserName, remoteFeedDef.SmbPassword))
+            .Bind(() => _rfs.DownloadFileAsync(remoteFeedDef.Feed, remoteFeedDef.PackageGz, localFeedDef.PackageGz, remoteFeedDef.SmbUserName, remoteFeedDef.SmbPassword))
+            .Bind(() => _rfs.DownloadFileAsync(remoteFeedDef.Feed, remoteFeedDef.PackageStamps, localFeedDef.PackageStamps, remoteFeedDef.SmbUserName, remoteFeedDef.SmbPassword));
     }
 }

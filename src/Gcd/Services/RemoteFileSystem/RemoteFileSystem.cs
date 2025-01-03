@@ -27,7 +27,7 @@ namespace Gcd.Services.RemoteFileSystem
                 LocalFilePath source => await _fs.CopyFileAsync(source, destinationPath, overwrite: overwrite),
                 WebUri source => await _webDownload.DownloadFileAsync(source, destinationPath),
                 AzBlobUri source => await downloadAz.DownloadFileAsync(source, destinationPath),
-                SmbPath source => await _remoteSmb.DownloadFileAsync(source, destinationPath),
+                //SmbFilePath source => await _remoteSmb.DownloadFileAsync(source, destinationPath),
                 _ => throw new InvalidOperationException(sourceDescriptor.GetType().Name)
             };
         }
@@ -38,7 +38,7 @@ namespace Gcd.Services.RemoteFileSystem
             {
                 LocalFilePath source => await _fs.CopyFileAsync(source, sourcePath, overwrite: overwrite),
                 AzBlobUri source => await _uploadService.UploadFileAsync(source, sourcePath),
-                SmbPath source => await _remoteSmb.UploadFileAsync(source, sourcePath),
+                //SmbPath source => await _remoteSmb.UploadFileAsync(source, sourcePath),
                 _ => throw new InvalidOperationException(sourceDescriptor.GetType().Name)
             };
         }
@@ -48,16 +48,16 @@ namespace Gcd.Services.RemoteFileSystem
             return dirDescriptor switch
             {
                 AzBlobContainerUri source => CreateBlobURI(source,fileName).Map((x) => x as IFileDescriptor),
-                SmbDir source => CreateSmbFile(source, fileName).Map((x) => x as IFileDescriptor),
+                SmbDirPath source => CreateSmbFile(source, fileName).Map((x) => x as IFileDescriptor),
                 _ => throw new InvalidOperationException(dirDescriptor.GetType().Name)
             };
         }
 
-        private Result<SmbPath> CreateSmbFile(SmbDir azBlobContainerUri, FileName fileName)
+        private Result<SmbFilePath> CreateSmbFile(SmbDirPath azBlobContainerUri, FileName fileName)
         {
 
 
-            return SmbPath.Of("");
+            return SmbFilePath.Of("");
         }
 
         private Result<AzBlobUri> CreateBlobURI(AzBlobContainerUri azBlobContainerUri, FileName fileName)

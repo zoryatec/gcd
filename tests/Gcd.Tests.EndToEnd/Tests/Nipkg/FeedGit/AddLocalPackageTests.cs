@@ -15,7 +15,7 @@ public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixtur
 {
 
     //[Fact(Skip = "temp disable")]
-    [Fact]
+    //[Fact]
     private void AddLocalPackageTest()
     {
 

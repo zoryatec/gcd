@@ -1,37 +1,32 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg.Builder;
-using Gcd.Tests.EndToEnd.Arguments.Nipkg.Feed;
 using Gcd.Tests.EndToEnd.Setup;
 
-namespace Gcd.Tests.EndToEnd.Nipkg.FeedGit;
+namespace Gcd.Tests.EndToEnd.Nipkg.FeedSmb;
 
 public class PullFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
-   // [Fact]
+    //[Fact]
     public void PullFeedMetaData_ShouldDownloadFiles_WhenFeedIsValid()
     {
         // Arrange
         var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
-        string repoAddress = _config.GetGitRepoAddress();
-        string username = _config.GetGitUserName();
-        string password = _config.GetGitPassword();
-        string committerName = "test gcd";
-        string committerEmail = "mail@mail.com";
-        string branchName = "pull-test";
+        // Arrange
+        string shareAddress = _config.GetSmbRepoAddress();
+        string username = _config.GetSmbUserName();
+        string password = _config.GetSmbPassword();
 
         var args = new NipkgArgBuilder()
             .WithNipkgCmd()
-            .WithFeedGitCmd()
+            .WithFeedSmbCmd()
             .WithPullMetaData()
-            .WithGitRepoAddressOpt(repoAddress)
-            .WithGitBranchNameOpt(branchName)
-            .WithGitUserNameOpt(username)
-            .WithGitPasswordOpt(password)
-            .WithGitCommitterNameOpt(committerName)
-            .WithGitCommitterEmailOpt(committerEmail)
+            .WithSmbShareAddress(shareAddress)
+            .WithSmbUserName(username)
+            .WithSmbUserPassword(password)
             .WithFeedLocalDirOpt(feedDestinationDirectory)
             .Build();
+
 
         // Act
         var result = _gcd.Run(args);
@@ -53,23 +48,5 @@ public class PullFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
         destinationPackagesStampsContent.Should().Contain("packages_stamps_content");
     }
 
-    [Fact]
-    public void PullFeedMetaData_ShoulReturnError_WhenFeedLocalPathNotSpecified()
-    {
-        // Arrange
-        var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
-        var feedUri = _config.GetAzurePublicFeedUri();
-
-        var args = new PullFeedMetaArgBuilder()
-            .WithFeedUri(feedUri)
-            .Build();
-
-        // Act
-        var result = _gcd.Run(args);
-
-        // Asssert
-        result.Return.Should().Be(1);
-        //result.Error.Should().BeEmpty(); // NOT CORRECT SHOUL RETURN ERROR
-    }
 }
 

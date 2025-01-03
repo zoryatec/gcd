@@ -14,9 +14,9 @@ public class PushFeedMetaHandler(IFileSystem _fs, RemoteFileSystemSmb _rfs)
 {
     public async Task<Result> Handle(PushFeedMetaRequest<FeedDefinitionSmb> request, CancellationToken cancellationToken)
     {
-        var (azFeedDef, localFeedDef) = request;
-        return await _rfs.UploadFileAsync(azFeedDef.Package, localFeedDef.Package)
-            .Bind(() => _rfs.UploadFileAsync(azFeedDef.PackageGz, localFeedDef.PackageGz))
-            .Bind(() => _rfs.UploadFileAsync(azFeedDef.PackageStamps, localFeedDef.PackageStamps));
+        var (remoteFeedDef, localFeedDef) = request;
+        return await _rfs.UploadFileAsync(remoteFeedDef.Feed, remoteFeedDef.Package, localFeedDef.Package, remoteFeedDef.SmbUserName,remoteFeedDef.SmbPassword)
+            .Bind(() => _rfs.UploadFileAsync(remoteFeedDef.Feed, remoteFeedDef.PackageGz, localFeedDef.PackageGz, remoteFeedDef.SmbUserName, remoteFeedDef.SmbPassword))
+            .Bind(() => _rfs.UploadFileAsync(remoteFeedDef.Feed, remoteFeedDef.PackageStamps, localFeedDef.PackageStamps, remoteFeedDef.SmbUserName, remoteFeedDef.SmbPassword));
     }
 }

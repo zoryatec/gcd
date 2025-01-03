@@ -12,13 +12,13 @@ namespace Gcd.Model.FeedDefinition;
 
 public record FeedDefinitionSmb : IFeedDefinition
 {
-    SmbShareAddress SmbShareAddress { get; }
-    SmbUserName SmbUserName { get; }
-    SmbPassword SmbPassword { get; }
-    public SmbDir Feed { get; }
-    public SmbPath Package { get; }
-    public SmbPath PackageGz { get; }
-    public SmbPath PackageStamps { get; }
+    public SmbShareAddress SmbShareAddress { get; }
+    public SmbUserName SmbUserName { get; }
+    public SmbPassword SmbPassword { get; }
+    public SmbDirPath Feed { get; }
+    public SmbFilePath Package { get; }
+    public SmbFilePath PackageGz { get; }
+    public SmbFilePath PackageStamps { get; }
 
     IDirectoryDescriptor IFeedDefinition.Feed => Feed;
     IFileDescriptor IFeedDefinition.Package => Package;
@@ -27,15 +27,15 @@ public record FeedDefinitionSmb : IFeedDefinition
 
     public static Result<FeedDefinitionSmb> Of(SmbShareAddress smbaddress, SmbUserName smbUserName, SmbPassword smbPassword)
     {
-        var feed = SmbDir.Of(smbaddress.Value);
-        var package = SmbPath.Of($"{smbaddress.Value}\\Packages");
-        var packageGz = SmbPath.Of($"{smbaddress.Value}\\Packages.gz");
-        var packageStamps = SmbPath.Of($"{smbaddress.Value}\\Packages.stamps");
+        var feed = SmbDirPath.Of(smbaddress.Value);
+        var package = SmbFilePath.Of($"{smbaddress.Value}\\Packages");
+        var packageGz = SmbFilePath.Of($"{smbaddress.Value}\\Packages.gz");
+        var packageStamps = SmbFilePath.Of($"{smbaddress.Value}\\Packages.stamps");
         return Result
             .Combine(feed, package, packageGz, packageStamps)
             .Map(() => new FeedDefinitionSmb(feed.Value, package.Value, packageGz.Value, packageStamps.Value,smbaddress,smbPassword,smbUserName));
     }
-    private FeedDefinitionSmb(SmbDir feed, SmbPath package, SmbPath packageGz, SmbPath packageStamps, SmbShareAddress shareAddress, SmbPassword smbPassword, SmbUserName smbUserName)
+    private FeedDefinitionSmb(SmbDirPath feed, SmbFilePath package, SmbFilePath packageGz, SmbFilePath packageStamps, SmbShareAddress shareAddress, SmbPassword smbPassword, SmbUserName smbUserName)
     {
         Feed = feed;
         Package = package;
@@ -48,35 +48,31 @@ public record FeedDefinitionSmb : IFeedDefinition
 }
 
 
-public record SmbPath : IFileDescriptor
+public record SmbFilePath : IFileDescriptor
 {
-    public static Result<SmbPath> Of(Maybe<string> maybeBlobUri)
+    public static Result<SmbFilePath> Of(Maybe<string> maybeBlobUri)
     {
         return maybeBlobUri.ToResult("FeedUri should not be empty")
         .Ensure(blobUri => blobUri != string.Empty, "FeedUri should not be empty")
-        .MapTry((blobUri) => new Uri(blobUri), ex => ex.Message)
-        .Map(blobUri => new SmbPath(blobUri));
+        .Map(blobUri => new SmbFilePath(blobUri));
     }
-    private SmbPath(Uri value) => _uri = value;
-    private Uri _uri;
-    public string Value { get => _uri.AbsoluteUri; }
+    private SmbFilePath(string value) => Value = value;
+
+    public string Value { get; }
 }
 
 
-public record SmbDir : IDirectoryDescriptor
+public record SmbDirPath : IDirectoryDescriptor
 {
-    public static Result<SmbDir> Of(Maybe<string> feedUriOrNothing)
+    public static Result<SmbDirPath> Of(Maybe<string> feedUriOrNothing)
     {
         return feedUriOrNothing.ToResult("FeedUri should not be empty")
             .Ensure(feedUri => feedUri != string.Empty, "FeedUri should not be empty")
-            .MapTry((uri) => new Uri(uri), ex => ex.Message)
-            .Map(feedUri => new SmbDir(feedUri));
+            .Map(feedUri => new SmbDirPath(feedUri));
     }
-    private SmbDir(Uri value) => _uri = value;
-    private Uri _uri;
-    public string Full { get => _uri.AbsoluteUri; }
-    public string BaseUri { get => _uri.GetLeftPart(UriPartial.Path); }
-    public string Query { get => _uri.Query; }
+    private SmbDirPath(string value) => Value = value;
+
+    public string Value { get; }
 }
 
 
@@ -106,7 +102,7 @@ public record SmbShareAddress
 {
     public static Result<SmbShareAddress> Of(Maybe<string> UserName)
     {
-        return UserName.ToResult($"{nameof(GitRepoAddress)} cannot be empty")
+        return UserName.ToResult($"{nameof(SmbShareAddress)} cannot be empty")
             .Map(x => new SmbShareAddress(x));
     }
     private SmbShareAddress(string value) => Value = value;

@@ -26,52 +26,45 @@ public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
 
 
         Push(feedSourceDirectory);
-        //Pull(feedDestinationDirectory); // wont work with current implementation of git fs
+        Pull(feedDestinationDirectory); // wont work with current implementation of git fs
 
 
-        //var destinationPackagesContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages");
-        //var destinationPackagesGzContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.gz");
-        //var destinationPackagesStampsContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.stamps");
+        var destinationPackagesContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages");
+        var destinationPackagesGzContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.gz");
+        var destinationPackagesStampsContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.stamps");
 
-        //destinationPackagesContent.Should().Be(sourcePackageContent);
-        //destinationPackagesGzContent.Should().Be(sourcePackageGzContent);
-        //destinationPackagesStampsContent.Should().Be(sourcePackageStampsContent);
+        destinationPackagesContent.Should().Be(sourcePackageContent);
+        destinationPackagesGzContent.Should().Be(sourcePackageGzContent);
+        destinationPackagesStampsContent.Should().Be(sourcePackageStampsContent);
 
         Directory.Delete(feedSourceDirectory, true);
         Directory.Delete(feedDestinationDirectory, true);
 
     }
 
-    private void Pull(string feedDirectory, string branchName = "push-test")
+    private void Pull(string feedDirectory)
     {
         // Arrange
+        string shareAddress = _config.GetSmbRepoAddress();
+        string username = _config.GetSmbUserName();
+        string password = _config.GetSmbPassword();
 
-        // Arrange
-        //string repoAddress = _config.GetGitRepoAddress();
-        //string username = _config.GetGitUserName();
-        //string password = _config.GetGitPassword();
-        //string committerName = "test gcd";
-        //string committerEmail = "mail@mail.com";
+        var args = new NipkgArgBuilder()
+            .WithNipkgCmd()
+            .WithFeedSmbCmd()
+            .WithPullMetaData()
+            .WithSmbShareAddress(shareAddress)
+            .WithSmbUserName(username)
+            .WithSmbUserPassword(password)
+            .WithFeedLocalDirOpt(feedDirectory)
+            .Build();
 
-        //var args = new NipkgArgBuilder()
-        //    .WithNipkgCmd()
-        //    .WithFeedGitCmd()
-        //    .WithPullMetaData()
-        //    .WithGitRepoAddressOpt(repoAddress)
-        //    .WithGitBranchNameOpt(branchName)
-        //    .WithGitUserNameOpt(username)
-        //    .WithGitPasswordOpt(password)
-        //    .WithGitCommitterNameOpt(committerName)
-        //    .WithGitCommitterEmailOpt(committerEmail)
-        //    .WithFeedLocalDirOpt(feedDirectory)
-        //    .Build();
+        // Act
+        var result = _gcd.Run(args);
 
-        //// Act
-        //var result = _gcd.Run(args);
-
-        //// Asssert
-        //result.Return.Should().Be(0);
-        //result.Error.Should().BeEmpty();
+        // Asssert
+        result.Error.Should().BeEmpty();
+        result.Return.Should().Be(0);
     }
 
     private void Push(string feedDirectory)
