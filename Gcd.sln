@@ -15,13 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gcd.Tests.EndToEnd", "tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gcd.Contract", "src\Gcd.Contract\Gcd.Contract.csproj", "{8A81542F-5B9D-45D0-A68C-FD9D5FAE2267}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gcd.Nipkg.Instructions", "src\Gcd.Nipkg.Instructions\Gcd.Nipkg.Instructions.csproj", "{0242FEAB-64EB-41CE-A163-6FF8EFB0010B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gcd.Nipkg.Instructions", "src\Gcd.Nipkg.Instructions\Gcd.Nipkg.Instructions.csproj", "{0242FEAB-64EB-41CE-A163-6FF8EFB0010B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{04EEF038-7CB1-4F92-BB19-20BB6974D73B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{15AC161A-E093-4A37-9AC7-382DBFF5CD05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gcd.Nipkg.Instructions.Tests", "tests\Gcd.Nipkg.Instructions.Tests\Gcd.Nipkg.Instructions.Tests.csproj", "{0ED1403F-2183-43FA-9429-FE4B589C3F10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gcd.Nipkg.Instructions.Tests", "tests\Gcd.Nipkg.Instructions.Tests\Gcd.Nipkg.Instructions.Tests.csproj", "{0ED1403F-2183-43FA-9429-FE4B589C3F10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,14 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Handlers.Project.BuildSpec;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using static Gcd.Contract.Project.BuildSpecList;
 
-namespace Gcd.Commands.Project.BuildSpec.List;
+namespace Gcd.Commands.Project.BuildSpec;
 
-public static class UseBuildSpecListCmdExtensions
+public static class UseCmdListExt
 {
-    public static CommandLineApplication UseBuildSpecListCmdd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseCmdList(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();

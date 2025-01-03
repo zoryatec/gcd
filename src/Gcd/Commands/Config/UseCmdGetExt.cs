@@ -4,15 +4,13 @@ using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
 using Gcd.Extensions;
 using Gcd.Model.Config;
-using Gcd.Commands.Config.SetConfig;
-using Gcd.Commands.Config.GetCongi;
-using Newtonsoft.Json.Linq;
+using Gcd.Handlers.Config;
 
-namespace Gcd.Commands.Config.GetConfig;
+namespace Gcd.Commands.Config;
 
-public static class UseGetConfigCmdExtensions
+public static class UseCmdGetExt
 {
-    public static CommandLineApplication UseGetConfigCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseCmdGet(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();

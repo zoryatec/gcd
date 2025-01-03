@@ -4,12 +4,13 @@ using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
 using Gcd.Extensions;
 using Gcd.Model.Config;
+using Gcd.Handlers.Config;
 
-namespace Gcd.Commands.Config.SetConfig;
+namespace Gcd.Commands.Config;
 
-public static class UseSetConfigCmdExtensions
+public static class UseCmdSetExt
 {
-    public static CommandLineApplication UseSetConfigCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseCmdSet(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
@@ -22,7 +23,7 @@ public static class UseSetConfigCmdExtensions
             {
                 new NipkgCmdPathOption(),
                 new NipkgInstallerUriOption(),
-    
+
             };
 
             command.AddOptions(options);
@@ -62,7 +63,7 @@ public class NipkgInstallerUriOption : ConfigPropertyOption
 public class NipkgCmdPathOption : ConfigPropertyOption
 {
     public static readonly string NAME = "--nipkg-cmd-path";
-    public NipkgCmdPathOption(CommandOptionType optionType = CommandOptionType.SingleValue) : base(NAME,  optionType)
+    public NipkgCmdPathOption(CommandOptionType optionType = CommandOptionType.SingleValue) : base(NAME, optionType)
     {
         Description = "Description";
     }

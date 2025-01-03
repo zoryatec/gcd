@@ -1,13 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Handlers.Project.BuildSpec;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Gcd.Commands.Project.BuildSpec.SetVersion;
+namespace Gcd.Commands.Project.BuildSpec;
 
-public static class UseBuildSpecSetVersionCmdExtensions
+public static class UseCmdSetVersionExt
 {
-    public static CommandLineApplication UseBuildSpecSetVersionCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseCmdSetVersion(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();

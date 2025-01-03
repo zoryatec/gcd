@@ -1,11 +1,10 @@
-using Gcd.Commands.Config.GetConfig;
-using Gcd.Commands.Config.SetConfig;
+using Gcd.Commands.Config;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
-public static class UseConfigCmdExtensions
+public static class UseMenuConfigExt
 {
-    public static CommandLineApplication UseConfigCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseMenuConfig(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
 
@@ -17,8 +16,8 @@ public static class UseConfigCmdExtensions
                 cmd.ShowHelp();
                 return 1;
             });
-            cmd.UseSetConfigCmd(serviceProvider);
-            cmd.UseGetConfigCmd(serviceProvider);
+            cmd.UseCmdSet(serviceProvider);
+            cmd.UseCmdGet(serviceProvider);
 
         });
         return app;

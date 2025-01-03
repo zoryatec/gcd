@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.Config.GetConfig;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Extensions;
 using Gcd.Model;
@@ -10,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gcd.Commands.Config.SetConfig
+namespace Gcd.Commands.Config
 {
     public interface IConfigPropertyFactory
     {

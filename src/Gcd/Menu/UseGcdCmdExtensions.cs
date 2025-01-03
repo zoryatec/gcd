@@ -1,4 +1,5 @@
 using Gcd.Commands.Nipkg;
+using Gcd.Commands.Project;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,7 +22,7 @@ public static class UseGcdCmdExtensions
         app.UseProjectCmd(serviceProvider);
         app.UseMenuNipkg(serviceProvider);
         app.UseToolsCmd(serviceProvider);
-        app.UseConfigCmd(serviceProvider);
+        app.UseMenuConfig(serviceProvider);
 
 
         app.OnExecute(() =>

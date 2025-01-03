@@ -1,6 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.Config.SetConfig;
-using Gcd.Model.Config;
 using MediatR;
 
 namespace Gcd.Commands.Tools.AddToPath;
