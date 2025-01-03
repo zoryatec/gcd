@@ -8,7 +8,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg.FeedGit;
 public class AddHttpPackageTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
-    [Fact (Skip ="for now")]
+    //[Fact]
     private void AddHttpPackageTest()
     {
 
@@ -20,7 +20,7 @@ public class AddHttpPackageTests(TestFixture testFixture) : BaseTest(testFixture
         string password = _config.GetGitPassword();
         string committerName = "test gcd";
         string committerEmail = "mail@mail.com";
-        string branchName = "anotherTest";
+        string branchName = "add-http-package-nested";
 
         var args = new NipkgArgBuilder()
             .WithNipkgCmd()
@@ -48,7 +48,7 @@ public class AddHttpPackageTests(TestFixture testFixture) : BaseTest(testFixture
 
     }
 
-    [Fact(Skip = "for now")]
+    //[Fact]
     private void AddHttpPackageTestUseAbs()
     {
 
@@ -60,7 +60,7 @@ public class AddHttpPackageTests(TestFixture testFixture) : BaseTest(testFixture
         string password = _config.GetGitPassword();
         string committerName = "test gcd";
         string committerEmail = "mail@mail.com";
-        string branchName = "anotherTest";
+        string branchName = "add-http-package-relative";
 
         var args = new NipkgArgBuilder()
             .WithNipkgCmd()
