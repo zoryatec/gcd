@@ -34,7 +34,6 @@
     <ItemGroup>
       <PackageReference Include="Azure.Storage.Blobs" Version="12.23.0" />
       <PackageReference Include="Azure.Storage.Files.Shares" Version="12.21.0" />
-      <PackageReference Include="LibGit2Sharp" Version="0.31.0" />
       <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.1.1" />
       <PackageReference Include="MediatR" Version="12.4.1" />
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
@@ -49,7 +48,12 @@
     <ItemGroup>
       <ProjectReference Include="..\Gcd.Contract\Gcd.Contract.csproj" />
       <ProjectReference Include="..\Gcd.LabViewProject\Gcd.LabViewProject.csproj" />
+      <ProjectReference Include="..\Gcd.LocalFileSystem.Abstractions\Gcd.LocalFileSystem.Abstractions.csproj" />
+      <ProjectReference Include="..\Gcd.LocalFileSystem\Gcd.LocalFileSystem.csproj" />
       <ProjectReference Include="..\Gcd.Nipkg.Instructions\Gcd.Nipkg.Instructions.csproj" />
+      <ProjectReference Include="..\Gcd.RemoteFileSystem.Abstractions\Gcd.RemoteFileSystem.Abstractions.csproj" />
+      <ProjectReference Include="..\Gcd.RemoteFileSystem.Git\Gcd.RemoteFileSystem.Git.csproj" />
+      <ProjectReference Include="..\Gcd.RemoteFileSystem.Smb\Gcd.RemoteFileSystem.Smb.csproj" />
     </ItemGroup>
 
     <ItemGroup>

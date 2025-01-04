@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 
 namespace Gcd.Model.File;
 

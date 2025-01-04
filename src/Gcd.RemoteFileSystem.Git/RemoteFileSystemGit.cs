@@ -1,14 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;
-using Gcd.Services.FileSystem;
 using LibGit2Sharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Gcd.Services.RemoteFileSystem
 {
@@ -16,10 +10,6 @@ namespace Gcd.Services.RemoteFileSystem
     {
 
         public readonly LocalDirPath GlobalCheckoutDir;
-        public RemoteFileSystemGit(IFileSystem fs) 
-        {
-            GlobalCheckoutDir = fs.CreateTempDirPathAsync().GetAwaiter().GetResult().Value;
-        }
 
         public async Task<Result> Clone(GitRepoAddress address, GitLocalBranch branch, GitUserName username, GitPassword password)
         {
