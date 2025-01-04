@@ -6,7 +6,7 @@ namespace Gcd.RemoteFileSystem.Git.DI;
 public static class RemoteFileSystemGitExt
 {
 
-    public static IServiceCollection AddRemoteFileServiceGcd(this IServiceCollection services) =>
+    public static IServiceCollection AddRemoteFileServiceGit(this IServiceCollection services) =>
         services.AddScoped<IRemoteFileSystemGit, RemoteFileSystemGit>();
 }
 

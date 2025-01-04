@@ -3,12 +3,11 @@ using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Handlers.Nipkg.Shared;
 using Gcd.LabViewProject;
 using Gcd.Model.Nipkg.FeedDefinition;
+using Gcd.RemoteFileSystem.AzBlob.DI;
 using Gcd.RemoteFileSystem.Git.DI;
 using Gcd.RemoteFileSystem.Smb.DI;
 using Gcd.Services;
 using Gcd.Services.DI;
-using Gcd.Services.FileSystem;
-using Gcd.Services.RemoteFileSystem;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,15 +20,12 @@ public static class GcdExt
 
     public static IServiceCollection AddGcd(this IServiceCollection services, Assembly assembly, IConsole console)
     {
-        //var assembly = typeof(Program).Assembly;
         return services
-                .AddScoped<IDownloadAzBlobService, AzBlobService>()
-                .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddScoped<IWebDownload, WebDownload>()
-                .AddScoped<IFileSystem, LocalFileService>()
-                .AddScoped<IRemoteFileSystemAzBlob, RemoteFileSystemAzBlob>()
+                .AddLocalFileSystem()
+                .AddRemoteFileServiceAzBlob()
                 .AddRemoteFileServiceSmb()
-                .AddRemoteFileServiceGcd()
+                .AddRemoteFileServiceSmb()
                 .RegisterInstructions()
                 .RegisterConfiguration()
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
