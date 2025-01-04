@@ -28,7 +28,7 @@ namespace Gcd.Tests
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddSingleton<IWebDownload, WebDownload>()
                 .AddScoped<IFileSystem, LocalFileService>()
-                .AddScoped<IRemoteFileSystem, RemoteFileSystem>()
+                .AddScoped<IRemoteFileSystemAzBlob, RemoteFileSystemAzBlob>()
                 .AddScoped<RemoteFileSystemSmb, RemoteFileSystemSmb>()
                 .AddScoped<RemoteFileSystemGit, RemoteFileSystemGit>()
                 .RegisterInstructions()

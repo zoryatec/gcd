@@ -7,6 +7,7 @@ using Gcd.Services.FileSystem;
 using System.IO.Compression;
 using Gcd.Model.File;
 using Gcd.Model.FeedDefinition;
+using Gcd.Handlers.Nipkg.Shared;
 
 namespace Gcd.Handlers.Nipkg.FeedLocal;
 

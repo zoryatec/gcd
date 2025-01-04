@@ -33,7 +33,7 @@ namespace Gcd
                 .AddScoped<IUploadAzBlobService, AzBlobService>()
                 .AddScoped<IWebDownload, WebDownload>()
                 .AddScoped<IFileSystem, LocalFileService>()
-                .AddScoped<IRemoteFileSystem,RemoteFileSystem>()
+                .AddScoped<IRemoteFileSystemAzBlob,RemoteFileSystemAzBlob>()
                 .AddScoped<RemoteFileSystemSmb, RemoteFileSystemSmb>()
                 .AddScoped<RemoteFileSystemGit, RemoteFileSystemGit>()
                 .RegisterInstructions()

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Gcd.Services.RemoteFileSystem
 {
-    public interface IRemoteFileSystem
+    public interface IRemoteFileSystemAzBlob
     {
         public Task<Result> DownloadFileAsync(IFileDescriptor sourceDescriptor, LocalFilePath destinationPath, bool overwrite = false);
         public Task<Result> UploadFileAsync(IFileDescriptor sourceDescriptor, LocalFilePath sourcePath, bool overwrite = false);

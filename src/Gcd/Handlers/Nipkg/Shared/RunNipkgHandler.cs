@@ -5,25 +5,25 @@ using Gcd.Model.Config;
 using Gcd.Model.FeedDefinition;
 using MediatR;
 
-namespace Gcd.Services;
+namespace Gcd.Handlers.Nipkg.Shared;
 
 
 
-public record  RunNipkgRequest(string[] arguments, NipkgCmdPath cmd) : IRequest<Result>;
+public record RunNipkgRequest(string[] arguments, NipkgCmdPath cmd) : IRequest<Result>;
 
-public class  RunNipkgHandler(NipkgCmdPath _cmd)
-    : IRequestHandler< RunNipkgRequest, Result>
+public class RunNipkgHandler(NipkgCmdPath _cmd)
+    : IRequestHandler<RunNipkgRequest, Result>
 {
-    public async Task<Result> Handle( RunNipkgRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(RunNipkgRequest request, CancellationToken cancellationToken)
     {
         var cmd = request.cmd;
-        if(cmd == NipkgCmdPath.None)
+        if (cmd == NipkgCmdPath.None)
         {
-            cmd =_cmd;
+            cmd = _cmd;
             if (cmd == NipkgCmdPath.None) return Result.Failure("Please specify NIPKG path");
         }
 
-        return RunNipkg(request.arguments,cmd);
+        return RunNipkg(request.arguments, cmd);
     }
 
 

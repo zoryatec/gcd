@@ -10,7 +10,7 @@ using MediatR;
 namespace Gcd.Handlers.Nipkg.FeedAzBlob;
 
 
-public class UploadPackage(IFileSystem _fs, IRemoteFileSystem _rfs)
+public class UploadPackage(IFileSystem _fs, IRemoteFileSystemAzBlob _rfs)
     : IRequestHandler<UploadPackageRequest<FeedDefinitionAzBlob>, Result>
 {
     public async Task<Result> Handle(UploadPackageRequest<FeedDefinitionAzBlob> request, CancellationToken cancellationToken)

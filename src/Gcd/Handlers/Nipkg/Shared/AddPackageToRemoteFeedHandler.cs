@@ -21,7 +21,7 @@ public record AddPackageToRemoteFeedRequest<TFeedDefinition>(
 public class AddPackageToRemoteFeedHandler<TFeedDefinition>(
     IMediator _mediator,
     IFileSystem _fs,
-    IRemoteFileSystem _rfs)
+    IRemoteFileSystemAzBlob _rfs)
     : IRequestHandler<AddPackageToRemoteFeedRequest<TFeedDefinition>,Result> where TFeedDefinition : IFeedDefinition
 
 {

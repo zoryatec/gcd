@@ -17,7 +17,7 @@ namespace Gcd.Handlers.Nipkg.FeedSmb;
 public class AddPackageToSmbFeedHandler(
     IMediator _mediator,
     IFileSystem _fs,
-    IRemoteFileSystem _rfs)
+    IRemoteFileSystemAzBlob _rfs)
     : IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionSmb>, Result>
 {
     public async Task<Result> Handle(AddPackageToRemoteFeedRequest<FeedDefinitionSmb> request, CancellationToken cancellationToken)

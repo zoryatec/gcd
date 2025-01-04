@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Gcd.LocalFileSystem.Abstractions\Gcd.LocalFileSystem.Abstractions.csproj" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.23.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Gcd.RemoteFileSystem.AzBlob.Abstractions\Gcd.RemoteFileSystem.AzBlob.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

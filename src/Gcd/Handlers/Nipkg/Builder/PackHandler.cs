@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Handlers.Nipkg.Shared;
 using Gcd.Model;
 using Gcd.Model.Config;
-using Gcd.Services;
 using MediatR;
 
 namespace Gcd.Handlers.Nipkg.Builder;

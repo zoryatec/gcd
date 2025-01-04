@@ -1,23 +1,16 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Model;
-using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;
 using Gcd.Services.FileSystem;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gcd.Services.RemoteFileSystem
 {
-    public class RemoteFileSystem(
+    public class RemoteFileSystemAzBlob(
         IUploadAzBlobService _uploadService,
         IDownloadAzBlobService downloadAz,
         IFileSystem _fs,
-        IWebDownload _webDownload,
-        RemoteFileSystemSmb _remoteSmb
-        ) : IRemoteFileSystem
+        IWebDownload _webDownload
+        ) : IRemoteFileSystemAzBlob
     {
 
         public async Task<Result> DownloadFileAsync(IFileDescriptor sourceDescriptor, LocalFilePath destinationPath, bool overwrite = false)
@@ -43,22 +36,7 @@ namespace Gcd.Services.RemoteFileSystem
             };
         }
 
-        public Result<IFileDescriptor> CreateFileDescriptor(IDirectoryDescriptor dirDescriptor, FileName fileName)
-        {
-            return dirDescriptor switch
-            {
-                AzBlobContainerUri source => CreateBlobURI(source,fileName).Map((x) => x as IFileDescriptor),
-                SmbDirPath source => CreateSmbFile(source, fileName).Map((x) => x as IFileDescriptor),
-                _ => throw new InvalidOperationException(dirDescriptor.GetType().Name)
-            };
-        }
 
-        private Result<SmbFilePath> CreateSmbFile(SmbDirPath azBlobContainerUri, FileName fileName)
-        {
-
-
-            return SmbFilePath.Of("");
-        }
 
         private Result<AzBlobUri> CreateBlobURI(AzBlobContainerUri azBlobContainerUri, FileName fileName)
         {
@@ -71,5 +49,13 @@ namespace Gcd.Services.RemoteFileSystem
             $"{feedUri.BaseUri}/{subPath}{feedUri.Query}";
 
 
+        public Result<IFileDescriptor> CreateFileDescriptor(IDirectoryDescriptor dirDescriptor, FileName fileName)
+        {
+            return dirDescriptor switch
+            {
+                AzBlobContainerUri source => CreateBlobURI(source, fileName).Map((x) => x as IFileDescriptor),
+                _ => throw new InvalidOperationException(dirDescriptor.GetType().Name)
+            };
+        }
     }
 }

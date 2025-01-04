@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Gcd.Handlers.Nipkg.FeedAzBlob;
 
-public class PullFeedMetaHandler(IFileSystem _fs, IRemoteFileSystem _rfs)
+public class PullFeedMetaHandler(IFileSystem _fs, IRemoteFileSystemAzBlob _rfs)
     : IRequestHandler<PullFeedMetaRequest<FeedDefinitionAzBlob>, Result>
 {
     public async Task<Result> Handle(PullFeedMetaRequest<FeedDefinitionAzBlob> request, CancellationToken cancellationToken)
