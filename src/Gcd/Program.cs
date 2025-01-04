@@ -18,7 +18,7 @@ namespace Gcd
         {
             var assembly = typeof(Program).Assembly;
             var services = new ServiceCollection()
-                .AddGcd();
+                .AddGcd(assembly,PhysicalConsole.Singleton);
 
             var serviceProvider = services.BuildServiceProvider();
             var console = serviceProvider.GetRequiredService<IConsole>();

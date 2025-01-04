@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
+using Gcd.DI;
 using Gcd.Handlers.Nipkg.Shared;
 using Gcd.LabViewProject;
 using Gcd.Model.Config;
@@ -24,24 +25,25 @@ namespace Gcd.Tests
             _console = new FakeConsole();
             var assembly = typeof(Program).Assembly;
             var services = new ServiceCollection()
-                .AddScoped<IDownloadAzBlobService, AzBlobService>()
-                .AddScoped<IUploadAzBlobService, AzBlobService>()
-                .AddSingleton<IWebDownload, WebDownload>()
-                .AddScoped<IFileSystem, LocalFileService>()
-                .AddScoped<IRemoteFileSystemAzBlob, RemoteFileSystemAzBlob>()
-                .AddScoped<RemoteFileSystemSmb, RemoteFileSystemSmb>()
-                .AddScoped<RemoteFileSystemGit, RemoteFileSystemGit>()
-                .RegisterInstructions()
-                .RegisterConfiguration()
-                .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
-                .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
-                .AddSingleton<IConsole>(_console)
-                .AddMediatR(config =>
-                {
-                    config.RegisterServicesFromAssembly(assembly);
-                })
-               .AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionAzBlob>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionAzBlob>))
-               .AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionGit>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionGit>));
+                .AddGcd(assembly, _console);
+               // .AddScoped<IDownloadAzBlobService, AzBlobService>()
+               // .AddScoped<IUploadAzBlobService, AzBlobService>()
+               // .AddSingleton<IWebDownload, WebDownload>()
+               // .AddScoped<IFileSystem, LocalFileService>()
+               // .AddScoped<IRemoteFileSystemAzBlob, RemoteFileSystemAzBlob>()
+               // .AddScoped<RemoteFileSystemSmb, RemoteFileSystemSmb>()
+               // .AddScoped<RemoteFileSystemGit, RemoteFileSystemGit>()
+               // .RegisterInstructions()
+               // .RegisterConfiguration()
+               // .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
+               // .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
+               // .AddSingleton<IConsole>(_console)
+               // .AddMediatR(config =>
+               // {
+               //     config.RegisterServicesFromAssembly(assembly);
+               // })
+               //.AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionAzBlob>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionAzBlob>))
+               //.AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionGit>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionGit>));
 
             var serviceProvider = services.BuildServiceProvider();
 
