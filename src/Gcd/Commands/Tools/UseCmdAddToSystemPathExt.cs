@@ -8,18 +8,20 @@ namespace Gcd.Commands.Tools;
 
 public static class UseCmdAddToSystemPathExt
 {
+    private static bool SHOW_IN_HELP = false;
     public static CommandLineApplication UseCmdAddToSystemPath(this CommandLineApplication app,
        IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
-        app.Command("add-to-system-path", addToUserPath =>
+        app.Command("add-to-system-path", cmd =>
         {
-            addToUserPath.Description = "adds to user path";
+            cmd.Description = "adds to user path";
+            cmd.ShowInHelpText = SHOW_IN_HELP;
 
-            var pathToAdd = addToUserPath.Argument("path", "Path to be added to user path enviromental variable").IsRequired();
+            var pathToAdd = cmd.Argument("path", "Path to be added to user path enviromental variable").IsRequired();
 
-            addToUserPath.OnExecuteAsync(async cancelationToken =>
+            cmd.OnExecuteAsync(async cancelationToken =>
             {
                 var maybePath = Maybe.From(pathToAdd.Value);
                 if (maybePath.HasValue)

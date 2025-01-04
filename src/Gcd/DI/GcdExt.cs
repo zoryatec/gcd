@@ -36,6 +36,7 @@ public static class GcdExt
                     config.RegisterServicesFromAssembly(assembly);
                 })
                .AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionAzBlob>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionAzBlob>))
+               .AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionSmb>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionSmb>))
                .AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionGit>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionGit>));
     }
 

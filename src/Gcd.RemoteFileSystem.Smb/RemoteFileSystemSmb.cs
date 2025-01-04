@@ -53,7 +53,6 @@ namespace Gcd.Services.RemoteFileSystem
             using (new NetworkConnection(smbSharePath, credentials))
             {
                 File.Copy(localFilePath, smbFilePath, overwrite: true);
-                Console.WriteLine($"File uploaded successfully to {destinationPath}");
             }
         }
     }

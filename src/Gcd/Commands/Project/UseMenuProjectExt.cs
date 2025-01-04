@@ -5,19 +5,22 @@ namespace Gcd.Commands.Project;
 
 public static class UseMenuProjectExt
 {
+    
+    private static bool SHOW_IN_HELP = false;
     public static CommandLineApplication UseProjectCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
 
-        app.Command("project", projectCmd =>
+        app.Command("project", cmd =>
         {
-            projectCmd.OnExecute(() =>
+            cmd.ShowInHelpText = SHOW_IN_HELP;
+            cmd.OnExecute(() =>
             {
                 console.WriteLine("Specify a subcommand");
-                projectCmd.ShowHelp();
+                cmd.ShowHelp();
                 return 1;
             });
-            projectCmd.UseBuildSpecCmd(serviceProvider);
+            cmd.UseBuildSpecCmd(serviceProvider);
         });
         return app;
     }
