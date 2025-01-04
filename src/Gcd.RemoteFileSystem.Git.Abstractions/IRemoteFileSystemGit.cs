@@ -1,4 +1,7 @@
-﻿using System;
+﻿using CSharpFunctionalExtensions;
+using Gcd.Model.FeedDefinition;
+using Gcd.Model.File;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +11,7 @@ namespace Gcd.Services.RemoteFileSystem
 {
     public interface IRemoteFileSystemGit
     {
+        public Task<Result> Clone(GitRepoAddress address, GitLocalBranch branch, GitUserName username, GitPassword password, LocalDirPath checkoutDir);
+        public Task<Result> Push(GitRepoAddress address, GitLocalBranch branch, GitUserName username, GitPassword password, GitCommitterName committerName, GitCommiterEmail committerEmail, LocalDirPath checkoutDir);
     }
 }

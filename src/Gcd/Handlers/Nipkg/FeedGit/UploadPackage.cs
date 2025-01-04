@@ -10,7 +10,7 @@ using MediatR;
 namespace Gcd.Handlers.Nipkg.FeedGit;
 
 
-public class UploadPackage(IFileSystem _fs, RemoteFileSystemGit _rfs)
+public class UploadPackage(IFileSystem _fs, IRemoteFileSystemGit _rfs)
     : IRequestHandler<UploadPackageRequest<FeedDefinitionGit>, Result>
 {
     public async Task<Result> Handle(UploadPackageRequest<FeedDefinitionGit> request, CancellationToken cancellationToken)

@@ -24,7 +24,7 @@ public static class GcdExt
                 .AddScoped<IWebDownload, WebDownload>()
                 .AddLocalFileSystem()
                 .AddRemoteFileServiceAzBlob()
-                .AddRemoteFileServiceSmb()
+                .AddRemoteFileServiceGit()
                 .AddRemoteFileServiceSmb()
                 .RegisterInstructions()
                 .RegisterConfiguration()

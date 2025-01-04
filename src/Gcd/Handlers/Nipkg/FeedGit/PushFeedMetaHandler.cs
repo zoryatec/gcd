@@ -11,7 +11,7 @@ using MediatR;
 
 namespace Gcd.Handlers.Nipkg.FeedGit;
 
-public class PushFeedMetaHandler(IFileSystem _fs, RemoteFileSystemGit _rfs)
+public class PushFeedMetaHandler(IFileSystem _fs, IRemoteFileSystemGit _rfs)
     : IRequestHandler<PushFeedMetaRequest<FeedDefinitionGit>, Result>
 {
     public async Task<Result> Handle(PushFeedMetaRequest<FeedDefinitionGit> request, CancellationToken cancellationToken)
