@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
 using Gcd.Model.Config;
-using Gcd.Model.FeedDefinition;
 using Gcd.Handlers.Nipkg.Shared;
 using Gcd.Extensions;
+using Gcd.Model.Nipkg.FeedDefinition;
 
 namespace Gcd.Commands.Nipkg.FeedSmb;
 

@@ -1,8 +1,9 @@
 ﻿using System.Diagnostics;
 using CSharpFunctionalExtensions;
-using Gcd.Model;
 using Gcd.Model.Config;
-using Gcd.Model.FeedDefinition;
+using Gcd.Model.Nipkg.Common;
+using Gcd.Model.Nipkg.FeedDefinition;
+using Gcd.Model.Nipkg.PackageBuilder;
 using MediatR;
 
 namespace Gcd.Handlers.Nipkg.Shared;

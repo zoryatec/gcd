@@ -2,8 +2,8 @@
 using Gcd.Extensions;
 using Gcd.Handlers.Nipkg.Shared;
 using Gcd.Model;
-using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;
+using Gcd.Model.Nipkg.FeedDefinition;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;

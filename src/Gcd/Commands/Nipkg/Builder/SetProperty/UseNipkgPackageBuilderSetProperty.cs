@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
 using Gcd.Extensions;
-using Gcd.Model;
+using Gcd.Model.Nipkg.PackageBuilder;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;

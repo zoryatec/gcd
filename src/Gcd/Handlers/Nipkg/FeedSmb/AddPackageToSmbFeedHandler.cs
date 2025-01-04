@@ -1,15 +1,15 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Services;
-using Gcd.Model;
 using MediatR;
 using Gcd.Model.Config;
 using Gcd.Services.FileSystem;
 using System.IO.Compression;
 using Gcd.Model.File;
-using Gcd.Model.FeedDefinition;
 using Gcd.Services.RemoteFileSystem;
 using Gcd.Handlers.Nipkg.FeedLocal;
 using Gcd.Handlers.Nipkg.Shared;
+using Gcd.Model.Nipkg.FeedDefinition;
+using Gcd.Model.Nipkg.Common;
 
 namespace Gcd.Handlers.Nipkg.FeedSmb;
 

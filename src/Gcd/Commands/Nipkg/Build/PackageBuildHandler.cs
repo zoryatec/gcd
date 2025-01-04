@@ -1,8 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.Nipkg.Builder.AddContent;
 using Gcd.Handlers.Nipkg.Builder;
-using Gcd.Model;
 using Gcd.Model.Config;
+using Gcd.Model.Nipkg.Common;
+using Gcd.Model.Nipkg.PackageBuilder;
 using Gcd.Services.FileSystem;
 using MediatR;
 

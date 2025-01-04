@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Model;
 using Gcd.Extensions;
+using Gcd.Model.Nipkg.ControlFile;
 
 namespace Gcd.Commands.Nipkg.Builder.SetProperty;
 

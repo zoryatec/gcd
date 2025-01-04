@@ -7,6 +7,7 @@ using Gcd.Model.Config;
 using Gcd.Extensions;
 using Gcd.Model.FeedDefinition;
 using Gcd.Handlers.Nipkg.Shared;
+using Gcd.Model.Nipkg.FeedDefinition;
 
 namespace Gcd.Commands.Nipkg.FeedGit;
 

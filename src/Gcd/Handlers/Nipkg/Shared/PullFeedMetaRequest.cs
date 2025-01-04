@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Model.FeedDefinition;
+using Gcd.Model.Nipkg.FeedDefinition;
 using MediatR;
 
 namespace Gcd.Handlers.Nipkg.Shared;

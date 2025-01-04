@@ -4,8 +4,8 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
 using Gcd.Extensions;
-using Gcd.Model;
 using Gcd.Commands.Nipkg.Builder.AddContent;
+using Gcd.Model.Nipkg.PackageBuilder;
 
 
 namespace Gcd.Handlers.Nipkg.Builder;

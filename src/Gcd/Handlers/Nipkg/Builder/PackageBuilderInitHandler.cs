@@ -1,6 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
-using Gcd.Model;
+using Gcd.Model.Nipkg.ControlFile;
+using Gcd.Model.Nipkg.DebianFile;
+using Gcd.Model.Nipkg.InstructionFile;
+using Gcd.Model.Nipkg.PackageBuilder;
 using Gcd.Services.FileSystem;
 using MediatR;
 using System.Threading;

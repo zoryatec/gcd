@@ -6,10 +6,10 @@ using CSharpFunctionalExtensions.ValueTasks;
 using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
 using Gcd.Model;
 using Gcd.Model.Config;
-using Gcd.Model.FeedDefinition;
 using Gcd.Handlers.Nipkg.Shared;
 using Gcd.Handlers.Nipkg.FeedLocal;
 using Gcd.Extensions;
+using Gcd.Model.Nipkg.FeedDefinition;
 
 namespace Gcd.Commands.Nipkg.FeedSmb;
 

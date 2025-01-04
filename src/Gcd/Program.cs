@@ -11,8 +11,8 @@ using Gcd.Services.FileSystem;
 using Gcd.Services.RemoteFileSystem;
 using CSharpFunctionalExtensions;
 using Gcd.Handlers.Nipkg.Shared;
-using Gcd.Model.FeedDefinition;
 using Gcd.Commands;
+using Gcd.Model.Nipkg.FeedDefinition;
 
 
 namespace Gcd

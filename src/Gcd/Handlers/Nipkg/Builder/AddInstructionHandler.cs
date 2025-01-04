@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
 using Gcd.Extensions;
-using Gcd.Model;
+using Gcd.Model.Nipkg.PackageBuilder;
 using Gcd.Nipkg.Instructions.Model;
 using Gcd.Services.FileSystem;
 using Gcd.Tests.UnitTest;

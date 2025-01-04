@@ -4,7 +4,7 @@ using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Handlers.Nipkg.Shared;
 using Gcd.LabViewProject;
 using Gcd.Model.Config;
-using Gcd.Model.FeedDefinition;
+using Gcd.Model.Nipkg.FeedDefinition;
 using Gcd.Services;
 using Gcd.Services.DI;
 using Gcd.Services.FileSystem;
