@@ -18,14 +18,15 @@ public class PushFeedMetaHandler(IFileSystem _fs, RemoteFileSystemGit _rfs)
     {
         var (remoteFeedDef, localFeedDef) = request;
 
-        var checkoutFeed = FeedDefinitionLocal.Of(_rfs.GlobalCheckoutDir);
+        var checkoutDir = await _fs.GenerateTempDirectoryAsync();
+        var checkoutFeed = FeedDefinitionLocal.Of(checkoutDir.Value);
 
         return await checkoutFeed
-        //.Bind((x) => _rfs.Clone(remoteFeedDef.Address, remoteFeedDef.BrancName, remoteFeedDef.UserName, remoteFeedDef.Password))
-        .Bind((x) => _fs.CopyFileAsync(localFeedDef.Package, checkoutFeed.Value.Package, overwrite: true))
+        .Bind((x) => _rfs.Clone(remoteFeedDef.Address, remoteFeedDef.BrancName, remoteFeedDef.UserName, remoteFeedDef.Password, checkoutFeed.Value.Feed))
+        .Bind(() => _fs.CopyFileAsync(localFeedDef.Package, checkoutFeed.Value.Package, overwrite: true))
         .Bind(() => _fs.CopyFileAsync( localFeedDef.PackageGz, checkoutFeed.Value.PackageGz, overwrite: true))
         .Bind(() => _fs.CopyFileAsync(localFeedDef.PackageStamps,checkoutFeed.Value.PackageStamps, overwrite: true))
-        .Bind(() => _rfs.Push(remoteFeedDef.Address, remoteFeedDef.BrancName, remoteFeedDef.UserName, remoteFeedDef.Password, remoteFeedDef.CommitterName, remoteFeedDef.CommitterEmail));
+        .Bind(() => _rfs.Push(remoteFeedDef.Address, remoteFeedDef.BrancName, remoteFeedDef.UserName, remoteFeedDef.Password, remoteFeedDef.CommitterName, remoteFeedDef.CommitterEmail, checkoutFeed.Value.Feed));
     }
 
     private async Task<Result> PushFeed(FeedDefinitionGit feedDefinition, LocalDirPath checkoutPath) =>

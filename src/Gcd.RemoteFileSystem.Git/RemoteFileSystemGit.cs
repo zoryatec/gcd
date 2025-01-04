@@ -10,15 +10,19 @@ namespace Gcd.Services.RemoteFileSystem
     {
 
         public readonly LocalDirPath GlobalCheckoutDir;
+        private bool _allready_cloned = false;
 
-        public async Task<Result> Clone(GitRepoAddress address, GitLocalBranch branch, GitUserName username, GitPassword password)
+        public async Task<Result> Clone(GitRepoAddress address, GitLocalBranch branch, GitUserName username, GitPassword password, LocalDirPath checkoutDir)
         {
-            return Result.Try(() => CloneRepositoryWithCredentials(address, branch, username, password, GlobalCheckoutDir), ex => ex.Message).MapError(errr => $"PULL:{errr}");
+            //if(!_allready_cloned) return Result.Try(() => CloneRepositoryWithCredentials(address, branch, username, password, checkoutDir), ex => ex.Message).MapError(errr => $"PULL:{errr}");
+            //_allready_cloned = true;
+            //return Result.Success();
+            return Result.Try(() => CloneRepositoryWithCredentials(address, branch, username, password, checkoutDir), ex => ex.Message).MapError(errr => $"PULL:{errr}");
         }
 
-        public async Task<Result> Push(GitRepoAddress address, GitLocalBranch branch, GitUserName username, GitPassword password, GitCommitterName committerName, GitCommiterEmail committerEmail)
+        public async Task<Result> Push(GitRepoAddress address, GitLocalBranch branch, GitUserName username, GitPassword password, GitCommitterName committerName, GitCommiterEmail committerEmail, LocalDirPath checkoutDir)
         {
-            return Result.Try(() => CommitAndPush(address, branch, username, password, committerName, committerEmail, GlobalCheckoutDir)).MapError(errr => $"PUSH:{errr}");
+            return Result.Try(() => CommitAndPush(address, branch, username, password, committerName, committerEmail, checkoutDir)).MapError(errr => $"PUSH:{errr}");
         }
 
 

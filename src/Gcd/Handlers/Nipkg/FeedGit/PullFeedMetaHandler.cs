@@ -17,14 +17,15 @@ public class PullFeedMetaHandler(IFileSystem _fs, RemoteFileSystemGit _rfs)
     {
         var (remoteFeedDef, localFeedDef) = request;
 
-        var checkoutFeed = FeedDefinitionLocal.Of(_rfs.GlobalCheckoutDir);
+        var checkoutDir =  await _fs.GenerateTempDirectoryAsync();
+        var checkoutFeed = FeedDefinitionLocal.Of(checkoutDir.Value);
 
         var pullResult = await checkoutFeed
-            .Bind((x) => _rfs.Clone(remoteFeedDef.Address, remoteFeedDef.BrancName, remoteFeedDef.UserName, remoteFeedDef.Password));
+            .Bind((x) => _rfs.Clone(remoteFeedDef.Address, remoteFeedDef.BrancName, remoteFeedDef.UserName, remoteFeedDef.Password, checkoutFeed.Value.Feed));
 
 
          return await pullResult
-            .Bind(() => _fs.CreateDirAsync(localFeedDef.Feed))
+            .Bind(() => _fs.CreateDirAsync(localFeedDef.Feed)) // this actually create if not exist
             .Bind(() => _fs.CopyFileAsync(checkoutFeed.Value.Package, localFeedDef.Package, overwrite: true))
             .Bind(() => _fs.CopyFileAsync(checkoutFeed.Value.PackageGz, localFeedDef.PackageGz, overwrite: true))
             .Bind(() => _fs.CopyFileAsync(checkoutFeed.Value.PackageStamps, localFeedDef.PackageStamps, overwrite: true));

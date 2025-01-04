@@ -18,14 +18,15 @@ public class UploadPackage(IFileSystem _fs, RemoteFileSystemGit _rfs)
         var (feedDef, packageFilePath) = request;
 
 
-        var checkoutFeed = FeedDefinitionLocal.Of(_rfs.GlobalCheckoutDir);
+        var checkoutDir = await _fs.GenerateTempDirectoryAsync();
+        var checkoutFeed = FeedDefinitionLocal.Of(checkoutDir.Value);
 
         var destinationPackage = checkoutFeed
             .Map((arg) => PackageFilePath.Of(arg.Feed, packageFilePath.FileName));
 
         return await destinationPackage
         .Bind((x) => _fs.CopyFileAsync(packageFilePath, destinationPackage.Value, overwrite: true))
-        .Bind(() => _rfs.Push(feedDef.Address, feedDef.BrancName, feedDef.UserName, feedDef.Password, feedDef.CommitterName, feedDef.CommitterEmail));
+        .Bind(() => _rfs.Push(feedDef.Address, feedDef.BrancName, feedDef.UserName, feedDef.Password, feedDef.CommitterName, feedDef.CommitterEmail, checkoutFeed.Value.Feed));
     }
 
 }
