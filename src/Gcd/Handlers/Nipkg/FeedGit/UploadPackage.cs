@@ -24,6 +24,9 @@ public class UploadPackage(IFileSystem _fs, IRemoteFileSystemGit _rfs)
         var destinationPackage = checkoutFeed
             .Map((arg) => PackageFilePath.Of(arg.Feed, packageFilePath.FileName));
 
+        var pullResult = await checkoutFeed
+            .Bind((x) => _rfs.Clone(feedDef.Address, feedDef.BrancName, feedDef.UserName, feedDef.Password, checkoutFeed.Value.Feed));
+
         return await destinationPackage
         .Bind((x) => _fs.CopyFileAsync(packageFilePath, destinationPackage.Value, overwrite: true))
         .Bind(() => _rfs.Push(feedDef.Address, feedDef.BrancName, feedDef.UserName, feedDef.Password, feedDef.CommitterName, feedDef.CommitterEmail, checkoutFeed.Value.Feed));
