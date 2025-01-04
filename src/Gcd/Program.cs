@@ -1,18 +1,7 @@
-﻿using Gcd.LabViewProject;
-using McMaster.Extensions.CommandLineUtils;
+﻿using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
-using MediatR;
-using Gcd.Services;
-using Gcd.Commands.Nipkg.Builder.SetProperty;
-using Gcd.Model.Config;
-using Microsoft.Extensions.Configuration;
-using Gcd.Services.DI;
-using Gcd.Services.FileSystem;
-using Gcd.Services.RemoteFileSystem;
-using CSharpFunctionalExtensions;
-using Gcd.Handlers.Nipkg.Shared;
 using Gcd.Commands;
-using Gcd.Model.Nipkg.FeedDefinition;
+using Gcd.DI;
 
 
 namespace Gcd
@@ -29,24 +18,7 @@ namespace Gcd
         {
             var assembly = typeof(Program).Assembly;
             var services = new ServiceCollection()
-                .AddScoped<IDownloadAzBlobService, AzBlobService>()
-                .AddScoped<IUploadAzBlobService, AzBlobService>()
-                .AddScoped<IWebDownload, WebDownload>()
-                .AddScoped<IFileSystem, LocalFileService>()
-                .AddScoped<IRemoteFileSystemAzBlob,RemoteFileSystemAzBlob>()
-                .AddScoped<RemoteFileSystemSmb, RemoteFileSystemSmb>()
-                .AddScoped<RemoteFileSystemGit, RemoteFileSystemGit>()
-                .RegisterInstructions()
-                .RegisterConfiguration()
-                .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
-                .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
-                .AddSingleton<IConsole>(PhysicalConsole.Singleton)
-                .AddMediatR(config =>
-                {
-                    config.RegisterServicesFromAssembly(assembly);
-                })
-               .AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionAzBlob>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionAzBlob>))
-               .AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionGit>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionGit>));
+                .AddGcd();
 
             var serviceProvider = services.BuildServiceProvider();
             var console = serviceProvider.GetRequiredService<IConsole>();
