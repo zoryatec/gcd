@@ -13,7 +13,7 @@ namespace Gcd.Handlers.Nipkg.Builder;
 
 public static class UseAddContentCmdExtensions
 {
-    public static CommandLineApplication UseAddContentCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseCmdAddContent(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();

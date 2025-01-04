@@ -1,38 +1,39 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Extensions;
 using Gcd.Handlers.Nipkg.Builder;
 using Gcd.Model.Config;
-using Gcd.Model.Nipkg.Common;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using static Gcd.Contract.Nipkg.PackageBuild;
 
 
 namespace Gcd.Commands.Nipkg.Builder;
 
 public static class UseCmdPackExt
 {
+    public static readonly string NAME = "pack";
+    public static readonly string DESCRIPTION = "pack";
+    public static readonly string SUCESS_MESSAGE = "success";
     public static CommandLineApplication UseCmdPack(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
         var factory = serviceProvider.GetRequiredService<IControlPropertyFactory>();
 
-        app.Command("pack", cmd =>
+        app.Command(NAME, cmd =>
         {
-            var packageDestinationOption = cmd
-                .Option(PACKAGE_DESTINATION_DIR_OPTION, PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
-                .IsRequired();
-
+            var packageDestinationOption = new PackageDestinationDirOption();
             var builderRootDirOpt = new BuilderRootDirOption();
 
-            cmd.AddOption(builderRootDirOpt);
+            cmd.AddOptions(
+                builderRootDirOpt.IsRequired(),
+                packageDestinationOption.IsRequired()
+                );
 
 
             cmd.OnExecuteAsync(async cancellationToken =>
             {
-                var packageDestinationDir = PackageDestinationDirectory.Of(packageDestinationOption.Value());
-
+                var packageDestinationDir = packageDestinationOption.Map();
                 var rootDir = builderRootDirOpt.Map();
 
                 var cmdPath = NipkgCmdPath.None;

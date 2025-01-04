@@ -4,22 +4,23 @@ using Gcd.Handlers.Nipkg.Builder;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using static Gcd.Contract.Nipkg.PackageBuilderInit;
-
 
 namespace Gcd.Commands.Nipkg.Builder;
 
 public static class UseCmdInitExt
 {
+    public static readonly string NAME = "init";
+    public static readonly string DESCRIPTION = "init";
+    public static readonly string SUCESS_MESSAGE = "success";
     public static CommandLineApplication UseCmdInit(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
         var factory = serviceProvider.GetRequiredService<IControlPropertyFactory>();
 
-        app.Command(COMMAND, command =>
+        app.Command(NAME, command =>
         {
-            command.Description = COMMAND_DESCRIPTION;
+            command.Description = DESCRIPTION;
             var rootDirOpt = new BuilderRootDirOption();
 
             var options = new List<ControlPropertyOption>

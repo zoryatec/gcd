@@ -6,10 +6,11 @@ namespace Gcd.Commands.Nipkg.Builder;
 
 public static class UseMenuBuilderExt
 {
+    public static readonly string NAME = "builder";
     public static CommandLineApplication UseMenuBuilder(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
-        app.Command("builder", cmd =>
+        app.Command(NAME, cmd =>
         {
             cmd.OnExecute(() =>
             {
@@ -18,8 +19,8 @@ public static class UseMenuBuilderExt
                 return 1;
             });
             cmd.UseCmdInit(serviceProvider);
-            cmd.UseSetProperty(serviceProvider);
-            cmd.UseAddContentCmd(serviceProvider);
+            cmd.UseCmdSetProperty(serviceProvider);
+            cmd.UseCmdAddContent(serviceProvider);
             cmd.UseFilePackageInstructionsCmd(serviceProvider);
             cmd.UseCmdPack(serviceProvider);
         });

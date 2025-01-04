@@ -11,15 +11,18 @@ namespace Gcd.Commands.Nipkg.Builder;
 
 public static class UseCmdAddInstructionExt
 {
+    public static readonly string NAME = "add-custom-execute";
+    public static readonly string DESCRIPTION = "inadd-custom-executeit";
+    public static readonly string SUCESS_MESSAGE = "success";
     public static CommandLineApplication UseCmdAddInstruction(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
         var factory = serviceProvider.GetRequiredService<IControlPropertyFactory>();
 
-        app.Command("add-custom-execute", command =>
+        app.Command(NAME, command =>
         {
-            command.Description = "COMMAND_DESCRIPTION";
+            command.Description = DESCRIPTION;
             var builderRootDirOpt = new BuilderRootDirOption();
             var rootOpt = new CustomExecuteRootOption();
             var argsOpt = new CustomExecuteArgumentsOption();
@@ -52,7 +55,7 @@ public static class UseCmdAddInstructionExt
                     .Combine(builderRootDir, exeName, args, step, schedule)
                     .Map(() => new FilePackageCustomeExecute(root.Value, exeName.Value, args.Value, step.Value, schedule.Value))
                     .Bind((custExe) => mediator.AddInstructionAsync(builderRootDir.Value, custExe, cancelationToken))
-                    .Tap(() => console.Write("SUCESS_MESSAGE"))
+                    .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);
             });

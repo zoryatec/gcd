@@ -2,7 +2,6 @@
 using CSharpFunctionalExtensions.ValueTasks;
 using Gcd.Extensions;
 using Gcd.Handlers.Nipkg.Builder;
-using Gcd.Model.Nipkg.PackageBuilder;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,16 +10,20 @@ using static Gcd.Contract.Nipkg.PackageBuilderSetProperty;
 namespace Gcd.Commands.Nipkg.Builder;
 public static class UseCmdSetPropertyExt
 {
-    public static CommandLineApplication UseSetProperty(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static readonly string NAME = "set-property";
+    public static readonly string DESCRIPTION = "set-property";
+    public static readonly string SUCESS_MESSAGE = "success";
+    public static CommandLineApplication UseCmdSetProperty(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
         var factory = serviceProvider.GetRequiredService<IControlPropertyFactory>();
 
-        app.Command(COMMAND, command =>
+        app.Command(NAME, command =>
         {
-            var rootDirOpt = command.Option(PACKAGE_BUILDER_DIR_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue)
-                .IsRequired();
+            command.Description = DESCRIPTION;
+
+            var rootDirOpt = new BuilderRootDirOption();
 
             var options = new List<ControlPropertyOption>
             {
@@ -38,10 +41,11 @@ public static class UseCmdSetPropertyExt
             };
 
             command.AddOptions(options);
+            command.AddOptions(rootDirOpt.IsRequired());
 
             command.OnExecuteAsync(async cancelationToken =>
             {
-                var rootDir = BuilderRootDir.Of(rootDirOpt.Value());
+                var rootDir = rootDirOpt.Map();
                 var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
 
                 if (rootDir.IsFailure)
