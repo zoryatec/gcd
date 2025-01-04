@@ -18,17 +18,26 @@ public class RunNipkgHandler(NipkgCmdPath _cmd)
     public async Task<Result> Handle(RunNipkgRequest request, CancellationToken cancellationToken)
     {
         var cmd = request.cmd;
-        if (cmd == NipkgCmdPath.None)
+        if (cmd == NipkgCmdPath.None) // cmd path from arguments not exist
         {
             cmd = _cmd;
-            if (cmd == NipkgCmdPath.None) return Result.Failure("Please specify NIPKG path");
+            if (cmd == NipkgCmdPath.None) // cmd path from config not exist
+            {
+                cmd = NipkgCmdPath.InPath;
+                var inPath = TestExists(cmd);
+                if(inPath.IsFailure) return Result.Failure("nipkg not in PATH variable. Please set in PATH, gcd config or pass it as option to cmd");
+            }
         }
 
-        return RunNipkg(request.arguments, cmd);
+        return RunNipkg(cmd, request.arguments);
     }
 
+    private Result TestExists(NipkgCmdPath cmd)
+    {
+        return RunNipkg(cmd, "--version");
+    }
 
-    private Result RunNipkg(string[] args, NipkgCmdPath cmd)
+    private Result RunNipkg( NipkgCmdPath cmd,params string[] args)
     {
         //string nipkg = @"""C:\Program Files\National Instruments\NI Package Manager\nipkg.exe""";
 
@@ -37,12 +46,12 @@ public class RunNipkgHandler(NipkgCmdPath _cmd)
 
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
-            FileName = cmd.Value,       // Use "cmd.exe" to run a command
-            Arguments = arguments, // "/c" tells cmd to run the command and then terminate
-            RedirectStandardOutput = true, // Redirect the output of the command
-            RedirectStandardError = true,  // Redirect any errors
-            UseShellExecute = false,      // Don't use the shell to execute the command
-            CreateNoWindow = true        // Don't create a command window
+            FileName = cmd.Value,  
+            Arguments = arguments, 
+            RedirectStandardOutput = true, 
+            RedirectStandardError = true,  
+            UseShellExecute = false,     
+            CreateNoWindow = true 
         };
 
         try
@@ -79,7 +88,6 @@ public static class MediatorExtensions
     {
         if (createFeed) return await mediator.RunNipkgRequestAsync(new string[] { "feed-add-pkg", feedDefinition.Feed.Value, packagePath.Value, "--create" }, cmd, cancellationToken);
         else return await mediator.RunNipkgRequestAsync(new string[] { "feed-add-pkg", feedDefinition.Feed.Value, packagePath.Value }, cmd, cancellationToken);
-
     }
 
 
