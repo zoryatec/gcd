@@ -5,12 +5,42 @@ using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;
 using Gcd.Model.Nipkg.Common;
 using Gcd.Model.Nipkg.FeedDefinition;
+using Gcd.Model.Nipkg.PackageBuilder;
 using McMaster.Extensions.CommandLineUtils;
 
 
 namespace Gcd.Commands.Nipkg;
 
+#region package builer
 
+
+
+public sealed class PackageDestinationDirOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-destination-dir";
+    public Result<PackageDestinationDirectory> Map() =>
+        PackageDestinationDirectory.Of(this.Value());
+}
+
+public sealed class PackageInstalationDirOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-instalation-dir";
+    public Result<InatallationTargetRootDir> Map() =>
+        InatallationTargetRootDir.Create(this.Value());
+}
+
+public sealed class PackageContentSourceDirOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-sourec-dir";
+    public Result<PackageBuilderContentSourceDir> Map() =>
+        PackageBuilderContentSourceDir.Of(this.Value());
+}
+
+
+
+
+
+#endregion
 #region package source
 public sealed class PackageLocalPathOption() : CommandOption(NAME, CommandOptionType.SingleValue)
 {

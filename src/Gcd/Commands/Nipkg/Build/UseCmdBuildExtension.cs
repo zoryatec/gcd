@@ -1,39 +1,33 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Extensions;
+using Gcd.Handlers.Nipkg.Build;
 using Gcd.Model.Config;
-using Gcd.Model.Nipkg.Common;
-using Gcd.Model.Nipkg.PackageBuilder;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using static Gcd.Contract.Nipkg.PackageBuild;
 
 
 namespace Gcd.Commands.Nipkg.Build;
 
 public static class UseCmdBuildExtension
 {
+    public const string NAME = "build";
+    public const string DESCRIPTION = "build a package";
+    public static string SUCESS_MESSAGE = "success";
     public static CommandLineApplication UseCmdBuild(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
         var factory = serviceProvider.GetRequiredService<IControlPropertyFactory>();
 
-        app.Command(COMMAND, cmd =>
+        app.Command(NAME, cmd =>
         {
-            cmd.Description = COMMAND_DESCRIPTION;
-            var packageSoureDirOption = cmd
-                .Option(PACKAGE_CONTENT_DIR_OPTION, PACKAGE_CONTENT_DIR_DESCRIPTION, CommandOptionType.SingleValue)
-                .IsRequired();
+            cmd.Description = DESCRIPTION;
+            var packageSoureDirOption = new PackageContentSourceDirOption();
+            var packageInstalationOption = new PackageInstalationDirOption();
+            var packageDestinationDirOpt = new PackageDestinationDirOption();
 
-            var packageInstalationOption = cmd
-                .Option(PACKAGE_INSTALATION_DIR_OPTION, PACKAGE_INSTALATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
-                .IsRequired();
-
-            var packageDestinationOption = cmd
-                .Option(PACKAGE_DESTINATION_DIR_OPTION, PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
-                .IsRequired();
 
             var options = new List<ControlPropertyOption>
             {
@@ -51,12 +45,18 @@ public static class UseCmdBuildExtension
             };
 
             cmd.AddOptions(options);
+            cmd.AddOptions(
+                packageSoureDirOption.IsRequired(),
+                packageDestinationDirOpt.IsRequired(),
+                packageInstalationOption.IsRequired()
+                );
+
 
             cmd.OnExecuteAsync(async cancellationToken =>
             {
-                var packageContent = PackageBuilderContentSourceDir.Of(packageSoureDirOption.Value());
-                var packageInstalationDir = InatallationTargetRootDir.Create(packageInstalationOption.Value());
-                var packageDestinationDir = PackageDestinationDirectory.Of(packageDestinationOption.Value());
+                var packageContent = packageSoureDirOption.Map();
+                var packageInstalationDir = packageInstalationOption.Map();
+                var packageDestinationDir = packageDestinationDirOpt.Map();
                 var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
                 var cmdPath = NipkgCmdPath.None;
 

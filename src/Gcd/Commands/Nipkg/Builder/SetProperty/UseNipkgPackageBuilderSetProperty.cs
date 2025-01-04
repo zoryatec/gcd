@@ -71,6 +71,12 @@ public sealed class PackageXbPluginOption() : ControlPropertyOption(PACKAGE_XB_P
 public sealed class PackageXbUserVisibleOption() : ControlPropertyOption(PACKAGE_XB_USER_VISIBLE_OPTION, CommandOptionType.SingleValue);
 public sealed class PackageXbStoreProductOption() : ControlPropertyOption(PACKAGE_XB_STORE_PRODUCT_OPTION, CommandOptionType.SingleValue);
 public sealed class PackageXBSectionOption() : ControlPropertyOption(PACKAGE_XB_SECTION_OPTION, CommandOptionType.SingleValue);
-public sealed class PackageVersionOption() : ControlPropertyOption(PACKAGE_VERSION_OPTION, CommandOptionType.SingleValue);
-public sealed class PackageNameOption() : ControlPropertyOption(PACKAGE_NAME_OPTION, CommandOptionType.SingleValue);
+public sealed class PackageVersionOption() : ControlPropertyOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-version";
+}
+public sealed class PackageNameOption() : ControlPropertyOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-name";
+}
 public sealed class PackageDependenciesOption() : ControlPropertyOption(PACKAGE_DEPENDENCIES_OPTION, CommandOptionType.SingleValue);

@@ -18,7 +18,7 @@ public static class UseMenuGcdExt
             .UseDefaultConventions()
             .UseConstructorInjection(serviceProvider);
 
-        app.HelpOption(inherited: true);
+        //app.HelpOption(inherited: true);
 
         app.UseProjectCmd(serviceProvider);
         app.UseMenuNipkg(serviceProvider);
@@ -28,7 +28,6 @@ public static class UseMenuGcdExt
 
         app.OnExecute(() =>
         {
-            console.WriteLine("Specify a subcommand");
             app.ShowHelp();
             return 1;
         });

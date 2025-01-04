@@ -14,15 +14,17 @@ namespace Gcd.Commands.Nipkg.FeedGit;
 public static class UseCmdPullFeedMetaExt
 {
     public static string NAME = "pull-meta-data";
-    public static string DESCRIPTION = "pull-meta-data";
     public static string SUCESS_MESSAGE = "success";
+    private static bool  SHOW_IN_HELP = false;
+    public static string DESCRIPTION = "pull-meta-data";
 
     public static CommandLineApplication UseCmdPullFeedMeta(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
         app.Command(NAME, cmd =>
-        {
+        { 
+            cmd.ShowInHelpText = SHOW_IN_HELP;
             cmd.Description = DESCRIPTION;
 
             var feedLocalOpt = new FeedLocalDirOption();

@@ -7,12 +7,12 @@ using Gcd.Model.Nipkg.PackageBuilder;
 using Gcd.Services.FileSystem;
 using MediatR;
 
-namespace Gcd.Commands.Nipkg.Build;
+namespace Gcd.Handlers.Nipkg.Build;
 
 public record PackageBuildRequest(
     PackageBuilderContentSourceDir PackageContentPath,
     InatallationTargetRootDir PackageInstalationDir,
-    PackageDestinationDirectory PackageDestinationDir, 
+    PackageDestinationDirectory PackageDestinationDir,
     IReadOnlyList<ControlFileProperty> ControlProperties,
     NipkgCmdPath CmdPath) : IRequest<Result>;
 
@@ -22,7 +22,7 @@ public class PackageBuildHandler(IMediator _mediator, IFileSystem _fs)
 {
     public async Task<Result> Handle(PackageBuildRequest request, CancellationToken cancellationToken)
     {
-        var (contentSrcDir, installationDir, outputDir, controlProp,cmd) = request;
+        var (contentSrcDir, installationDir, outputDir, controlProp, cmd) = request;
 
         var rootDirTempR = await _fs.GenerateTempDirectoryAsync()
             .Bind(dir => PackageBuilderRootDir.Of(dir.Value));
@@ -36,7 +36,7 @@ public class PackageBuildHandler(IMediator _mediator, IFileSystem _fs)
         return await _mediator
             .PackageBuilderInitAsync(rootDirTemp, controlProp)
             .Bind(() => _mediator.AddContentAsync(rootDirTemp, installationDir, contentSrcDir))
-            .Bind(() => _mediator.BuilderPackAsync(rootDirTemp, outputDir,cmd));
+            .Bind(() => _mediator.BuilderPackAsync(rootDirTemp, outputDir, cmd));
     }
 }
 

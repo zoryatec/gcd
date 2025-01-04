@@ -26,7 +26,7 @@ namespace Gcd
             var app = new CommandLineApplication<Program>()
             {
                 Name = "gcd",
-                Description = "CI/CD tool for G programmers with OCDddd",
+                Description = "G/LabVIEW CI/CD tool",
             };
             
             app.UseMenuGcd(serviceProvider);

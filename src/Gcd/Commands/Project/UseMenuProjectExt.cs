@@ -5,7 +5,6 @@ namespace Gcd.Commands.Project;
 
 public static class UseMenuProjectExt
 {
-    
     private static bool SHOW_IN_HELP = false;
     public static CommandLineApplication UseProjectCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
