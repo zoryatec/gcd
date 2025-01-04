@@ -11,7 +11,7 @@ using McMaster.Extensions.CommandLineUtils;
 
 namespace Gcd.Commands.Nipkg;
 
-#region package builer
+#region builer
 
 
 
@@ -35,6 +35,16 @@ public sealed class PackageContentSourceDirOption() : CommandOption(NAME, Comman
     public Result<PackageBuilderContentSourceDir> Map() =>
         PackageBuilderContentSourceDir.Of(this.Value());
 }
+
+public sealed class BuilderRootDirOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-builder-dir";
+    public Result<BuilderRootDir> Map() =>
+        BuilderRootDir.Of(this.Value());
+}
+
+
+
 
 
 

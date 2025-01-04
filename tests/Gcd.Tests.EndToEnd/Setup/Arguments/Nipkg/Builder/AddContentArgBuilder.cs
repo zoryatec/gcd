@@ -1,4 +1,5 @@
-﻿using Gcd.Handlers.Nipkg.Builder;
+﻿using Gcd.Commands.Nipkg;
+using Gcd.Handlers.Nipkg.Builder;
 
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg.Builder;
 
@@ -12,7 +13,7 @@ public class AddContentArgBuilder : ArgumentsBuilder
     }
     public AddContentArgBuilder WithPackageBuilderRootDir(string value)
     {
-        WithOption(PackageBuilderRootDirOption.NAME, value);
+        WithOption(BuilderRootDirOption.NAME, value);
         return this;
     }
 

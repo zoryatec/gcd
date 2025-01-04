@@ -1,21 +1,17 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.Nipkg.Builder.SetProperty;
-using Gcd.Model;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Gcd.Extensions;
-using Gcd.Commands.Nipkg.Builder.AddContent;
-using Gcd.Commands.Nipkg.Builder.Init;
 using Gcd.Nipkg.Instructions.Model;
 using Gcd.Handlers.Nipkg.Builder;
 
 
-namespace Gcd.Commands.Nipkg.Builder.AddInstruction;
+namespace Gcd.Commands.Nipkg.Builder;
 
-public static class UseAddInstructionCmdExtensions
+public static class UseCmdAddInstructionExt
 {
-    public static CommandLineApplication UseAddCustomExecuteCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseCmdAddInstruction(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
@@ -24,7 +20,7 @@ public static class UseAddInstructionCmdExtensions
         app.Command("add-custom-execute", command =>
         {
             command.Description = "COMMAND_DESCRIPTION";
-            var builderRootDirOpt= new PackageBuilderRootDirOption();
+            var builderRootDirOpt = new BuilderRootDirOption();
             var rootOpt = new CustomExecuteRootOption();
             var argsOpt = new CustomExecuteArgumentsOption();
             var exeNameOpt = new CustomExecuteExeNameOption();
@@ -73,10 +69,10 @@ public class CustomExecuteRootOption : CommandOption
     public static readonly string NAME = "--root";
     public CustomExecuteRootOption() : base(NAME, CommandOptionType.SingleValue)
     {
-        this.Description = "Description";
+        Description = "Description";
     }
     public Result<CustomExecuteRoot> Map() =>
-        CustomExecuteRoot.Of(this.Value());
+        CustomExecuteRoot.Of(Value());
 }
 
 public class CustomExecuteArgumentsOption : CommandOption
@@ -84,10 +80,10 @@ public class CustomExecuteArgumentsOption : CommandOption
     public static readonly string NAME = "--arguments";
     public CustomExecuteArgumentsOption() : base(NAME, CommandOptionType.SingleValue)
     {
-        this.Description = "Description";
+        Description = "Description";
     }
     public Result<CustomExecuteArguments> Map() =>
-    CustomExecuteArguments.Of(this.Value());
+    CustomExecuteArguments.Of(Value());
 }
 
 
@@ -96,10 +92,10 @@ public class CustomExecuteExeNameOption : CommandOption
     public static readonly string NAME = "--exe-name";
     public CustomExecuteExeNameOption() : base(NAME, CommandOptionType.SingleValue)
     {
-        this.Description = "Description";
+        Description = "Description";
     }
     public Result<CustomExecuteExeName> Map() =>
-        CustomExecuteExeName.Of(this.Value());
+        CustomExecuteExeName.Of(Value());
 }
 
 public class CustomExecuteStepOption : CommandOption
@@ -107,10 +103,10 @@ public class CustomExecuteStepOption : CommandOption
     public static readonly string NAME = "--step";
     public CustomExecuteStepOption() : base(NAME, CommandOptionType.SingleValue)
     {
-        this.Description = "Description";
+        Description = "Description";
     }
     public Result<CustomExecuteStep> Map() =>
-        CustomExecuteStep.Of(this.Value());
+        CustomExecuteStep.Of(Value());
 }
 
 public class CustomExecuteScheduleOption : CommandOption
@@ -118,8 +114,8 @@ public class CustomExecuteScheduleOption : CommandOption
     public static readonly string NAME = "--schedule";
     public CustomExecuteScheduleOption() : base(NAME, CommandOptionType.SingleValue)
     {
-        this.Description = "Description";
+        Description = "Description";
     }
     public Result<CustomExecuteSchedule> Map() =>
-        CustomExecuteSchedule.Of(this.Value());
+        CustomExecuteSchedule.Of(Value());
 }

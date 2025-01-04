@@ -1,13 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Extensions;
 using Gcd.Model;
 using Gcd.Model.Config;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gcd.Commands.Config
 {

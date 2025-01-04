@@ -1,4 +1,5 @@
-﻿using Gcd.Commands.Nipkg.Builder.AddInstruction;
+﻿using Gcd.Commands.Nipkg;
+using Gcd.Commands.Nipkg.Builder;
 using Gcd.Handlers.Nipkg.Builder;
 
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg.Builder;
@@ -14,7 +15,7 @@ public class AddInstructionArgBuilder : ArgumentsBuilder
     }
     public AddInstructionArgBuilder WithPackageBuilderRootDir(string value)
     {
-        WithOption(PackageBuilderRootDirOption.NAME, value);
+        WithOption(BuilderRootDirOption.NAME, value);
         return this;
     }
 

@@ -1,9 +1,4 @@
-﻿
-
-using CSharpFunctionalExtensions;
-using Gcd.Commands.Nipkg.Builder.Init;
-using Gcd.Commands.Nipkg.Builder.SetProperty;
-using Gcd.Extensions;
+﻿using CSharpFunctionalExtensions;
 using Gcd.Handlers.Nipkg.Builder;
 using Gcd.Model.Config;
 using Gcd.Model.Nipkg.Common;
@@ -13,11 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using static Gcd.Contract.Nipkg.PackageBuild;
 
 
-namespace Gcd.Commands.Nipkg.Build;
+namespace Gcd.Commands.Nipkg.Builder;
 
-public static class UsePackCmdExtensions
+public static class UseCmdPackExt
 {
-    public static CommandLineApplication UsePackCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseCmdPack(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
@@ -29,7 +24,7 @@ public static class UsePackCmdExtensions
                 .Option(PACKAGE_DESTINATION_DIR_OPTION, PACKAGE_DESTINATION_DIR_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
 
-            var builderRootDirOpt = new PackageBuilderRootDirOption();
+            var builderRootDirOpt = new BuilderRootDirOption();
 
             cmd.AddOption(builderRootDirOpt);
 

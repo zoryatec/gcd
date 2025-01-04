@@ -7,7 +7,7 @@ using MediatR;
 
 namespace Gcd.Handlers.Nipkg.Builder;
 
-public record PackRequest(PackageBuilderRootDir RootDir, PackageDestinationDirectory OutputDir, NipkgCmdPath CmdPath) : IRequest<Result>;
+public record PackRequest(BuilderRootDir RootDir, PackageDestinationDirectory OutputDir, NipkgCmdPath CmdPath) : IRequest<Result>;
 
 public class PackHandler(IMediator _mediator)
     : IRequestHandler<PackRequest, Result>
@@ -21,6 +21,6 @@ public class PackHandler(IMediator _mediator)
 
 public static class MediatorExtensionsPack
 {
-    public static async Task<Result> BuilderPackAsync(this IMediator mediator, PackageBuilderRootDir rootDir, PackageDestinationDirectory outputDir, NipkgCmdPath cmd, CancellationToken cancellationToken = default)
+    public static async Task<Result> BuilderPackAsync(this IMediator mediator, BuilderRootDir rootDir, PackageDestinationDirectory outputDir, NipkgCmdPath cmd, CancellationToken cancellationToken = default)
         => await mediator.Send(new PackRequest(rootDir, outputDir, cmd), cancellationToken);
 }

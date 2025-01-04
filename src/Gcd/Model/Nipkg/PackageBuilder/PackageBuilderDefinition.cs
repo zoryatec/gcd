@@ -9,7 +9,7 @@ namespace Gcd.Model.Nipkg.PackageBuilder;
 
 public sealed record PackageBuilderContentDir : LocalDirPath
 {
-    public static Result<PackageBuilderContentDir> Of(PackageBuilderRootDir rootDir, InatallationTargetRootDir packageInstalatioDir)
+    public static Result<PackageBuilderContentDir> Of(BuilderRootDir rootDir, InatallationTargetRootDir packageInstalatioDir)
     {
         var windPath = packageInstalatioDir.Value.Replace('/', '\\');
         var dir = Parse($"{rootDir.Value}\\data\\{windPath}");

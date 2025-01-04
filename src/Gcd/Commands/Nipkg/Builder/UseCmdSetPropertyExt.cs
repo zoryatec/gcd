@@ -1,16 +1,17 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
 using Gcd.Extensions;
+using Gcd.Handlers.Nipkg.Builder;
 using Gcd.Model.Nipkg.PackageBuilder;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using static Gcd.Contract.Nipkg.PackageBuilderSetProperty;
 
-namespace Gcd.Commands.Nipkg.Builder.SetProperty;
-public static class UseNipkgPackageBuilderSetPropertyCmdExtensions
+namespace Gcd.Commands.Nipkg.Builder;
+public static class UseCmdSetPropertyExt
 {
-    public static CommandLineApplication UseNipkgPackageBuilderSetPropertyCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseSetProperty(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
@@ -40,7 +41,7 @@ public static class UseNipkgPackageBuilderSetPropertyCmdExtensions
 
             command.OnExecuteAsync(async cancelationToken =>
             {
-                var rootDir = PackageBuilderRootDir.Of(rootDirOpt.Value());
+                var rootDir = BuilderRootDir.Of(rootDirOpt.Value());
                 var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
 
                 if (rootDir.IsFailure)

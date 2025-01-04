@@ -6,7 +6,6 @@ using CSharpFunctionalExtensions.ValueTasks;
 using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
 using Gcd.Model;
 using Gcd.Model.Config;
-using Gcd.Commands.Nipkg.Builder.Init;
 using Gcd.Extensions;
 using Gcd.Handlers.Nipkg.FeedLocal;
 

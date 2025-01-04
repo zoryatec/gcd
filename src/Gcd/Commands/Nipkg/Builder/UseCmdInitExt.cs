@@ -1,19 +1,17 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Extensions;
 using Gcd.Handlers.Nipkg.Builder;
-using Gcd.Model.Nipkg.PackageBuilder;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using static Gcd.Contract.Nipkg.PackageBuilderInit;
 
 
-namespace Gcd.Commands.Nipkg.Builder.Init;
+namespace Gcd.Commands.Nipkg.Builder;
 
-public static class UseNipkgPackageBuilderInitmdExtensions
+public static class UseCmdInitExt
 {
-    public static CommandLineApplication UseNipkgPackageBuilderInitmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    public static CommandLineApplication UseCmdInit(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
@@ -22,8 +20,7 @@ public static class UseNipkgPackageBuilderInitmdExtensions
         app.Command(COMMAND, command =>
         {
             command.Description = COMMAND_DESCRIPTION;
-            var rootDirOpt = command.Option(PACKAGE_BUILDER_DIR_OPTION, PACKAGE_PATH_DESCRIPTION, CommandOptionType.SingleValue)
-                .IsRequired();
+            var rootDirOpt = new BuilderRootDirOption();
 
             var options = new List<ControlPropertyOption>
             {
@@ -41,10 +38,11 @@ public static class UseNipkgPackageBuilderInitmdExtensions
             };
 
             command.AddOptions(options);
+            command.AddOption(rootDirOpt.IsRequired());
 
             command.OnExecuteAsync(async cancelationToken =>
             {
-                var rootDir = PackageBuilderRootDir.Of(rootDirOpt.Value());
+                var rootDir = rootDirOpt.Map();
                 var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
 
                 return await Result

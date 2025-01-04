@@ -1,10 +1,6 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Gcd.Commands.Nipkg.Builder.Init;
-using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Commands.Nipkg.Build;
-using Gcd.Commands.Nipkg.Builder.AddInstruction;
 using Gcd.Commands.Nipkg.FeedGit;
 using Gcd.Commands.Nipkg.Builder;
 using Gcd.Commands.Nipkg.FeedAzBlob;
@@ -52,7 +48,7 @@ namespace Gcd.Commands.Nipkg
                     return 1;
                 });
 
-                cmd.UseAddCustomExecuteCmd(serviceProvider);
+                cmd.UseCmdAddInstruction(serviceProvider);
 
             });
 

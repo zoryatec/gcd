@@ -11,7 +11,7 @@ using MediatR;
 
 namespace Gcd.Handlers.Nipkg.Builder;
 
-public record AddInstructionRequest(PackageBuilderRootDir rootDir, FilePackageCustomeExecute customExecute) : IRequest<Result>;
+public record AddInstructionRequest(BuilderRootDir rootDir, FilePackageCustomeExecute customExecute) : IRequest<Result>;
 
 public class AddInstructionHandler(IFileSystem _fs, IInstructionsSerializer _serial)
     : IRequestHandler<AddInstructionRequest, Result>
@@ -35,6 +35,6 @@ public class AddInstructionHandler(IFileSystem _fs, IInstructionsSerializer _ser
 
 public static class MediatorExtensions
 {
-    public static async Task<Result> AddInstructionAsync(this IMediator mediator, PackageBuilderRootDir rootDir, FilePackageCustomeExecute customExecute, CancellationToken cancellationToken = default)
+    public static async Task<Result> AddInstructionAsync(this IMediator mediator, BuilderRootDir rootDir, FilePackageCustomeExecute customExecute, CancellationToken cancellationToken = default)
         => await mediator.Send(new AddInstructionRequest(rootDir, customExecute), cancellationToken);
 }

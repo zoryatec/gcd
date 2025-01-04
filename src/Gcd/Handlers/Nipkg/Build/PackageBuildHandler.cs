@@ -25,7 +25,7 @@ public class PackageBuildHandler(IMediator _mediator, IFileSystem _fs)
         var (contentSrcDir, installationDir, outputDir, controlProp, cmd) = request;
 
         var rootDirTempR = await _fs.GenerateTempDirectoryAsync()
-            .Bind(dir => PackageBuilderRootDir.Of(dir.Value));
+            .Bind(dir => BuilderRootDir.Of(dir.Value));
 
         var rootDirTemp = rootDirTempR.Value;
         var contentDirResult = PackageBuilderContentDir.Of(rootDirTemp, installationDir);

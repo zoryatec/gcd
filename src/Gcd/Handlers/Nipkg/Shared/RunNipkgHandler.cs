@@ -91,7 +91,7 @@ public static class MediatorExtensions
     }
 
 
-    public static async Task<Result> NipkgPackAsync(this IMediator mediator, PackageBuilderRootDir rootDir, PackageDestinationDirectory destDirectory, NipkgCmdPath cmd, CancellationToken cancellationToken = default) =>
+    public static async Task<Result> NipkgPackAsync(this IMediator mediator, BuilderRootDir rootDir, PackageDestinationDirectory destDirectory, NipkgCmdPath cmd, CancellationToken cancellationToken = default) =>
     await mediator.RunNipkgRequestAsync(new string[] { "pack", rootDir.Value, destDirectory.Value }, cmd, cancellationToken);
 }
 

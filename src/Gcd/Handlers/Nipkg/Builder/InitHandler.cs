@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.Nipkg.Builder.SetProperty;
 using Gcd.Model.Nipkg.ControlFile;
 using Gcd.Model.Nipkg.DebianFile;
 using Gcd.Model.Nipkg.InstructionFile;
@@ -10,12 +9,12 @@ using System.Threading;
 
 namespace Gcd.Handlers.Nipkg.Builder;
 
-public record PackageBuilderInitRequest(PackageBuilderRootDir RootDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
+public record InitRequest(BuilderRootDir RootDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
 
-public class PackageBuilderInitHandler(IMediator _mediator, IFileSystem _writer)
-    : IRequestHandler<PackageBuilderInitRequest, Result>
+public class InitHandler(IMediator _mediator, IFileSystem _writer)
+    : IRequestHandler<InitRequest, Result>
 {
-    public async Task<Result> Handle(PackageBuilderInitRequest request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(InitRequest request, CancellationToken cancellationToken)
     {
         var (rootdir, controlProperties) = request;
 
@@ -52,9 +51,14 @@ public static class MediatorExtensionsInit
 {
     public static async Task<Result> PackageBuilderInitAsync(
         this IMediator mediator,
-        PackageBuilderRootDir packageContentDir,
+        BuilderRootDir packageContentDir,
         IReadOnlyList<ControlFileProperty> controlProperties,
         CancellationToken cancellationToken = default)
-        => await mediator.Send(new PackageBuilderInitRequest(packageContentDir, controlProperties), cancellationToken);
+        => await mediator.Send(new InitRequest(packageContentDir, controlProperties), cancellationToken);
+
+    public static async Task<Result> PackageBuilderSetPropertiesAsync(this IMediator mediator, BuilderRootDir packageBuilderRootDir, IReadOnlyList<ControlFileProperty> properties, CancellationToken cancellationToken = default)
+    => await mediator.Send(new PackageBuilderSetPropertyRequest(packageBuilderRootDir, properties), cancellationToken);
+    public static async Task<Result> PackageBuilderSetPropertyAsync(this IMediator mediator, BuilderRootDir packageBuilderRootDir, ControlFileProperty property, CancellationToken cancellationToken = default)
+    => await mediator.Send(new PackageBuilderSetPropertyRequest(packageBuilderRootDir, new List<ControlFileProperty> { property }), cancellationToken);
 }
 

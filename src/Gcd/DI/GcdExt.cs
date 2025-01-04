@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.Nipkg.Builder.SetProperty;
+using Gcd.Commands.Nipkg.Builder;
 using Gcd.Handlers.Nipkg.Shared;
 using Gcd.LabViewProject;
 using Gcd.Model.Nipkg.FeedDefinition;

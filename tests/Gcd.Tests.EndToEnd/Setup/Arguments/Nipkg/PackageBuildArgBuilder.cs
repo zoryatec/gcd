@@ -1,7 +1,6 @@
 ﻿using Gcd.Commands.Nipkg;
 using Gcd.Commands.Nipkg.Build;
-using Gcd.Commands.Nipkg.Builder.SetProperty;
-using static Gcd.Contract.Nipkg.PackageBuild;
+using Gcd.Commands.Nipkg.Builder;
 
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg;
 

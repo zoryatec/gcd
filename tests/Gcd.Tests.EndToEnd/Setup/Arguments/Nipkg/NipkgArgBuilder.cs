@@ -1,6 +1,4 @@
 ﻿using Gcd.Commands.Nipkg;
-using Gcd.Commands.Nipkg.Builder.Init;
-using Gcd.Model.FeedDefinition;
 
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg.Builder;
 

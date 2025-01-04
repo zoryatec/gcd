@@ -2,7 +2,7 @@
 using Gcd.Extensions;
 using Gcd.Model.Nipkg.ControlFile;
 
-namespace Gcd.Commands.Nipkg.Builder.SetProperty;
+namespace Gcd.Commands.Nipkg.Builder;
 
 public interface IControlPropertyFactory
 {

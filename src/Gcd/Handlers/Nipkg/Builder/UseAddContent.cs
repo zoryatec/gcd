@@ -1,11 +1,12 @@
-﻿using Gcd.Commands.Nipkg.Builder.SetProperty;
-using McMaster.Extensions.CommandLineUtils;
+﻿using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
 using Gcd.Extensions;
 using Gcd.Commands.Nipkg.Builder.AddContent;
 using Gcd.Model.Nipkg.PackageBuilder;
+using Gcd.Commands.Nipkg;
+using Gcd.Commands.Nipkg.Builder;
 
 
 namespace Gcd.Handlers.Nipkg.Builder;
@@ -23,7 +24,7 @@ public static class UseAddContentCmdExtensions
             command.Description = "COMMAND_DESCRIPTION";
             var contentSrcDirOpt = new BuilderContentSourceDirOption();
             var targetDirOpt = new InatallationTargetRootDirOption();
-            var builderRootOpt = new PackageBuilderRootDirOption();
+            var builderRootOpt = new BuilderRootDirOption();
 
             command.AddOptions(
                 builderRootOpt.IsRequired(),
@@ -50,18 +51,6 @@ public static class UseAddContentCmdExtensions
 
         return app;
     }
-}
-
-public class PackageBuilderRootDirOption : CommandOption
-{
-    public static readonly string NAME = "--package-builder-dir";
-    public PackageBuilderRootDirOption() : base(NAME, CommandOptionType.SingleValue)
-    {
-        Description = "Description Arg";
-    }
-
-    public Result<PackageBuilderRootDir> Map() =>
-        PackageBuilderRootDir.Of(Value());
 }
 
 public class BuilderContentSourceDirOption : CommandOption

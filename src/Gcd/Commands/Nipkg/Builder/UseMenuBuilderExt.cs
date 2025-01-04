@@ -1,13 +1,10 @@
-﻿using Gcd.Commands.Nipkg.Build;
-using Gcd.Commands.Nipkg.Builder.Init;
-using Gcd.Commands.Nipkg.Builder.SetProperty;
-using Gcd.Handlers.Nipkg.Builder;
+﻿using Gcd.Handlers.Nipkg.Builder;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Gcd.Commands.Nipkg.Builder;
 
-public static class UseBuilderExtension
+public static class UseMenuBuilderExt
 {
     public static CommandLineApplication UseMenuBuilder(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
@@ -20,11 +17,11 @@ public static class UseBuilderExtension
                 cmd.ShowHelp();
                 return 1;
             });
-            cmd.UseNipkgPackageBuilderInitmd(serviceProvider);
-            cmd.UseNipkgPackageBuilderSetPropertyCmd(serviceProvider);
+            cmd.UseCmdInit(serviceProvider);
+            cmd.UseSetProperty(serviceProvider);
             cmd.UseAddContentCmd(serviceProvider);
             cmd.UseFilePackageInstructionsCmd(serviceProvider);
-            cmd.UsePackCmd(serviceProvider);
+            cmd.UseCmdPack(serviceProvider);
         });
 
         return app;
