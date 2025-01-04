@@ -9,7 +9,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg.FeedSmb;
 public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
-    //[Fact]
+    [Fact]
     private void AddLocalPackageTest()
     {
 
@@ -43,6 +43,9 @@ public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixtur
         result.Error.Should().BeEmpty();
         result.Return.Should().Be(0);
 
+
+        Pull(shareAddress, feedDir);
+
         var packageName = Path.GetFileName(packagePath);
         var destinationPackagesContent = File.ReadAllText($"{feedDir}\\Packages");
         var destinationPackagesGzContent = File.ReadAllText($"{feedDir}\\Packages.gz");
@@ -51,6 +54,31 @@ public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixtur
         destinationPackagesContent.Should().Contain(packageName);
         destinationPackagesStampsContent.Should().Contain(packageName);
 
+    }
+
+
+    private void Pull(string smbAddress, string feedDirectory)
+    {
+        // Arrange
+        string username = _config.GetSmbUserName();
+        string password = _config.GetSmbPassword();
+
+        var args = new NipkgArgBuilder()
+            .WithNipkgCmd()
+            .WithFeedSmbCmd()
+            .WithPullMetaData()
+            .WithSmbShareAddress(smbAddress)
+            .WithSmbUserName(username)
+            .WithSmbUserPassword(password)
+            .WithFeedLocalDirOpt(feedDirectory)
+            .Build();
+
+        // Act
+        var result = _gcd.Run(args);
+
+        // Asssert
+        result.Error.Should().BeEmpty();
+        result.Return.Should().Be(0);
     }
     public string BuildPackage()
     {
