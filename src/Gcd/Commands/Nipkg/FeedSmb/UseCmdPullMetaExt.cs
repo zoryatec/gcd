@@ -12,9 +12,9 @@ namespace Gcd.Commands.Nipkg.FeedSmb;
 
 public static class UseCmdPullMetaExt
 {
-    public static string SUCESS_MESSAGE = "success";
-    public static string NAME = "pull-meta-data";
-    public static string DESCRIPTION = "pusll-meta-data desc";
+    public static readonly string SUCESS_MESSAGE = "success";
+    public static readonly string NAME = "pull-meta-data";
+    public static readonly string DESCRIPTION = "pusll-meta-data desc";
     public static CommandLineApplication UseCmdPullMeta(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();

@@ -8,7 +8,7 @@ public class PullFeedMetaArgBuilder : ArgumentsBuilder
 {
     public PullFeedMetaArgBuilder()
     {
-        WithArg("nipkg");
+        WithArg(UseMenuNipkgExtension.NAME);
         WithArg(UseMenuFeedAzBlobExt.NAME);
         WithArg(UseCmdPullFeedMetaExt.NAME);
     }

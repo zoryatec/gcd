@@ -17,10 +17,10 @@ namespace Gcd.Contract.Nipkg
         public const string PACKAGE_ARCHITECTURE_OPTION = "--package-architecture";
         public const string PACKAGE_ARCHITECTURE_DESCRIPTION = "";
 
-        public const string PACKAGE_HOME_PAGE_OPTION = "--package-home-page";
+
         public const string PACKAGE_HOME_PAGE_DESCRIPTION = "package home page to set";
 
-        public const string PACKAGE_MAINTAINER_OPTION = "--package-maintainer";
+
         public const string PACKAGE_MAINTAINER_DESCRIPTION = "";
 
         public const string PACKAGE_DESCRIPTION_OPTION = "--package-description";
@@ -38,10 +38,10 @@ namespace Gcd.Contract.Nipkg
         public const string PACKAGE_XB_SECTION_OPTION = "--package-xb-section";
         public const string PACKAGE_XB_SECTION_DESCRIPTION = "";
 
-        public const string PACKAGE_NAME_OPTION = "--package-name";
+
         public const string PACKAGE_NAME_DESCRIPTION = "";
 
-        public const string PACKAGE_VERSION_OPTION = "--package-version";
+
         public const string PACKAGE_VERSION_DESCRIPTION = "package version to set";
 
         public const string PACKAGE_DEPENDENCIES_OPTION = "--package-dependencies";

@@ -8,7 +8,7 @@ public class PushAzFeedMetaArgBuilder : ArgumentsBuilder
 {
     public PushAzFeedMetaArgBuilder()
     {
-        WithArg("nipkg");
+        WithArg(UseMenuNipkgExtension.NAME);
         WithArg(UseMenuFeedAzBlobExt.NAME);
         WithArg(UseCmdPushFeedMetaExt.NAME);
     }

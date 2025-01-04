@@ -12,7 +12,7 @@ public class NipkgArgBuilder : ArgumentsBuilder
     // cmd
     public NipkgArgBuilder WithNipkgCmd()
     {
-        WithArg("nipkg");
+        WithArg(UseMenuNipkgExtension.NAME);
         return this;
     }
 

@@ -8,7 +8,7 @@ public class PackageBuildArgBuilder : ArgumentsBuilder
 {
     public PackageBuildArgBuilder()
     {
-        WithArg("nipkg");
+        WithArg(UseMenuNipkgExtension.NAME);
         WithArg(UseCmdBuildExtension.NAME);
     }
 

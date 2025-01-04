@@ -8,8 +8,8 @@ public class AddInstructionArgBuilder : ArgumentsBuilder
 {
     public AddInstructionArgBuilder()
     {
-        WithArg("nipkg");
-        WithArg("builder");
+        WithArg(UseMenuNipkgExtension.NAME);
+        WithArg(UseMenuBuilderExt.NAME);
         WithArg("instructions-file-pkg");
         WithArg("add-custom-execute");
     }

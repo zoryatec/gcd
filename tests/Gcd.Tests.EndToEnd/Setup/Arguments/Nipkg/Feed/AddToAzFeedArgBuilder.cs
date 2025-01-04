@@ -7,16 +7,11 @@ public class AddToAzFeedArgBuilder : ArgumentsBuilder
 {
     public AddToAzFeedArgBuilder()
     {
-        WithArg("nipkg");
+        WithArg(UseMenuNipkgExtension.NAME);
         WithArg(UseMenuFeedAzBlobExt.NAME);
         WithArg(UseCmdAddLocalPackageExt.NAME);
     }
 
-    public AddToAzFeedArgBuilder WithPackageBuilderDirectory(string value)
-    {
-        WithOption(PACKAGE_PATH_OPTION, value);
-        return this;
-    }
     public AddToAzFeedArgBuilder WithPackagePath(string value)
     {
         WithOption(PackageLocalPathOption.NAME, value);

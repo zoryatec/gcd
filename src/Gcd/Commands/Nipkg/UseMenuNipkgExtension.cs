@@ -8,70 +8,71 @@ using Gcd.Commands.Nipkg.FeedLocal;
 using Gcd.Commands.Nipkg.FeedSmb;
 
 
-namespace Gcd.Commands.Nipkg
+namespace Gcd.Commands.Nipkg;
+
+public static class UseMenuNipkgExtension
 {
-    public static class UseMenuNipkgExtension
+    public static readonly string NAME = "nipkg";
+    public static CommandLineApplication UseMenuNipkg(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
-        public static CommandLineApplication UseMenuNipkg(this CommandLineApplication app, IServiceProvider serviceProvider)
+        var console = serviceProvider.GetRequiredService<IConsole>();
+
+        app.Command(NAME, cmd =>
         {
-            var console = serviceProvider.GetRequiredService<IConsole>();
-
-            app.Command("nipkg", cmd =>
+            cmd.OnExecute(() =>
             {
-                cmd.OnExecute(() =>
-                {
-                    console.WriteLine("Specify a subcommand");
-                    cmd.ShowHelp();
-                    return 1;
-                });
-                cmd.UseMenuBuilder(serviceProvider);
-                cmd.UseMenuFeedAzBlob(serviceProvider);
-                cmd.UseMenuFeedLocal(serviceProvider);
-                cmd.UseMenuFeedGit(serviceProvider);
-                cmd.UseMenuFeedSmb(serviceProvider);
-                cmd.UseCmdBuild(serviceProvider);
+                console.WriteLine("Specify a subcommand");
+                cmd.ShowHelp();
+                return 1;
             });
-            return app;
-        }
-
-
-        public static CommandLineApplication UseFilePackageInstructionsCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
-        {
-            var console = serviceProvider.GetRequiredService<IConsole>();
-            app.Command("instructions-file-pkg", cmd =>
-            {
-
-                cmd.OnExecute(() =>
-                {
-                    console.WriteLine("Specify a subcommand");
-                    cmd.ShowHelp();
-                    return 1;
-                });
-
-                cmd.UseCmdAddInstruction(serviceProvider);
-
-            });
-
-            return app;
-        }
-
-        public static CommandLineApplication UseMsiPackageInstructionsCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
-        {
-            var console = serviceProvider.GetRequiredService<IConsole>();
-            app.Command("instructions-msi-pkg", cmd =>
-            {
-
-                cmd.OnExecute(() =>
-                {
-                    console.WriteLine("Specify a subcommand");
-                    cmd.ShowHelp();
-                    return 1;
-                });
-
-            });
-
-            return app;
-        }
-
+            cmd.UseMenuBuilder(serviceProvider);
+            cmd.UseMenuFeedAzBlob(serviceProvider);
+            cmd.UseMenuFeedLocal(serviceProvider);
+            cmd.UseMenuFeedGit(serviceProvider);
+            cmd.UseMenuFeedSmb(serviceProvider);
+            cmd.UseCmdBuild(serviceProvider);
+        });
+        return app;
     }
+
+
+    public static CommandLineApplication UseFilePackageInstructionsCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    {
+        var console = serviceProvider.GetRequiredService<IConsole>();
+        app.Command("instructions-file-pkg", cmd =>
+        {
+
+            cmd.OnExecute(() =>
+            {
+                console.WriteLine("Specify a subcommand");
+                cmd.ShowHelp();
+                return 1;
+            });
+
+            cmd.UseCmdAddInstruction(serviceProvider);
+
+        });
+
+        return app;
+    }
+
+    public static CommandLineApplication UseMsiPackageInstructionsCmd(this CommandLineApplication app, IServiceProvider serviceProvider)
+    {
+        var console = serviceProvider.GetRequiredService<IConsole>();
+        app.Command("instructions-msi-pkg", cmd =>
+        {
+
+            cmd.OnExecute(() =>
+            {
+                console.WriteLine("Specify a subcommand");
+                cmd.ShowHelp();
+                return 1;
+            });
+
+        });
+
+        return app;
+    }
+
 }
+

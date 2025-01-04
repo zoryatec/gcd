@@ -1,4 +1,5 @@
 ﻿using Gcd.Commands.Nipkg;
+using Gcd.Commands.Nipkg.Builder;
 using Gcd.Handlers.Nipkg.Builder;
 
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg.Builder;
@@ -7,8 +8,8 @@ public class AddContentArgBuilder : ArgumentsBuilder
 {
     public AddContentArgBuilder()
     {
-        WithArg("nipkg");
-        WithArg("builder");
+        WithArg(UseMenuNipkgExtension.NAME);
+        WithArg(UseMenuBuilderExt.NAME);
         WithArg("add-content");
     }
     public AddContentArgBuilder WithPackageBuilderRootDir(string value)

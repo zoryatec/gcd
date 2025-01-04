@@ -69,8 +69,14 @@ public static class UseCmdSetPropertyExt
 public abstract class ControlPropertyOption(string template, CommandOptionType optionType) : CommandOption(template, optionType);
 
 public sealed class PackageArchitectureOption() : ControlPropertyOption(PACKAGE_ARCHITECTURE_OPTION, CommandOptionType.SingleValue);
-public sealed class PackageHomePageOption() : ControlPropertyOption(PACKAGE_HOME_PAGE_OPTION, CommandOptionType.SingleValue);
-public sealed class PackageMaintainerOption() : ControlPropertyOption(PACKAGE_MAINTAINER_OPTION, CommandOptionType.SingleValue);
+public sealed class PackageHomePageOption() : ControlPropertyOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-home-page";
+}
+public sealed class PackageMaintainerOption() : ControlPropertyOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-maintainer";
+}
 public sealed class PackageDescriptionOption() : ControlPropertyOption(PACKAGE_DESCRIPTION_OPTION, CommandOptionType.SingleValue);
 public sealed class PackageXbPluginOption() : ControlPropertyOption(PACKAGE_XB_PLUGIN_OPTION, CommandOptionType.SingleValue);
 public sealed class PackageXbUserVisibleOption() : ControlPropertyOption(PACKAGE_XB_USER_VISIBLE_OPTION, CommandOptionType.SingleValue);
