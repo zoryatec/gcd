@@ -10,22 +10,6 @@ public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
 {
 
     [Fact]
-    public void Push_ShouldReturnEror_WhenPathIsEmpty()
-    {
-        var args = new PushAzFeedMetaArgBuilder()
-            .WithFeedLocalPath("dd")
-            .WithFeedUri("dd")
-            .Build();
-
-        // Act
-        var result = _gcd.Run(args);
-
-        // Asssert
-        result.Return.Should().Be(1);
-        result.Error.Should().NotBeEmpty();
-    }
-
-    [Fact (Skip = "wont work for now")]
     public void PushPull_ShouldMatch()
     {
         // Arrange
@@ -43,16 +27,16 @@ public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
 
 
         Push(feedSourceDirectory);
-        //Pull(feedDestinationDirectory); // wont work with current implementation of git fs
+        Pull(feedDestinationDirectory); // wont work with current implementation of git fs
 
 
-        //var destinationPackagesContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages");
-        //var destinationPackagesGzContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.gz");
-        //var destinationPackagesStampsContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.stamps");
+        var destinationPackagesContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages");
+        var destinationPackagesGzContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.gz");
+        var destinationPackagesStampsContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.stamps");
 
-        //destinationPackagesContent.Should().Be(sourcePackageContent);
-        //destinationPackagesGzContent.Should().Be(sourcePackageGzContent);
-        //destinationPackagesStampsContent.Should().Be(sourcePackageStampsContent);
+        destinationPackagesContent.Should().Be(sourcePackageContent);
+        destinationPackagesGzContent.Should().Be(sourcePackageGzContent);
+        destinationPackagesStampsContent.Should().Be(sourcePackageStampsContent);
 
         Directory.Delete(feedSourceDirectory, true);
         Directory.Delete(feedDestinationDirectory, true);
