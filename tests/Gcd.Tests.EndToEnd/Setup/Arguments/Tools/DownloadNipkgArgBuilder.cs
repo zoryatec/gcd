@@ -12,7 +12,7 @@ namespace Gcd.Tests.EndToEnd.Arguments.Tools
 
         public DownloadNipkgArgBuilder WithLocalPath(string fileLocalPath)
         {
-            WithOption(UseCmdDownloadNipkgExt.NAME, fileLocalPath);
+            WithOption(DownloadNipkgPathOption.NAME, fileLocalPath);
             return this;
         }
     }

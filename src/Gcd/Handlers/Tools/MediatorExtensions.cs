@@ -7,7 +7,8 @@ namespace Gcd.Handlers.Tools;
 public static class MediatorExtensions
 {
     public static async Task<Result> DownloadNipkgInstallerAsync(this IMediator mediator, LocalFilePath FilePath, NipkgInstallerUri InstallerUri, CancellationToken cancellationToken = default)
-        => await mediator.Send(new DownloadNipkgRequest(FilePath, InstallerUri), cancellationToken);
+        => await mediator.Send(new DownloadNipkgRequest(FilePath, InstallerUri), cancellationToken)
+           .MapError(x => x.Message);   
 
     public static async Task<Result> InstallNipkgInstallerAsync(this IMediator mediator, NipkgCmdPath cmdPath, CancellationToken cancellationToken = default)
     => await mediator.Send(new InstallNinpkgRequest(cmdPath), cancellationToken);
