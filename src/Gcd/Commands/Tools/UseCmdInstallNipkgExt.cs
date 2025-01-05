@@ -5,21 +5,23 @@ using Gcd.Model.Config;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using static Gcd.Contract.Nipkg.InstallNipkg;
-
 
 namespace Gcd.Commands.Tools;
 
 public static class UseCmdInstallNipkgExt
 {
+    public static readonly string NAME = "install-nipkg";
+    public static readonly string SUCESS_MESSAGE = "success";
+    private static readonly bool SHOW_IN_HELP = false;
+    public static readonly string DESCRIPTION = "install-nipkg";
     public static CommandLineApplication UseCmdInstallNipkg(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
 
-        app.Command(COMMAND, subCmd =>
+        app.Command(NAME, subCmd =>
         {
-            subCmd.Description = COMMAND_DESCRIPTION;
+            subCmd.Description = DESCRIPTION;
 
             subCmd.OnExecuteAsync(async cancelationToken =>
             {

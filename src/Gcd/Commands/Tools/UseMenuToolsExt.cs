@@ -5,12 +5,14 @@ namespace Gcd.Commands.Tools;
 
 public static class UseMenuToolsExt
 {
-    private static bool SHOW_IN_HELP = false;
+    public static readonly string NAME = "tools";
+    public static readonly bool   SHOW_IN_HELP = true;
+    public static readonly string DESCRIPTION = "tools";
     public static CommandLineApplication UseMenuTools(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
 
-        app.Command("tools", cmd =>
+        app.Command(NAME, cmd =>
         {
             cmd.ShowInHelpText = SHOW_IN_HELP;
             cmd.OnExecute(() =>

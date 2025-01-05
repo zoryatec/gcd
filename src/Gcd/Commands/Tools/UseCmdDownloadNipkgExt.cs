@@ -13,16 +13,19 @@ namespace Gcd.Commands.Tools;
 
 public static class UseCmdDownloadNipkgExt
 {
-    private static bool SHOW_IN_HELP = false;
+    public static readonly string NAME = "download-nipkg";
+    public static readonly string SUCESS_MESSAGE = "success";
+    private static readonly bool  SHOW_IN_HELP = false;
+    public static readonly string DESCRIPTION = "download-nipkg";
     public static CommandLineApplication UseCmdDownloadNipkg(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
 
-        app.Command(COMMAND, cmd =>
+        app.Command(NAME, cmd =>
         {
             cmd.ShowInHelpText = SHOW_IN_HELP;
-            cmd.Description = COMMAND_DESCRIPTION;
+            cmd.Description = DESCRIPTION;
             var downloadPath = cmd.Option(DOWNLOAD_PATH_OPTION, DOWNLOAD_PATH_DESCRIPTION, CommandOptionType.SingleValue);
             cmd.OnExecuteAsync(async cancelationToken =>
             {

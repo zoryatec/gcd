@@ -1,4 +1,5 @@
-﻿using static Gcd.Contract.Nipkg.DownloadNipkg;
+﻿using Gcd.Commands.Tools;
+using static Gcd.Contract.Nipkg.DownloadNipkg;
 
 namespace Gcd.Tests.EndToEnd.Arguments.Tools
 {
@@ -6,8 +7,8 @@ namespace Gcd.Tests.EndToEnd.Arguments.Tools
     {
         public DownloadNipkgArgBuilder()
         {
-            WithArg("tools");
-            WithArg(COMMAND);
+            WithArg(UseMenuToolsExt.NAME);
+            WithArg(UseCmdDownloadNipkgExt.NAME);
         }
 
         public DownloadNipkgArgBuilder WithLocalPath(string fileLocalPath)
