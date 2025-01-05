@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gcd.Common", "src\Gcd.Commo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gcd.Tests.EndToEnd", "tests\Gcd.Tests.EndToEnd\Gcd.Tests.EndToEnd.csproj", "{69AA8B40-22B4-48F4-BCA7-2DD136FA750C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gcd.Contract", "src\Gcd.Contract\Gcd.Contract.csproj", "{8A81542F-5B9D-45D0-A68C-FD9D5FAE2267}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gcd.Nipkg.Instructions", "src\Gcd.Nipkg.Instructions\Gcd.Nipkg.Instructions.csproj", "{0242FEAB-64EB-41CE-A163-6FF8EFB0010B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{04EEF038-7CB1-4F92-BB19-20BB6974D73B}"
@@ -75,10 +73,6 @@ Global
 		{69AA8B40-22B4-48F4-BCA7-2DD136FA750C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69AA8B40-22B4-48F4-BCA7-2DD136FA750C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{69AA8B40-22B4-48F4-BCA7-2DD136FA750C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8A81542F-5B9D-45D0-A68C-FD9D5FAE2267}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A81542F-5B9D-45D0-A68C-FD9D5FAE2267}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A81542F-5B9D-45D0-A68C-FD9D5FAE2267}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A81542F-5B9D-45D0-A68C-FD9D5FAE2267}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0242FEAB-64EB-41CE-A163-6FF8EFB0010B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0242FEAB-64EB-41CE-A163-6FF8EFB0010B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0242FEAB-64EB-41CE-A163-6FF8EFB0010B}.Release|Any CPU.ActiveCfg = Release|Any CPU

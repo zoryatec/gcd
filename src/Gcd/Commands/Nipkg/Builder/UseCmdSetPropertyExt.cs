@@ -5,7 +5,6 @@ using Gcd.Handlers.Nipkg.Builder;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using static Gcd.Contract.Nipkg.PackageBuilderSetProperty;
 
 namespace Gcd.Commands.Nipkg.Builder;
 public static class UseCmdSetPropertyExt
@@ -66,9 +65,13 @@ public static class UseCmdSetPropertyExt
     }
 }
 
+
 public abstract class ControlPropertyOption(string template, CommandOptionType optionType) : CommandOption(template, optionType);
 
-public sealed class PackageArchitectureOption() : ControlPropertyOption(PACKAGE_ARCHITECTURE_OPTION, CommandOptionType.SingleValue);
+public sealed class PackageArchitectureOption() : ControlPropertyOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-architecture";
+}
 public sealed class PackageHomePageOption() : ControlPropertyOption(NAME, CommandOptionType.SingleValue)
 {
     public static readonly string NAME = "--package-home-page";
@@ -77,11 +80,26 @@ public sealed class PackageMaintainerOption() : ControlPropertyOption(NAME, Comm
 {
     public static readonly string NAME = "--package-maintainer";
 }
-public sealed class PackageDescriptionOption() : ControlPropertyOption(PACKAGE_DESCRIPTION_OPTION, CommandOptionType.SingleValue);
-public sealed class PackageXbPluginOption() : ControlPropertyOption(PACKAGE_XB_PLUGIN_OPTION, CommandOptionType.SingleValue);
-public sealed class PackageXbUserVisibleOption() : ControlPropertyOption(PACKAGE_XB_USER_VISIBLE_OPTION, CommandOptionType.SingleValue);
-public sealed class PackageXbStoreProductOption() : ControlPropertyOption(PACKAGE_XB_STORE_PRODUCT_OPTION, CommandOptionType.SingleValue);
-public sealed class PackageXBSectionOption() : ControlPropertyOption(PACKAGE_XB_SECTION_OPTION, CommandOptionType.SingleValue);
+public sealed class PackageDescriptionOption() : ControlPropertyOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-description";
+}
+public sealed class PackageXbPluginOption() : ControlPropertyOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-xb-plugin";
+}
+public sealed class PackageXbUserVisibleOption() : ControlPropertyOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-xb-user-visible";
+}
+public sealed class PackageXbStoreProductOption() : ControlPropertyOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-xb-store-product";
+}
+public sealed class PackageXBSectionOption() : ControlPropertyOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-xb-section";
+}
 public sealed class PackageVersionOption() : ControlPropertyOption(NAME, CommandOptionType.SingleValue)
 {
     public static readonly string NAME = "--package-version";
@@ -90,4 +108,7 @@ public sealed class PackageNameOption() : ControlPropertyOption(NAME, CommandOpt
 {
     public static readonly string NAME = "--package-name";
 }
-public sealed class PackageDependenciesOption() : ControlPropertyOption(PACKAGE_DEPENDENCIES_OPTION, CommandOptionType.SingleValue);
+public sealed class PackageDependenciesOption() : ControlPropertyOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--package-dependencies";
+}
