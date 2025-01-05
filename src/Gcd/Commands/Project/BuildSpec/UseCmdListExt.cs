@@ -9,14 +9,19 @@ namespace Gcd.Commands.Project.BuildSpec;
 
 public static class UseCmdListExt
 {
+    public static readonly string NAME = "list";
+    public static readonly string SUCESS_MESSAGE = "success";
+    public static readonly bool   SHOW_IN_HELP = false;
+    public static readonly string DESCRIPTION = "list";
+    
     public static CommandLineApplication UseCmdList(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
 
-        app.Command(COMMAND, listCmd =>
+        app.Command(NAME, listCmd =>
         {
-            listCmd.Description = COMMAND_DESCRIPTION;
+            listCmd.Description = DESCRIPTION;
             var projectPath = listCmd.Option(PROJECT_PATH_OPTION, PROJECT_PATH_DESCRIPTION, CommandOptionType.SingleValue)
                 .IsRequired();
             listCmd.OnExecute(async () =>
