@@ -1,6 +1,5 @@
 ﻿using Gcd.Commands.Nipkg;
 using Gcd.Commands.Nipkg.FeedAzBlob;
-using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg.Feed;
 
 public class AddToAzFeedArgBuilder : ArgumentsBuilder
@@ -20,7 +19,7 @@ public class AddToAzFeedArgBuilder : ArgumentsBuilder
 
     public AddToAzFeedArgBuilder WithAzFeedUri(string value)
     {
-        WithOption(AZ_FEED_URI_OPTION, value);
+        WithOption(AzFeedUrlOption.NAME, value);
         return this;
     }
 }

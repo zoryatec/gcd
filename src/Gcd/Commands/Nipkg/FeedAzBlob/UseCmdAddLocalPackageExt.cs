@@ -3,8 +3,6 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
-using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
-using Gcd.Model;
 using Gcd.Model.Config;
 using Gcd.Handlers.Nipkg.Shared;
 using Gcd.Handlers.Nipkg.FeedLocal;

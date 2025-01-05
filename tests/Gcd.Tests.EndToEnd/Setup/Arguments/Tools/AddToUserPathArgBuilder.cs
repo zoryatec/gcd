@@ -1,11 +1,12 @@
-﻿using static Gcd.Contract.Nipkg.PushAzBlobFeedMetaData;
+﻿using Gcd.Commands.Tools;
+
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg;
 
 public class AddToUserPathArgBuilder : ArgumentsBuilder
 {
     public AddToUserPathArgBuilder()
     {
-        WithArg("tools");
+        WithArg(UseMenuToolsExt.NAME);
         WithArg("add-to-user-path");
     }
 

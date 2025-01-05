@@ -3,8 +3,6 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
-using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
-using Gcd.Model;
 using Gcd.Model.Config;
 using Gcd.Extensions;
 using Gcd.Handlers.Nipkg.FeedLocal;
@@ -13,13 +11,16 @@ namespace Gcd.Commands.Nipkg.FeedLocal;
 
 public static class UseCmdAddLocalPackageExt
 {
+    public static string NAME = "add-local-package";
+    public static string DESCRIPTION = "add-local-package";
+    public static string SUCESS_MESSAGE = "success";
     public static CommandLineApplication UseCmdAddLocalPackage(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
-        app.Command("add-local-package", cmd =>
+        app.Command(NAME, cmd =>
         {
-            cmd.Description = "add local package to local feed";
+            cmd.Description = DESCRIPTION;
 
             var locPathOpt = new PackageLocalPathOption();
             var feedDirOpt = new FeedLocalDirOption();

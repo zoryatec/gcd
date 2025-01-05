@@ -1,7 +1,6 @@
 ﻿using Gcd.Commands.Nipkg;
 using Gcd.Commands.Nipkg.FeedAzBlob;
 using Gcd.Commands.Nipkg.FeedGit;
-using static Gcd.Contract.Nipkg.PushAzBlobFeedMetaData;
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg.Feed;
 
 public class PushAzFeedMetaArgBuilder : ArgumentsBuilder
@@ -21,7 +20,7 @@ public class PushAzFeedMetaArgBuilder : ArgumentsBuilder
 
     public PushAzFeedMetaArgBuilder WithFeedUri(string feedUri)
     {
-        WithOption(REMOTE_FEED_URI_OPTION, feedUri);
+        WithOption(AzFeedUrlOption.NAME, feedUri);
         return this;
     }
 }

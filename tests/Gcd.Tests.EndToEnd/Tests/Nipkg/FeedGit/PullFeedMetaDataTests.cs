@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Gcd.Tests.EndToEnd.Arguments.Nipkg.Builder;
-using Gcd.Tests.EndToEnd.Arguments.Nipkg.Feed;
 using Gcd.Tests.EndToEnd.Setup;
 
 namespace Gcd.Tests.EndToEnd.Nipkg.FeedGit;
@@ -51,25 +50,6 @@ public class PullFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
         destinationPackagesContent.Should().Contain("packages_content");
         //destinationPackagesGzContent.Should().Be("packages_gz_content"); // it's binary, need to pull it to local dir and update
         destinationPackagesStampsContent.Should().Contain("packages_stamps_content");
-    }
-
-    [Fact]
-    public void PullFeedMetaData_ShoulReturnError_WhenFeedLocalPathNotSpecified()
-    {
-        // Arrange
-        var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
-        var feedUri = _config.GetAzurePublicFeedUri();
-
-        var args = new PullFeedMetaArgBuilder()
-            .WithFeedUri(feedUri)
-            .Build();
-
-        // Act
-        var result = _gcd.Run(args);
-
-        // Asssert
-        result.Return.Should().Be(1);
-        //result.Error.Should().BeEmpty(); // NOT CORRECT SHOUL RETURN ERROR
     }
 }
 

@@ -1,13 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Extensions;
 using Gcd.Handlers.Nipkg.Shared;
-using Gcd.Model;
 using Gcd.Model.File;
 using Gcd.Model.Nipkg.FeedDefinition;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using static Gcd.Contract.Nipkg.PullFeedMetaData;
 
 namespace Gcd.Commands.Nipkg.FeedAzBlob;
 
@@ -26,15 +24,16 @@ public static class UseCmdPullMetaDataExt
             cmd.Description = DESCRIPTION;
 
             var feedPathOpt = new FeedLocalDirOption();
-            var feedUrl = cmd.Option(REMOTE_FEED_URI_OPTION, REMOTE_FEED_URI_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
+            var feedUrl = new AzFeedUrlOption();
 
             cmd.AddOptions(
-                feedPathOpt.IsRequired()
+                feedPathOpt.IsRequired(),
+                feedUrl.IsRequired()
                 );
 
             cmd.OnExecuteAsync(async cancelationToken =>
             {
-                var azFeedDef = AzBlobFeedUri.Create(feedUrl.Value())
+                var azFeedDef = feedUrl.Map()
                     .Bind(feedUri => FeedDefinitionAzBlob.Of(feedUri));
 
                 var localFeedDef = LocalDirPath.Parse(feedPathOpt.Value())

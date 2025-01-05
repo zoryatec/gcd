@@ -4,8 +4,6 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
-using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
-using Gcd.Model;
 using Gcd.Model.Config;
 using Gcd.Extensions;
 using Gcd.Handlers.Nipkg.FeedLocal;
@@ -14,11 +12,14 @@ namespace Gcd.Commands.Nipkg.FeedLocal;
 
 public static class UseCmdAddHttpPackageExt
 {
+    public static readonly string NAME = "add-http-package";
+    public static readonly string DESCRIPTION = "add-http-package";
+    public static readonly string SUCESS_MESSAGE = "success";
     public static CommandLineApplication UseCmdAddHttpPackage(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
-        app.Command("add-http-package", cmd =>
+        app.Command(NAME, cmd =>
         {
             cmd.Description = "add local package to local feed";
 

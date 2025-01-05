@@ -4,10 +4,8 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
-using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
 using Gcd.Model.Config;
 using Gcd.Extensions;
-using Gcd.Model.FeedDefinition;
 using Gcd.Handlers.Nipkg.Shared;
 using Gcd.Model.Nipkg.FeedDefinition;
 
@@ -15,13 +13,17 @@ namespace Gcd.Commands.Nipkg.FeedGit;
 
 public static class UseCmdAddHttpPackageExt
 {
+    public static string NAME = "add-http-package";
+    public static string DESCRIPTION = "add-http-package";
+    public static string SUCESS_MESSAGE = "success";
+
     public static CommandLineApplication UseCmdAddHttpPackage(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
-        app.Command("add-http-package", cmd =>
+        app.Command(NAME, cmd =>
         {
-            cmd.Description = "add local package to local feed";
+            cmd.Description = DESCRIPTION;
 
             var locPathOpt = new PackageHttpPathOption();
             var gitRepoAddressOpt = new GitRepoAddressOption();
