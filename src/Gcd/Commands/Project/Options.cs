@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Model.File;
 using McMaster.Extensions.CommandLineUtils;
 
 namespace Gcd.Commands.Tools;

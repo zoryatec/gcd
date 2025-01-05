@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Model.File;
+using Gcd.LocalFileSystem.Abstractions;
 
 namespace Gcd.Model;
 

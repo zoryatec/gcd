@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gcd.Model.File
+namespace Gcd.LocalFileSystem.Abstractions
 {
     public interface IFileDescriptor
     {

@@ -2,7 +2,7 @@
 using CSharpFunctionalExtensions.ValueTasks;
 using Gcd.Extensions;
 using Gcd.Handlers.Nipkg.Shared;
-using Gcd.Model.File;
+using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model.Nipkg.FeedDefinition;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;

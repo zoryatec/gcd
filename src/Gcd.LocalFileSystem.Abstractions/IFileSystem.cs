@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Model.File;
 
-namespace Gcd.Services.FileSystem;
+namespace Gcd.LocalFileSystem.Abstractions;
 
 public interface IFileSystem
 {

@@ -1,6 +1,6 @@
-﻿namespace Gcd.Model.File
+﻿namespace Gcd.LocalFileSystem.Abstractions;
+
+public interface IDirectoryDescriptor
 {
-    public interface IDirectoryDescriptor
-    {
-    }
 }
+

@@ -1,9 +1,9 @@
 ﻿
 using CSharpFunctionalExtensions;
 using Gcd.Handlers.Nipkg.FeedLocal;
+using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model;
 using Gcd.Model.FeedDefinition;
-using Gcd.Model.File;
 using Gcd.Model.Nipkg.Common;
 using Gcd.Model.Nipkg.FeedDefinition;
 using Gcd.Model.Nipkg.PackageBuilder;

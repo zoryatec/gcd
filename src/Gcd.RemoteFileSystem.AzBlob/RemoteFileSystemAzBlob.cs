@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model;
-using Gcd.Model.File;
-using Gcd.Services.FileSystem;
 
 namespace Gcd.Services.RemoteFileSystem
 {

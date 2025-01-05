@@ -1,9 +1,8 @@
 ﻿using System.Diagnostics;
 using CSharpFunctionalExtensions;
 using Gcd.Handlers.Nipkg.Shared;
+using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model.Config;
-using Gcd.Model.File;
-using Gcd.Services.FileSystem;
 using MediatR;
 
 namespace Gcd.Handlers.Tools;

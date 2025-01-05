@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model.Config;
-using Gcd.Model.File;
 using MediatR;
 
 namespace Gcd.Handlers.Tools;

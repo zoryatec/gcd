@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Commands.Config;
+using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model.Config;
-using Gcd.Services.FileSystem;
 using Newtonsoft.Json.Linq;
 
 namespace Gcd.Services;

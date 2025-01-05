@@ -1,11 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using MediatR;
 using Gcd.Model.Config;
-using Gcd.Services.FileSystem;
 using Gcd.Services.RemoteFileSystem;
 using Gcd.Handlers.Nipkg.FeedLocal;
 using Gcd.Model.Nipkg.FeedDefinition;
 using Gcd.Model.Nipkg.Common;
+using Gcd.LocalFileSystem.Abstractions;
 
 namespace Gcd.Handlers.Nipkg.Shared;
 

@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace Gcd.Model.File;
+namespace Gcd.LocalFileSystem.Abstractions;
 
-public record LocalFilePath : IFileDescriptor
+public record LocalFilePath : IFileDescriptor, ILocalFilePath
 {
     public static Result<LocalFilePath> Offf(Maybe<string> maybeValue)
     {

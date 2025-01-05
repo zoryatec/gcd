@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace Gcd.Model.File;
+namespace Gcd.LocalFileSystem.Abstractions;
 
 public record LocalDirPath : IDirectoryDescriptor
 {

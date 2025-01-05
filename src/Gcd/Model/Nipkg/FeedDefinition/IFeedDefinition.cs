@@ -1,4 +1,4 @@
-﻿using Gcd.Model.File;
+﻿using Gcd.LocalFileSystem.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

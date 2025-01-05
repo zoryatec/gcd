@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Handlers.Nipkg.Shared;
+using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model.FeedDefinition;
 using Gcd.Model.Nipkg.FeedDefinition;
-using Gcd.Services.FileSystem;
 using Gcd.Services.RemoteFileSystem;
 using MediatR;
 

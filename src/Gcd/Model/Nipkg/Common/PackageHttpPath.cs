@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
-using Gcd.Model.File;
+using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Services;
 using System;
 using System.Collections.Generic;

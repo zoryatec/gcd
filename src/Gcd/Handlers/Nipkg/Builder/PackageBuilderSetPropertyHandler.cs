@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model.Nipkg.ControlFile;
 using Gcd.Model.Nipkg.PackageBuilder;
-using Gcd.Services.FileSystem;
 using MediatR;
 
 namespace Gcd.Handlers.Nipkg.Builder;

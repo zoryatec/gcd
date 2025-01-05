@@ -1,9 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
 using Gcd.Handlers.Nipkg.Shared;
-using Gcd.Model.File;
+using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model.Nipkg.FeedDefinition;
-using Gcd.Services.FileSystem;
 using Gcd.Services.RemoteFileSystem;
 using LibGit2Sharp;
 using MediatR;

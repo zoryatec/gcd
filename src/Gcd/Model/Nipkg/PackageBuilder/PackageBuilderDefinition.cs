@@ -2,7 +2,7 @@
 using Azure.Core;
 using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
-using Gcd.Model.File;
+using Gcd.LocalFileSystem.Abstractions;
 
 namespace Gcd.Model.Nipkg.PackageBuilder;
 
