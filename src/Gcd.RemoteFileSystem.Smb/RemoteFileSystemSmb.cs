@@ -1,5 +1,6 @@
 ﻿
 using CSharpFunctionalExtensions;
+using Gcd.Common;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model.FeedDefinition;
 using System.Net;
@@ -32,8 +33,8 @@ namespace Gcd.Services.RemoteFileSystem
 
         }
 
-        public async Task<Result> UploadFileAsync(SmbDirPath smbDir, SmbFilePath smbPath, LocalFilePath sourcePath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false) =>
-            Result.Try(() => UploadFile(smbDir.Value, smbPath.Value, sourcePath.Value, SmbUserName.Value, SmbPassword.Value), ex => ex.Message);
+        public async Task<UnitResult<Error>> UploadFileAsync(SmbDirPath smbDir, SmbFilePath smbPath, LocalFilePath sourcePath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false) =>
+            Result.Try(() => UploadFile(smbDir.Value, smbPath.Value, sourcePath.Value, SmbUserName.Value, SmbPassword.Value), ex => new Error(ex.Message));
 
         public static void UploadFile(string smbSharePath, string smbFilePath, string localFilePath, string username, string password, string domain = null)
         {

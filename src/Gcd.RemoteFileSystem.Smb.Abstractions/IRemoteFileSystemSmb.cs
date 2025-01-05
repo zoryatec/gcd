@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Common;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model.FeedDefinition;
 
@@ -8,7 +9,7 @@ namespace Gcd.Services.RemoteFileSystem
     {
         public Task<Result> DownloadFileAsync(SmbDirPath smbDir, SmbFilePath sourceDescriptor, LocalFilePath destinationPath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false);
 
-        public Task<Result> UploadFileAsync(SmbDirPath smbDir, SmbFilePath smbPath, LocalFilePath sourcePath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false);
+        public Task<UnitResult<Error>> UploadFileAsync(SmbDirPath smbDir, SmbFilePath smbPath, LocalFilePath sourcePath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false);
 
     }
 }

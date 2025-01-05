@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Common;
 using Gcd.Handlers.Nipkg.Shared;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model.FeedDefinition;
@@ -19,6 +20,7 @@ public class UploadPackage(IFileSystem _fs, IRemoteFileSystemSmb _rfs)
         var smbFilePath = SmbFilePath.Of($"{feedDef.Feed.Value}\\{packageFilePath.FileName.Value}");
 
         return await smbFilePath
-            .Bind((smbPath) => _rfs.UploadFileAsync(feedDef.Feed, smbPath, packageFilePath, feedDef.SmbUserName, feedDef.SmbPassword));
+            .Bind((smbPath) => _rfs.UploadFileAsync(feedDef.Feed, smbPath, packageFilePath, feedDef.SmbUserName, feedDef.SmbPassword))
+            .MapError(err => err.Message);
     }
 }
