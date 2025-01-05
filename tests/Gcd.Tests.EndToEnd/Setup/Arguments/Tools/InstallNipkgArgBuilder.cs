@@ -1,5 +1,4 @@
 using Gcd.Commands.Tools;
-using static Gcd.Contract.Nipkg.InstallNipkg;
 
 namespace Gcd.Tests.EndToEnd.Arguments.Tools
 {
