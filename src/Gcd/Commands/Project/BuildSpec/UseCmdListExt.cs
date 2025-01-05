@@ -1,4 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Commands.Tools;
+using Gcd.Extensions;
 using Gcd.Handlers.Project.BuildSpec;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
@@ -19,14 +21,14 @@ public static class UseCmdListExt
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
 
-        app.Command(NAME, listCmd =>
+        app.Command(NAME, cmd =>
         {
-            listCmd.Description = DESCRIPTION;
-            var projectPath = listCmd.Option(PROJECT_PATH_OPTION, PROJECT_PATH_DESCRIPTION, CommandOptionType.SingleValue)
-                .IsRequired();
-            listCmd.OnExecute(async () =>
+            cmd.Description = DESCRIPTION;
+            var projectPath = new LabViewProjectPathOption();
+            cmd.AddOptions(projectPath.IsRequired());
+            cmd.OnExecute(async () =>
             {
-                var maybeProjectPat = Maybe.From(projectPath.Value());
+                var maybeProjectPat = projectPath.Map();
                 var request = new BuildSpecListRequest(maybeProjectPat.Value);
                 var response = await mediator.Send(request);
                 console.WriteLine(response.ProjectPaht);

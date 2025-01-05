@@ -1,12 +1,11 @@
 ﻿
 using CSharpFunctionalExtensions;
+using Gcd.Extensions;
 using Gcd.Handlers.Tools;
 using Gcd.Model.Config;
-using Gcd.Model.File;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using static Gcd.Contract.Nipkg.DownloadNipkg;
 
 
 namespace Gcd.Commands.Tools;
@@ -26,10 +25,12 @@ public static class UseCmdDownloadNipkgExt
         {
             cmd.ShowInHelpText = SHOW_IN_HELP;
             cmd.Description = DESCRIPTION;
-            var downloadPath = cmd.Option(DOWNLOAD_PATH_OPTION, DOWNLOAD_PATH_DESCRIPTION, CommandOptionType.SingleValue);
+            var downloadPath = new DownloadNipkgPathOption();
+            cmd.AddOptions(downloadPath.IsRequired());
+
             cmd.OnExecuteAsync(async cancelationToken =>
             {
-                var filePath = LocalFilePath.Offf(downloadPath.Value());
+                var filePath = downloadPath.Map();
                 var installerUri = NipkgInstallerUri.None;
 
                 return await filePath

@@ -26,16 +26,17 @@ public static class UseCmdAddLocalPackageExt
         {
             cmd.Description = DESCRIPTION;
             var locPathOpt = new PackageLocalPathOption();
-            var feedUrlOption = cmd.Option(AZ_FEED_URI_OPTION, AZ_FEED_URI_OPTION_DESCRIPTION, CommandOptionType.SingleValue).IsRequired();
+            var feedUrlOption = new AzFeedUrlOption();
 
 
             cmd.AddOptions(
-                locPathOpt.IsRequired()
+                locPathOpt.IsRequired(),
+                feedUrlOption.IsRequired()
                 );
 
             cmd.OnExecuteAsync(async cancelationToken =>
             {
-                var azFeedDef = AzBlobFeedUri.Create(feedUrlOption.Value())
+                var azFeedDef = feedUrlOption.Map()
                     .Bind(feedUri => FeedDefinitionAzBlob.Of(feedUri));
                 var pathToPackage = locPathOpt.ToPackageLocalPath();
                 var cmdPath = NipkgCmdPath.None;

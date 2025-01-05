@@ -1,6 +1,7 @@
 ﻿
 using CSharpFunctionalExtensions;
 using Gcd.Handlers.Nipkg.FeedLocal;
+using Gcd.Model;
 using Gcd.Model.FeedDefinition;
 using Gcd.Model.File;
 using Gcd.Model.Nipkg.Common;
@@ -112,6 +113,16 @@ public sealed class UseAbsolutePathOption() : CommandOption(NAME, CommandOptionT
     }
 }
 #endregion
+
+#region az
+public sealed class AzFeedUrlOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--feed-url";
+    public Result<AzBlobFeedUri> Map() => AzBlobFeedUri.Create(this.Value());
+}
+
+#endregion
+
 #region git
 
 public sealed class GitRepoAddressOption() : CommandOption(NAME, CommandOptionType.SingleValue)

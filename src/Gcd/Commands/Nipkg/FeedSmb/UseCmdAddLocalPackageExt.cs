@@ -3,11 +3,8 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
-using static Gcd.Contract.Nipkg.AddPackageToAzFeed;
-using Gcd.Model;
 using Gcd.Model.Config;
 using Gcd.Handlers.Nipkg.Shared;
-using Gcd.Handlers.Nipkg.FeedLocal;
 using Gcd.Extensions;
 using Gcd.Model.Nipkg.FeedDefinition;
 
@@ -15,13 +12,16 @@ namespace Gcd.Commands.Nipkg.FeedSmb;
 
 public static class UseCmdAddLocalPackageExt
 {
+    public static readonly string NAME = "add-local-package";
+    public static readonly string DESCRIPTION = "add-local-package";
+    public static readonly string SUCESS_MESSAGE = "success";
     public static CommandLineApplication UseCmdAddLocalPackage(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
         var mediator = serviceProvider.GetRequiredService<IMediator>();
-        app.Command("add-local-package", cmd =>
+        app.Command(NAME, cmd =>
         {
-            cmd.Description = COMMAND_DESCRIPTION;
+            cmd.Description = DESCRIPTION;
             var locPathOpt = new PackageLocalPathOption();
             var smbShareOpt = new SmbShareAddressOption();
             var smbUserOpt = new SmbUserNameOption();
