@@ -16,11 +16,11 @@ namespace Gcd.Services.RemoteFileSystem
             //return Result.Success();
         }
 
-        public async Task<Result> DownloadFileAsync(SmbDirPath smbDir, SmbFilePath sourceDescriptor, LocalFilePath destinationPath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false) =>
+        public async Task<Result> DownloadFileAsync(SmbDirPath smbDir, SmbFilePath sourceDescriptor, ILocalFilePath destinationPath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false) =>
             await Result.Try(() => DownloadFilePrivAsync(smbDir, sourceDescriptor, destinationPath, SmbUserName, SmbPassword, overwrite), ex => ex.Message);
 
 
-        private async Task<Result> DownloadFilePrivAsync(SmbDirPath smbDir, SmbFilePath sourceDescriptor, LocalFilePath destinationPath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false)
+        private async Task<Result> DownloadFilePrivAsync(SmbDirPath smbDir, SmbFilePath sourceDescriptor, ILocalFilePath destinationPath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false)
         {
             var credentials = new NetworkCredential(SmbUserName.Value, SmbPassword.Value, null);
 
@@ -33,7 +33,7 @@ namespace Gcd.Services.RemoteFileSystem
 
         }
 
-        public async Task<UnitResult<Error>> UploadFileAsync(SmbDirPath smbDir, SmbFilePath smbPath, LocalFilePath sourcePath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false) =>
+        public async Task<UnitResult<Error>> UploadFileAsync(SmbDirPath smbDir, SmbFilePath smbPath, ILocalFilePath sourcePath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false) =>
             Result.Try(() => UploadFile(smbDir.Value, smbPath.Value, sourcePath.Value, SmbUserName.Value, SmbPassword.Value), ex => new Error(ex.Message));
 
         public static void UploadFile(string smbSharePath, string smbFilePath, string localFilePath, string username, string password, string domain = null)

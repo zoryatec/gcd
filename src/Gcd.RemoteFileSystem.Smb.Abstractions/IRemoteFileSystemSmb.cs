@@ -7,9 +7,9 @@ namespace Gcd.Services.RemoteFileSystem
 {
     public interface IRemoteFileSystemSmb
     {
-        public Task<Result> DownloadFileAsync(SmbDirPath smbDir, SmbFilePath sourceDescriptor, LocalFilePath destinationPath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false);
+        public Task<Result> DownloadFileAsync(SmbDirPath smbDir, SmbFilePath sourceDescriptor, ILocalFilePath destinationPath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false);
 
-        public Task<UnitResult<Error>> UploadFileAsync(SmbDirPath smbDir, SmbFilePath smbPath, LocalFilePath sourcePath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false);
+        public Task<UnitResult<Error>> UploadFileAsync(SmbDirPath smbDir, SmbFilePath smbPath, ILocalFilePath sourcePath, SmbUserName SmbUserName, SmbPassword SmbPassword, bool overwrite = false);
 
     }
 }

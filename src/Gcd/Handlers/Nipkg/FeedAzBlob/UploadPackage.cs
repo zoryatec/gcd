@@ -18,7 +18,7 @@ public class UploadPackage(IFileSystem _fs, IRemoteFileSystemAzBlob _rfs)
         return await UploadPackagePriv(feedDef.Feed, packageFilePath);
     }
 
-    private async Task<Result> UploadPackagePriv(IDirectoryDescriptor dirDescriptor, PackageFilePath packagePath)
+    private async Task<Result> UploadPackagePriv(IDirectoryDescriptor dirDescriptor, PackageLocalFilePath packagePath)
     {
 
         var blorUriRes = _rfs.CreateFileDescriptor(dirDescriptor, packagePath.FileName);

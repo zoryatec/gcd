@@ -31,9 +31,9 @@ namespace Gcd.Model.Nipkg.Common
 
 
 
-        public static PackageFilePath Of(LocalDirPath Directory, PackageFileName FileName)
+        public static PackageLocalFilePath Of(LocalDirPath Directory, PackageFileName FileName)
         {
-            return new PackageFilePath(Directory, FileName);
+            return new PackageLocalFilePath(Directory, FileName);
         }
 
         public PackageFileName FileName { get; }

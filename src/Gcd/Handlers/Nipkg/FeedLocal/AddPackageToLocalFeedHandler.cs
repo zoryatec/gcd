@@ -48,7 +48,7 @@ public class AddPackageToLocalHandler(
 
 
 
-        var insideFeedPkgPath = PackageFilePath.Of(localFeedDef.Feed, packagePath.FileName);
+        var insideFeedPkgPath = PackageLocalFilePath.Of(localFeedDef.Feed, packagePath.FileName);
 
         var result = await DownloadFile(packagePath, insideFeedPkgPath, overwrite: true)
             .Bind(() => _mediator.AddPackageToLcalFeedAsync(localFeedDef, insideFeedPkgPath, cmdPath, createFeed));
@@ -66,20 +66,20 @@ public class AddPackageToLocalHandler(
 
 
 
-    private async Task<Result> DownloadFile(IFileDescriptor sourceDescriptor, LocalFilePath destinationPath, bool overwrite = false)
+    private async Task<Result> DownloadFile(IFileDescriptor sourceDescriptor, ILocalFilePath destinationPath, bool overwrite = false)
     {
         return sourceDescriptor switch
         {
-            LocalFilePath source => await _fs.CopyFileAsync(source, destinationPath, overwrite: overwrite),
+            ILocalFilePath source => await _fs.CopyFileAsync(source, destinationPath, overwrite: overwrite),
             WebUri source => await _webDownload.DownloadFileAsync(source, destinationPath),
             _ => throw new InvalidOperationException(sourceDescriptor.GetType().Name)
         };
     }
-    private async Task<Result> UploadFile(IFileDescriptor destinationDescriptor, LocalFilePath destinationPath)
+    private async Task<Result> UploadFile(IFileDescriptor destinationDescriptor, ILocalFilePath destinationPath)
     {
         return destinationDescriptor switch
         {
-            LocalFilePath source => await _fs.CopyFileAsync(source, destinationPath, overwrite: true),
+            ILocalFilePath source => await _fs.CopyFileAsync(source, destinationPath, overwrite: true),
             _ => throw new InvalidOperationException(destinationDescriptor.GetType().Name)
         };
     }
@@ -116,7 +116,7 @@ public class AddPackageToLocalHandler(
 
     }
 
-    private async Task<Result> UploadPackage(FeedDefinitionAzBlob azFeedDef, PackageFilePath packagePath)
+    private async Task<Result> UploadPackage(FeedDefinitionAzBlob azFeedDef, PackageLocalFilePath packagePath)
     {
         var azblob = AzBlobFeedUri.Create(azFeedDef.Feed.Full); ;
         string nipkgUrl = CreateSubUrl(azblob.Value, packagePath.FileName.Value);

@@ -21,7 +21,7 @@ public class UploadPackage(IFileSystem _fs, IRemoteFileSystemGit _rfs)
         var checkoutFeed = FeedDefinitionLocal.Of(checkoutDir.Value);
 
         var destinationPackage = checkoutFeed
-            .Map((arg) => PackageFilePath.Of(arg.Feed, packageFilePath.FileName));
+            .Map((arg) => PackageLocalFilePath.Of(arg.Feed, packageFilePath.FileName));
 
         var pullResult = await checkoutFeed
             .Bind((x) => _rfs.Clone(feedDef.Address, feedDef.BrancName, feedDef.UserName, feedDef.Password, checkoutFeed.Value.Feed));

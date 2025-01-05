@@ -9,7 +9,7 @@ namespace Gcd.Handlers.Nipkg.Shared;
 
 public static class MediatorExt
 {
-    public static async Task<Result> UploadPackageAsync<TFeedDefinition>(this IMediator mediator, TFeedDefinition remoteFeedDef, PackageFilePath packageFilePath, CancellationToken cancellationToken = default) where TFeedDefinition : IFeedDefinition
+    public static async Task<Result> UploadPackageAsync<TFeedDefinition>(this IMediator mediator, TFeedDefinition remoteFeedDef, PackageLocalFilePath packageFilePath, CancellationToken cancellationToken = default) where TFeedDefinition : IFeedDefinition
         => await mediator.Send(new UploadPackageRequest<TFeedDefinition>(remoteFeedDef, packageFilePath), cancellationToken);
 
     public static async Task<Result> PushFeedMetaDataAsync<TFeedDefinition>(this IMediator mediator, TFeedDefinition FeedDefinition, FeedDefinitionLocal LocalFeedDef, CancellationToken cancellationToken = default) where TFeedDefinition : IFeedDefinition

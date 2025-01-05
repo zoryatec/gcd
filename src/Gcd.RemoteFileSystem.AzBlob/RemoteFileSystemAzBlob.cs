@@ -12,7 +12,7 @@ namespace Gcd.Services.RemoteFileSystem
         ) : IRemoteFileSystemAzBlob
     {
 
-        public async Task<Result> DownloadFileAsync(IFileDescriptor sourceDescriptor, LocalFilePath destinationPath, bool overwrite = false)
+        public async Task<Result> DownloadFileAsync(IFileDescriptor sourceDescriptor, ILocalFilePath destinationPath, bool overwrite = false)
         {
             return sourceDescriptor switch
             {
@@ -24,7 +24,7 @@ namespace Gcd.Services.RemoteFileSystem
             };
         }
 
-        public async Task<Result> UploadFileAsync(IFileDescriptor sourceDescriptor, LocalFilePath sourcePath, bool overwrite = false)
+        public async Task<Result> UploadFileAsync(IFileDescriptor sourceDescriptor, ILocalFilePath sourcePath, bool overwrite = false)
         {
             return sourceDescriptor switch
             {

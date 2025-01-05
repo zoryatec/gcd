@@ -56,8 +56,8 @@ public sealed class BuilderRootDirOption() : CommandOption(NAME, CommandOptionTy
 public sealed class PackageLocalPathOption() : CommandOption(NAME, CommandOptionType.SingleValue)
 {
     public static readonly string NAME = "--package-local-path";
-    public Result<PackageFilePath> ToPackageLocalPath() =>
-        PackageFilePath.Of(this.Value());
+    public Result<PackageLocalFilePath> ToPackageLocalPath() =>
+        PackageLocalFilePath.Of(this.Value());
 }
 
 public sealed class PackageHttpPathOption() : CommandOption(NAME, CommandOptionType.SingleValue)

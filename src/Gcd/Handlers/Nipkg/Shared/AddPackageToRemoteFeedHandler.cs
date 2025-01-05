@@ -32,7 +32,7 @@ public class AddPackageToRemoteFeedHandler<TFeedDefinition>(
         var localFeedDef = await CreateTempFeedDefinition();
 
         var insideFeedPkgPath = localFeedDef
-            .Map((arg) => PackageFilePath.Of(arg.Feed, packagePath.FileName));
+            .Map((arg) => PackageLocalFilePath.Of(arg.Feed, packagePath.FileName));
 
         return await Result.Combine(localFeedDef, insideFeedPkgPath)
             .Bind(() => _mediator.PullFeedMetaAsync(azFeedDef, localFeedDef.Value))

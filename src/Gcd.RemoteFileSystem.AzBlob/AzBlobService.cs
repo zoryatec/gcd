@@ -21,19 +21,19 @@ public record AzBlobUri : IFileDescriptor
 }
 public interface IUploadAzBlobService
 {
-    public Task<Result> UploadFileAsync(AzBlobUri blobUri, LocalFilePath filePath);
+    public Task<Result> UploadFileAsync(AzBlobUri blobUri, ILocalFilePath filePath);
 }
 
 
 public interface IDownloadAzBlobService
 {
-    public Task<Result> DownloadFileAsync(AzBlobUri blobUri, LocalFilePath filePath);
+    public Task<Result> DownloadFileAsync(AzBlobUri blobUri, ILocalFilePath filePath);
 }
 
 public class AzBlobService : IDownloadAzBlobService, IUploadAzBlobService
 {
 
-    public async Task<Result> UploadFileAsync(AzBlobUri blobUri, LocalFilePath filePath) =>
+    public async Task<Result> UploadFileAsync(AzBlobUri blobUri, ILocalFilePath filePath) =>
 
            await UploadCoreAsync(blobUri.Value, filePath.Value);
   
@@ -52,7 +52,7 @@ public class AzBlobService : IDownloadAzBlobService, IUploadAzBlobService
         }
     }
 
-    public async Task<Result> DownloadFileAsync(AzBlobUri blobUri, LocalFilePath filePath) =>
+    public async Task<Result> DownloadFileAsync(AzBlobUri blobUri, ILocalFilePath filePath) =>
         await Result.Try(
             async () => await DownloadCore(blobUri.Value, filePath.Value),
             ex => ex.Message);
