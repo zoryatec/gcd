@@ -34,7 +34,7 @@ namespace Gcd.Services.FileSystem
         public async Task<Result<LocalDirPath>> CreateTempDirPathAsync()
         {
             string path = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-            return LocalDirPath.Parse(path).MapError(er => er.Message);
+            return LocalDirPath.Of(path).MapError(er => er.Message);
         }
 
         public async Task<Result> CreateDirAsync(LocalDirPath locDirPath)
@@ -63,7 +63,7 @@ namespace Gcd.Services.FileSystem
             try
             {
                 var path = GenerateTempDirectory();
-                return LocalDirPath.Parse(path).MapError(er => er.Message);
+                return LocalDirPath.Of(path).MapError(er => er.Message);
             }
             catch (Exception ex)
             {

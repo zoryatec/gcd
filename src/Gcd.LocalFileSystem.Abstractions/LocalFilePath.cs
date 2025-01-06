@@ -13,12 +13,10 @@ public record LocalFilePath : IFileDescriptor, ILocalFilePath
     public static Result<LocalFilePath,Error> Of(Maybe<string> maybeValue){
         var res =
             from value  in maybeValue.ToResult(ErorNullValue.Of(nameof(LocalFilePath)))
-            from currDir in Result.Success<string,Error>(Environment.CurrentDirectory)
             from rawFileName in Result.Success<string, Error>(Path.GetFileName(value))
             from rawRecDir in Result.Success<string, Error>(Path.GetDirectoryName(value))
             from fileName1 in FileName.Of(rawFileName)
-            from rawDir in Result.Success<string, Error>(Path.Combine(currDir, rawRecDir))
-            from dir in LocalDirPath.Parse(rawDir)
+            from dir in LocalDirPath.Of(rawRecDir)
             select new LocalFilePath(dir, fileName1);
 
         //return res.MapError(er => er.Message); }

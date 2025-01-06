@@ -9,7 +9,7 @@ public sealed record PackageBuilderContentDir : ILocalDirPath
     public static Result<PackageBuilderContentDir> Of(BuilderRootDir rootDir, InatallationTargetRootDir packageInstalatioDir)
     {
         var windPath = packageInstalatioDir.Value.Replace('/', '\\');
-        var dir = LocalDirPath.Parse($"{rootDir.Value}\\data\\{windPath}").MapError(er => er.Message);
+        var dir = LocalDirPath.Of($"{rootDir.Value}\\data\\{windPath}").MapError(er => er.Message);
         return dir.Map((dir) => new PackageBuilderContentDir(dir));
     }
 

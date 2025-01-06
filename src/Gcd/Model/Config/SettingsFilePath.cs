@@ -20,7 +20,7 @@ public record SettingsFilePath : ILocalFilePath
 
         string assemblyDir = AppContext.BaseDirectory;
 
-        var varLocDir = LocalDirPath.Parse(assemblyDir);
+        var varLocDir = LocalDirPath.Of(assemblyDir);
         var fileName = new FileName(maybeValue.Value);
 
         var locFilePath = new LocalFilePath(varLocDir.Value, fileName);

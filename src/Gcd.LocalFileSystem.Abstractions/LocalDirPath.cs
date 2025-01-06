@@ -5,7 +5,7 @@ namespace Gcd.LocalFileSystem.Abstractions;
 
 public record LocalDirPath : IDirectoryDescriptor, ILocalDirPath
 {
-    public static Result<LocalDirPath,Error> Parse(Maybe<string> maybeValue)
+    public static Result<LocalDirPath,Error> Of(Maybe<string> maybeValue)
     {
         var isAbsolute = Path.IsPathFullyQualified(maybeValue.Value);
         if (!isAbsolute)

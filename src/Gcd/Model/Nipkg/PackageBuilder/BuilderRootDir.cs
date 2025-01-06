@@ -6,7 +6,7 @@ namespace Gcd.Model.Nipkg.PackageBuilder;
 public record BuilderRootDir : ILocalDirPath
 {
     public static Result<BuilderRootDir> Of(Maybe<string> packagePathOrNothing) =>
-        LocalDirPath.Parse(packagePathOrNothing).MapError(er => er.Message)
+        LocalDirPath.Of(packagePathOrNothing).MapError(er => er.Message)
         .Map(x => new BuilderRootDir(x));
     private BuilderRootDir(LocalDirPath dirPath)
     {

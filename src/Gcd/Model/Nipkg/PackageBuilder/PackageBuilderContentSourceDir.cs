@@ -15,7 +15,7 @@ public record PackageBuilderContentSourceDir : ILocalDirPath
     public LocalDirPath DirPath { get; }
 
     public static Result<PackageBuilderContentSourceDir> Of(Maybe<string> maybeValue) =>
-        LocalDirPath.Parse(maybeValue).MapError(er => er.Message)
+        LocalDirPath.Of(maybeValue).MapError(er => er.Message)
         .Map(x => new PackageBuilderContentSourceDir(x));
 
     private PackageBuilderContentSourceDir(LocalDirPath dirPath)

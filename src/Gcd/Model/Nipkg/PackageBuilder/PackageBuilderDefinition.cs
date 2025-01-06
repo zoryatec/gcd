@@ -19,9 +19,9 @@ public record PackageBuilderDefinition
     {
 
         var result =
-            from rootDir in LocalDirPath.Parse($"{feedDirPath.Value}")
-            from dataDir in LocalDirPath.Parse($"{feedDirPath.Value}\\data")
-            from controlDir in LocalDirPath.Parse($"{feedDirPath.Value}\\control")
+            from rootDir in LocalDirPath.Of($"{feedDirPath.Value}")
+            from dataDir in LocalDirPath.Of($"{feedDirPath.Value}\\data")
+            from controlDir in LocalDirPath.Of($"{feedDirPath.Value}\\control")
             from debianFile in LocalFilePath.Of($"{feedDirPath.Value}\\debian-binary")
             from controlFile in LocalFilePath.Of($"{feedDirPath.Value}\\control\\control")
             from instructionsFile in LocalFilePath.Of($"{feedDirPath.Value}\\data\\instructions")

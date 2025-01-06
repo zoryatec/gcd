@@ -93,7 +93,7 @@ public sealed class FeedLocalDirOption() : CommandOption(NAME, CommandOptionType
 {
     public static readonly string NAME = "--feed-local-path";
     public Result<FeedDefinitionLocal> ToLocalFeedDefinition() =>
-                 LocalDirPath.Parse(this.Value()).MapError(er => er.Message)
+                 LocalDirPath.Of(this.Value()).MapError(er => er.Message)
                     .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 }
 public sealed class FeedCreateOption() : CommandOption(NAME, CommandOptionType.NoValue)

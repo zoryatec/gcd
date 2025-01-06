@@ -6,7 +6,7 @@ namespace Gcd.Model.Nipkg.Common;
 public record PackageDestinationDirectory : ILocalDirPath
 {
     public static Result<PackageDestinationDirectory> Of(Maybe<string> maybeValue) =>
-        LocalDirPath.Parse(maybeValue).MapError(er => er.Message)
+        LocalDirPath.Of(maybeValue).MapError(er => er.Message)
         .Map(x => new PackageDestinationDirectory(x));
 
 
