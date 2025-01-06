@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.15.0"></a>
+## [0.15.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.15.0) (2025-01-06)
+
+### Features
+
+* new releae test ([c7dc715](https://www.github.com/zoryatec/gcd/commit/c7dc7152843050499a0abf98fdb260e0e7399e9c))
+
 <a name="0.14.0"></a>
 ## [0.14.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.14.0) (2025-01-06)
 
