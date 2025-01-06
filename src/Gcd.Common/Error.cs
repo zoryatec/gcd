@@ -1,13 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Gcd.Common;
 
-public class Error : ICombine
+public record Error : ICombine
 {
     public Error(string message)
     {
@@ -30,5 +25,11 @@ public class Error : ICombine
 
         return this;
     }
+}
+
+public record ErorNullValue : Error
+{
+    public static Error Of(string name) => new ErorNullValue(new Error($"Value '{name}' cannot be null"));
+    protected ErorNullValue(Error original) : base(original) { }
 }
 

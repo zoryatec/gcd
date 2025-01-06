@@ -12,7 +12,7 @@ public record LocalFilePath : IFileDescriptor, ILocalFilePath
     }
     public static Result<LocalFilePath,Error> Offf(Maybe<string> maybeValue){
         var res =
-            from value  in maybeValue.ToResult(Error.Of("path should not be null"))
+            from value  in maybeValue.ToResult(ErorNullValue.Of(nameof(LocalFilePath)))
             from currDir in Result.Success<string,Error>(Environment.CurrentDirectory)
             from rawFileName in Result.Success<string, Error>(Path.GetFileName(value))
             from rawRecDir in Result.Success<string, Error>(Path.GetDirectoryName(value))
