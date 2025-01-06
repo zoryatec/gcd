@@ -7,5 +7,5 @@ public sealed class DownloadNipkgPathOption() : CommandOption(NAME, CommandOptio
 {
     public static readonly string NAME = "--download-path";
     public Result<LocalFilePath> Map() =>
-        LocalFilePath.Offf(this.Value());
+        LocalFilePath.Offf(this.Value()).MapError(er => er.Message);
 }

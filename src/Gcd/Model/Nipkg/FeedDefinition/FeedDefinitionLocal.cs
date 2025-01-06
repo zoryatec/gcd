@@ -17,12 +17,17 @@ public record FeedDefinitionLocal
 
     public static Result<FeedDefinitionLocal> Of(LocalDirPath feedDirPath)
     {
-        var package = LocalFilePath.Offf($"{feedDirPath.Value}\\Packages");
-        var packageGz = LocalFilePath.Offf($"{feedDirPath.Value}\\Packages.gz");
-        var packageStamps = LocalFilePath.Offf($"{feedDirPath.Value}\\Packages.stamps");
-        return Result
-            .Combine(package, packageGz, packageStamps)
-            .Map(() => new FeedDefinitionLocal(feedDirPath, package.Value, packageGz.Value, packageStamps.Value));
+        var result =
+            from package in LocalFilePath.Offf($"{feedDirPath.Value}\\Packages")
+            from packageGz in LocalFilePath.Offf($"{feedDirPath.Value}\\Packages.gz")
+            from packageStamps in LocalFilePath.Offf($"{feedDirPath.Value}\\Packages.stamps")
+            select new FeedDefinitionLocal(
+                feedDirPath,
+                package,
+                packageGz,
+                packageStamps);
+
+        return result.MapError(er => er.Message);
     }
     private FeedDefinitionLocal(LocalDirPath feed, LocalFilePath package, LocalFilePath packageGz, LocalFilePath packageStamps)
     {

@@ -10,7 +10,7 @@ public record LocalFilePath : IFileDescriptor, ILocalFilePath
         Directory = directory;
         FileName = fileName;
     }
-    public static Result<LocalFilePath> Offf(Maybe<string> maybeValue){
+    public static Result<LocalFilePath,Error> Offf(Maybe<string> maybeValue){
         var res =
             from value  in maybeValue.ToResult(Error.Of("path should not be null"))
             from currDir in Result.Success<string,Error>(Environment.CurrentDirectory)
@@ -21,7 +21,9 @@ public record LocalFilePath : IFileDescriptor, ILocalFilePath
             from dir in LocalDirPath.Parse(rawDir)
             select new LocalFilePath(dir, fileName1);
 
-        return res.MapError(er => er.Message); }
+        //return res.MapError(er => er.Message); }
+        return res;}
+
 
     //protected LocalFilePath(string path) => Value = path;
     public string Value => Path.Combine(Directory.Value, FileName.Value);

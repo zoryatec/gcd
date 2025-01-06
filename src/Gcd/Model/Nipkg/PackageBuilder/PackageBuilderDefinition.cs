@@ -38,9 +38,9 @@ public record PackageBuilderDefinition
             from rootDir in LocalDirPath.Parse($"{feedDirPath.Value}")
             from dataDir in LocalDirPath.Parse($"{feedDirPath.Value}\\data")
             from controlDir in LocalDirPath.Parse($"{feedDirPath.Value}\\control")
-            from debianFile in LocalFilePath.Offf($"{feedDirPath.Value}\\debian-binary").MapError(er => Error.Of(er))
-            from controlFile in LocalFilePath.Offf($"{feedDirPath.Value}\\control\\control").MapError(er => Error.Of(er))
-            from instructionsFile in LocalFilePath.Offf($"{feedDirPath.Value}\\data\\instructions").MapError(er => Error.Of(er))
+            from debianFile in LocalFilePath.Offf($"{feedDirPath.Value}\\debian-binary")
+            from controlFile in LocalFilePath.Offf($"{feedDirPath.Value}\\control\\control")
+            from instructionsFile in LocalFilePath.Offf($"{feedDirPath.Value}\\data\\instructions")
             select new  PackageBuilderDefinition(
                         rootDir,
                         dataDir,
