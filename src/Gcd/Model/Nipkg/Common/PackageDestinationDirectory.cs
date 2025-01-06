@@ -3,12 +3,19 @@ using Gcd.LocalFileSystem.Abstractions;
 
 namespace Gcd.Model.Nipkg.Common;
 
-public record PackageDestinationDirectory : LocalDirPath
+public record PackageDestinationDirectory : ILocalDirPath
 {
     public static Result<PackageDestinationDirectory> Of(Maybe<string> maybeValue) =>
-        Parse(maybeValue).MapError(er => er.Message)
+        LocalDirPath.Parse(maybeValue).MapError(er => er.Message)
         .Map(x => new PackageDestinationDirectory(x));
 
-    private PackageDestinationDirectory(LocalDirPath value) : base(value) { }
+
+    private PackageDestinationDirectory(ILocalDirPath dirPath)
+    {
+        DirPath = dirPath;
+    }
+    public string Value => DirPath.Value;
+
+    private ILocalDirPath DirPath { get; }
 }
 

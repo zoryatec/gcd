@@ -4,13 +4,20 @@ using Gcd.LocalFileSystem.Abstractions;
 
 namespace Gcd.Model.Nipkg.PackageBuilder;
 
-public sealed record PackageBuilderContentDir : LocalDirPath
+public sealed record PackageBuilderContentDir : ILocalDirPath
 {
     public static Result<PackageBuilderContentDir> Of(BuilderRootDir rootDir, InatallationTargetRootDir packageInstalatioDir)
     {
         var windPath = packageInstalatioDir.Value.Replace('/', '\\');
-        var dir = Parse($"{rootDir.Value}\\data\\{windPath}").MapError(er => er.Message);
+        var dir = LocalDirPath.Parse($"{rootDir.Value}\\data\\{windPath}").MapError(er => er.Message);
         return dir.Map((dir) => new PackageBuilderContentDir(dir));
     }
-    private PackageBuilderContentDir(LocalDirPath value) : base(value) { }
+
+    private PackageBuilderContentDir(ILocalDirPath dirPath)
+    {
+        DirPath = dirPath;
+    }
+    public string Value => DirPath.Value;
+
+    private ILocalDirPath DirPath { get; }
 }

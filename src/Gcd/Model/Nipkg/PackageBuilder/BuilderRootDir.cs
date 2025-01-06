@@ -5,10 +5,6 @@ namespace Gcd.Model.Nipkg.PackageBuilder;
 
 public record BuilderRootDir : ILocalDirPath
 {
-    public string Value => DirPath.Value;
-
-    public LocalDirPath DirPath { get; }
-
     public static Result<BuilderRootDir> Of(Maybe<string> packagePathOrNothing) =>
         LocalDirPath.Parse(packagePathOrNothing).MapError(er => er.Message)
         .Map(x => new BuilderRootDir(x));
@@ -16,5 +12,8 @@ public record BuilderRootDir : ILocalDirPath
     {
         DirPath = dirPath;
     }
+    public string Value => DirPath.Value;
+
+    private LocalDirPath DirPath { get; }
 }
 
