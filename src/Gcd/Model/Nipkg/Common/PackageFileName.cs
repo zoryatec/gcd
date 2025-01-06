@@ -1,11 +1,8 @@
-﻿
-using Azure.Storage.Blobs.Models;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
 using Gcd.LocalFileSystem.Abstractions;
-using Gcd.Model.FeedDefinition;
 using Gcd.Model.Nipkg.ControlFile;
-using Gcd.Model.Nipkg.FeedDefinition;
+
 
 namespace Gcd.Model.Nipkg.Common;
 
@@ -27,7 +24,7 @@ public record PackageFileName : FileName
     public static Result<PackageFileName> Of(FileName fileName)
     {
         var result =
-            from parts1 in Result.Success(fileName.Value.Split('_')).Ensure(array => array.Length.Equals(3),"Package file name should contain version architecture and package name separteted by _")
+            from parts1 in Result.Success(fileName.Value.Split('_')).Ensure(array => array.Length >= 3,"Package file name should contain version architecture and package name separteted by _")  /// this is all wrong for now
             from packageName in PackageName.Create(parts1[0])
             from packageVersion in PackageVersion.Create(parts1[1])
             select new PackageFileName(
