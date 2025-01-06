@@ -19,7 +19,7 @@ public record PackageLocalFilePath : ILocalFilePath, IPackageFileDescriptor
             .Bind(lfp => PackageLocalFilePath.Of(lfp));
         
     public static Result<PackageLocalFilePath,Error> Of(LocalFilePath localFilePath) =>
-        PackageFileName.Of(localFilePath.FileName.Value)
+        PackageFileName.Of(localFilePath.FileName)
             .Map(name => new PackageLocalFilePath(localFilePath.Directory, name));
  
     public static PackageLocalFilePath Of(LocalDirPath Directory, PackageFileName FileName) => 
