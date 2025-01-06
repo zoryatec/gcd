@@ -11,7 +11,7 @@ namespace Gcd.Model.Nipkg.PackageBuilder;
 public record PackageBuilderContentSourceDir : LocalDirPath
 {
     public static Result<PackageBuilderContentSourceDir> Of(Maybe<string> maybeValue) =>
-        Parse(maybeValue)
+        Parse(maybeValue).MapError(er => er.Message)
         .Map(x => new PackageBuilderContentSourceDir(x));
     private PackageBuilderContentSourceDir(LocalDirPath value) : base(value) { }
 }

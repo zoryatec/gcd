@@ -22,24 +22,6 @@ public record FeedDefinitionSmb : IFeedDefinition
 
     public static Result<FeedDefinitionSmb> Of(SmbShareAddress smbaddress, SmbUserName smbUserName, SmbPassword smbPassword)
     {
-        //var feed = SmbDirPath.Of(smbaddress.Value);
-        //var package = SmbFilePath.Of($"{smbaddress.Value}\\Packages");
-        //var packageGz = SmbFilePath.Of($"{smbaddress.Value}\\Packages.gz");
-        //var packageStamps = SmbFilePath.Of($"{smbaddress.Value}\\Packages.stamps");
-        //var result = Result
-        //    .Combine(package, packageGz, packageStamps);
-
-        //var rest = feed
-        //    .Bind((f) => package)
-        //    .Bind((p) => packageGz)
-        //    .Bind((pgz) => packageStamps)
-        //    .Map(ps => new FeedDefinitionSmb(feed.Value, package.Value, packageGz.Value, packageStamps.Value, smbaddress, smbPassword, smbUserName));
-
-        //            return feed
-        //    .Map((d) => new FeedDefinitionSmb(feed.Value, package.Value, packageGz.Value, packageStamps.Value, smbaddress, smbPassword, smbUserName))
-        //    .MapError(x => x.Message);
-
-
         var result =
             from feed in SmbDirPath.Of(smbaddress.Value)
             from package in SmbFilePath.Of($"{smbaddress.Value}\\Packages")

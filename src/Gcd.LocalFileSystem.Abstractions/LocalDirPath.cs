@@ -5,7 +5,7 @@ namespace Gcd.LocalFileSystem.Abstractions;
 
 public record LocalDirPath : IDirectoryDescriptor
 {
-    public static Result<LocalDirPath> Parse(Maybe<string> maybeValue)
+    public static Result<LocalDirPath,Error> Parse(Maybe<string> maybeValue)
     {
         var isAbsolute = Path.IsPathFullyQualified(maybeValue.Value);
         if (!isAbsolute)
@@ -18,7 +18,8 @@ public record LocalDirPath : IDirectoryDescriptor
         var res = maybeValue.ToResult(Error.Of($"{nameof(LocalDirPath)} should not be empty"))
             .Ensure(value => value != string.Empty, Error.Of($"{nameof(LocalDirPath)} should not be empty"))
             .Map(value => new LocalDirPath(value));
-        return res.MapError(er => er.Message);
+        //return res.MapError(er => er.Message);
+        return res;
     }
     protected LocalDirPath(string value) => Value = value;
     public string Value { get; }

@@ -36,7 +36,7 @@ public static class UseCmdPullMetaDataExt
                 var azFeedDef = feedUrl.Map()
                     .Bind(feedUri => FeedDefinitionAzBlob.Of(feedUri));
 
-                var localFeedDef = LocalDirPath.Parse(feedPathOpt.Value())
+                var localFeedDef = LocalDirPath.Parse(feedPathOpt.Value()).MapError(er => er.Message)
                     .Bind(feedPath => FeedDefinitionLocal.Of(feedPath));
 
                 return await Result

@@ -18,7 +18,7 @@ public record LocalFilePath : IFileDescriptor, ILocalFilePath
             from rawRecDir in Result.Success<string, Error>(Path.GetDirectoryName(value))
             from fileName1 in FileName.Of(rawFileName)
             from rawDir in Result.Success<string, Error>(Path.Combine(currDir, rawRecDir))
-            from dir in LocalDirPath.Parse(rawDir).MapError(er => Error.Of(er))
+            from dir in LocalDirPath.Parse(rawDir)
             select new LocalFilePath(dir, fileName1);
 
         return res.MapError(er => er.Message); }
