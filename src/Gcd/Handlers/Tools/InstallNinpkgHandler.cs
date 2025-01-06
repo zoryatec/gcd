@@ -17,7 +17,7 @@ public class InstallNinpkgHandler(IMediator _mediator, IFileSystem _fs)
         var tempDirR = await _fs.GenerateTempDirectoryAsync();
         var tempDir = tempDirR.Value;
 
-        var intallerPath = LocalFilePath.Offf($"{tempDir.Value}\\nipkg-installer.exe");
+        var intallerPath = LocalFilePath.Of($"{tempDir.Value}\\nipkg-installer.exe");
         var installerUri = NipkgInstallerUri.None;
 
         return await _mediator.DownloadNipkgInstallerAsync(intallerPath.Value, installerUri)

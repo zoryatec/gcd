@@ -8,10 +8,18 @@ using System.Threading.Tasks;
 
 namespace Gcd.Model.Nipkg.PackageBuilder;
 
-public record PackageBuilderContentSourceDir : LocalDirPath
+public record PackageBuilderContentSourceDir : ILocalDirPath
 {
+    public string Value => DirPath.Value;
+
+    public LocalDirPath DirPath { get; }
+
     public static Result<PackageBuilderContentSourceDir> Of(Maybe<string> maybeValue) =>
-        Parse(maybeValue).MapError(er => er.Message)
+        LocalDirPath.Parse(maybeValue).MapError(er => er.Message)
         .Map(x => new PackageBuilderContentSourceDir(x));
-    private PackageBuilderContentSourceDir(LocalDirPath value) : base(value) { }
+
+    private PackageBuilderContentSourceDir(LocalDirPath dirPath)
+    {
+        DirPath = dirPath;
+    }
 }

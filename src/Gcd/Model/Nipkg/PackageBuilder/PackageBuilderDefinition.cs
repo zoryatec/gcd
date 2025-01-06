@@ -1,25 +1,9 @@
-﻿
-using Azure.Core;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
 using Gcd.Common;
 using Gcd.LocalFileSystem.Abstractions;
-using Gcd.Model.FeedDefinition;
-using Gcd.Model.Nipkg.FeedDefinition;
 
 namespace Gcd.Model.Nipkg.PackageBuilder;
-
-
-public sealed record PackageBuilderContentDir : LocalDirPath
-{
-    public static Result<PackageBuilderContentDir> Of(BuilderRootDir rootDir, InatallationTargetRootDir packageInstalatioDir)
-    {
-        var windPath = packageInstalatioDir.Value.Replace('/', '\\');
-        var dir = Parse($"{rootDir.Value}\\data\\{windPath}").MapError(er => er.Message);
-        return dir.Map((dir) => new PackageBuilderContentDir(dir));
-    }
-    private PackageBuilderContentDir(LocalDirPath value) : base(value) { }
-}
 
 public record PackageBuilderDefinition
 {
@@ -31,16 +15,16 @@ public record PackageBuilderDefinition
     public LocalFilePath ControlFile { get; }
     public LocalFilePath InstructionFile { get; }
 
-    public static Result<PackageBuilderDefinition> Of(LocalDirPath feedDirPath)
+    public static Result<PackageBuilderDefinition> Of(ILocalDirPath feedDirPath)
     {
 
         var result =
             from rootDir in LocalDirPath.Parse($"{feedDirPath.Value}")
             from dataDir in LocalDirPath.Parse($"{feedDirPath.Value}\\data")
             from controlDir in LocalDirPath.Parse($"{feedDirPath.Value}\\control")
-            from debianFile in LocalFilePath.Offf($"{feedDirPath.Value}\\debian-binary")
-            from controlFile in LocalFilePath.Offf($"{feedDirPath.Value}\\control\\control")
-            from instructionsFile in LocalFilePath.Offf($"{feedDirPath.Value}\\data\\instructions")
+            from debianFile in LocalFilePath.Of($"{feedDirPath.Value}\\debian-binary")
+            from controlFile in LocalFilePath.Of($"{feedDirPath.Value}\\control\\control")
+            from instructionsFile in LocalFilePath.Of($"{feedDirPath.Value}\\data\\instructions")
             select new  PackageBuilderDefinition(
                         rootDir,
                         dataDir,

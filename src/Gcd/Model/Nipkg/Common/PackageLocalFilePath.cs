@@ -15,7 +15,7 @@ public record PackageLocalFilePath : ILocalFilePath, IPackageFileDescriptor
     }
 
     public static Result<PackageLocalFilePath,Error> Of(Maybe<string> packagePathOrNothing) =>
-         LocalFilePath.Offf(packagePathOrNothing)
+         LocalFilePath.Of(packagePathOrNothing)
             .Bind(lfp => PackageLocalFilePath.Of(lfp));
         
     public static Result<PackageLocalFilePath,Error> Of(LocalFilePath localFilePath) =>

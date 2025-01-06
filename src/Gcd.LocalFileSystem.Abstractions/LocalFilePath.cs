@@ -10,7 +10,7 @@ public record LocalFilePath : IFileDescriptor, ILocalFilePath
         Directory = directory;
         FileName = fileName;
     }
-    public static Result<LocalFilePath,Error> Offf(Maybe<string> maybeValue){
+    public static Result<LocalFilePath,Error> Of(Maybe<string> maybeValue){
         var res =
             from value  in maybeValue.ToResult(ErorNullValue.Of(nameof(LocalFilePath)))
             from currDir in Result.Success<string,Error>(Environment.CurrentDirectory)

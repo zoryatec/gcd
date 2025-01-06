@@ -18,9 +18,9 @@ public record FeedDefinitionLocal
     public static Result<FeedDefinitionLocal> Of(LocalDirPath feedDirPath)
     {
         var result =
-            from package in LocalFilePath.Offf($"{feedDirPath.Value}\\Packages")
-            from packageGz in LocalFilePath.Offf($"{feedDirPath.Value}\\Packages.gz")
-            from packageStamps in LocalFilePath.Offf($"{feedDirPath.Value}\\Packages.stamps")
+            from package in LocalFilePath.Of($"{feedDirPath.Value}\\Packages")
+            from packageGz in LocalFilePath.Of($"{feedDirPath.Value}\\Packages.gz")
+            from packageStamps in LocalFilePath.Of($"{feedDirPath.Value}\\Packages.stamps")
             select new FeedDefinitionLocal(
                 feedDirPath,
                 package,

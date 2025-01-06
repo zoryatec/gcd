@@ -72,7 +72,7 @@ namespace Gcd.Services.FileSystem
         }
 
 
-        public async Task<Result> CopyDirectoryRecursievely(LocalDirPath source, LocalDirPath destination, bool overwrite = false, CancellationToken cancellationToken = default)
+        public async Task<Result> CopyDirectoryRecursievely(ILocalDirPath source, ILocalDirPath destination, bool overwrite = false, CancellationToken cancellationToken = default)
             => Result.Try(() => CopyDirectoryContents(source.Value, destination.Value), ex => ex.Message);
         private void CopyDirectoryContents(string sourceDir, string destinationDir)
         {

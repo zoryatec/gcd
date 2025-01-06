@@ -3,7 +3,7 @@ using Gcd.Common;
 
 namespace Gcd.LocalFileSystem.Abstractions;
 
-public record LocalDirPath : IDirectoryDescriptor
+public record LocalDirPath : IDirectoryDescriptor, ILocalDirPath
 {
     public static Result<LocalDirPath,Error> Parse(Maybe<string> maybeValue)
     {

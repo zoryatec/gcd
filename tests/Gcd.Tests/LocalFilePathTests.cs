@@ -15,7 +15,7 @@ namespace Gcd.Tests
         {
             string test = null;
 
-            var result = LocalFilePath.Offf(test);
+            var result = LocalFilePath.Of(test);
 
             result.IsFailure.Should().BeTrue();
         }
