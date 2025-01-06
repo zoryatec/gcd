@@ -7,7 +7,7 @@ public  record FileName
     public static Result<FileName> Of(Maybe<string> maybeValue) =>
     
         maybeValue
-            .ToResult($"{nameof(FileName)} should not be empty")
+            .ToResult($"{nameof(FileName)} should not be null")
             .Ensure(value => value != string.Empty, $"{nameof(FileName)} should not be empty")
             .Map(value => new FileName(value));
     

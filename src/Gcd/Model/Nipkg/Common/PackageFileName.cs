@@ -27,7 +27,7 @@ public record PackageFileName : FileName
     public static Result<PackageFileName> Of(FileName fileName)
     {
         var result =
-            from parts1 in Result.Success(fileName.Value.Split('_'))
+            from parts1 in Result.Success(fileName.Value.Split('_')).Ensure(array => array.Length.Equals(3),"Package file name should contain version architecture and package name separteted by _")
             from packageName in PackageName.Create(parts1[0])
             from packageVersion in PackageVersion.Create(parts1[1])
             select new PackageFileName(
