@@ -1,8 +1,8 @@
 ﻿namespace Gcd.LocalFileSystem.Abstractions;
 
-public abstract record FileName
+public  record FileName
 {
-    protected FileName(string value) { Value = value; }
+    public FileName(string value) { Value = value; }
 
     public string Value { get; }
     public override string ToString() => Value;
