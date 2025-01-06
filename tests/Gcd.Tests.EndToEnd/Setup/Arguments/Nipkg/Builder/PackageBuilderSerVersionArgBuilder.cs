@@ -1,35 +1,36 @@
-﻿using static Gcd.Contract.Nipkg.PackageBuilderSetProperty;
+﻿using Gcd.Commands.Nipkg.Builder;
+using Gcd.Commands.Nipkg;
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg;
 
 public class PackageBuilderSerVersionArgBuilder : ArgumentsBuilder
 {
     public PackageBuilderSerVersionArgBuilder()
     {
-        WithArg("nipkg");
-        WithArg("builder");
-        WithArg(COMMAND);
+        WithArg(UseMenuNipkgExtension.NAME);
+        WithArg(UseMenuBuilderExt.NAME);
+        WithArg(UseCmdSetPropertyExt.NAME);
     }
 
     public PackageBuilderSerVersionArgBuilder WithPackageBuilderDirectory(string value)
     {
-        WithOption(PACKAGE_BUILDER_DIR_OPTION, value);
+        WithOption(BuilderRootDirOption.NAME, value);
         return this;
     }
     public PackageBuilderSerVersionArgBuilder WithVersion(string value)
     {
-        WithOption(PACKAGE_VERSION_OPTION, value);
+        WithOption(PackageVersionOption.NAME, value);
         return this;
     }
 
     public PackageBuilderSerVersionArgBuilder WithHomePage(string value)
     {
-        WithOption(PACKAGE_HOME_PAGE_OPTION, value);
+        WithOption(PackageHomePageOption.NAME, value);
         return this;
     }
 
     public PackageBuilderSerVersionArgBuilder WithMaintainer(string value)
     {
-        WithOption(PACKAGE_MAINTAINER_OPTION, value);
+        WithOption(PackageMaintainerOption.NAME, value);
         return this;
     }
 }

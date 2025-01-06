@@ -1,0 +1,40 @@
+name: 'release'
+
+on:
+  workflow_dispatch:
+    inputs:
+      package_url:
+        required: true
+        default: ''
+
+
+jobs:
+  publish:
+    runs-on: windows-latest
+
+    steps:
+      # download gcd from previous release???
+      # from nuget??
+
+      - name: add to path
+        run: |
+          echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
+
+      - name: setup
+        run: |
+          gcd --version  
+          gcd config set --nipkg-installer-uri  ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
+          gcd config set --nipkg-cmd-path  ${{vars.NIPKG_INSTALATION_DIR}}
+          gcd tools install-nipkg
+
+      - name: publish to feed
+        run:  |
+          gcd nipkg feed-git add-local-package `
+          --git-repo-address ${{ secrets.nipkg-git-feed-repo}} `
+          --git-branch-name ${{ secrets.nipkg-git-feed-branch }} `
+          --git-user-name ${{ secrets.nipkg-git-feed-user }} `
+          --git-user-password ${{ secrets.nipkg-git-feed-password }} `
+          --git-committer-name "test gcd" `
+          --git-committer-email "mail@mail.com" `
+          --package-local-path "$env:GITHUB_WORKSPACE\\package\\${{inputs.name}}_${{inputs.version}}_windows_x64.nipkg" `
+          --feed-create

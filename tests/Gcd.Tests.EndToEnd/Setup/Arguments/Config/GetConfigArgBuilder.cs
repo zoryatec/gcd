@@ -1,5 +1,4 @@
-using Gcd.Commands.Config.SetConfig;
-using Gcd.Commands.Nipkg.Builder.Init;
+using Gcd.Commands.Config;
 
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg.Builder;
 

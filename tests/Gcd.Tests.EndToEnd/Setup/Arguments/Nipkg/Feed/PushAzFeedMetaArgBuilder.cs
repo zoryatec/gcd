@@ -1,24 +1,26 @@
-﻿using static Gcd.Contract.Nipkg.PushAzBlobFeedMetaData;
+﻿using Gcd.Commands.Nipkg;
+using Gcd.Commands.Nipkg.FeedAzBlob;
+using Gcd.Commands.Nipkg.FeedGit;
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg.Feed;
 
 public class PushAzFeedMetaArgBuilder : ArgumentsBuilder
 {
     public PushAzFeedMetaArgBuilder()
     {
-        WithArg("nipkg");
-        WithArg("feed");
-        WithArg(COMMAND_NAME);
+        WithArg(UseMenuNipkgExtension.NAME);
+        WithArg(UseMenuFeedAzBlobExt.NAME);
+        WithArg(UseCmdPushFeedMetaExt.NAME);
     }
 
     public PushAzFeedMetaArgBuilder WithFeedLocalPath(string feedLocalPath)
     {
-        WithOption(LOCAL_FEED_PATH_OPTION, feedLocalPath);
+        WithOption(FeedLocalDirOption.NAME, feedLocalPath);
         return this;
     }
 
     public PushAzFeedMetaArgBuilder WithFeedUri(string feedUri)
     {
-        WithOption(REMOTE_FEED_URI_OPTION, feedUri);
+        WithOption(AzFeedUrlOption.NAME, feedUri);
         return this;
     }
 }

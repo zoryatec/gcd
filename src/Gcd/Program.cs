@@ -1,14 +1,7 @@
-﻿using Gcd.LabViewProject;
-using McMaster.Extensions.CommandLineUtils;
+﻿using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
-using MediatR;
-using Gcd.Services;
-using Gcd.Commands.Nipkg.Builder.SetProperty;
-using Gcd.Menu;
-using Gcd.Model.Config;
-using Microsoft.Extensions.Configuration;
-using Gcd.Services.DI;
-using Gcd.Services.FileSystem;
+using Gcd.Commands;
+using Gcd.DI;
 
 
 namespace Gcd
@@ -25,30 +18,18 @@ namespace Gcd
         {
             var assembly = typeof(Program).Assembly;
             var services = new ServiceCollection()
-                .AddScoped<IDownloadAzBlobService, AzBlobService>()
-                .AddScoped<IUploadAzBlobService, AzBlobService>()
-                .AddScoped<IWebDownload, WebDownload>()
-                .AddScoped<IFileSystem, LocalFileService>()
-                .RegisterInstructions()
-                .RegisterConfiguration()
-                .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
-                .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
-                .AddSingleton<IConsole>(PhysicalConsole.Singleton)
-                .AddMediatR(config =>
-                {
-                    config.RegisterServicesFromAssembly(assembly);
-                });
-            
+                .AddGcd(assembly,PhysicalConsole.Singleton);
+
             var serviceProvider = services.BuildServiceProvider();
             var console = serviceProvider.GetRequiredService<IConsole>();
 
             var app = new CommandLineApplication<Program>()
             {
                 Name = "gcd",
-                Description = "CI/CD tool for G programmers with OCDddd",
+                Description = "G/LabVIEW CI/CD tool",
             };
             
-            app.UseGcdCmd(serviceProvider);
+            app.UseMenuGcd(serviceProvider);
 
             try
             {

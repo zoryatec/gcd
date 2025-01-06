@@ -1,4 +1,5 @@
-﻿using static Gcd.Contract.Nipkg.PackageBuilderInit;
+﻿using Gcd.Commands.Nipkg.Builder;
+using Gcd.Commands.Nipkg;
 
 namespace Gcd.Tests.EndToEnd.Arguments.Nipkg;
 
@@ -6,25 +7,25 @@ public class PackageBuilderInitArgBuilder : ArgumentsBuilder
 {
     public PackageBuilderInitArgBuilder()
     {
-        WithArg("nipkg");
-        WithArg("builder");
-        WithArg(COMMAND);
+        WithArg(UseMenuNipkgExtension.NAME);
+        WithArg(UseMenuBuilderExt.NAME);
+        WithArg(UseCmdInitExt.NAME);
     }
 
     public PackageBuilderInitArgBuilder WithPackageBuilderDirectory(string value)
     {
-        WithOption(PACKAGE_BUILDER_DIR_OPTION, value);
+        WithOption(BuilderRootDirOption.NAME, value);
         return this;
     }
     public PackageBuilderInitArgBuilder WithPackageName(string value)
     {
-        WithOption(PACKAGE_NAME_OPTION, value);
+        WithOption(PackageNameOption.NAME, value);
         return this;
     }
 
     public PackageBuilderInitArgBuilder WithPackageVersion(string value)
     {
-        WithOption(PACKAGE_VERSION_OPTION, value);
+        WithOption(PackageVersionOption.NAME, value);
         return this;
     }
 

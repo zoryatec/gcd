@@ -1,0 +1,66 @@
+name: ci-cd-nipkg-git-test
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: "package version"
+        required: true
+        type: string
+      name:
+        description: "package name"
+        required: true
+        type: string
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - name: download gcd 
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: gcd-bin
+          path: gcd-bootstrap
+
+      - name: download integration tests
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: gcd-test
+          path: integration-tests 
+
+      - name: add to path
+        run: |
+          echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
+          echo "C:\\Program Files\\National Instruments\\NI Package Manager" >> $env:GITHUB_PATH
+         
+      - name: setup
+        run: |
+          gcd --version  
+          gcd config set --nipkg-installer-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
+          gcd config set --nipkg-cmd-path "${{vars.NIPKG_INSTALATION_DIR}}"
+          gcd tools install-nipkg
+          nipkg -v
+          nipkg feed-add "${{ secrets.nipkg-git-feed }}" --name=gcd-dev --system
+          nipkg list-installed
+          nipkg feed-list
+          nipkg list
+          nipkg config-get
+          nipkg update
+          nipkg install ${{inputs.name}} -y
+
+      - name: app test
+        env:
+          SmbShareAddress: ${{ secrets.test-smb-share }}
+          SmbUserName: ${{ secrets.test-smb-user }}
+          SmbUserPass: ${{ secrets.test-smb-password }} 
+          GitRepoAddress: ${{ secrets.test-git-repo }}
+          GitUserName: ${{ secrets.test-git-user }}
+          GitPassword: ${{ secrets.test-git-password }}  
+          AZUREADDPKGTESTFEEDURI: ${{ secrets.test-feed-add-pkg }}
+          AZUREFEEDURI: ${{ secrets.test-feed-generic }}
+          AZUREPUSHPULLTESTFEEDURI: ${{ secrets.test-feed-push-pull }}
+          NipkgInstallerUri: ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
+          NipkgCmdPath: ${{vars.NIPKG_INSTALATION_DIR}}
+          DevMode : false
+          GcdPath: "C:\\Program Files\\gcd\\gcd.exe"
+        run: dotnet test  integration-tests/Gcd.Tests.EndToEnd.dll

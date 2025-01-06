@@ -1,14 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
-using Gcd.Commands.Config.SetConfig;
+using Gcd.Commands.Config;
+using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model.Config;
-using Gcd.Services.FileSystem;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gcd.Services;
 

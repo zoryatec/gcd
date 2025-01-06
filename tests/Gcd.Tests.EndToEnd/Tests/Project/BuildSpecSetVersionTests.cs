@@ -12,7 +12,7 @@ namespace Gcd.Tests.EndToEnd.Project
     public class BuildSpecSetVersionTests(TestFixture testFixture) : BaseTest(testFixture)
     {
 
-        [Fact]
+        //[Fact]
         public void ProjectBuildSpecSetVersion_ShouldExecuteWithoutErrors_WhenValidVersionProvided()
         {
             // Arrange

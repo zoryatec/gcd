@@ -18,11 +18,33 @@ on:
         required: true
       nipkg-feed-sas:
         required: true
+      nipkg-git-feed:
+        required: true
+      nipkg-git-feed-repo:
+        required: true
+      nipkg-git-feed-branch:
+        required: true
+      nipkg-git-feed-user:
+        required: true
+      nipkg-git-feed-password:
+        required: true
       test-feed-add-pkg:
         required: true
       test-feed-push-pull:
         required: true
       test-feed-generic:
+        required: true
+      test-git-repo:
+        required: true
+      test-git-user:
+        required: true
+      test-git-password:
+        required: true
+      test-smb-share:
+        required: true
+      test-smb-user:
+        required: true
+      test-smb-password:
         required: true
 
 
@@ -79,7 +101,6 @@ jobs:
     with:
       version: ${{ inputs.version }}
       name: ${{ inputs.name }}
-  
 
   nipkg-test:
     uses: ./.github/workflows/ci-cd-nipkg-test.yml
@@ -88,3 +109,20 @@ jobs:
     with:
       version: ${{ inputs.version }}
       name: ${{ inputs.name }}
+
+  nipkg-git-publish:
+    uses: ./.github/workflows/ci-cd-nipkg-git-publish.yml
+    needs: nipkg-build
+    secrets: inherit
+    with:
+      version: ${{ inputs.version }}
+      name: ${{ inputs.name }}
+
+  nipkg-git-test:
+    uses: ./.github/workflows/ci-cd-nipkg-git-test.yml
+    needs: nipkg-git-publish
+    secrets: inherit
+    with:
+      version: ${{ inputs.version }}
+      name: ${{ inputs.name }}
+

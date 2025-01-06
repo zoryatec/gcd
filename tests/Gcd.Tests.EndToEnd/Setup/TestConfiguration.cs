@@ -24,6 +24,12 @@ namespace Gcd.Tests.EndToEnd
         public string GetAzurePullTestFeedUri() => "https://zoryatecartifacts.blob.core.windows.net/pull-test-feed";
         public string GetAzureAddPkgTestFeedUri() => _config["AzureAddPkgTestFeedUri"] ?? throw new ArgumentNullException("_config[\"AzureAddPkgTestFeedUri\"]");
         public string GetAzurePushPullTestFeedUri() => _config["AzurePushPullTestFeedUri"] ?? throw new ArgumentNullException("_config[\"AzurePushPullTestFeedUri\"]");
+        public string GetGitRepoAddress() => _config["GitRepoAddress"] ?? throw new ArgumentNullException("_config[\"GitRepoAddress\"]");
+        public string GetGitPassword() => _config["GitPassword"] ?? throw new ArgumentNullException("_config[\"GitPassword\"] ");
+        public string GetGitUserName() => _config["GitUserName"] ?? throw new ArgumentNullException(" _config[\"GitUserName\"]");
+        public string GetSmbRepoAddress() => _config["SmbShareAddress"] ?? throw new ArgumentNullException("_config[\"SmbShareAddress\"]");
+        public string GetSmbPassword() => _config["SmbUserPass"] ?? throw new ArgumentNullException("_config[\"SmbUserPass\"] ");
+        public string GetSmbUserName() => _config["SmbUserName"] ?? throw new ArgumentNullException(" _config[\"SmbUserName\"]");
 
     }
 }
