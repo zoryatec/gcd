@@ -57,7 +57,7 @@ public sealed class PackageLocalPathOption() : CommandOption(NAME, CommandOption
 {
     public static readonly string NAME = "--package-local-path";
     public Result<PackageLocalFilePath> ToPackageLocalPath() =>
-        PackageLocalFilePath.Of(this.Value());
+        PackageLocalFilePath.Of(this.Value()).MapError(er => er.Message);
 }
 
 public sealed class PackageHttpPathOption() : CommandOption(NAME, CommandOptionType.SingleValue)

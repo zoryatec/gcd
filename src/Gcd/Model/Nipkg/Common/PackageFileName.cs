@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
+using Gcd.Common;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model.Nipkg.ControlFile;
 
@@ -13,7 +14,7 @@ public record PackageFileName : FileName
         return new PackageFileName(Architecture, Name, Version);
     }
 
-    public static Result<PackageFileName> Of(Maybe<string> maybeValue) =>
+    public static Result<PackageFileName, Error> Of(Maybe<string> maybeValue) =>
         FileName
             .Of(maybeValue)
             .Bind(fileName => PackageFileName.Of(fileName));
@@ -21,10 +22,10 @@ public record PackageFileName : FileName
 
     
 
-    public static Result<PackageFileName> Of(FileName fileName)
+    public static Result<PackageFileName,Error> Of(FileName fileName)
     {
         var result =
-            from parts1 in Result.Success(fileName.Value.Split('_')).Ensure(array => array.Length >= 3,"Package file name should contain version architecture and package name separteted by _")  /// this is all wrong for now
+            from parts1 in Result.Success<string[],Error>(fileName.Value.Split('_')).Ensure(array => array.Length >= 3, Error.Of("Package file name should contain version architecture and package name separteted by _"))  /// this is all wrong for now
             from packageName in PackageName.Create(parts1[0])
             from packageVersion in PackageVersion.Create(parts1[1])
             select new PackageFileName(

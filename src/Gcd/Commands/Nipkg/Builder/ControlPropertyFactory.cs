@@ -35,8 +35,8 @@ public class ControlPropertyFactory : IControlPropertyFactory
             PackageXbUserVisibleOption => PackageXbUserVisible.Of(option.Value()).Map(x => x as ControlFileProperty),
             PackageXbStoreProductOption => PackageXbStoreProduct.Of(option.Value()).Map(x => x as ControlFileProperty),
             PackageXBSectionOption => PackageXBSection.Of(option.Value()).Map(x => x as ControlFileProperty),
-            PackageNameOption => PackageName.Create(option.Value()).Map(x => x as ControlFileProperty),
-            PackageVersionOption => PackageVersion.Create(option.Value()).Map(x => x as ControlFileProperty),
+            PackageNameOption => PackageName.Create(option.Value()).MapError(er => er.Message).Map(x => x as ControlFileProperty),
+            PackageVersionOption => PackageVersion.Create(option.Value()).MapError(er => er.Message).Map(x => x as ControlFileProperty),
             PackageDependenciesOption => PackageDependencies.Of(option.Value()).Map(x => x as ControlFileProperty),
             _ => Result.Failure<ControlFileProperty>($"not implemented factory option {option.LongName}")
         };

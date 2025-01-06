@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using CSharpFunctionalExtensions.ValueTasks;
+using Gcd.Common;
 using Gcd.LocalFileSystem.Abstractions;
 
 
@@ -13,11 +14,11 @@ public record PackageLocalFilePath : ILocalFilePath, IPackageFileDescriptor
         FileName = fileName;
     }
 
-    public static Result<PackageLocalFilePath> Of(Maybe<string> packagePathOrNothing) =>
-         LocalFilePath.Offf(packagePathOrNothing)
+    public static Result<PackageLocalFilePath,Error> Of(Maybe<string> packagePathOrNothing) =>
+         LocalFilePath.Offf(packagePathOrNothing).MapError(x => Error.Of(x))
             .Bind(lfp => PackageLocalFilePath.Of(lfp));
         
-    public static Result<PackageLocalFilePath> Of(LocalFilePath localFilePath) =>
+    public static Result<PackageLocalFilePath,Error> Of(LocalFilePath localFilePath) =>
         PackageFileName.Of(localFilePath.FileName.Value)
             .Map(name => new PackageLocalFilePath(localFilePath.Directory, name));
  

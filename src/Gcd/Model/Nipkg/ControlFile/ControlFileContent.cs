@@ -97,11 +97,11 @@ public record ControlFileContent(
 
         var name = dictionary
              .Ensure(dict => dict.ContainsKey(PackageName.Key), $"Missing property {PackageName.Key}")
-             .Bind(dict => PackageName.Create(dict[PackageName.Key]));
+             .Bind(dict => PackageName.Create(dict[PackageName.Key]).MapError(x => x.Message));
 
         var version = dictionary
              .Ensure(dict => dict.ContainsKey(PackageVersion.Key), $"Missing property {PackageVersion.Key}")
-             .Bind(dict => PackageVersion.Create(dict[PackageVersion.Key]));
+             .Bind(dict => PackageVersion.Create(dict[PackageVersion.Key]).MapError(x => x.Message));
 
         var dependencies = dictionary
              .Ensure(dict => dict.ContainsKey(PackageDependencies.Key), $"Missing property {PackageDependencies.Key}")

@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Common;
 
 namespace Gcd.LocalFileSystem.Abstractions;
 
@@ -11,16 +12,16 @@ public record LocalFilePath : IFileDescriptor, ILocalFilePath
     }
     public static Result<LocalFilePath> Offf(Maybe<string> maybeValue){
         var res =
-            from value  in maybeValue.ToResult("path should not be null")
-            from currDir in Result.Success(Environment.CurrentDirectory)
-            from rawFileName in Result.Success(Path.GetFileName(value))
-            from rawRecDir in Result.Success(Path.GetDirectoryName(value))
+            from value  in maybeValue.ToResult(Error.Of("path should not be null"))
+            from currDir in Result.Success<string,Error>(Environment.CurrentDirectory)
+            from rawFileName in Result.Success<string, Error>(Path.GetFileName(value))
+            from rawRecDir in Result.Success<string, Error>(Path.GetDirectoryName(value))
             from fileName1 in FileName.Of(rawFileName)
-            from rawDir in Result.Success(Path.Combine(currDir, rawRecDir))
-            from dir in LocalDirPath.Parse(rawDir)
+            from rawDir in Result.Success<string, Error>(Path.Combine(currDir, rawRecDir))
+            from dir in LocalDirPath.Parse(rawDir).MapError(er => Error.Of(er))
             select new LocalFilePath(dir, fileName1);
 
-        return res; }
+        return res.MapError(er => er.Message); }
 
     //protected LocalFilePath(string path) => Value = path;
     public string Value => Path.Combine(Directory.Value, FileName.Value);

@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Common;
 
 namespace Gcd.LocalFileSystem.Abstractions;
 
@@ -14,9 +15,10 @@ public record LocalDirPath : IDirectoryDescriptor
             maybeValue = Maybe.From(packageDirectoryPath);
         }
 
-        return maybeValue.ToResult($"{nameof(LocalDirPath)} should not be empty")
-            .Ensure(value => value != string.Empty, $"{nameof(LocalDirPath)} should not be empty")
+        var res = maybeValue.ToResult(Error.Of($"{nameof(LocalDirPath)} should not be empty"))
+            .Ensure(value => value != string.Empty, Error.Of($"{nameof(LocalDirPath)} should not be empty"))
             .Map(value => new LocalDirPath(value));
+        return res.MapError(er => er.Message);
     }
     protected LocalDirPath(string value) => Value = value;
     public string Value { get; }

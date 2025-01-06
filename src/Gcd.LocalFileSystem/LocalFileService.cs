@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Gcd.Common;
 using Gcd.LocalFileSystem.Abstractions;
 using System.IO;
 
@@ -66,7 +67,7 @@ namespace Gcd.Services.FileSystem
             }
             catch (Exception ex)
             {
-                return Result.Failure<LocalDirPath>(ex.Message);
+                return Result.Failure<LocalDirPath>((ex.Message));
             }
         }
 
