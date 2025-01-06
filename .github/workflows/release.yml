@@ -69,9 +69,9 @@ jobs:
       nuget-feed: ${{ secrets.NUGET_DEV_FEED  }} # dev for now
       nuget-feed-key: ${{ secrets.GITHUB_TOKEN}}
       
-      test-git-repo: ${{ secrets.TEST_GIT_REPO}}
-      test-git-user: "any"
-      test-git-password: ${{ secrets.GITHUB_TOKEN}}
+      test-git-repo: ${{ secrets.TEST_GIT_REPO }}
+      test-git-user: ${{ secrets.NIPKG_GIT_USER }}
+      test-git-password: ${{ secrets.NIPKG_GIT_PASSWORD }}
 
       test-smb-share: ${{ secrets.TEST_SMB_URL }}
       test-smb-user: ${{ secrets.TEST_SMB_USER }}
