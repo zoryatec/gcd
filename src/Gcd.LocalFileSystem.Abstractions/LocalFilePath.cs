@@ -9,26 +9,17 @@ public record LocalFilePath : IFileDescriptor, ILocalFilePath
         Directory = directory;
         FileName = fileName;
     }
-public static Result<LocalFilePath> Offf(Maybe<string> maybeValue)
-    {
-        string currentDirectoryPath = Environment.CurrentDirectory;
+    public static Result<LocalFilePath> Offf(Maybe<string> maybeValue){
+        var res =
+            from currDir in Result.Success(Environment.CurrentDirectory)
+            from rawFileName in Result.Success(Path.GetFileName(maybeValue.Value))
+            from rawRecDir in Result.Success(Path.GetDirectoryName(maybeValue.Value))
+            from fileName1 in FileName.Of(rawFileName)
+            from rawDir in Result.Success(Path.Combine(currDir, rawRecDir))
+            from dir in LocalDirPath.Parse(rawDir)
+            select new LocalFilePath(dir, fileName1);
 
-        var recivedDir = Path.GetDirectoryName(maybeValue.Value);
-        var fileName = Path.GetFileName(maybeValue.Value);
-        var dir = Path.Combine(currentDirectoryPath, recivedDir);
-
-
-        var fileNameR = new FileName(fileName);
-
-        var locDir = LocalDirPath.Parse(dir); 
-
-        return Result.Success(new LocalFilePath(locDir.Value, fileNameR));
-
-        //return maybeValue.ToResult("FilePath should not be empty")
-        //    .Ensure(packagePath => packagePath != string.Empty, "FilePath  should not be empty")
-        //    .Map(filepath => Path.Combine(currentDirectoryPath, filepath))
-        //    .Map(feedUri => new LocalFilePath(feedUri));
-    }
+        return res; }
 
     //protected LocalFilePath(string path) => Value = path;
     public string Value => Path.Combine(Directory.Value, FileName.Value);

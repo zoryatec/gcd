@@ -13,24 +13,17 @@ public record PackageLocalFilePath : ILocalFilePath, IPackageFileDescriptor
         FileName = fileName;
     }
 
-    public static Result<PackageLocalFilePath> Of(Maybe<string> packagePathOrNothing)
-    {
-        var locFile = LocalFilePath.Offf(packagePathOrNothing); 
+    public static Result<PackageLocalFilePath> Of(Maybe<string> packagePathOrNothing) =>
+         LocalFilePath.Offf(packagePathOrNothing)
+            .Bind(lfp => PackageLocalFilePath.Of(lfp));
+        
+    public static Result<PackageLocalFilePath> Of(LocalFilePath localFilePath) =>
+        PackageFileName.Of(localFilePath.FileName.Value)
+            .Map(name => new PackageLocalFilePath(localFilePath.Directory, name));
+ 
+    public static PackageLocalFilePath Of(LocalDirPath Directory, PackageFileName FileName) => 
+        new PackageLocalFilePath(Directory, FileName);
 
-        var pkgName = Path.GetFileName(packagePathOrNothing.Value);
-        var dir = Path.GetDirectoryName(packagePathOrNothing.Value);
-        var locDir = LocalDirPath.Parse(dir); ;
-
-        var packageFileName = PackageFileName.Of(pkgName);
-        return packagePathOrNothing.ToResult("FeedUri should not be empty")
-            .Ensure(packagePath => packagePath != string.Empty, "Package path should not be empty")
-            .Map(feedUri => new PackageLocalFilePath(locDir.Value, packageFileName.Value));
-    }
-
-    public static PackageLocalFilePath Of(LocalDirPath Directory, PackageFileName FileName)
-    {
-        return new PackageLocalFilePath(Directory, FileName);
-    }
 
     public LocalDirPath Directory { get; }
     public PackageFileName FileName { get; }
