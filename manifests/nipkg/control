@@ -1,0 +1,11 @@
+Architecture: windows_x64
+Homepage: unset-home-page
+Maintainer: unset-maintainer
+Description: unset-description
+XB-Plugin: file
+XB-UserVisible: yes
+XB-StoreProduct: yes
+XB-Section: unset-section
+Package: unset-package-name
+Version: 0.0.0.1
+Depends: 

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>gcd</id> 
+    <version>0.14.0</version>
+    <authors>Zoryatec</authors>
+    <description>G CI/CD command line tool</description>
+    <license type="expression">MIT</license> 
+    <projectUrl>https://github.com/zoryatec/gcd</projectUrl>
+    <tags>LabVIEW tool ci cd</tags> 
+    <toolCommandName>gcd</toolCommandName>
+  </metadata>
+
+  <files>
+    <file src="../../gcd-bin/gcd.exe" target="tools" />
+  </files>
+</package>
