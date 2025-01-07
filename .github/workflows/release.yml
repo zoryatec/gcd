@@ -89,3 +89,9 @@ jobs:
     needs: release
     with:
       tag: "v0.13.0"
+
+  release-gh-feed:
+    uses: ./.github/workflows/release-gh-feed.yml
+    needs: release-gh
+    with:
+      tag: "v0.13.0"

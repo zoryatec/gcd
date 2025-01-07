@@ -1,0 +1,65 @@
+name: release-gh-feed
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+
+jobs:
+  publish-new-version:
+    runs-on: windows-latest
+    steps:
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: '0'
+
+        - name: download gcd bin
+          uses: actions/download-artifact@v4.1.8
+          with:
+            name: gcd-bin
+            path: "gcd-bin"
+
+        - name: download gcd nipkg
+          uses: actions/download-artifact@v4.1.8
+          with:
+              name: gcd-nipkg
+              path: gcd-nipkg
+
+        - name: add to path
+          run: |
+                echo "$env:GITHUB_WORKSPACE\\gcd-bin" >> $env:GITHUB_PATH
+        - name: setup
+          run: |
+                gcd --version  
+                gcd config set --nipkg-installer-uri  ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
+                gcd config set --nipkg-cmd-path  ${{vars.NIPKG_INSTALATION_DIR}}
+                gcd tools install-nipkg
+
+        - name: publish to feed
+          run:  |
+                gcd nipkg feed-local add-http-package `
+                --package-http-path https://github.com/zoryatec/gcd/releases/download/v0.13.0/gcd_0.15.0_windows_x64.nipkg `
+                --feed-local-path feed `
+                --feed-create `
+                --use-absolute-path `
+
+        - name: setup git
+          run: |
+                git config --local user.email "dawid.wozny@zoryatec.com"
+                git config --local user.name "github-actions[bot]"
+
+    
+        - name: git commit
+          run: |
+            git stage -a
+            git commit -m "chore: release package version ${{ inputs.tag }}"
+
+        - name: push changes
+          if: steps.versionize.outcome == 'success'
+          uses: ad-m/github-push-action@master
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            branch: ${{ github.ref }}
+            tags: true
