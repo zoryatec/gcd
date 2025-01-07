@@ -53,7 +53,7 @@ jobs:
 
       
   release:
-    uses: ./.github/workflows/ci-cd.yml
+    uses: ./.github/workflows/ci-cd-prod.yml
     needs: setup
     with:
       version: ${{needs.setup.outputs.VERSION}}
@@ -83,15 +83,3 @@ jobs:
       nipkg-git-feed-user: ${{ secrets.NIPKG_GIT_USER }}
       nipkg-git-feed-password: ${{ secrets.NIPKG_GIT_PASSWORD }}
 
-      
-  release-gh:
-    uses: ./.github/workflows/release-gh.yml
-    needs: release
-    with:
-      tag: "v0.13.0"
-
-  release-gh-feed:
-    uses: ./.github/workflows/release-gh-feed.yml
-    needs: release-gh
-    with:
-      tag: "v0.13.0"
