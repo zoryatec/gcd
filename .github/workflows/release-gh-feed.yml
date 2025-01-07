@@ -57,9 +57,8 @@ jobs:
             git commit -m "chore: release package version ${{ inputs.tag }}"
 
         - name: push changes
-          if: steps.versionize.outcome == 'success'
           uses: ad-m/github-push-action@master
           with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
             branch: ${{ github.ref }}
-            tags: true
+            tags: false
