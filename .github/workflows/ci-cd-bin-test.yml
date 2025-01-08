@@ -22,6 +22,7 @@ jobs:
       - name: add to path
         run: |
           echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
+          echo "C:\\Program Files\\National Instruments\\NI Package Manager\\nipkg.exe" >> $env:GITHUB_PATH
          
       - name: setup
         env:
