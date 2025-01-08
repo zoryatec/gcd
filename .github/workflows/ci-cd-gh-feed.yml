@@ -27,6 +27,12 @@ jobs:
               name: gcd-nipkg
               path: gcd-nipkg
 
+        - name: setup git
+          run: |
+                git config --local user.email "dawid.wozny@zoryatec.com"
+                git config --local user.name "github-actions[bot]"
+                git pull
+
         - name: add to path
           run: |
                 echo "$env:GITHUB_WORKSPACE\\gcd-bin" >> $env:GITHUB_PATH
@@ -44,13 +50,7 @@ jobs:
                 --feed-local-path feed `
                 --feed-create `
                 --use-absolute-path `
-
-        - name: setup git
-          run: |
-                git config --local user.email "dawid.wozny@zoryatec.com"
-                git config --local user.name "github-actions[bot]"
-
-    
+ 
         - name: git commit
           run: |
             git add .
