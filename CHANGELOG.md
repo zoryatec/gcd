@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.19.0"></a>
+## [0.19.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.19.0) (2025-01-08)
+
+### Features
+
+* dynamic release ([87366e9](https://www.github.com/zoryatec/gcd/commit/87366e953ef72ff1a4b0b88d060a15c45111e002))
+
 <a name="0.18.0"></a>
 ## [0.18.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.18.0) (2025-01-08)
 
