@@ -52,7 +52,7 @@ jobs:
           gcd-test.zip
           gcd-nipkg/*.nipkg
           gcd-nuget/*.nupkg
-        body_path: ${{ github.workspace }}/CHANGELOG.md
+        generate_release_notes: true
         repository: zoryatec/gcd
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
