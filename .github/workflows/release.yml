@@ -53,7 +53,7 @@ jobs:
 
       
   release:
-    uses: ./.github/workflows/ci-cd-prod.yml
+    uses: ./.github/workflows/base-prod.yml
     needs: setup
     with:
       version: ${{needs.setup.outputs.VERSION}}

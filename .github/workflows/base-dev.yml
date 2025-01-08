@@ -1,4 +1,4 @@
-name: ci-cd-prod
+name: base-dev
 
 on:
   workflow_call: # This allows this workflow to be called by other workflows
@@ -126,17 +126,3 @@ jobs:
   #     version: ${{ inputs.version }}
   #     name: ${{ inputs.name }}
 
-  release-gh:
-    uses: ./.github/workflows/release-gh.yml
-    needs: 
-      - nipkg-test
-      - nuget-test
-
-    with:
-      tag: "v0.13.0"
-
-  release-gh-feed:
-    uses: ./.github/workflows/release-gh-feed.yml
-    needs: release-gh
-    with:
-      tag: "v0.13.0"

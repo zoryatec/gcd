@@ -1,7 +1,7 @@
-name: ci-cd
+name: base-prod
 
 on:
-  workflow_call: # This allows this workflow to be called by other workflows
+  workflow_call: 
     inputs:
       version:
         required: true
@@ -110,19 +110,17 @@ jobs:
       version: ${{ inputs.version }}
       name: ${{ inputs.name }}
 
-  # nipkg-git-publish:
-  #   uses: ./.github/workflows/ci-cd-nipkg-git-publish.yml
-  #   needs: nipkg-build
-  #   secrets: inherit
-  #   with:
-  #     version: ${{ inputs.version }}
-  #     name: ${{ inputs.name }}
+  release-gh:
+    uses: ./.github/workflows/ci-cd-gh-release.yml
+    needs: 
+      - nipkg-test
+      - nuget-test
 
-  # nipkg-git-test:
-  #   uses: ./.github/workflows/ci-cd-nipkg-git-test.yml
-  #   needs: nipkg-git-publish
-  #   secrets: inherit
-  #   with:
-  #     version: ${{ inputs.version }}
-  #     name: ${{ inputs.name }}
+    with:
+      tag: "v0.13.0"
 
+  release-gh-feed:
+    uses: ./.github/workflows/ci-cd-gh-feed.yml
+    needs: release-gh
+    with:
+      tag: "v0.13.0"

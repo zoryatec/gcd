@@ -1,4 +1,4 @@
-name: 'release-gh'
+name: 'ci-cd-gh-release'
 
 on:
   workflow_call:

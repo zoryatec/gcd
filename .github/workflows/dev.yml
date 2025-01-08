@@ -35,7 +35,7 @@ jobs:
         shell: bash
      
   ci-cd:
-    uses: ./.github/workflows/ci-cd.yml
+    uses: ./.github/workflows/base-dev.yml
     needs: setup
     with:
       version: ${{needs.setup.outputs.VERSION}}
