@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.23.1"></a>
+## [0.23.1](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.1) (2025-01-08)
+
+### Bug Fixes
+
+* updating packages stamps ([73b9143](https://www.github.com/zoryatec/gcd/commit/73b9143b9fefd5250b683ed56b1c80407e3fc2b9))
+
 <a name="0.23.0"></a>
 ## [0.23.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.0) (2025-01-08)
 
