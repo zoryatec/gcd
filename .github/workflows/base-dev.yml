@@ -109,20 +109,3 @@ jobs:
     with:
       version: ${{ inputs.version }}
       name: ${{ inputs.name }}
-
-  # nipkg-git-publish:
-  #   uses: ./.github/workflows/ci-cd-nipkg-git-publish.yml
-  #   needs: nipkg-build
-  #   secrets: inherit
-  #   with:
-  #     version: ${{ inputs.version }}
-  #     name: ${{ inputs.name }}
-
-  # nipkg-git-test:
-  #   uses: ./.github/workflows/ci-cd-nipkg-git-test.yml
-  #   needs: nipkg-git-publish
-  #   secrets: inherit
-  #   with:
-  #     version: ${{ inputs.version }}
-  #     name: ${{ inputs.name }}
-
