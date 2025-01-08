@@ -69,7 +69,7 @@ jobs:
         --package-builder-dir ${{env.PACKAGE_BUILDER_DIR}} `
         --package-architecture "windows_x64" `
         --package-home-page "https://github.com/zoryatec/gcd" `
-        --package-maintainer "Dawid Wozny" `
+        --package-maintainer "Zoryatec" `
         --package-description "G CI/CD tool" `
         --package-xb-plugin "file" `
         --package-xb-user-visible "yes" `
