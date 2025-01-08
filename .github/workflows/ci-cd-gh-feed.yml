@@ -48,7 +48,6 @@ jobs:
                 gcd nipkg feed-local add-http-package `
                 --package-http-path https://github.com/zoryatec/gcd/releases/download/${{ inputs.tag }}/gcd_${{ inputs.tag }}_windows_x64.nipkg `
                 --feed-local-path feed `
-                --feed-create `
                 --use-absolute-path `
  
         - name: git commit
