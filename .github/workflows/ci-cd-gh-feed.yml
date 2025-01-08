@@ -40,7 +40,7 @@ jobs:
         - name: publish to feed
           run:  |
                 gcd nipkg feed-local add-http-package `
-                --package-http-path https://github.com/zoryatec/gcd/releases/download/v0.13.0/gcd_0.15.0_windows_x64.nipkg `
+                --package-http-path https://github.com/zoryatec/gcd/releases/download/${{ inputs.tag }}/gcd_${{ inputs.tag }}_windows_x64.nipkg `
                 --feed-local-path feed `
                 --feed-create `
                 --use-absolute-path `
@@ -54,7 +54,7 @@ jobs:
         - name: git commit
           run: |
             git add .
-            git commit -m "chore: release package version ${{ inputs.tag }}"
+            git commit -m "chore(feed): ${{ inputs.tag }}"
 
         - name: push changes
           uses: ad-m/github-push-action@master

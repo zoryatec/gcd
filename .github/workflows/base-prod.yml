@@ -117,10 +117,10 @@ jobs:
       - nuget-test
 
     with:
-      tag: 'v${{ inputs.version }}'
+      tag: '${{ inputs.version }}'
 
   release-gh-feed:
     uses: ./.github/workflows/ci-cd-gh-feed.yml
     needs: release-gh
     with:
-      tag: 'v${{ inputs.version }}'
+      tag: '${{ inputs.version }}'
