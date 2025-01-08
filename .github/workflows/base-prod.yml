@@ -84,6 +84,8 @@ jobs:
     uses: ./.github/workflows/ci-cd-nuget-test.yml
     needs: nuget-publish
     secrets: inherit
+    with:
+      version: ${{ inputs.version }}
 
   nipkg-build:
     uses: ./.github/workflows/ci-cd-nipkg-build.yml

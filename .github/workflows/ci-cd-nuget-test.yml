@@ -2,6 +2,10 @@ name: ci-cd-nuget-test
 
 on:
   workflow_call: # This allows this workflow to be called by other workflows
+    inputs:
+      version:
+        required: true
+        type: string
 
 jobs:
   test-end-to-end:
@@ -16,7 +20,7 @@ jobs:
       - name: install gcd
         run: |
           dotnet nuget add source ${{secrets.nuget-feed}} --username "anyusername" --password  ${{ secrets.nuget-feed-key }}
-          dotnet tool install --global gcd
+          dotnet tool install --global gcd --version ${{ inputs.version }}
 
       - name: setup
         env:

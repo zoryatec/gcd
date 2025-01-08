@@ -1,10 +1,9 @@
-name: ci-cd-bin-build
+name: ci-cd-nuget-publish
 
 on:
   workflow_call: # This allows this workflow to be called by other workflows
     inputs:
       version:
-        description: "nuget version"
         required: true
         type: string
 
