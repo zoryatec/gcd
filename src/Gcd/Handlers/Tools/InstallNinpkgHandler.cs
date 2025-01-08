@@ -7,22 +7,23 @@ using MediatR;
 
 namespace Gcd.Handlers.Tools;
 
-public record InstallNinpkgRequest(NipkgCmdPath CmdPath) : IRequest<Result>;
+public record InstallNinpkgRequest(NipkgInstallerUri InstallerUri, NipkgCmdPath CmdPath) : IRequest<Result>;
 
 public class InstallNinpkgHandler(IMediator _mediator, IFileSystem _fs)
     : IRequestHandler<InstallNinpkgRequest, Result>
 {
     public async Task<Result> Handle(InstallNinpkgRequest request, CancellationToken cancellationToken)
     {
+        var (installerUri, validationPath) = request;
         var tempDirR = await _fs.GenerateTempDirectoryAsync();
         var tempDir = tempDirR.Value;
 
         var intallerPath = LocalFilePath.Of($"{tempDir.Value}\\nipkg-installer.exe");
-        var installerUri = NipkgInstallerUri.None;
+
 
         return await _mediator.DownloadNipkgInstallerAsync(intallerPath.Value, installerUri)
-            .Bind(() => InstallAsync(intallerPath.Value))
-            .Bind(() => CheckNipkgVersionAsync(request.CmdPath));
+            .Bind(() => InstallAsync(intallerPath.Value));
+            //.Bind(() => CheckNipkgVersionAsync(validationPath)); to be implemented once design decision made
     }
 
     private async Task<Result> CheckNipkgVersionAsync(NipkgCmdPath cmd) =>
@@ -31,16 +32,15 @@ public class InstallNinpkgHandler(IMediator _mediator, IFileSystem _fs)
 
     static async Task<Result> InstallAsync(LocalFilePath nipkgInstaller)
     {
-        // Initialize the ProcessStartInfo with the command and arguments
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
 
-            FileName = nipkgInstaller.Value,         // Use "cmd.exe" to run a command
+            FileName = nipkgInstaller.Value,         
             Arguments = "--quiet --accept-eulas --prevent-reboot",
-            RedirectStandardOutput = true,  // Redirect the output of the command
-            RedirectStandardError = true,   // Redirect any errors
-            UseShellExecute = false,       // Don't use the shell to execute the command
-            CreateNoWindow = false         // Don't create a command 
+            RedirectStandardOutput = true,  
+            RedirectStandardError = true,  
+            UseShellExecute = false,       
+            CreateNoWindow = false    
         };
 
         try

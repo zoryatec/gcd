@@ -10,8 +10,8 @@ public static class MediatorExtensions
         => await mediator.Send(new DownloadNipkgRequest(FilePath, InstallerUri), cancellationToken)
            .MapError(x => x.Message);   
 
-    public static async Task<Result> InstallNipkgInstallerAsync(this IMediator mediator, NipkgCmdPath cmdPath, CancellationToken cancellationToken = default)
-    => await mediator.Send(new InstallNinpkgRequest(cmdPath), cancellationToken);
+    public static async Task<Result> InstallNipkgInstallerAsync(this IMediator mediator, NipkgInstallerUri installerUri, NipkgCmdPath cmdPath, CancellationToken cancellationToken = default)
+    => await mediator.Send(new InstallNinpkgRequest(installerUri,cmdPath), cancellationToken);
 
 
     public static async Task<Result> AddToUserPath(this IMediator mediator, string pathToAdd, CancellationToken cancellationToken = default)
