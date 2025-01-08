@@ -55,7 +55,7 @@ jobs:
           run: |
             git add feed\Packages
             git add feed\Packages.gz
-            git add Packages.stamps
+            git add feed\Packages.stamps
             git commit -m "chore(feed): ${{ inputs.tag }}"
 
         - name: push changes
