@@ -22,13 +22,16 @@ jobs:
           dotnet nuget add source ${{secrets.nuget-feed}} --username "anyusername" --password  ${{ secrets.nuget-feed-key }}
           dotnet tool install --global gcd --version ${{ inputs.version }}
 
+      - name: add to path
+        run: |
+          echo "C:\\Program Files\\National Instruments\\NI Package Manager" >> $env:GITHUB_PATH
+
       - name: setup
         env:
           NIPKG_CMD_PATH: "${{vars.NIPKG_INSTALATION_DIR}}\\nipkg.exe"
         run: |
           gcd --version  
           gcd config set --nipkg-installer-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
-          gcd config set --nipkg-cmd-path "${{env.NIPKG_CMD_PATH}}"
           gcd tools install-nipkg
           Get-Command gcd
 

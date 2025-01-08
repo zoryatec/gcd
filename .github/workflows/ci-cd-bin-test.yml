@@ -27,11 +27,9 @@ jobs:
       - name: setup
         env:
           NIPKGINSTALLERURI: ${{ secrets.NIPKGINSTALLERURI }}
-          NIPKGCMDPATH: ${{ secrets.NIPKGCMDPATH }}
         run: |
           gcd --version  
           gcd config set --nipkg-installer-uri ${{env.NIPKGINSTALLERURI}}
-          gcd config set --nipkg-cmd-path  "${{env.NIPKGCMDPATH}}"
           gcd tools install-nipkg
 
       - name: dev test
