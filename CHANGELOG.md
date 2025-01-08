@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.18.0"></a>
+## [0.18.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.18.0) (2025-01-08)
+
+### Features
+
+* trying auto gen ([e4494ca](https://www.github.com/zoryatec/gcd/commit/e4494ca5d90ab8ca47dbd1ccce39cf9c4fb5ee57))
+
 <a name="0.17.0"></a>
 ## [0.17.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.17.0) (2025-01-08)
 
