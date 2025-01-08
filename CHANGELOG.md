@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.23.2"></a>
+## [0.23.2](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.2) (2025-01-08)
+
+### Bug Fixes
+
+* not recreating feed ([334a8e0](https://www.github.com/zoryatec/gcd/commit/334a8e0a310c2dff6aeb274e92835cae126905a7))
+
 <a name="0.23.1"></a>
 ## [0.23.1](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.1) (2025-01-08)
 
