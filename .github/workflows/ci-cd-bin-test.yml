@@ -22,15 +22,12 @@ jobs:
       - name: add to path
         run: |
           echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
-          echo "C:\\Program Files\\National Instruments\\NI Package Manager" >> $env:GITHUB_PATH
+          echo "${{vars.NIPKG_INSTALATION_DIR}}" >> $env:GITHUB_PATH
          
       - name: setup
-        env:
-          NIPKGINSTALLERURI: ${{ secrets.NIPKGINSTALLERURI }}
         run: |
           gcd --version  
-          gcd config set --nipkg-installer-uri ${{env.NIPKGINSTALLERURI}}
-          gcd tools install-nipkg
+          gcd tools install-nipkg --installer-source-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
 
       - name: dev test
         env:
