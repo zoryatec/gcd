@@ -25,7 +25,7 @@ public static class UseCmdInstallNipkgExt
         {
             cmd.Description = DESCRIPTION;
             var installerSourceUrlOption = new NipkgInstallerSourceUrlOption();
-            cmd.AddOptions(installerSourceUrlOption); // it is optional untill design finished
+            cmd.AddOptions(installerSourceUrlOption.IsRequired()); // it is optional untill design finished
 
             cmd.OnExecuteAsync(async cancelationToken =>
             {
