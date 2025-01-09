@@ -14,7 +14,10 @@ public record PackageBuildRequest(
     InatallationTargetRootDir PackageInstalationDir,
     PackageDestinationDirectory PackageDestinationDir,
     IReadOnlyList<ControlFileProperty> ControlProperties,
-    NipkgCmdPath CmdPath) : IRequest<Result>;
+    NipkgCmdPath CmdPath,
+    Maybe<LocalFilePath> BaseInstrumentFile,
+    Maybe<LocalFilePath> BaseControlFile
+    ) : IRequest<Result>;
 
 
 public class PackageBuildHandler(IMediator _mediator, IFileSystem _fs)
@@ -22,7 +25,7 @@ public class PackageBuildHandler(IMediator _mediator, IFileSystem _fs)
 {
     public async Task<Result> Handle(PackageBuildRequest request, CancellationToken cancellationToken)
     {
-        var (contentSrcDir, installationDir, outputDir, controlProp, cmd) = request;
+        var (contentSrcDir, installationDir, outputDir, controlProp, cmd, instructionFilePath, controlFilePath) = request;
 
         var rootDirTempR = await _fs.GenerateTempDirectoryAsync()
             .Bind(dir => BuilderRootDir.Of(dir.Value));
@@ -30,9 +33,6 @@ public class PackageBuildHandler(IMediator _mediator, IFileSystem _fs)
         var rootDirTemp = rootDirTempR.Value;
         var contentDirResult = PackageBuilderContentDir.Of(rootDirTemp, installationDir);
         var contentDstDir = contentDirResult.Value;
-
-        var controlFilePath = Maybe<LocalFilePath>.None;
-        var instructionFilePath = Maybe<LocalFilePath>.None;
 
         // build package
         return await _mediator
@@ -51,6 +51,9 @@ public static class MediatorExtensions
         PackageDestinationDirectory packageDestinationDir,
         IReadOnlyList<ControlFileProperty> controlProperties,
         NipkgCmdPath cmdPath,
-        CancellationToken cancellationToken = default)
-        => await mediator.Send(new PackageBuildRequest(packageContentDir, packageInstalationDir, packageDestinationDir, controlProperties, cmdPath), cancellationToken);
+        Maybe<LocalFilePath> baseInstrumentFile,
+        Maybe<LocalFilePath> baseControlFile,
+        CancellationToken cancellationToken = default
+        )
+        => await mediator.Send(new PackageBuildRequest(packageContentDir, packageInstalationDir, packageDestinationDir, controlProperties, cmdPath, baseInstrumentFile, baseControlFile), cancellationToken);
 }
