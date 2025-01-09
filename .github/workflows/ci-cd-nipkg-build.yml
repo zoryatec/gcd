@@ -54,7 +54,7 @@ jobs:
       run:  |
         mkdir ${{env.PACKAGE_OUTPUT_DIR}}
         gcd nipkg build `
-        --content-src-dir ${{github.workspace}}\package-content`
+        --content-src-dir ${{github.workspace}}\package-content `
         --target-root-dir "BootVolume/Program Files/gcd" `
         --instructions-file-path ${{env.MANIFEST_DIR}}\instructions `
         --control-file-path ${{env.MANIFEST_DIR}}\control `
