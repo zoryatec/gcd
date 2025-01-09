@@ -46,7 +46,8 @@ public static class UseCmdInitExt
             command.AddOptions(options);
             command.AddOptions(
                 rootDirOpt.IsRequired(),
-                instrFileOption
+                instrFileOption,
+                controlFileOption
             );
 
             command.OnExecuteAsync(async cancelationToken =>
