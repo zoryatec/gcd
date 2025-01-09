@@ -34,7 +34,7 @@ jobs:
     - name: add to path
       run: |
         echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
-        echo ${{vars.NIPKG_INSTALATION_DIR}} >> $env:GITHUB_PATH
+        echo "${{vars.NIPKG_INSTALATION_DIR}}" >> $env:GITHUB_PATH
         
     - name: setup
       run: |
