@@ -24,20 +24,6 @@ public sealed class PackageDestinationDirOption() : CommandOption(NAME, CommandO
         PackageDestinationDirectory.Of(this.Value());
 }
 
-public sealed class PackageInstalationDirOption() : CommandOption(NAME, CommandOptionType.SingleValue)
-{
-    public static readonly string NAME = "--package-instalation-dir";
-    public Result<InatallationTargetRootDir> Map() =>
-        InatallationTargetRootDir.Create(this.Value());
-}
-
-public sealed class PackageContentSourceDirOption() : CommandOption(NAME, CommandOptionType.SingleValue)
-{
-    public static readonly string NAME = "--package-sourec-dir";
-    public Result<PackageBuilderContentSourceDir> Map() =>
-        PackageBuilderContentSourceDir.Of(this.Value());
-}
-
 public sealed class BuilderRootDirOption() : CommandOption(NAME, CommandOptionType.SingleValue)
 {
     public static readonly string NAME = "--package-builder-dir";

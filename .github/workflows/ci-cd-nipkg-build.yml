@@ -49,19 +49,18 @@ jobs:
 
     - name: build nipkg
       env:
-        PACKAGE_BUILDER_DIR: ${{github.workspace}}\package-builder
-        PACKAGE_CONTENT_DIR: ${{github.workspace}}\package-content
         PACKAGE_OUTPUT_DIR: ${{github.workspace}}\package
         CONTROL_FILE_PATH: ${{github.workspace}}\manifests\nipkg\control
         INSTRUCTIONS_FILE_PATH: ${{github.workspace}}\manifests\nipkg\instructions
       run:  |
+        mkdir ${{env.PACKAGE_OUTPUT_DIR}}
         gcd nipkg build `
-        --package-sourec-dir "$env:GITHUB_WORKSPACE\\package-content" `
+        --content-src-dir ${{github.workspace}}\package-content`
+        --target-root-dir "BootVolume/Program Files/gcd" `
         --instructions-file-path ${{env.INSTRUCTIONS_FILE_PATH}} `
         --control-file-path ${{env.CONTROL_FILE_PATH}} `
         --package-name ${{inputs.name}}  `
         --package-version ${{inputs.version}} `
-        --package-instalation-dir "BootVolume/Program Files/gcd" `
         --package-destination-dir  ${{github.workspace}}\package
 
     - name: upload package artifact

@@ -14,7 +14,7 @@ public class PackageBuildArgBuilder : ArgumentsBuilder
 
     public PackageBuildArgBuilder WithPackageContentDirectory(string packageContentDirectory)
     {
-        WithOption(PackageContentSourceDirOption.NAME, packageContentDirectory);
+        WithOption(BuilderContentSourceDirOption.NAME, packageContentDirectory);
         return this;
     }
     public PackageBuildArgBuilder WithPackageName(string packageName)
@@ -31,7 +31,8 @@ public class PackageBuildArgBuilder : ArgumentsBuilder
 
     public PackageBuildArgBuilder WithPackageInstalationDir(string packageInstalationDir)
     {
-        WithOption(PackageInstalationDirOption.NAME, packageInstalationDir);
+        //
+        WithOption(InatallationTargetRootDirOption.NAME, packageInstalationDir);
         return this;
     }
 

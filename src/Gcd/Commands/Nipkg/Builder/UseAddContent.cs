@@ -6,10 +6,9 @@ using Gcd.Extensions;
 using Gcd.Commands.Nipkg.Builder.AddContent;
 using Gcd.Model.Nipkg.PackageBuilder;
 using Gcd.Commands.Nipkg;
-using Gcd.Commands.Nipkg.Builder;
 
 
-namespace Gcd.Handlers.Nipkg.Builder;
+namespace Gcd.Commands.Nipkg.Builder;
 
 public static class UseAddContentCmdExtensions
 {

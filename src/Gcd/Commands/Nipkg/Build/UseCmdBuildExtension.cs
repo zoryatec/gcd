@@ -25,10 +25,10 @@ public static class UseCmdBuildExtension
         app.Command(NAME, cmd =>
         {
             cmd.Description = DESCRIPTION;
-            var packageSoureDirOption = new PackageContentSourceDirOption();
-            var packageInstalationOption = new PackageInstalationDirOption();
+            var packageSoureDirOption = new BuilderContentSourceDirOption();
+            var packageInstalationOption = new InatallationTargetRootDirOption();
             var packageDestinationDirOpt = new PackageDestinationDirOption();
-
+ 
 
             var options = new List<ControlPropertyOption>
             {
