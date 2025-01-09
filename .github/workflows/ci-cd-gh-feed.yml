@@ -36,12 +36,12 @@ jobs:
         - name: add to path
           run: |
                 echo "$env:GITHUB_WORKSPACE\\gcd-bin" >> $env:GITHUB_PATH
+                echo "${{vars.NIPKG_INSTALATION_DIR}}" >> $env:GITHUB_PATH
+            
         - name: setup
           run: |
                 gcd --version  
-                gcd config set --nipkg-installer-uri  ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
-                gcd config set --nipkg-cmd-path  ${{vars.NIPKG_INSTALATION_DIR}}
-                gcd tools install-nipkg
+                gcd tools install-nipkg --installer-source-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
 
         - name: publish to feed
           run:  |
