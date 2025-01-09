@@ -9,14 +9,14 @@ using System.Threading;
 
 namespace Gcd.Handlers.Nipkg.Builder;
 
-public record InitRequest(BuilderRootDir RootDir, IReadOnlyList<ControlFileProperty> ControlProperties) : IRequest<Result>;
+public record InitRequest(BuilderRootDir RootDir, IReadOnlyList<ControlFileProperty> ControlProperties, Maybe<LocalFilePath> BaseInstructionFilePath, Maybe<LocalFilePath> BaseControlFilePath) : IRequest<Result>;
 
 public class InitHandler(IMediator _mediator, IFileSystem _writer)
     : IRequestHandler<InitRequest, Result>
 {
     public async Task<Result> Handle(InitRequest request, CancellationToken cancellationToken)
     {
-        var (rootdir, controlProperties) = request;
+        var (rootdir, controlProperties,instrFilePath,ctrFilePath) = request;
 
         var defR = PackageBuilderDefinition.Of(rootdir);
         if (defR.IsFailure) return defR;
@@ -53,8 +53,10 @@ public static class MediatorExtensionsInit
         this IMediator mediator,
         BuilderRootDir packageContentDir,
         IReadOnlyList<ControlFileProperty> controlProperties,
+        Maybe<LocalFilePath> baseInstructionFilePath,
+        Maybe<LocalFilePath> baseControlFilePath,
         CancellationToken cancellationToken = default)
-        => await mediator.Send(new InitRequest(packageContentDir, controlProperties), cancellationToken);
+        => await mediator.Send(new InitRequest(packageContentDir, controlProperties, baseInstructionFilePath, baseControlFilePath), cancellationToken);
 
     public static async Task<Result> PackageBuilderSetPropertiesAsync(this IMediator mediator, BuilderRootDir packageBuilderRootDir, IReadOnlyList<ControlFileProperty> properties, CancellationToken cancellationToken = default)
     => await mediator.Send(new PackageBuilderSetPropertyRequest(packageBuilderRootDir, properties), cancellationToken);

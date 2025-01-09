@@ -1,5 +1,6 @@
 ﻿
 using CSharpFunctionalExtensions;
+using Gcd.Common;
 using Gcd.Handlers.Nipkg.FeedLocal;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model;
@@ -42,6 +43,22 @@ public sealed class BuilderRootDirOption() : CommandOption(NAME, CommandOptionTy
     public static readonly string NAME = "--package-builder-dir";
     public Result<BuilderRootDir> Map() =>
         BuilderRootDir.Of(this.Value());
+}
+
+
+public sealed class InstructionFileSource() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--instructions-file-path";
+    public Maybe<Result<LocalFilePath, Error>> Map()
+    {
+        var result = Maybe<Result<LocalFilePath,Error>>.None;
+        if(this.HasValue())
+        {
+            return LocalFilePath.Of(this.Value());
+        }
+
+        return result;
+    }
 }
 
 

@@ -52,4 +52,8 @@
       <ProjectReference Include="..\Gcd.RemoteFileSystem.Smb\Gcd.RemoteFileSystem.Smb.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Handlers\Nipkg\Builder\Model\" />
+    </ItemGroup>
+
 </Project>

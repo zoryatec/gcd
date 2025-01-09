@@ -31,10 +31,12 @@ public class PackageBuildHandler(IMediator _mediator, IFileSystem _fs)
         var contentDirResult = PackageBuilderContentDir.Of(rootDirTemp, installationDir);
         var contentDstDir = contentDirResult.Value;
 
+        var controlFilePath = Maybe<LocalFilePath>.None;
+        var instructionFilePath = Maybe<LocalFilePath>.None;
 
         // build package
         return await _mediator
-            .PackageBuilderInitAsync(rootDirTemp, controlProp)
+            .PackageBuilderInitAsync(rootDirTemp, controlProp, instructionFilePath, controlFilePath)
             .Bind(() => _mediator.AddContentAsync(rootDirTemp, installationDir, contentSrcDir))
             .Bind(() => _mediator.BuilderPackAsync(rootDirTemp, outputDir, cmd));
     }

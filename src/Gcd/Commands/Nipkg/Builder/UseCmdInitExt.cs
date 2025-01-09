@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Gcd.Extensions;
 using Gcd.Handlers.Nipkg.Builder;
+using Gcd.LocalFileSystem.Abstractions;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,9 +47,12 @@ public static class UseCmdInitExt
                 var rootDir = rootDirOpt.Map();
                 var properties = factory.Create(options.Where(x => x.HasValue()).ToList());
 
+                var controlFilePath = Maybe<LocalFilePath>.None;
+                var instructionFilePath = Maybe<LocalFilePath>.None;
+
                 return await Result
                     .Combine(rootDir, properties)
-                    .Bind(() => mediator.PackageBuilderInitAsync(rootDir.Value, properties.Value, cancelationToken))
+                    .Bind(() => mediator.PackageBuilderInitAsync(rootDir.Value, properties.Value,instructionFilePath,controlFilePath, cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);
