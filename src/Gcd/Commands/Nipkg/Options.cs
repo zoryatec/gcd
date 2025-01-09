@@ -46,13 +46,28 @@ public sealed class BuilderRootDirOption() : CommandOption(NAME, CommandOptionTy
 }
 
 
-public sealed class InstructionFileSource() : CommandOption(NAME, CommandOptionType.SingleValue)
+public sealed class InstructionFileSourceOption() : CommandOption(NAME, CommandOptionType.SingleValue)
 {
     public static readonly string NAME = "--instructions-file-path";
     public Maybe<Result<LocalFilePath, Error>> Map()
     {
         var result = Maybe<Result<LocalFilePath,Error>>.None;
         if(this.HasValue())
+        {
+            return LocalFilePath.Of(this.Value());
+        }
+
+        return result;
+    }
+}
+
+public sealed class ControlFileSourceOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--control-file-path";
+    public Maybe<Result<LocalFilePath, Error>> Map()
+    {
+        var result = Maybe<Result<LocalFilePath, Error>>.None;
+        if (this.HasValue())
         {
             return LocalFilePath.Of(this.Value());
         }
