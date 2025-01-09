@@ -31,8 +31,7 @@ jobs:
           NIPKG_CMD_PATH: "${{vars.NIPKG_INSTALATION_DIR}}\\nipkg.exe"
         run: |
           gcd --version  
-          gcd config set --nipkg-installer-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
-          gcd tools install-nipkg
+          gcd tools install-nipkg --installer-source-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
           Get-Command gcd
 
       - name: app test 

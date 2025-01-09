@@ -13,7 +13,7 @@ public sealed class DownloadNipkgPathOption() : CommandOption(NAME, CommandOptio
 
 public sealed class NipkgInstallerSourceUrlOption() : CommandOption(NAME, CommandOptionType.SingleValue)
 {
-    public static readonly string NAME = "---installer-source-uri";
+    public static readonly string NAME = "--installer-source-uri";
     public Result<NipkgInstallerUri> Map() =>
         NipkgInstallerUri.Of(this.Value());
 }

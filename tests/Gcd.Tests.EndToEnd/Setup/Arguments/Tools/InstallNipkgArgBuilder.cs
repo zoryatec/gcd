@@ -9,5 +9,11 @@ namespace Gcd.Tests.EndToEnd.Arguments.Tools
             WithArg(UseMenuToolsExt.NAME);
             WithArg(UseCmdInstallNipkgExt.NAME);
         }
+        
+        public InstallNipkgArgBuilder WithInstallerSourceUri(string installerSourceUri)
+        {
+            WithOption(NipkgInstallerSourceUrlOption.NAME, installerSourceUri);
+            return this;
+        }
     }
 }

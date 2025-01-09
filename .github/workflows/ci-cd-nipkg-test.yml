@@ -36,8 +36,7 @@ jobs:
       - name: setup
         run: |
           gcd --version  
-          gcd config set --nipkg-installer-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
-          gcd tools install-nipkg
+          gcd tools install-nipkg --installer-source-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
           nipkg -v
           nipkg feed-add "${{ secrets.nipkg-feed }}" --name=gcd-dev --system
           nipkg list-installed
