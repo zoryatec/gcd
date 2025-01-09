@@ -1,7 +1,7 @@
 name: ci-cd-bin-build
 
 on:
-  workflow_call: # This allows this workflow to be called by other workflows
+  workflow_call: 
     inputs:
       version:
         description: "bin version"
