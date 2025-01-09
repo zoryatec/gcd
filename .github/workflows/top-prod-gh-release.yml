@@ -13,9 +13,6 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      # download gcd from previous release???
-      # from nuget??
-
       - name: add to path
         run: |
           echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
