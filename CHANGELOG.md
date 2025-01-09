@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [versionize](https://github.com/versionize/versionize) for commit guidelines.
 
+<a name="0.23.3"></a>
+## [0.23.3](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.3) (2025-01-09)
+
+### Bug Fixes
+
+* triggering main branch ([1994b97](https://www.github.com/zoryatec/gcd/commit/1994b97dec9ed9bd3278efe2260c6c45a2a6c5c9))
+
 <a name="0.23.2"></a>
 ## [0.23.2](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.2) (2025-01-08)
 
