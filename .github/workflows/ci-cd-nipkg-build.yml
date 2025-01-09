@@ -50,18 +50,17 @@ jobs:
     - name: build nipkg
       env:
         PACKAGE_OUTPUT_DIR: ${{github.workspace}}\package
-        CONTROL_FILE_PATH: ${{github.workspace}}\manifests\nipkg\control
-        INSTRUCTIONS_FILE_PATH: ${{github.workspace}}\manifests\nipkg\instructions
+        MANIFEST_DIR: ${{github.workspace}}\manifests\nipkg
       run:  |
         mkdir ${{env.PACKAGE_OUTPUT_DIR}}
         gcd nipkg build `
         --content-src-dir ${{github.workspace}}\package-content`
         --target-root-dir "BootVolume/Program Files/gcd" `
-        --instructions-file-path ${{env.INSTRUCTIONS_FILE_PATH}} `
-        --control-file-path ${{env.CONTROL_FILE_PATH}} `
+        --instructions-file-path ${{env.MANIFEST_DIR}}\instructions `
+        --control-file-path ${{env.MANIFEST_DIR}}\control `
         --package-name ${{inputs.name}}  `
         --package-version ${{inputs.version}} `
-        --package-destination-dir  ${{github.workspace}}\package
+        --package-destination-dir  ${{env.PACKAGE_OUTPUT_DIR}}
 
     - name: upload package artifact
       uses: actions/upload-artifact@v4.4.3
