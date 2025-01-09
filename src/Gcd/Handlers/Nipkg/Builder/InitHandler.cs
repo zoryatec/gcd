@@ -23,10 +23,25 @@ public class InitHandler(IMediator _mediator, IFileSystem _writer)
 
         var def = defR.Value;
 
+        string controlFileContent = ControlFileContent.Default.Content.ToString();
+        string instrFileContent = InstructionFileContent.Default.ToString();
+
+        if (instrFilePath.HasValue)
+        {
+            var res = await _writer.ReadTextFileAsync(instrFilePath.Value);
+            instrFileContent = res.Value;
+        }
+
+        if (ctrFilePath.HasValue)
+        {
+            var res = await _writer.ReadTextFileAsync(ctrFilePath.Value);
+            controlFileContent = res.Value;
+        }
+
         return await CreatePackageBuilderStructure(def)
         .Bind(() => _writer.WriteTextFileAsync(def.DebianFile, DebianFileContent.Default.Value))
-        .Bind(() => _writer.WriteTextFileAsync(def.ControlFile, ControlFileContent.Default.Content.ToString()))
-        .Bind(() => _writer.WriteTextFileAsync(def.InstructionFile, InstructionFileContent.Default.ToString()))
+        .Bind(() => _writer.WriteTextFileAsync(def.ControlFile, controlFileContent))
+        .Bind(() => _writer.WriteTextFileAsync(def.InstructionFile, instrFileContent))
         .Bind(() => _mediator.PackageBuilderSetPropertiesAsync(request.RootDir, controlProperties, cancellationToken));
     }
 
