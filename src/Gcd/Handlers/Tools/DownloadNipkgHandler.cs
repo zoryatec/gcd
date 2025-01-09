@@ -9,20 +9,21 @@ namespace Gcd.Handlers.Tools;
 
 public record DownloadNipkgRequest(LocalFilePath FilePath, NipkgInstallerUri InstallerUri) : IRequest<UnitResult<Error>>;
 
-public class DownloadNipkgHandler(IWebDownload _webDownload, NipkgInstallerUri _installerUri)
+public class DownloadNipkgHandler(IWebDownload _webDownload)
     : IRequestHandler<DownloadNipkgRequest, UnitResult<Error>>
 {
     public async Task<UnitResult<Error>> Handle(DownloadNipkgRequest request, CancellationToken cancellationToken)
     {
-        var uri = request.InstallerUri;
-        if (uri == NipkgInstallerUri.None)
-        {
-            uri = _installerUri;
-            if (uri == NipkgInstallerUri.None) return UnitResult.Failure(new Error("Please specify NIPKG uri") );
-        }
+        var(filePath, installerSourceUri) = request;
+        //var uri = request.InstallerUri;
+        // if (uri == NipkgInstallerUri.None)
+        // {
+        //     uri = _installerUri;
+        //     if (uri == NipkgInstallerUri.None) return UnitResult.Failure(new Error("Please specify NIPKG uri") );
+        // }
 
-        return await WebUri.Create(_installerUri.Value)
-            .Bind(uri => DownloadFileAsync(uri, request.FilePath))
+        return await WebUri.Create(installerSourceUri.Value)
+            .Bind(uri => DownloadFileAsync(uri, filePath))
             .MapError(x => new Error(x));
     }
 
