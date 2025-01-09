@@ -39,10 +39,6 @@ jobs:
           gcd tools install-nipkg --installer-source-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
           nipkg -v
           nipkg feed-add "${{ secrets.nipkg-feed }}" --name=gcd-dev --system
-          nipkg list-installed
-          nipkg feed-list
-          nipkg list
-          nipkg config-get
           nipkg update
           nipkg install ${{inputs.name}} -y
 
