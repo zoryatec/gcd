@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Version>0.23.4</Version>
-    <ToolCommandName>gcd</ToolCommandName>
     <Company>Zoryatec</Company>
     <Authors>Dawid Wozny</Authors>
     <Copyright>Zoryatec</Copyright>
@@ -14,7 +13,8 @@
     <Description>G CI/CD command line tool to do what LabVIEW should</Description>
     <NoBuild>true</NoBuild> <!-- Skips the build step -->
     <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Avoids including empty build output -->
-    <PackAsTool>true</PackAsTool>
+    <PackageType>DotnetTool</PackageType>
+    <ToolCommandName>gcd</ToolCommandName>
   </PropertyGroup>
 
   <Target Name="OverrideBuildTargets" BeforeTargets="Pack">
