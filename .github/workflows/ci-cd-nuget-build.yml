@@ -13,6 +13,12 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
+
+    - name: download gcd bootstrap
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: gcd-bin
+        path: "gcd-bootstrap"
       
     - name: setup dotnet
       uses: actions/setup-dotnet@v4
@@ -29,7 +35,10 @@ jobs:
       run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:Version=${{ inputs.version }} -p:PublishSingleFile=true --output "./publish"
 
     - name: pack nuget
-      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=${{ inputs.version }} --output nuget
+      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=${{ inputs.version }} --output nuget1
+
+    - name: pack nuget
+      run: dotnet pack manifests/nuget/gcd.nuspec -p:Version=${{ inputs.version }} --output nuget
 
     - name: upload nuget
       uses: actions/upload-artifact@v4.4.3
