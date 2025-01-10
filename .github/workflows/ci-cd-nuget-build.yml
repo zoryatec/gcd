@@ -18,7 +18,7 @@ jobs:
       uses: actions/download-artifact@v4.1.8
       with:
         name: gcd-bin
-        path: "gcd-bootstrap"
+        path: "gcd-bin"
       
     - name: setup dotnet
       uses: actions/setup-dotnet@v4
