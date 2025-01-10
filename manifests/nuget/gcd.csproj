@@ -17,6 +17,11 @@
     <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Avoids including empty build output -->
   </PropertyGroup>
 
+  <Target Name="OverrideBuildTargets" BeforeTargets="Pack">
+    <Message Text="Skipping build targets since NoBuild=true" Importance="High" />
+  </Target>
+
+
   <ItemGroup>
     <None Include="../../gcd-bin/gcd.exe" Pack="true" PackagePath="tools" />
   </ItemGroup>
