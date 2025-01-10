@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Version>0.23.4</Version>
-    <PackAsTool>true</PackAsTool>
     <ToolCommandName>gcd</ToolCommandName>
     <Company>Zoryatec</Company>
     <Authors>Dawid Wozny</Authors>
