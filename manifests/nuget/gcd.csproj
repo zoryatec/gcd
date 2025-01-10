@@ -14,6 +14,7 @@
     <Description>G CI/CD command line tool to do what LabVIEW should</Description>
     <NoBuild>true</NoBuild> <!-- Skips the build step -->
     <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Avoids including empty build output -->
+    <PackAsTool>true</PackAsTool>
   </PropertyGroup>
 
   <Target Name="OverrideBuildTargets" BeforeTargets="Pack">
