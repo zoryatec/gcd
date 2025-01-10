@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Version>0.23.4</Version>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>gcd</ToolCommandName>
+    <Company>Zoryatec</Company>
+    <Authors>Dawid Wozny</Authors>
+    <Copyright>Zoryatec</Copyright>
+    <RepositoryUrl>https://github.com/zoryatec/gcd</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/zoryatec/gcd</PackageProjectUrl>
+    <PackageId>gcd</PackageId>
+    <Title>G CI/CD command line tool</Title>
+    <Description>G CI/CD command line tool to do what LabVIEW should</Description>
+    <NoBuild>true</NoBuild> <!-- Skips the build step -->
+    <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Avoids including empty build output -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../gcd-bin/gcd.exe" Pack="true" PackagePath="tools" />
+  </ItemGroup>
+</Project>
