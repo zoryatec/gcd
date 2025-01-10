@@ -22,6 +22,7 @@
 
 
   <ItemGroup>
+    <None Include="DotnetToolSettings.xml" Pack="true" PackagePath="tools" />
     <None Include="../../gcd-bin/gcd.exe" Pack="true" PackagePath="tools" />
   </ItemGroup>
 </Project>
