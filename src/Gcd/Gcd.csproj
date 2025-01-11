@@ -19,6 +19,7 @@
 		<PackageId>gcd</PackageId>
 		<Title>G CI/CD command line tool</Title>
 		<Description>G CI/CD command line tool to do what LabVIEW should</Description>
+    <PublishSingleFile>true</PublishSingleFile>
     </PropertyGroup>
 
     <ItemGroup>
