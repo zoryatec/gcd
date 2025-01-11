@@ -24,6 +24,9 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+
+    - name: install nuget cmd
+      run: dotnet tool install --global nuget.commandline
        
     - name: restore dependencies
       run: dotnet restore
@@ -38,7 +41,10 @@ jobs:
       run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=${{ inputs.version }} --output nuget1
 
     - name: pack nuget
-      run: dotnet pack manifests/nuget/gcd.csproj -p:Version=${{ inputs.version }} --output nuget --verbosity detailed
+      run: dotnet pack manifests/nuget/gcd.csproj -p:Version=${{ inputs.version }} --output nuget2 --verbosity detailed
+
+    - name: pack nuget
+      run: nuget pack manifests/nuget/gcd.nuspec -p:Version=${{ inputs.version }} --output nuget
 
     - name: upload nuget
       uses: actions/upload-artifact@v4.4.3
