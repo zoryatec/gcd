@@ -20,7 +20,7 @@ jobs:
       - name: install gcd
         run: |
           dotnet nuget add source ${{secrets.nuget-feed}} --username "anyusername" --password  ${{ secrets.nuget-feed-key }}
-          dotnet tool install --global gcd --version ${{ inputs.version }}
+          dotnet tool install --global gcd --version ${{ inputs.version }} --verbosity detailed
 
       - name: add to path
         run: |
