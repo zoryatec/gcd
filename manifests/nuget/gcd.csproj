@@ -12,7 +12,7 @@
     <Title>G CI/CD command line tool</Title>
     <Description>G CI/CD command line tool to do what LabVIEW should</Description>
     <NoBuild>true</NoBuild> <!-- Skips the build step -->
-    <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Avoids including empty build output -->
+    <IncludeBuildOutput>true</IncludeBuildOutput> <!-- Avoids including empty build output -->
     <PackageType>DotnetTool</PackageType>
     <ToolCommandName>gcd</ToolCommandName>
   </PropertyGroup>
