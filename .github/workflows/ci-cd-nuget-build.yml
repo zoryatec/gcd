@@ -28,8 +28,8 @@ jobs:
     - name: setup nuget 
 		  run: dotnet tool install --global Versionize
 
-		- name: setup nuget again
-		  run: dotnet tool install --global NuGet.CommandLine
+- name: setup nuget again
+  run: dotnet tool install --global NuGet.CommandLine
        
     - name: restore dependencies
       run: dotnet restore
