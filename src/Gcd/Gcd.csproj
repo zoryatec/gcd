@@ -21,6 +21,7 @@
 		<Description>G CI/CD command line tool to do what LabVIEW should</Description>
     <PublishSingleFile>true</PublishSingleFile>
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<SelfContained>true</SelfContained>
     </PropertyGroup>
 
     <ItemGroup>
