@@ -25,11 +25,11 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    - name: install versionize to check
-      run: dotnet tool install --global Versionize
+    #- name: install versionize to check
+     # run: dotnet tool install --global Versionize
 
-    - name: install cmd to check
-      run: dotnet tool install --global NuGet.CommandLine
+    #- name: install cmd to check
+     # run: dotnet tool install --global NuGet.CommandLine
 
     - name: restore dependencies
       run: dotnet restore
@@ -41,10 +41,10 @@ jobs:
       run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:Version=${{ inputs.version }} -p:PublishSingleFile=true --output "./publish"
 
     - name: pack nuget
-      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=${{ inputs.version }} --output nuget1
+      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=${{ inputs.version }} --output nuget
 
     - name: pack nuget
-      run: dotnet pack manifests/nuget/gcd.csproj -p:Version=${{ inputs.version }} --output nuget --verbosity detailed
+      run: dotnet pack manifests/nuget/gcd.csproj -p:Version=${{ inputs.version }} --output nuget2 --verbosity detailed
 
     - name: upload nuget
       uses: actions/upload-artifact@v4.4.3
