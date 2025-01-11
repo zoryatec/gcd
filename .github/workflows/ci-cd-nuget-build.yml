@@ -25,12 +25,12 @@ jobs:
       with:
         dotnet-version: 8.0.x
 
-    - name: setup nuget 
-		  run: dotnet tool install --global Versionize
+    - name: install versionize to check
+      run: dotnet tool install --global Versionize
 
-	- name: setup nuget again
-  	run: dotnet tool install --global NuGet.CommandLine
-       
+    - name: install cmd to check
+      run: dotnet tool install --global NuGet.CommandLine
+
     - name: restore dependencies
       run: dotnet restore
       
