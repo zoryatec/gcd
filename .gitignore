@@ -20,3 +20,6 @@ pull-smb-meta-dir
 /tests/manual/pull-az-blob-meta-dir
 /tests/manual/package-builder-dir
 pull-git-meta-dir
+/Gcd.sln.DotSettings.user
+/src/Gcd/Gcd.csproj.user
+/src/Gcd/Properties/PublishProfiles/FolderProfile.pubxml.user
