@@ -1,0 +1,5 @@
+<instructions>
+	<targetAttributes readOnly="allWritable"/>
+    <customExecutes>
+    </customExecutes>
+</instructions>

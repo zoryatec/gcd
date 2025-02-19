@@ -1,0 +1,160 @@
+Architecture: windows_x64
+CompatibilityVersion: 240800
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.1/gcd_0.23.1_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: 334467cb018c01fa15817c0b6f8a38d7
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+Section: tools
+Size: 32884272
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.1
+
+Architecture: windows_x64
+CompatibilityVersion: 240800
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.2/gcd_0.23.2_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: a09f5052f341b8bfa1ea48cd5b4d28cb
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+Section: tools
+Size: 32884490
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.2
+
+Architecture: windows_x64
+CompatibilityVersion: 240800
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.3/gcd_0.23.3_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: 8b918e363162dd4dac36b7d52b0d51f5
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+Section: tools
+Size: 32884470
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.3
+
+Architecture: windows_x64
+CompatibilityVersion: 240800
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.4/gcd_0.23.4_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: 0c1b3c4acd3b579f3391c5eb93d9becc
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+Section: Utilities
+Size: 32885336
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.4
+
+Architecture: windows_x64
+CompatibilityVersion: 250000
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.5/gcd_0.23.5_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: 739763bfeedfaa3b8f7db3a4b0de6004
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+Section: Utilities
+Size: 32923090
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.5
+
+Architecture: windows_x64
+CompatibilityVersion: 200003
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.6/gcd_0.23.6_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: dd97b8684930557efb8156eed28a1a06
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+Section: Utilities
+Size: 32923092
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.6
+
+Architecture: windows_x64
+CompatibilityVersion: 200003
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.7/gcd_0.23.7_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: a30759cc9f1d789f6809a4df2a5ea9d5
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+Section: Utilities
+Size: 32924146
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.7
+
+Architecture: windows_x64
+CompatibilityVersion: 200003
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.8/gcd_0.23.8_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: adb9d73f07b148a5ff8ba1fb1fc7be3b
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+Section: Utilities
+Size: 32924394
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.8
+
+Architecture: windows_x64
+CompatibilityVersion: 200003
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.9/gcd_0.23.9_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: 171afa20fec49627b7e07e3560f58298
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+Section: Utilities
+Size: 32936530
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.9
+
+Architecture: windows_x64
+CompatibilityVersion: 200003
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.10/gcd_0.23.10_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: e00e4d5cfb8ed713fca38a17ac47c962
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+Section: Utilities
+Size: 32938162
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.10
+

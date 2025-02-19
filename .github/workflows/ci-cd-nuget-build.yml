@@ -1,0 +1,60 @@
+name: ci-cd-nuget-build
+
+on:
+  workflow_call: # This allows this workflow to be called by other workflows
+    inputs:
+      version:
+        description: "nuget version"
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: download gcd bootstrap
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: gcd-bin
+        path: "gcd-bin"
+      
+    - name: setup dotnet
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    #- name: install versionize to check
+     # run: dotnet tool install --global Versionize
+
+    #- name: install cmd to check
+     # run: dotnet tool install --global NuGet.CommandLine
+
+    - name: restore dependencies
+      run: dotnet restore
+      
+    - name: build app
+      run: dotnet build src/Gcd/Gcd.csproj -p:Version=${{ inputs.version }} --no-restore
+
+    - name: publish app
+      run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:Version=${{ inputs.version }} -p:PublishSingleFile=true --output "./publish"
+
+    - name: pack nuget
+      run: dotnet pack src/Gcd/Gcd.csproj -c Release -p:Version=${{ inputs.version }} --output nuget
+
+    #- name: pack nuget
+     # run: mkdir manifests\nuget\bin\Release
+
+    #- name: pack nuget
+     # run: cp gcd-bin\gcd.exe manifests\nuget\bin\Release\gcd.exe
+
+    #- name: pack nuget
+     # run: dotnet pack manifests/nuget/gcd.csproj -p:Version=${{ inputs.version }} --output nuget --verbosity detailed -c Release
+
+    - name: upload nuget
+      uses: actions/upload-artifact@v4.4.3
+      with:
+        name: gcd-nuget
+        path: nuget
+        

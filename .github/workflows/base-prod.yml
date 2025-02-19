@@ -1,0 +1,135 @@
+name: base-prod
+
+on:
+  workflow_call: 
+    inputs:
+      version:
+        required: true
+        type: string
+      name:
+        required: true
+        type: string
+    secrets:
+      nuget-feed:
+        required: true
+      nuget-feed-key:
+        required: true
+      nipkg-feed:
+        required: true
+      nipkg-feed-sas:
+        required: true
+#      nipkg-git-feed:
+#        required: true
+#      nipkg-git-feed-repo:
+#        required: true
+#      nipkg-git-feed-branch:
+#        required: true
+#      nipkg-git-feed-user:
+#        required: true
+#      nipkg-git-feed-password:
+#        required: true
+      test-feed-add-pkg:
+        required: true
+      test-feed-push-pull:
+        required: true
+      test-feed-generic:
+        required: true
+      test-git-repo:
+        required: true
+      test-git-user:
+        required: true
+      test-git-password:
+        required: true
+      test-smb-share:
+        required: true
+      test-smb-user:
+        required: true
+      test-smb-password:
+        required: true
+      test-rclone-sharepoint-client-id:
+        required: true
+      test-rclone-sharepoint-client-secret:
+        required: true
+      test-rclone-sharepoint-tenant:
+        required: true
+      test-rclone-sharepoint-drive-id:
+        required: true
+
+jobs:
+  ci-cd-setup:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+  bin-build:
+    uses: ./.github/workflows/ci-cd-bin-build.yml
+    needs: ci-cd-setup
+    secrets: inherit
+    with:
+      version: ${{ inputs.version }}
+      
+  bin-test:
+    uses: ./.github/workflows/ci-cd-bin-test.yml
+    needs: bin-build
+    secrets: inherit
+
+  nuget-build:
+    uses: ./.github/workflows/ci-cd-nuget-build.yml
+    needs: bin-test
+    secrets: inherit
+    with:
+      version: ${{ inputs.version }}
+
+  nuget-publish:
+    uses: ./.github/workflows/ci-cd-nuget-publish.yml
+    needs: nuget-build
+    secrets: inherit
+    with:
+      version: ${{ inputs.version }}
+
+  nuget-test:
+    uses: ./.github/workflows/ci-cd-nuget-test.yml
+    needs: nuget-publish
+    secrets: inherit
+    with:
+      version: ${{ inputs.version }}
+
+  nipkg-build:
+    uses: ./.github/workflows/ci-cd-nipkg-build.yml
+    needs: bin-test
+    secrets: inherit
+    with:
+      version: ${{ inputs.version }}
+      name: ${{ inputs.name }}
+
+    
+  nipkg-publish:
+    uses: ./.github/workflows/ci-cd-nipkg-publish.yml
+    needs: nipkg-build
+    secrets: inherit
+    with:
+      version: ${{ inputs.version }}
+      name: ${{ inputs.name }}
+
+  nipkg-test:
+    uses: ./.github/workflows/ci-cd-nipkg-test.yml
+    needs: nipkg-publish
+    secrets: inherit
+    with:
+      version: ${{ inputs.version }}
+      name: ${{ inputs.name }}
+
+  release-gh:
+    uses: ./.github/workflows/ci-cd-gh-release.yml
+    needs: 
+      - nipkg-test
+      - nuget-test
+
+    with:
+      tag: '${{ inputs.version }}'
+
+  release-gh-feed:
+    uses: ./.github/workflows/ci-cd-gh-feed.yml
+    needs: release-gh
+    with:
+      tag: '${{ inputs.version }}'

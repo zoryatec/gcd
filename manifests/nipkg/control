@@ -1,0 +1,11 @@
+Architecture: windows_x64
+Homepage: https://github.com/zoryatec/gcd
+Maintainer: Zoryatec
+Description: G CI/CD tool
+XB-Plugin: file
+XB-UserVisible: yes
+XB-StoreProduct: yes
+XB-Section: Utilities
+Package: gcd
+Version: 0.0.0.1
+Depends: 

@@ -1,0 +1,58 @@
+name: 'ci-cd-gh-release'
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+
+jobs:
+  publish-new-version:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+        
+    - name: download gcd 
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: gcd-bin
+        path: gcd-bin       
+
+    - name: download test
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: gcd-test
+        path: gcd-test
+
+    - name: download nipkg
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: gcd-nipkg
+        path: gcd-nipkg
+
+    - name: download nuget
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: gcd-nuget
+        path: gcd-nuget
+
+    - name: zip files
+      run: |
+       Compress-Archive -Path gcd-bin/* -DestinationPath gcd-bin.zip
+       Compress-Archive -Path gcd-test/* -DestinationPath gcd-test.zip
+
+    - name: create release
+      id: create_release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ inputs.tag }}  
+        files: |
+          gcd-bin.zip
+          gcd-test.zip
+          gcd-nipkg/*.nipkg
+          gcd-nuget/*.nupkg
+        body: "[Changelog](https://github.com/zoryatec/gcd/blob/main/CHANGELOG.md)"
+        repository: zoryatec/gcd
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

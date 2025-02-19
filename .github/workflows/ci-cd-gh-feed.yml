@@ -1,0 +1,65 @@
+name: ci-cd-gh-feed
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+
+jobs:
+  publish-new-version:
+    runs-on: windows-latest
+    steps:
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: '0'
+
+        - name: download gcd bin
+          uses: actions/download-artifact@v4.1.8
+          with:
+            name: gcd-bin
+            path: "gcd-bin"
+
+        - name: download gcd nipkg
+          uses: actions/download-artifact@v4.1.8
+          with:
+              name: gcd-nipkg
+              path: gcd-nipkg
+
+        - name: setup git
+          run: |
+                git config --local user.email "dawid.wozny@zoryatec.com"
+                git config --local user.name "github-actions[bot]"
+                git pull
+
+        - name: add to path
+          run: |
+                echo "$env:GITHUB_WORKSPACE\\gcd-bin" >> $env:GITHUB_PATH
+                echo "${{vars.NIPKG_INSTALATION_DIR}}" >> $env:GITHUB_PATH
+            
+        - name: setup
+          run: |
+                gcd --version  
+                gcd tools install-nipkg --installer-source-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
+
+        - name: publish to feed
+          run:  |
+                gcd nipkg feed-local add-http-package `
+                --package-http-path https://github.com/zoryatec/gcd/releases/download/${{ inputs.tag }}/gcd_${{ inputs.tag }}_windows_x64.nipkg `
+                --feed-local-path feed `
+                --use-absolute-path `
+ 
+        - name: git commit
+          run: |
+            git add feed\Packages
+            git add feed\Packages.gz
+            git add feed\Packages.stamps
+            git commit -m "chore(feed): ${{ inputs.tag }}"
+
+        - name: push changes
+          uses: ad-m/github-push-action@master
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            branch: ${{ github.ref }}
+            tags: false
