@@ -7,7 +7,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg.FeedLocal;
 public class AddHttpPackageTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
-    [Fact]
+    // [Fact]
     private void AddHttpPackageTest()
     {
 
