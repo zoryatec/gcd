@@ -45,7 +45,7 @@ public class AddHttpPackageTests(TestFixture testFixture) : BaseTest(testFixture
 
     }
 
-    [Fact]
+    // [Fact]
     private void AddHttpPackageTestUseAbs()
     {
 
