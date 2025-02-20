@@ -4,6 +4,9 @@ A command-line tool created for LabVIEW developers with OCD. It is designed to a
 
 > **Note**: This tool is in an **experimental** stage. Until it matures, the **fix** part of the version will denote new features or bug fixes. The **minor** version part will denote breaking changes. It still lacks error handling in many places and requires more testing.
 
+> **⚠️ Warning:** Feel free to experiment with the tool but using it in production is highly discourage at this point.<br>
+> I use  it on daily basis but got full control over the release process and can fix bugs ad hoc.<br>
+> There will be official announcement once the software is considered stable.
 ---
 
 # Setup
