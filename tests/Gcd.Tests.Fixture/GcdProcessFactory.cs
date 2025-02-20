@@ -2,13 +2,10 @@
 
 namespace Gcd.Tests.Fixture
 {
-    public class GcdProcessFactory : IGcdProcessFactory
+    public class GcdProcessFactory(IConfiguration configuration) : IGcdProcessFactory
     {
-        private readonly string _gcdPath;
-        public GcdProcessFactory(IConfiguration configuration )
-        {
-            _gcdPath = configuration.GetValue("GcdPath", string.Empty);
-        }
+        private readonly string _gcdPath = configuration.GetValue("GcdPath", string.Empty) ?? string.Empty;
+
         public IGcdProcess Create()
         {
             return new GcdProcess(_gcdPath);

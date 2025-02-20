@@ -37,8 +37,8 @@ namespace Gcd.Tests.Fixture
 
             return new GcdProcessResponse
             {
-                Error = _console.Error.ToString(),
-                Out = _console.Out.ToString(),
+                Error = _console.Error.ToString() ?? string.Empty,
+                Out = _console.Out.ToString() ?? string.Empty,
                 Return = result
             };
         }

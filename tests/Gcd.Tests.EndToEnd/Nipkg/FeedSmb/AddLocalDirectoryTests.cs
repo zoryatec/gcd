@@ -20,7 +20,7 @@ public class AddLocalDirectoryTests(TestFixture testFixture) : BaseTest(testFixt
         string username = _config.GetSmbUserName();
         string password = _config.GetSmbPassword();
 
-        var dir =  new FileInfo(packagePath).Directory;
+        var dir =  new FileInfo(packagePath).Directory ?? throw new NullReferenceException(packagePath);
         
         var args = new GcdArgBuilder()
             .WithNipkgMenu()

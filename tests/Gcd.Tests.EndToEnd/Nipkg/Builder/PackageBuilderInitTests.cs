@@ -13,7 +13,6 @@ namespace Gcd.Tests.EndToEnd.Nipkg.Builder
             // Arrange
             var packageName = "sample-package";
             var packageVersion = "99.88.77.66";
-            var packageInstalationDir = "BootVolume/Zoryatec/sample-package";
 
             //var packageContentDirectory = GetPackageContentDir();
             var packageBuilderDir = _tempDirectoryGenerator.GenerateTempDirectory();

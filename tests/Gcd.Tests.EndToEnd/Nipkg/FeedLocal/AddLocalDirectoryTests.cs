@@ -15,7 +15,7 @@ public class AddLocalDirectoryTests(TestFixture testFixture) : BaseTest(testFixt
         // Arrange
         string packagePath = BuildPackage();
 
-       var dir =  new FileInfo(packagePath).Directory;
+       var dir =  new FileInfo(packagePath).Directory ?? throw new NullReferenceException();
 
         var args = new GcdArgBuilder()
             .WithNipkgMenu()

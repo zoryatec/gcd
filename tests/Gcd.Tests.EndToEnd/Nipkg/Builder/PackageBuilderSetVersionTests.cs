@@ -14,7 +14,6 @@ namespace Gcd.Tests.EndToEnd.Nipkg.Builder
             // Arrange
             var packageName = "sample-package";
             var packageVersion = "99.88.77.66";
-            var packageInstalationDir = "BootVolume/Zoryatec/sample-package";
             var packageHomePage = Guid.NewGuid().ToString();
             var packageMaintainer = Guid.NewGuid().ToString();
 
@@ -66,10 +65,8 @@ namespace Gcd.Tests.EndToEnd.Nipkg.Builder
         public void ShouldBeAbleToSetOneProperty()
         {
             // Arrange
-            // Arrange
             var packageName = "sample-package";
             var packageVersion = "99.88.77.66";
-            var packageInstalationDir = "BootVolume/Zoryatec/sample-package";
             var packageHomePage = Guid.NewGuid().ToString();
             var packageMaintainer = Guid.NewGuid().ToString();
 
