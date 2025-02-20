@@ -1,0 +1,51 @@
+name: ci-cd-nipkg-publish
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: "package version"
+        required: true
+        type: string
+      name:
+        description: "package name"
+        required: true
+        type: string
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    steps:
+    - name: download gcd bootstrap
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: gcd-bin
+        path: "gcd-bootstrap"
+
+    - name: download gcd bootstrap
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: gcd-nipkg
+        path: "package"
+
+    - name: add to path
+      run: |
+        echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
+        echo "C:\\Program Files\\National Instruments\\NI Package Manager" >> $env:GITHUB_PATH
+        
+    - name: setup
+      run: |
+        gcd --version  
+        gcd tools install-nipkg --installer-source-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
+        nipkg update
+        nipkg upgrade --force-locked --yes --accept-eulas --verbose system-windows-x64 ni-msiproperties eula-ms-dotnet-4.8 ni-msdotnet4x ni-package-manager-deployment-support
+        nipkg install --force-locked --yes --accept-eulas --verbose --allow-downgrade --allow-uninstall ni-package-manager=20.0.0.49153-0+f1
+
+    - name: publish to feed
+      run:  |
+        gcd nipkg feed-az-blob add-local-package `
+        --package-local-path "$env:GITHUB_WORKSPACE\\package\\${{inputs.name}}_${{inputs.version}}_windows_x64.nipkg" `
+        --feed-url "${{ secrets.nipkg-feed }}?${{ secrets.nipkg-feed-sas}}" `
+
+
+

@@ -1,0 +1,23 @@
+name: ci-cd-nuget-publish
+
+on:
+  workflow_call: # This allows this workflow to be called by other workflows
+    inputs:
+      version:
+        required: true
+        type: string
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    steps:
+    - name: download nuget
+      uses: actions/download-artifact@v4.1.8
+      with:
+        name: gcd-nuget
+        path: nuget
+
+    - name: publish nuget
+      run: dotnet nuget push .\nuget\*.nupkg --source ${{secrets.nuget-feed}} --api-key ${{ secrets.nuget-feed-key }}
+
+        

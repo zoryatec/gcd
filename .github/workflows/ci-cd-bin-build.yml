@@ -1,0 +1,51 @@
+name: ci-cd-bin-build
+
+on:
+  workflow_call: 
+    inputs:
+      version:
+        description: "bin version"
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: setup dotnet
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+       
+    - name: restore dependencies
+      run: dotnet restore
+      
+    - name: build app
+      run: dotnet build src/Gcd/Gcd.csproj -p:Version=${{ inputs.version }} --no-restore
+
+    - name: publish app
+      run:  dotnet publish src/Gcd/Gcd.csproj -c Release -r win-x64 --self-contained true -p:Version=${{ inputs.version }} -p:PublishSingleFile=true --output "./publish"
+
+    - name: build unit tests
+      run: dotnet build tests/Gcd.Tests/Gcd.Tests.csproj  --output unit-tests
+
+    - name: run unit tests
+      run: dotnet test unit-tests/gcd.tests.dll
+
+    - name: build integration tests
+      run: dotnet build tests/Gcd.Tests.EndToEnd/Gcd.Tests.EndToEnd.csproj  --output integration-tests
+
+    - name: upload bin
+      uses: actions/upload-artifact@v4.4.3
+      with:
+        name: gcd-bin
+        path: publish
+
+    - name: upload integration tests
+      uses: actions/upload-artifact@v4.4.3
+      with:
+        name: gcd-test
+        path: integration-tests  
+        

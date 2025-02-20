@@ -1,0 +1,83 @@
+name: ci-cd-nuget-test
+
+on:
+  workflow_call: # This allows this workflow to be called by other workflows
+    inputs:
+      version:
+        required: true
+        type: string
+
+jobs:
+  test-end-to-end:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        
+      - name: download tests
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: gcd-test
+          path: gcd-test
+
+      - name: install gcd
+        run: |
+          dotnet nuget add source ${{secrets.nuget-feed}} --username "anyusername" --password  ${{ secrets.nuget-feed-key }}
+          
+          dotnet tool install --global Versionize
+
+          dotnet tool install --global gcd --version ${{ inputs.version }} --verbosity detailed
+
+      - name: add to path
+        run: |
+          echo "$env:GITHUB_WORKSPACE\\gcd-bootstrap" >> $env:GITHUB_PATH
+          echo "C:\\Program Files\\National Instruments\\NI Package Manager" >> $env:GITHUB_PATH
+          echo "$env:GITHUB_WORKSPACE\\rclone\\rclone-v1.69.0-windows-amd64" >> $env:GITHUB_PATH
+          
+      - name: setup env
+        env:
+          NIPKG_INSTALLER_DOWNLOAD_URI: ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
+          GITHUB_WORKSPACE: ${{env.GITHUB_WORKSPACE}}
+          
+          RCLONE_CONFIG_GCDSHAREPOINTTEST_CLIENT_ID: ${{ secrets.test-rclone-sharepoint-client-id }}
+          RCLONE_CONFIG_GCDSHAREPOINTTEST_CLIENT_SECRET: ${{ secrets.test-rclone-sharepoint-client-secret}}
+          RCLONE_CONFIG_GCDSHAREPOINTTEST_DRIVE_ID: ${{ secrets.test-rclone-sharepoint-drive-id}}
+          RCLONE_CONFIG_GCDSHAREPOINTTEST_DRIVE_TYPE: 'documentLibrary'
+          RCLONE_CONFIG_GCDSHAREPOINTTEST_CLIENT_CREDENTIALS: true
+          RCLONE_CONFIG_GCDSHAREPOINTTEST_TENANT: ${{ secrets.test-rclone-sharepoint-tenant }}
+          RCLONE_CONFIG_GCDSHAREPOINTTEST_TYPE: 'onedrive'
+        
+        run: |
+          powershell -ExecutionPolicy Bypass -File $env:GITHUB_WORKSPACE\.github\workflows\setup.ps1
+          
+
+#      - name: setup
+#        run: |
+#          gcd --version  
+#          gcd tools install-nipkg --installer-source-uri ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
+
+      - name: app test 
+        env:
+          SmbShareAddress: ${{ secrets.test-smb-share }}
+          SmbUserName: ${{ secrets.test-smb-user }}
+          SmbUserPass: ${{ secrets.test-smb-password }}  
+          GitRepoAddress: ${{ secrets.test-git-repo }}
+          GitUserName: ${{ secrets.test-git-user }}
+          GitPassword: ${{ secrets.test-git-password }}  
+          AZUREADDPKGTESTFEEDURI: ${{ secrets.test-feed-add-pkg }}
+          AZUREFEEDURI: ${{ secrets.test-feed-generic }}
+          AZUREPUSHPULLTESTFEEDURI: ${{ secrets.test-feed-push-pull }}
+          NipkgInstallerUri: ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
+          NipkgCmdPath: "${{vars.NIPKG_INSTALATION_DIR}}\\nipkg.exe"
+          DevMode : false
+          GcdPath: "C:\\Users\\runneradmin\\.dotnet\\tools\\gcd.exe"
+          
+          RCLONE_CONFIG_GCDSHAREPOINTTEST_CLIENT_ID: ${{ secrets.test-rclone-sharepoint-client-id }}
+          RCLONE_CONFIG_GCDSHAREPOINTTEST_CLIENT_SECRET: ${{ secrets.test-rclone-sharepoint-client-secret}}
+          RCLONE_CONFIG_GCDSHAREPOINTTEST_DRIVE_ID: ${{ secrets.test-rclone-sharepoint-drive-id}}
+          RCLONE_CONFIG_GCDSHAREPOINTTEST_DRIVE_TYPE: 'documentLibrary'
+          RCLONE_CONFIG_GCDSHAREPOINTTEST_CLIENT_CREDENTIALS: true
+          RCLONE_CONFIG_GCDSHAREPOINTTEST_TENANT: ${{ secrets.test-rclone-sharepoint-tenant }}
+          RCLONE_CONFIG_GCDSHAREPOINTTEST_TYPE: 'onedrive'
+          
+        run: dotnet test gcd-test/Gcd.Tests.EndToEnd.dll
+

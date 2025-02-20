@@ -1,0 +1,69 @@
+name: dev
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+      
+
+jobs:
+  setup:
+    if: ${{ github.actor != 'github-actions[bot]'}} 
+    runs-on: windows-latest
+    outputs:
+      VERSION: ${{ steps.versionize.outputs.version }}.${{ github.run_number}}
+      NAME: "gcd-dev"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: '0'
+          
+      - name: install versionize
+        run: dotnet tool install --global Versionize
+
+      - name: setup git
+        run: |
+          git config --local user.email "dawid.wozny@zoryatec.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Run versionize and debug output
+        id: versionize
+        run: |
+          VERSION=$(versionize inspect)
+          echo "VERSION is: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+        shell: bash
+     
+  ci-cd:
+    uses: ./.github/workflows/base-dev.yml
+    needs: setup
+    with:
+      version: ${{needs.setup.outputs.VERSION}}
+      name: ${{needs.setup.outputs.NAME}}
+    secrets:
+      nipkg-feed: ${{secrets.DEV_NIPKG_AZ_BLOB_FEED }}
+      nipkg-feed-sas: ${{secrets.DEV_NIPKG_AZ_BLOB_FEED_SAS}}
+      
+      nuget-feed: ${{ secrets.DEV_NUGET_FEED }}
+      nuget-feed-key: ${{ secrets.GITHUB_TOKEN }}
+      
+      test-feed-add-pkg: ${{ secrets.TEST_AZUREADDPKGTESTFEEDURI }}
+      test-feed-push-pull: ${{ secrets.TEST_AZUREPUSHPULLTESTFEEDURI }}
+      test-feed-generic: ${{ secrets.TEST_AZUREFEEDURI }}
+      
+      test-git-repo: ${{ secrets.TEST_GIT_REPO }}
+      test-git-user: ${{ secrets.TEST_GIT_USER }}
+      test-git-password: ${{ secrets.TEST_GIT_PASSWORD }}
+
+      test-smb-share: ${{ secrets.TEST_SMB_URL }}
+      test-smb-user: ${{ secrets.TEST_SMB_USER }}
+      test-smb-password: ${{ secrets.TEST_SMB_PASSWORD }}
+      
+      test-rclone-sharepoint-client-id: ${{ secrets.TEST_RCLONE_SHAREPOINT_CLIENT_ID }}
+      test-rclone-sharepoint-client-secret: ${{ secrets.TEST_RCLONE_SHAREPOINT_CLIENT_SECRET }}
+      test-rclone-sharepoint-tenant: ${{ secrets.TEST_RCLONE_SHAREPOINT_TENANT }}
+      test-rclone-sharepoint-drive-id: ${{ secrets.TEST_RCLONE_SHAREPOINT_DRIVE_ID }}
+      
+
+      

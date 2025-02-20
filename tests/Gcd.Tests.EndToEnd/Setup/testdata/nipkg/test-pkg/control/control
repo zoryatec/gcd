@@ -1,0 +1,10 @@
+Package: test-package
+Architecture: windows_x64
+Homepage: http://www.zoryatec.com/
+Maintainer: Zoryatec<>
+Description: Package fore e2e test
+XB-Plugin: file
+XB-UserVisible: yes
+XB-StoreProduct: yes
+XB-Section: Application Software
+Version: 99.88.77-66
