@@ -61,7 +61,7 @@ public class CustomExecute
 
 
     [XmlAttribute("arguments")]
-    public string Arguments { get; set; } = default;
+    public string Arguments { get; set; } = string.Empty;
 
     [XmlAttribute("exeName")]
     public string ExeName { get; set; }

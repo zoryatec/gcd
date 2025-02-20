@@ -8,8 +8,8 @@ public record SmbDirPath : IDirectoryDescriptor
 {
     public static Result<SmbDirPath, Error> Of(Maybe<string> feedUriOrNothing)
     {
-        return feedUriOrNothing.ToResult(Error.Of("FeedUri should not be empty"))
-            .Ensure(feedUri => feedUri != string.Empty, Error.Of("FeedUri should not be empty"))
+        return feedUriOrNothing.ToResult(new Error("FeedUri should not be empty"))
+            .Ensure(feedUri => feedUri != string.Empty, new Error("FeedUri should not be empty"))
             .Map(feedUri => new SmbDirPath(feedUri));
     }
     private SmbDirPath(string value) => Value = value;

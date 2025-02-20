@@ -8,8 +8,8 @@ public record RcloneDirPath : IDirectoryDescriptor
 {
     public static Result<RcloneDirPath, Error> Of(Maybe<string> feedUriOrNothing)
     {
-        return feedUriOrNothing.ToResult(Error.Of("FeedUri should not be empty"))
-            .Ensure(feedUri => feedUri != string.Empty, Error.Of("FeedUri should not be empty"))
+        return feedUriOrNothing.ToResult(new Error("FeedUri should not be empty"))
+            .Ensure(feedUri => feedUri != string.Empty, new Error("FeedUri should not be empty"))
             .Map(feedUri => new RcloneDirPath(feedUri));
     }
     private RcloneDirPath(string value) => Value = value;

@@ -9,8 +9,6 @@ public record Error : ICombine
         Message = message;
     }
 
-    public static Error Of(string message) => new Error(message);
-
     public string Message { get; }
     public int Code { get; set; }
 
