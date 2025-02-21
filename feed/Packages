@@ -1,1 +1,16 @@
-﻿
+Architecture: windows_x64
+CompatibilityVersion: 200003
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.11/gcd_0.23.11_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: d274ac706639de67fcdea8a5398d45af
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+Section: Utilities
+Size: 32938104
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.11
+
