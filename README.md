@@ -286,8 +286,18 @@ gcd nipkg feed-smb push-meta-data `
 ```
 
 ### Git Feed
-Functionality primarly developed to host GCD on github repo with links from github releases.
-It allows to host packages on git repo but please not that git repo should not be used for binary files.
+This functionality is quite controversial since in theory you should not keep binaries within git repository.<br>
+However:
+* You can just store feed (as I do)
+* Sometimes you just don't have choice
+* It is something I wish was availible when stared working with nipkg
+* You can use git-lfs
+
+> **Note 1** You can use git-lfs to handle packages file efficiently stored in git repo.
+
+>⚠️ Warning: Until [sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) is use to handle operations.<br>
+> This command is highly inefficient.
+
 
 #### Add Local Package (Git)
 ```powershell
