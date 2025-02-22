@@ -39,7 +39,7 @@ public record WebFileUri : IWebFileUri
             .Map(arg => new WebFileUri(arg));
     }
 
-    private WebFileUri(Uri value)
+    protected WebFileUri(Uri value)
     {
         _uri = value;
         var fileName = _uri.Segments.Last().Trim('/');
