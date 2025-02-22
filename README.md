@@ -5,20 +5,48 @@ A command-line tool created for LabVIEW developers with OCD. It is designed to a
 > **Note**: This tool is in an **experimental** stage. Until it matures, the **fix** part of the version will denote new features or bug fixes. The **minor** version part will denote breaking changes. It still lacks error handling in many places and requires more testing.
 
 > **⚠️ Warning:** Feel free to experiment with the tool but using it in production is highly discourage at this point.<br>
-> I use  it on daily basis but got full control over the release process and can fix bugs ad hoc.<br>
-> There will be official announcement once the software is considered stable.
+> I use  it for my tasks  but got full control over the release process and can fix bugs ad hoc.<br>
+> There will be official announcement once the software is considered stable. <br>
+> I will also mark commands where I consider no interface change is established until the software is mature. <br>
+> Untill then everything is up for change.
 ---
 
 # Setup
-
 ## Installation
-The main nipkg feed is hosted in the code repository and updated on merge to main branch. The feed packages points to .nipkg files uploaded to GitHub [Releases](https://github.com/zoryatec/gcd/releases).
+The end goal is to perform installation through various packages sources like vipm, chocolatey, scoop, winget etc.<br>
+Then to perform bootstrap installation of all required tools.
+Eventually to perform preparation of LabVIEW CI Agent from scratch. <br>
+This is long shot and hope [Dragon](https://dragon.vipm.io/) will help with it. 
 
+For the time being only two options are available: nipkg and nuget.
+### Nipkg
+The main nipkg feed is hosted in the code repository and updated on merge to main branch.<br>
+The feed packages points to .nipkg files uploaded to GitHub [Releases](https://github.com/zoryatec/gcd/releases).
+
+#### Install
 ```powershell
 nipkg feed-add https://raw.githubusercontent.com/zoryatec/gcd/refs/heads/main/feed --name=gcd-feed --system
 nipkg update
 nipkg install gcd
 ```
+#### Uninstall
+```powershell
+nipkg remove gcd
+```
+### Nuget
+Package is hosted on official [Nuget](https://www.nuget.org/packages/gcd) feed.<br>
+This was first choice after nipkg since dotnet usually have easy setup in pipelines like Azure DevOps and GitHub Actions.<br>
+Therefore it is easy to install on bare machine. 
+
+#### Install
+```powershell
+dotnet tool install gcd --global
+```
+#### Uninstall
+```powershell
+dotnet tool uninstall gcd --global
+```
+
 ## Requirements
 For the full feature support the following are required:
 
