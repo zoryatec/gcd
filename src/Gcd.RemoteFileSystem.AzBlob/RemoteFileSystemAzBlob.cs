@@ -19,7 +19,7 @@ namespace Gcd.RemoteFileSystem.AzBlob
             return sourceDescriptor switch
             {
                 LocalFilePath source => await _fs.CopyFileAsync(source, destinationPath, overwrite: overwrite),
-                WebUri source => await _webDownload.DownloadFileAsync(source, destinationPath),
+                IWebFileUri source => await _webDownload.DownloadFileAsync(source, destinationPath),
                 AzBlobUri source => await downloadAz.DownloadFileAsync(source, destinationPath),
                 //SmbFilePath source => await _remoteSmb.DownloadFileAsync(source, destinationPath),
                 _ => throw new InvalidOperationException(sourceDescriptor.GetType().Name)

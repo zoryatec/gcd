@@ -20,7 +20,7 @@ public record PackageFileName : IFileName
 
     public  string Value => _fileName.Value;
     
-    private readonly FileName _fileName;
+    private readonly IFileName _fileName;
 
     public static Result<PackageFileName, Error> Of(Maybe<string> maybeValue) =>
         FileName
@@ -28,7 +28,7 @@ public record PackageFileName : IFileName
             .Bind(fileName => PackageFileName.Of(fileName));
     
 
-    public static Result<PackageFileName,Error> Of(FileName fileName)
+    public static Result<PackageFileName,Error> Of(IFileName fileName)
     {
         if (fileName.Extension != FileExtension.Nipkg)
             return Result.Failure<PackageFileName, Error>(ErrorInvalidPackageName.Of(fileName.Value));
@@ -56,7 +56,7 @@ public record PackageFileName : IFileName
     //     Version = version;
     //     _fileName = fileName;
     // }
-    private PackageFileName(FileName fileName)
+    private PackageFileName(IFileName fileName)
     {
         _fileName = fileName;
     }
