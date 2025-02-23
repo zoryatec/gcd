@@ -31,8 +31,10 @@ public static class DownloadFileHandlerExtensions
     public static async Task<UnitResult<Error>> DownloadFileAsync(
         this IMediator mediator,
         LocalFilePath filePath,
-        WebFileUri webFileUri) =>
-        await mediator.Send(new DownloadFileRequest(filePath, webFileUri));
+        WebFileUri webFileUri,
+        CancellationToken cancellationToken
+        ) =>
+        await mediator.Send(new DownloadFileRequest(filePath, webFileUri),cancellationToken);
 }
 
 
