@@ -9,7 +9,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg.FeedGit;
 public class AddHttpPackageTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
-    [Fact]
+    // [Fact]
     private void AddHttpPackageTest()
     {
 

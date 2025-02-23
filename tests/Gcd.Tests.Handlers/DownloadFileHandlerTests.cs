@@ -11,7 +11,7 @@ using Moq;
 
 namespace Gcd.Tests.Handlers;
 
-public class DownloadHttpFileHandlerTests(TestFixture testFixture) : IClassFixture<TestFixture>
+public class DownloadFileHandlerTests(TestFixture testFixture) : IClassFixture<TestFixture>
 {
     [Fact]
     public async Task Test1()
@@ -19,11 +19,11 @@ public class DownloadHttpFileHandlerTests(TestFixture testFixture) : IClassFixtu
         var mediator = new Mock<IMediator>();
         var webDownload = new Mock<IWebDownload>();
         mediator.Setup(m => m.Send(It.IsAny<IRequest>(), It.IsAny<CancellationToken>()));
-        var handler = new DownloadHttpFileHandler(webDownload.Object);
+        var handler = new DownloadFileHandler(webDownload.Object);
 
         var localFilePath = LocalFilePath.Of("C:\test.txt");
         var webUri = WebFileUri.Of("http://localhost:5000/test.txt");
-        var request = new DownloadHttpFileRequest(localFilePath.Value, webUri.Value);
+        var request = new DownloadFileRequest(localFilePath.Value, webUri.Value);
         var result = await handler.Handle(request, CancellationToken.None);
     }
 }
