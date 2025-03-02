@@ -230,3 +230,17 @@ function invoke-push-meta-to-az-blob-feed
         --feed-local-path 'testdata\nipkg\empty-feed' 
 }
 
+function invoke-add-to-rclone-feed
+{
+    gcd nipkg feed-rclone add-local-package `
+        --rclone-feed-dir 'GCDSHAREPOINTTEST:/prod/gcd-manual-test' `
+        --package-local-path 'build-test-output-dir\gcd-build-test_0.5.0-1_windows_x64.nipkg' 
+}
+
+function invoke-add-local-dir-to-rclone-feed
+{
+    gcd nipkg feed-rclone add-local-directory `
+        --rclone-feed-dir 'GCDSHAREPOINTTEST:/prod/gcd-manual-test' `
+        --package-local-directory 'build-test-output-dir'
+}
+

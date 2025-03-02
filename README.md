@@ -5,20 +5,48 @@ A command-line tool created for LabVIEW developers with OCD. It is designed to a
 > **Note**: This tool is in an **experimental** stage. Until it matures, the **fix** part of the version will denote new features or bug fixes. The **minor** version part will denote breaking changes. It still lacks error handling in many places and requires more testing.
 
 > **⚠️ Warning:** Feel free to experiment with the tool but using it in production is highly discourage at this point.<br>
-> I use  it on daily basis but got full control over the release process and can fix bugs ad hoc.<br>
-> There will be official announcement once the software is considered stable.
+> I use  it for my tasks  but got full control over the release process and can fix bugs ad hoc.<br>
+> There will be official announcement once the software is considered stable. <br>
+> I will also mark commands where I consider no interface change is established until the software is mature. <br>
+> Untill then everything is up for change.
 ---
 
 # Setup
-
 ## Installation
-The main nipkg feed is hosted in the code repository and updated on merge to main branch. The feed packages points to .nipkg files uploaded to GitHub [Releases](https://github.com/zoryatec/gcd/releases).
+The end goal is to perform installation through various packages sources like vipm, chocolatey, scoop, winget etc.<br>
+Then to perform bootstrap installation of all required tools.
+Eventually to perform preparation of LabVIEW CI Agent from scratch. <br>
+This is long shot and hope [Dragon](https://dragon.vipm.io/) will help with it. 
 
+For the time being only two options are available: nipkg and nuget.
+### Nipkg
+The main nipkg feed is hosted in the code repository and updated on merge to main branch.<br>
+The feed packages points to .nipkg files uploaded to GitHub [Releases](https://github.com/zoryatec/gcd/releases).
+
+#### Install
 ```powershell
 nipkg feed-add https://raw.githubusercontent.com/zoryatec/gcd/refs/heads/main/feed --name=gcd-feed --system
 nipkg update
 nipkg install gcd
 ```
+#### Uninstall
+```powershell
+nipkg remove gcd
+```
+### Nuget
+Package is hosted on official [Nuget](https://www.nuget.org/packages/gcd) feed.<br>
+This was first choice after nipkg since dotnet usually have easy setup in pipelines like Azure DevOps and GitHub Actions.<br>
+Therefore it is easy to install on bare machine. 
+
+#### Install
+```powershell
+dotnet tool install gcd --global
+```
+#### Uninstall
+```powershell
+dotnet tool uninstall gcd --global
+```
+
 ## Requirements
 For the full feature support the following are required:
 
@@ -165,11 +193,24 @@ They follow the same principle:
 * upload feed meta data files (Packages, Packages.gz, Packages.stamps) to remote feed (overwrite)
 * upload package to remote feed package pool
 
-This approach is not atomic or transaction safe but is good enough for most of cases.
+> **⚠️ Warning:** This approach is not atomic or transaction safe but is good enough for most of cases.<br>
+> If you use one feed per product then you are rather safe.<br>
+> If you use one feed per multiple products and then they can build in parallel the you might get into problems.<br>
+> There is a plan to add some locking mechanism not allowing multiple builds editing feed simulatneously but it is far on the roadmap.
+---
+
+The original plan was to gradually develop functionality to operate on different hosting types sharepoint, drobpox, blob storage etc.<br>
+Then discovered that don't have to do that, that most of what I need is allready there.<br> 
+It is called [Rclone](https://github.com/rclone/rclone).<br>
+This tool allows to sync with various cloud storage mechanisms.<br>
+The actual gcd functionality is still in testing phase but it seems that this will the main tool to handle most of hosting types.
 
 
 ### Azure Blob Feed
-Blob blob
+Set commands to operate on feed hosted on Azure Blob storage. <br>
+It allows to upload package hosted both on private and public blob storage feed. <br>
+> **Note**: Nipkg will not know how to handle authentication to private blob storage.<br>
+> I have got idea how to overcome that problem with Azure API Gateway and replacing user credentials with SAS token but it is not straightforward just yet.
 
 #### Add Local Package (Az Blob)
 ```powershell
@@ -245,8 +286,18 @@ gcd nipkg feed-smb push-meta-data `
 ```
 
 ### Git Feed
-Functionality primarly developed to host GCD on github repo with links from github releases.
-It allows to host packages on git repo but please not that git repo should not be used for binary files.
+This functionality is quite controversial since in theory you should not keep binaries within git repository.<br>
+However:
+* You can just store feed (as I do)
+* Sometimes you just don't have choice
+* It is something I wish was availible when stared working with nipkg
+* You can use git-lfs
+
+> **Note 1** You can use git-lfs to handle packages file efficiently stored in git repo.
+
+>⚠️ Warning: Until [sparse-checkout](https://git-scm.com/docs/git-sparse-checkout) is use to handle operations.<br>
+> This command is highly inefficient.
+
 
 #### Add Local Package (Git)
 ```powershell
@@ -290,6 +341,17 @@ gcd nipkg feed-git push-meta-data `
     --git-committer-name "test gcd" `
     --git-committer-email "mail@mail.com" `
     --feed-local-path 'testdata\nipkg\empty-feed'
+```
+
+### Rclone Feed
+This is one of the most interesting commands since once you establish connection with [Rclone](https://github.com/rclone/rclone) remote,
+it should allow you to host feed on any remote that [Rclone](https://github.com/rclone/rclone) supports.
+
+#### Add Local Package (Rclone)
+```powershell
+gcd nipkg feed-rclone add-local-package `
+    --rclone-feed-dir 'GCDSHAREPOINTTEST:/prod/gcd-manual-test' `
+    --package-local-path 'build-test-output-dir\gcd-build-test_0.5.0-1_windows_x64.nipkg' 
 ```
 
 ### 

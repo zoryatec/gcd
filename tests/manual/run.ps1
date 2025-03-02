@@ -1,5 +1,6 @@
 .\test-lib.ps1
 
+#build package
 Write-Host 
 Write-Host "#########################################################"
 Write-Host "start build package test"
@@ -58,5 +59,30 @@ invoke-add-to-git-feed
 Write-Host 
 Write-Host "********************************************************"
 Write-Host "end invoke-add-to-git-feed"
+Write-Host "********************************************************"
+Write-Host 
+
+#nipkg feed rclone
+Write-Host 
+Write-Host "#########################################################"
+Write-Host "start  invoke-add-to-rclone-feed"
+Write-Host "#########################################################"
+Write-Host 
+invoke-add-to-rclone-feed
+Write-Host 
+Write-Host "********************************************************"
+Write-Host "end  invoke-add-to-rclone-feed"
+Write-Host "********************************************************"
+Write-Host 
+
+Write-Host 
+Write-Host "#########################################################"
+Write-Host "start  invoke-add-local-dir-to-rclone-feed"
+Write-Host "#########################################################"
+Write-Host 
+invoke-add-local-dir-to-rclone-feed
+Write-Host 
+Write-Host "********************************************************"
+Write-Host "end  invoke-add-local-dir-to-rclone-feed"
 Write-Host "********************************************************"
 Write-Host 
