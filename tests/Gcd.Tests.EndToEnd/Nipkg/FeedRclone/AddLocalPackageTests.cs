@@ -18,7 +18,7 @@ public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixtur
     private void AddLocalPackageTest()
     {
 
-        var feedDir = "GCDSHAREPOINTTEST:/prod/gcd-test";
+        var feedDir = "GCDSHAREPOINTTEST:/integration-test-feed";
         // Arrange
         string packagePath = BuildPackage();
 
