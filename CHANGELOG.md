@@ -1,5 +1,12 @@
 
 
+<a name="0.23.13"></a>
+## [0.23.13](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.13) (2025-03-08)
+
+### Bug Fixes
+
+* clean up of rclone tests ([6267441](https://www.github.com/zoryatec/gcd/commit/626744104dbf709002e15471a49824faa25740a5))
+
 <a name="0.23.12"></a>
 ## [0.23.12](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.12) (2025-03-02)
 
