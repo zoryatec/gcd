@@ -1,5 +1,12 @@
 
 
+<a name="0.23.12"></a>
+## [0.23.12](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.12) (2025-03-02)
+
+### Bug Fixes
+
+* docs clean up, running as fix since pipeline does not handle chore properly yet ([#2](https://www.github.com/zoryatec/gcd/issues/2)) ([61f972a](https://www.github.com/zoryatec/gcd/commit/61f972a85faed5276a1614c6dbfeeb3737dab43f))
+
 <a name="0.23.11"></a>
 ## [0.23.11](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.11) (2025-02-20)
 
