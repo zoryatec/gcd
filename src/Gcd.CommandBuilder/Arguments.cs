@@ -2,7 +2,7 @@
 
 public class Arguments
 {
-    private readonly List<string> _args = new List<string>();
+    private readonly List<string> _args = [];
     
     public void Add(params string[] args)
     {
