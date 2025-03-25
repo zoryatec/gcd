@@ -103,7 +103,9 @@ namespace Gcd.Services.RemoteFileSystem
         
         private Result<string, Error> GitCommitAndPushCmds(GitRepoAddress address, GitUserName username, GitPassword password,GitCommitterName committerName, GitCommiterEmail committerEmail, LocalDirPath checkoutDir)
         {
-            return GitAddCmd(checkoutDir)
+            return RunGitCmd( "-C", checkoutDir.Value, "config","user.email",committerEmail.Value)
+                .Bind(x => RunGitCmd("-C", checkoutDir.Value, "config","user.name",committerName.Value))
+                .Bind(x => GitAddCmd(checkoutDir))
                 .Bind( x => GitCommitCmd(committerName, committerEmail, checkoutDir))
                 .Bind( x => GitPushCmd(address, username, password, checkoutDir));
         }
