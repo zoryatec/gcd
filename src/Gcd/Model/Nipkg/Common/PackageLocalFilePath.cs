@@ -8,7 +8,7 @@ namespace Gcd.Model.Nipkg.Common;
 
 public record PackageLocalFilePath : ILocalFilePath, IPackageFileDescriptor
 {
-    public PackageLocalFilePath(LocalDirPath directory, PackageFileName fileName) 
+    public PackageLocalFilePath(ILocalDirPath directory, PackageFileName fileName) 
     {
         Directory = directory;
         FileName = fileName;
@@ -26,7 +26,10 @@ public record PackageLocalFilePath : ILocalFilePath, IPackageFileDescriptor
         new PackageLocalFilePath(Directory, FileName);
 
 
-    public LocalDirPath Directory { get; }
+    public ILocalDirPath Directory { get; }
+    IFileName ILocalFilePath.FileName => FileName;
+
+
     public PackageFileName FileName { get; }
 
     public string Value  => Path.Combine(Directory.Value, FileName.Value);

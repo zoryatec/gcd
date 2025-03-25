@@ -11,12 +11,12 @@ namespace Gcd.Services
 {
     public class WebDownload : IWebDownload
     {
-        public async Task<Result> DownloadFileAsync(WebUri webUri, ILocalFilePath filePath)
+        public async Task<Result> DownloadFileAsync(IWebFileUri webFileUri, ILocalFilePath filePath)
         {
             try
             {
                 using (var httpClient = new HttpClient())
-                using (var responseStream = await httpClient.GetStreamAsync(webUri.Value))
+                using (var responseStream = await httpClient.GetStreamAsync(webFileUri.Value))
                 using (var fileStream = new FileStream(filePath.Value, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                     await responseStream.CopyToAsync(fileStream);
@@ -28,6 +28,12 @@ namespace Gcd.Services
                 return Result.Failure(ex.Message);
             }
 
+        }
+
+        public Task<Result> DownloadFileAsync(IWebFileUri webFileUri, ILocalDirPath directoryPath)
+        {
+            // var localFilePath =  LocalFilePath.Of(Lo)
+            throw new NotImplementedException();
         }
     }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Gcd.Model.Nipkg.Common
 {
-    public record PackageHttpPath : WebUri, IPackageFileDescriptor
+    public record PackageHttpPath : WebFileUri, IPackageFileDescriptor
     {
         public static Result<PackageHttpPath> Of(Maybe<string> maybeValue)
         {
@@ -28,8 +28,6 @@ namespace Gcd.Model.Nipkg.Common
             var packageFileRes = PackageFileName.Of(file);
             FileName = packageFileRes.Value;
         }
-
-
 
         public static PackageLocalFilePath Of(LocalDirPath Directory, PackageFileName FileName)
         {

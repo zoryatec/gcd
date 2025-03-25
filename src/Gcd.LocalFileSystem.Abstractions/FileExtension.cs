@@ -11,6 +11,7 @@ public  record FileExtension
     public static FileExtension Txt => new FileExtension("txt");
     public static FileExtension Nipkg => new FileExtension("nipkg");
     public static FileExtension Exe => new FileExtension("exe");
+    public static FileExtension Zip => new FileExtension("zip");
     public static Result<FileExtension,Error> OfFileName(Maybe<string> maybeValue)
     {
         if (maybeValue.HasNoValue || string.IsNullOrWhiteSpace(maybeValue.Value)) return Result.Success<FileExtension, Error>(FileExtension.None);

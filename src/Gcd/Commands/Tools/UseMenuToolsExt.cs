@@ -26,6 +26,9 @@ public static class UseMenuToolsExt
             cmd.UseCmdAddToSystemPath(serviceProvider);
             cmd.UseCmdInstallNipkg(serviceProvider);
             cmd.UseCmdDownloadNipkg(serviceProvider);
+            cmd.UseCmdDownloadArchive(serviceProvider);
+            cmd.UseCmdSetupGit(serviceProvider);
+            cmd.UseCmdSetupRclone(serviceProvider);
         });
         return app;
     }

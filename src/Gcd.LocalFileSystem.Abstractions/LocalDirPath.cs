@@ -11,6 +11,11 @@ public record LocalDirPath : IDirectoryDescriptor, ILocalDirPath
             .BindIf(val => !Path.IsPathFullyQualified(val), ConvertToAbsolutePath)
             .Map(value => new LocalDirPath(value));
 
+    public static Result<LocalDirPath,Error> Of(ILocalDirPath localDirPath, IRelativeDirPath relativeDirPath) =>
+        relativeDirPath.Equals(RelativeDirPath.None) ?        
+        LocalDirPath.Of(localDirPath.Value):
+        LocalDirPath.Of($"{localDirPath}\\{relativeDirPath}");
+    
     private static Result<string, Error> ConvertToAbsolutePath(string relativePath)
     {
         string currentDirectoryPath = Environment.CurrentDirectory;

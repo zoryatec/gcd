@@ -7,13 +7,13 @@ namespace Gcd.Tests.EndToEnd.Nipkg.FeedLocal;
 public class AddHttpPackageTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
-    // [Fact]
+    [Fact]
     private void AddHttpPackageTest()
     {
 
         var feedDir = _tempDirectoryGenerator.GenerateTempDirectory();
         // Arrange
-        string packageUri = "https://github.com/zoryatec/gcd/releases/download/v0.13.0/gcd_0.13.0_windows_x64.nipkg";
+        string packageUri = "https://github.com/zoryatec/gcd/releases/download/0.23.11/gcd_0.23.11_windows_x64.nipkg";
 
         var args = new GcdArgBuilder()
             .WithNipkgMenu()

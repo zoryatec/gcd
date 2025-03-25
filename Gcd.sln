@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gcd.CommandBuilder", "src\G
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gcd.Tests.Fixture", "tests\Gcd.Tests.Fixture\Gcd.Tests.Fixture.csproj", "{65E55F29-9340-4730-AAA8-C3D8F3066A89}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gcd.Tests.Handlers", "tests\Gcd.Tests.Handlers\Gcd.Tests.Handlers.csproj", "{EFB58B90-94ED-4A6B-B510-8188A266F2B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -157,6 +159,10 @@ Global
 		{65E55F29-9340-4730-AAA8-C3D8F3066A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65E55F29-9340-4730-AAA8-C3D8F3066A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65E55F29-9340-4730-AAA8-C3D8F3066A89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFB58B90-94ED-4A6B-B510-8188A266F2B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFB58B90-94ED-4A6B-B510-8188A266F2B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFB58B90-94ED-4A6B-B510-8188A266F2B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFB58B90-94ED-4A6B-B510-8188A266F2B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -187,6 +193,7 @@ Global
 		{451952F9-0BD2-4271-9B3C-0E32EA9EB6A7} = {4EFD906F-B094-472F-BEE5-1E112F4C9C5E}
 		{C08B3F40-802B-4989-97B7-0A7FB6AD8BE3} = {04EEF038-7CB1-4F92-BB19-20BB6974D73B}
 		{65E55F29-9340-4730-AAA8-C3D8F3066A89} = {15AC161A-E093-4A37-9AC7-382DBFF5CD05}
+		{EFB58B90-94ED-4A6B-B510-8188A266F2B2} = {15AC161A-E093-4A37-9AC7-382DBFF5CD05}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5A16AA37-74C1-4577-86D0-B4EE73EF33D4}

@@ -21,7 +21,7 @@ public record SettingsFilePath : ILocalFilePath
         string assemblyDir = AppContext.BaseDirectory;
 
         var varLocDir = LocalDirPath.Of(assemblyDir);
-        var fileName =  FileName.Of(maybeValue.Value);
+        var fileName =  Gcd.LocalFileSystem.Abstractions.FileName.Of(maybeValue.Value);
 
         var locFilePath = new LocalFilePath(varLocDir.Value, fileName.Value);
 
@@ -33,14 +33,14 @@ public record SettingsFilePath : ILocalFilePath
 
     //private SettingsFilePath(string path) : base(path) { }
 
-    public SettingsFilePath(LocalDirPath directory, FileName fileName)
+    public SettingsFilePath(ILocalDirPath directory, IFileName fileName)
     {
         Directory = directory;
         FileName = fileName;
     }
 
-    public LocalDirPath Directory { get; }
-    public FileName FileName { get; }
+    public ILocalDirPath Directory { get; }
+    public IFileName FileName { get; }
 
     public string Value => Path.Combine(Directory.Value, FileName.Value);
 

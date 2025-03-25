@@ -131,7 +131,7 @@ public static class MediatorExtensions
 
 public record LabViewProjectPath : ILocalFilePath
 {
-    public LabViewProjectPath(LocalDirPath directory, FileName fileName) 
+    public LabViewProjectPath(ILocalDirPath directory, IFileName fileName) 
     {
         Directory = directory;
         FileName = fileName;
@@ -144,10 +144,10 @@ public record LabViewProjectPath : ILocalFilePath
     private static Result<LabViewProjectPath,Error> Of(LocalFilePath localFilePath) =>
             new LabViewProjectPath(localFilePath.Directory, localFilePath.FileName);
 
-    public LocalDirPath Directory { get; }
-    public FileName FileName { get; }
+    public ILocalDirPath Directory { get; }
+    public IFileName FileName { get; }
     
-    public string ProjectName { get{return FileName.ToString().Replace(".lvproj","");} }
+    public string ProjectName { get{return FileName.Value.ToString().Replace(".lvproj","");} }
 
     public string Value  => Path.Combine(Directory.Value, FileName.Value);
 
@@ -156,7 +156,7 @@ public record LabViewProjectPath : ILocalFilePath
 
 public record LabViewPath : ILocalFilePath
 {
-    public LabViewPath(LocalDirPath directory, FileName fileName) 
+    public LabViewPath(ILocalDirPath directory, IFileName fileName) 
     {
         Directory = directory;
         FileName = fileName;
@@ -169,8 +169,8 @@ public record LabViewPath : ILocalFilePath
     private static Result<LabViewPath,Error> Of(LocalFilePath localFilePath) =>
         new LabViewPath(localFilePath.Directory, localFilePath.FileName);
 
-    public LocalDirPath Directory { get; }
-    public FileName FileName { get; }
+    public ILocalDirPath Directory { get; }
+    public IFileName FileName { get; }
 
     public string Value  => Path.Combine(Directory.Value, FileName.Value);
 
@@ -296,7 +296,7 @@ public record NoOfReTry
 
 public record LabViewViPath : ILocalFilePath
 {
-    public LabViewViPath(LocalDirPath directory, FileName fileName) 
+    public LabViewViPath(ILocalDirPath directory, IFileName fileName) 
     {
         Directory = directory;
         FileName = fileName;
@@ -309,8 +309,8 @@ public record LabViewViPath : ILocalFilePath
     private static Result<LabViewViPath,Error> Of(LocalFilePath localFilePath) =>
         new LabViewViPath(localFilePath.Directory, localFilePath.FileName);
 
-    public LocalDirPath Directory { get; }
-    public FileName FileName { get; }
+    public ILocalDirPath Directory { get; }
+    public IFileName FileName { get; }
 
     public string Value  => Path.Combine(Directory.Value, FileName.Value);
 

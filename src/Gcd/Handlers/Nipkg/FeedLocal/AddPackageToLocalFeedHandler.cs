@@ -89,7 +89,7 @@ public class AddPackageToLocalHandler(
         return sourceDescriptor switch
         {
             ILocalFilePath source => await _fs.CopyFileAsync(source, destinationPath, overwrite: overwrite),
-            WebUri source => await _webDownload.DownloadFileAsync(source, destinationPath),
+            IWebFileUri source => await _webDownload.DownloadFileAsync(source, destinationPath),
             _ => throw new InvalidOperationException(sourceDescriptor.GetType().Name)
         };
     }

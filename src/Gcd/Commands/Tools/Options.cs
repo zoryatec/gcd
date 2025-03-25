@@ -1,6 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
+using CSharpFunctionalExtensions.ValueTasks;
+using Gcd.Common;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Model.Config;
+using Gcd.Services;
 using McMaster.Extensions.CommandLineUtils;
 
 namespace Gcd.Commands.Tools;
@@ -22,4 +25,28 @@ public sealed class NipkgInstallerSourceUrlOption : CommandOption
 
     public Result<NipkgInstallerUri> Map() =>
         NipkgInstallerUri.Of(this.Value());
+}
+
+public sealed class DownloadArchiveDestinationDirOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--destination-dir";
+
+    public Result<LocalDirPath, Error> Map() =>
+        LocalDirPath.Of(this.Value());
+}
+
+public sealed class DownloadArchiveRelativeDirOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--archive-relative-dir";
+
+    public Result<RelativeDirPath, Error> Map() =>
+        RelativeDirPath.Of(this.Value());
+}
+
+public sealed class DownloadArchiveSourceUriOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public static readonly string NAME = "--source-uri";
+
+    public Result<WebFileUri, Error> Map() =>
+        WebFileUri.Of(this.Value()).MapError(er => new Error(er));
 }

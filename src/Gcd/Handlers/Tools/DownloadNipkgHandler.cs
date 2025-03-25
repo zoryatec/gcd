@@ -22,12 +22,12 @@ public class DownloadNipkgHandler(IWebDownload _webDownload)
         //     if (uri == NipkgInstallerUri.None) return UnitResult.Failure(new Error("Please specify NIPKG uri") );
         // }
 
-        return await WebUri.Create(installerSourceUri.Value)
+        return await WebFileUri.Of(installerSourceUri.Value)
             .Bind(uri => DownloadFileAsync(uri, filePath))
             .MapError(x => new Error(x));
     }
 
-    public async Task<Result> DownloadFileAsync(WebUri webUri, LocalFilePath filePath)
+    public async Task<Result> DownloadFileAsync(IWebFileUri webUri, LocalFilePath filePath)
     {
         if (File.Exists(filePath.Value)) File.Delete(filePath.Value);
         return await _webDownload.DownloadFileAsync(webUri, filePath);
