@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <Version>0.23.13</Version>
+    <Version>0.23.14</Version>
     <Company>Zoryatec</Company>
     <Authors>Dawid Wozny</Authors>
     <Copyright>Zoryatec</Copyright>

@@ -1,5 +1,12 @@
 
 
+<a name="0.23.14"></a>
+## [0.23.14](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.14) (2025-03-25)
+
+### Bug Fixes
+
+* add ability to download and extract archive ([#4](https://www.github.com/zoryatec/gcd/issues/4)) ([edde27b](https://www.github.com/zoryatec/gcd/commit/edde27be28fbe57594edafd480eb376e5cba7f63))
+
 <a name="0.23.13"></a>
 ## [0.23.13](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.13) (2025-03-08)
 
