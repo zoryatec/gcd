@@ -46,3 +46,19 @@ StoreProduct: yes
 UserVisible: yes
 Version: 0.23.13
 
+Architecture: windows_x64
+CompatibilityVersion: 200003
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.14/gcd_0.23.14_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: 57636c4e50411ff9df28974c06b879b0
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+Section: Utilities
+Size: 32945056
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.14
+
