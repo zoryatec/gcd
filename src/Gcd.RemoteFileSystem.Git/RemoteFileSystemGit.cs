@@ -9,7 +9,7 @@ using LibGit2Sharp;
 
 namespace Gcd.Services.RemoteFileSystem
 {
-    public class RemoteFileSystemGit : IRemoteFileSystemGit
+    public class RemoteFileSystemGit(IFileSystem _fs) : IRemoteFileSystemGit
     {
 
         public readonly LocalDirPath GlobalCheckoutDir;
@@ -28,6 +28,30 @@ namespace Gcd.Services.RemoteFileSystem
         {
             return GitCommitAndPushCmds(address, username, password, committerName, committerEmail, checkoutDir).MapError(x => x.Message);
             // return Result.Try(() => CommitAndPush(address, branch, username, password, committerName, committerEmail, checkoutDir)).MapError(errr => $"PUSH:{errr}");
+        }
+
+        public  async Task<UnitResult<Error>> DownloadFileAsync(IRelativeFilePath sourcePath, ILocalFilePath destinationPath, GitRepoAddress address,
+            GitLocalBranch branch, GitUserName username, GitPassword password)
+        {
+            var tempDirResult = await _fs.GenerateTempDirectoryAsync();
+            var tempDir = tempDirResult.Value; 
+            
+            CloneNoCheckoutCmd(address, username, password, tempDir)
+                .Bind(() => GitSparseCheckoutInit(tempDir))
+                .Bind(() =>  GitSparseCheckoutSet(tempDir, sourcePath))
+                .Bind(() => GitCheckout(tempDir,branch));
+           
+            string path = tempDirResult.Value +"\\" + sourcePath.Value;
+            var tempFileResult = LocalFilePath.Of(path);
+            var result = await _fs.CopyFileAsync(tempFileResult.Value, destinationPath);
+            
+            return result.MapError(x => new Error(x));
+        }
+
+        public Task<UnitResult<Error>> UploadFileAsync(IFileDescriptor sourcePath, IRelativeFilePath destinationPath, GitRepoAddress address,
+            GitLocalBranch branch, GitUserName username, GitPassword password)
+        {
+            throw new NotImplementedException();
         }
 
 
@@ -84,8 +108,25 @@ namespace Gcd.Services.RemoteFileSystem
         //         repo.Network.Push(repo.Branches[branch.Value], pushOptions);
         //     }
         // }
+        
+        private UnitResult<Error> CloneNoCheckoutCmd(GitRepoAddress address, GitUserName username, GitPassword password, LocalDirPath checkoutDir)
+        {
+            string url = address.Value;
+            Uri uri = new Uri(url);
+        
+            // Extract host and absolute path
+            string noHtttps = uri.Host + uri.AbsolutePath;
+            string fullAddress = $"https://{username.Value}:{password.Value}@{noHtttps}";
 
-        private Result<string, Error> CloneCmd(GitRepoAddress address, GitLocalBranch branch, GitUserName username, GitPassword password, LocalDirPath checkoutDir)
+            return RunGitCmd(
+                "clone",
+                "--no-checkout",
+                fullAddress,
+                checkoutDir.Value);
+        }
+
+
+        private UnitResult<Error>CloneCmd(GitRepoAddress address, GitLocalBranch branch, GitUserName username, GitPassword password, LocalDirPath checkoutDir)
         {
             string url = address.Value;
             Uri uri = new Uri(url);
@@ -100,6 +141,43 @@ namespace Gcd.Services.RemoteFileSystem
                 fullAddress,
                 checkoutDir.Value);
         }
+        
+        private UnitResult<Error> GitSparseCheckoutInit( LocalDirPath checkoutDir)
+        {
+            return RunGitCmd(
+                "-C", checkoutDir.Value,
+                "sparse-checkout",
+                "init",
+                "--no-cone"
+                );
+        }
+        
+        private UnitResult<Error> GitCheckout( LocalDirPath checkoutDir, GitLocalBranch branch)
+        {
+            return RunGitCmd(
+                "-C", checkoutDir.Value,
+                "checkout", branch.Value
+            );
+        }
+        
+        private UnitResult<Error> GitSparseCheckoutSet(LocalDirPath checkoutDir, IRelativeFilePath pathToCheckout) =>
+            GitSparseCheckoutSet(checkoutDir, [pathToCheckout]);
+        private UnitResult<Error> GitSparseCheckoutSet(LocalDirPath checkoutDir, IReadOnlyList<IRelativeFilePath> pathsToCheckout)
+        {
+            var paths = pathsToCheckout.Select(x => x.Value).ToArray();
+
+            var args = new List<string>()
+            {
+                "-C", checkoutDir.Value,
+                "sparse-checkout",
+                "set",
+            };
+            
+            args.AddRange(paths);
+            
+            return RunGitCmd(args.ToArray());
+        }
+        
         
         private Result<string, Error> GitCommitAndPushCmds(GitRepoAddress address, GitUserName username, GitPassword password,GitCommitterName committerName, GitCommiterEmail committerEmail, LocalDirPath checkoutDir)
         {
