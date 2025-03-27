@@ -36,16 +36,17 @@ namespace Gcd.Services.RemoteFileSystem
             var tempDirResult = await _fs.GenerateTempDirectoryAsync();
             var tempDir = tempDirResult.Value; 
             
-            CloneNoCheckoutCmd(address, username, password, tempDir)
+            var result  = CloneNoCheckoutCmd(address, username, password, tempDir)
                 .Bind(() => GitSparseCheckoutInit(tempDir))
                 .Bind(() =>  GitSparseCheckoutSet(tempDir, sourcePath))
                 .Bind(() => GitCheckout(tempDir,branch));
+            if (result.IsFailure) return result;
            
             string path = tempDirResult.Value +"\\" + sourcePath.Value;
             var tempFileResult = LocalFilePath.Of(path);
-            var result = await _fs.CopyFileAsync(tempFileResult.Value, destinationPath);
+            var result1 = await _fs.CopyFileAsync(tempFileResult.Value, destinationPath);
             
-            return result.MapError(x => new Error(x));
+            return result1.MapError(x => new Error(x));
         }
 
         public async Task<UnitResult<Error>> UploadFileAsync(ILocalFilePath sourcePath, IRelativeFilePath destinationPath, GitRepoAddress address,
@@ -54,14 +55,18 @@ namespace Gcd.Services.RemoteFileSystem
             var tempDirResult = await _fs.GenerateTempDirectoryAsync();
             var tempDir = tempDirResult.Value; 
             
-            CloneNoCheckoutCmd(address, username, password, tempDir)
+            var result = CloneNoCheckoutCmd(address, username, password, tempDir)
                 .Bind(() => GitSparseCheckoutInit(tempDir))
                 .Bind(() =>  GitSparseCheckoutSet(tempDir, destinationPath))
                 .Bind(() => GitCheckout(tempDir,branch));
             
+            if (result.IsFailure) return result;
+            
             string path = tempDirResult.Value +"\\" + destinationPath.Value;
             var tempFileResult = LocalFilePath.Of(path);
-            var result = await _fs.CopyFileAsync(sourcePath, tempFileResult.Value, overwrite: true);
+            var result1 = await _fs.CopyFileAsync(sourcePath, tempFileResult.Value, overwrite: true);
+            if (result1.IsFailure) return result;
+
             
             return RunGitCmd( "-C", tempDir.Value, "config","user.email",committerEmail.Value)
                 .Bind( () => RunGitCmd("-C", tempDir.Value, "config","user.name",committerName.Value))
