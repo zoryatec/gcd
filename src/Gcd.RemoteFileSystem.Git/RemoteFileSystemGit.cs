@@ -48,10 +48,26 @@ namespace Gcd.Services.RemoteFileSystem
             return result.MapError(x => new Error(x));
         }
 
-        public Task<UnitResult<Error>> UploadFileAsync(IFileDescriptor sourcePath, IRelativeFilePath destinationPath, GitRepoAddress address,
-            GitLocalBranch branch, GitUserName username, GitPassword password)
+        public async Task<UnitResult<Error>> UploadFileAsync(ILocalFilePath sourcePath, IRelativeFilePath destinationPath, GitRepoAddress address,
+            GitLocalBranch branch, GitUserName username, GitPassword password,GitCommitterName committerName, GitCommiterEmail committerEmail)
         {
-            throw new NotImplementedException();
+            var tempDirResult = await _fs.GenerateTempDirectoryAsync();
+            var tempDir = tempDirResult.Value; 
+            
+            CloneNoCheckoutCmd(address, username, password, tempDir)
+                .Bind(() => GitSparseCheckoutInit(tempDir))
+                .Bind(() =>  GitSparseCheckoutSet(tempDir, destinationPath))
+                .Bind(() => GitCheckout(tempDir,branch));
+            
+            string path = tempDirResult.Value +"\\" + destinationPath.Value;
+            var tempFileResult = LocalFilePath.Of(path);
+            var result = await _fs.CopyFileAsync(sourcePath, tempFileResult.Value, overwrite: true);
+            
+            return RunGitCmd( "-C", tempDir.Value, "config","user.email",committerEmail.Value)
+                .Bind( () => RunGitCmd("-C", tempDir.Value, "config","user.name",committerName.Value))
+                .Bind(() => GitAddCmd(tempDir))
+                .Bind( () => GitCommitCmd(committerName, committerEmail, tempDir))
+                .Bind( () => GitPushCmd(address, username, password, tempDir));
         }
 
 
@@ -179,16 +195,16 @@ namespace Gcd.Services.RemoteFileSystem
         }
         
         
-        private Result<string, Error> GitCommitAndPushCmds(GitRepoAddress address, GitUserName username, GitPassword password,GitCommitterName committerName, GitCommiterEmail committerEmail, LocalDirPath checkoutDir)
+        private UnitResult<Error> GitCommitAndPushCmds(GitRepoAddress address, GitUserName username, GitPassword password,GitCommitterName committerName, GitCommiterEmail committerEmail, LocalDirPath checkoutDir)
         {
             return RunGitCmd( "-C", checkoutDir.Value, "config","user.email",committerEmail.Value)
-                .Bind(x => RunGitCmd("-C", checkoutDir.Value, "config","user.name",committerName.Value))
-                .Bind(x => GitAddCmd(checkoutDir))
-                .Bind( x => GitCommitCmd(committerName, committerEmail, checkoutDir))
-                .Bind( x => GitPushCmd(address, username, password, checkoutDir));
+                .Bind( () => RunGitCmd("-C", checkoutDir.Value, "config","user.name",committerName.Value))
+                .Bind(() => GitAddCmd(checkoutDir))
+                .Bind( () => GitCommitCmd(committerName, committerEmail, checkoutDir))
+                .Bind( () => GitPushCmd(address, username, password, checkoutDir));
         }
         
-        private Result<string, Error> GitPushCmd(GitRepoAddress address, GitUserName username, GitPassword password, LocalDirPath checkoutDir)
+        private UnitResult<Error>GitPushCmd(GitRepoAddress address, GitUserName username, GitPassword password, LocalDirPath checkoutDir)
         {
             string url = address.Value;
             Uri uri = new Uri(url);
@@ -203,14 +219,14 @@ namespace Gcd.Services.RemoteFileSystem
                 fullAddress);
         }
         
-        private Result<string, Error> GitAddCmd( LocalDirPath checkoutDir)
+        private UnitResult<Error> GitAddCmd( LocalDirPath checkoutDir)
         {
             return RunGitCmd(
                 "-C", checkoutDir.Value,
                 "add", "-A");
         }
         
-        private Result<string, Error> GitCommitCmd(GitCommitterName committerName, GitCommiterEmail committerEmail, LocalDirPath checkoutDir)
+        private UnitResult<Error>GitCommitCmd(GitCommitterName committerName, GitCommiterEmail committerEmail, LocalDirPath checkoutDir)
         {
             return RunGitCmd(
                 "-C", checkoutDir.Value,
@@ -219,7 +235,7 @@ namespace Gcd.Services.RemoteFileSystem
                 $"--author={committerName.Value} <{committerEmail.Value}>");
         }
         
-        private Result<string,Error> RunGitCmd(params string[] args)
+        private UnitResult<Error> RunGitCmd(params string[] args)
         {
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
