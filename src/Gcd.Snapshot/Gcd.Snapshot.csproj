@@ -7,7 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Gcd.Common\Gcd.Common.csproj" />
+      <ProjectReference Include="..\Gcd.NiPackageManager.Abstractions\Gcd.NiPackageManager.Abstractions.csproj" />
+      <ProjectReference Include="..\Snapshot.Abstractions\Snapshot.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>
