@@ -23,8 +23,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Gcd.NiPackageManager\Gcd.NiPackageManager.csproj" />
-      <ProjectReference Include="..\Gcd.SystemProcess\Gcd.SystemProcess.csproj" />
+      <ProjectReference Include="..\..\src\Gcd.NiPackageManager\Gcd.NiPackageManager.csproj" />
+      <ProjectReference Include="..\..\src\Gcd.SystemProcess\Gcd.SystemProcess.csproj" />
     </ItemGroup>
 
 </Project>
