@@ -7,6 +7,7 @@ using Gcd.Commands.Nipkg.FeedAzBlob;
 using Gcd.Commands.Nipkg.FeedLocal;
 using Gcd.Commands.Nipkg.FeedRclone;
 using Gcd.Commands.Nipkg.FeedSmb;
+using Gcd.Commands.Nipkg.InstallFromSnapshot;
 
 
 namespace Gcd.Commands.Nipkg;
@@ -35,6 +36,7 @@ public static class UseMenuNipkgExtension
             cmd.UseMenuFeedSmb(serviceProvider);
             cmd.UseMenuFeedRclone(serviceProvider);
             cmd.UseCmdBuild(serviceProvider);
+            cmd.UseCmdInstallFromSnapshot(serviceProvider);
             cmd.UseCmdExport(serviceProvider);
         });
         return app;

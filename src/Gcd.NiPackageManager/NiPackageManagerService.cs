@@ -40,6 +40,36 @@ public class NiPackageManagerService(IProcessService _processService)  : INiPack
         return await new OutputParser().ParseInfoInstalledAsync(value);    
     }
 
+    public async Task<Result<AddFeedResponse>> AddFeedAsync(AddFeedRequest request)
+    {
+         var (name , uri) = request.FeedToAdd;
+        
+            var arguments = new List<string>();
+            arguments.Add("feed-add");
+            arguments.Add("--name");
+            arguments.Add(name);
+            arguments.Add(uri);
+            
+            var response = await RunCommand(arguments.ToArray());
+            if (response.IsFailure) return Result.Failure<AddFeedResponse>(response.Error);
+            return Result.Success(new AddFeedResponse(request.FeedToAdd));
+    }
+
+    public async Task<Result<RemoveFeedsResponse>> RemoveFeedAsync(RemoveFeedsRequest request)
+    {
+        var (name , uri) = request.FeedToRemove;
+        
+        var arguments = new List<string>();
+        arguments.Add("feed-remove");
+        arguments.Add("--name");
+        arguments.Add(name);
+        arguments.Add(uri);
+            
+        var response = await RunCommand(arguments.ToArray());
+        if (response.IsFailure) return Result.Failure<RemoveFeedsResponse>(response.Error);
+        return Result.Success(new RemoveFeedsResponse(request.FeedToRemove));
+    }
+
     public async Task<Result> VersionAsync()
     {
         return await RunCommand("--version");
@@ -51,7 +81,6 @@ public class NiPackageManagerService(IProcessService _processService)  : INiPack
         
         return Result.Success<NiPackageManagerOutput>(new NiPackageManagerOutput(response.ExitCode,
             response.StandardOutput, response.StandardError)); 
-         
     }
 
 }

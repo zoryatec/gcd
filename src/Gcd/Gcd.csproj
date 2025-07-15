@@ -46,12 +46,14 @@
     <ItemGroup>
       <ProjectReference Include="..\Gcd.LabViewProject\Gcd.LabViewProject.csproj" />
       <ProjectReference Include="..\Gcd.LocalFileSystem\Gcd.LocalFileSystem.csproj" />
+      <ProjectReference Include="..\Gcd.NiPackageManager\Gcd.NiPackageManager.csproj" />
       <ProjectReference Include="..\Gcd.Nipkg.Instructions\Gcd.Nipkg.Instructions.csproj" />
       <ProjectReference Include="..\Gcd.Nipkg.Replication\Gcd.Nipkg.Replication.csproj" />
       <ProjectReference Include="..\Gcd.RemoteFileSystem.AzBlob\Gcd.RemoteFileSystem.AzBlob.csproj" />
       <ProjectReference Include="..\Gcd.RemoteFileSystem.Git\Gcd.RemoteFileSystem.Git.csproj" />
       <ProjectReference Include="..\Gcd.RemoteFileSystem.Rclone\Gcd.RemoteFileSystem.Rclone.csproj" />
       <ProjectReference Include="..\Gcd.RemoteFileSystem.Smb\Gcd.RemoteFileSystem.Smb.csproj" />
+      <ProjectReference Include="..\Gcd.Snapshot\Gcd.Snapshot.csproj" />
     </ItemGroup>
 
     <ItemGroup>
