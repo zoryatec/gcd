@@ -28,18 +28,29 @@ public class NiPackageManagerService(IProcessService _processService)  : INiPack
 
         return await RunCommand(arguments.ToArray());
     }
-    
+
+    public async Task<Result<InfoInstalledResponse>> InfoInstalledAsync(InfoInstalledRequest request)
+    {
+        var arguments = new List<string>();
+        arguments.Add("info-installed");
+        arguments.Add(request.Pattern);
+        var response = await RunCommand(arguments.ToArray());
+        var value = response.Value;
+
+        return await new OutputParser().ParseInfoInstalledAsync(value);    
+    }
+
     public async Task<Result> VersionAsync()
     {
         return await RunCommand("--version");
     }
     
-    private async Task<Result> RunCommand( params string[] args)
+    private async Task<Result<NiPackageManagerOutput>> RunCommand( params string[] args)
     {
         var response =  await _processService.ExecuteAsync(_cmd, args.ToArray());
-        if ( response.ExitCode != 0) { return Result.Failure(response.StandardOutput + response.StandardError); }
         
-        return Result.Success(response.StandardOutput); 
+        return Result.Success<NiPackageManagerOutput>(new NiPackageManagerOutput(response.ExitCode,
+            response.StandardOutput, response.StandardError)); 
          
     }
 

@@ -16,21 +16,22 @@ public class ProcessService : IProcessService
             RedirectStandardOutput = true, 
             RedirectStandardError = true,  
             UseShellExecute = false,     
-            CreateNoWindow = false 
+            CreateNoWindow = false
         };
 
 
-        using (System.Diagnostics.Process? process = System.Diagnostics.Process.Start(startInfo))
-        {
-            _ = process ?? throw new ArgumentNullException(nameof(process));
-            process.WaitForExit();
+        System.Diagnostics.Process? process = System.Diagnostics.Process.Start(startInfo);
+        
+        _ = process ?? throw new ArgumentNullException(nameof(process));
+        process.WaitForExit(new TimeSpan(0, 0, 5));
+         // process.WaitForInputIdle(60000);
 
-            string output = process.StandardOutput.ReadToEnd();
-            string errors = process.StandardError.ReadToEnd();
-            int  exitCode = process.ExitCode;
-            
-            return new ProcessResponse(exitCode,output,errors);
-        }
+        string output = await process.StandardOutput.ReadToEndAsync(cancellationToken);
+        string errors = await process.StandardError.ReadToEndAsync(cancellationToken);
+        int  exitCode = process.ExitCode;
+        
+        return new ProcessResponse(exitCode,output,errors);
+        
     }
 
     public async Task<ProcessResponse> ExecuteAsync(string executablePath, string[] arguments, CancellationToken cancellationToken = default) =>
