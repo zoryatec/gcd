@@ -1,0 +1,43 @@
+﻿Architecture: windows_x64
+CompatibilityVersion: 0
+Conflicts: ni-package-manager
+Description: Package for displaying the JKI VIPM EULA License Agreement
+DisplayName: JKI VIPM EULA License Agreement
+DisplayVersion: 2024 Q3
+EulaTitle: JKI VI Package Manager
+Filename: ../../pool/eula-jki-vimp_24.5.0.49247-0+f95_windows_x64.nipkg
+Homepage: https://www.ni.com
+MD5Sum: aaeed12e1a66bc0d0a84a962b5f762ef
+MD5sum: aaeed12e1a66bc0d0a84a962b5f762ef
+Maintainer: National Instruments <support@ni.com>
+OsRequires: >= 10.0.14393
+OsSupport: WINDOWS_11 WINDOWS_SERVER_2022 WINDOWS_10_64BIT WINDOWS_SERVER_2016_64BIT WINDOWS_SERVER_2019_64BIT
+Package: eula-jki-vimp
+Plugin: eula
+Priority: standard
+Section: Infrastructure
+Size: 17736
+UserVisible: no
+Version: 24.5.0.49247-0+f95
+
+Architecture: windows_x64
+CompatibilityVersion: 0
+Conflicts: ni-package-manager
+Description: Package for displaying the Microsoft .NET Framework 4.8 License Agreement
+DisplayName: Microsoft .NET Framework 4.8 License Agreement
+DisplayVersion: 2023 Q4
+EulaTitle: .NET 4.8
+Filename: ../../pool/eula-ms-dotnet-4.8_23.8.0.49254-0+f102_windows_x64.nipkg
+Homepage: https://www.ni.com
+MD5Sum: 1c97530b996c8199e765b28124fe1e82
+MD5sum: 1c97530b996c8199e765b28124fe1e82
+Maintainer: National Instruments <support@ni.com>
+OsRequires: >= 10.0.14393
+OsSupport: WINDOWS_11 WINDOWS_SERVER_2022 WINDOWS_10_64BIT WINDOWS_SERVER_2016_64BIT WINDOWS_SERVER_2019_64BIT
+Package: eula-ms-dotnet-4.8
+Plugin: eula
+Priority: standard
+Section: Infrastructure
+Size: 31684
+UserVisible: no
+Version: 23.8.0.49254-0+f102

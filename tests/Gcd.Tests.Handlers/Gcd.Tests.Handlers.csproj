@@ -26,4 +26,10 @@
       <ProjectReference Include="..\Gcd.Tests.Fixture\Gcd.Tests.Fixture.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="TestData\TestInstaller\\**\*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
 </Project>

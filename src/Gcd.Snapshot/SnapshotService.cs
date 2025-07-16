@@ -19,4 +19,25 @@ public class SnapshotService(INiPackageManagerService _niPackageManagerService) 
     {
         throw new NotImplementedException();
     }
+
+    public async Task<Result<InstallFromSnapshotResponse>> InstallFromSnapshotAsync(InstallFromSnapshotRequest request)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Result<InstallFromInstallerDirectoryResponse>> InstallFromInstallerDirectory(InstallFromInstallerDirectoryRequest request)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Result<InstallFromInstallerLocalIsoResponse>> InstallFromInstallerLocalIso(InstallFromInstallerLocalIsoRequest request)
+    {
+        throw new NotImplementedException();
+    }
+    
+
+    public async Task<Result<CreateSnapshotFromSystemResponse>> CreateSnapshotFromSystem(CreateSnapshotFromSystemRequest request)
+    {
+        throw new NotImplementedException();
+    }
 }

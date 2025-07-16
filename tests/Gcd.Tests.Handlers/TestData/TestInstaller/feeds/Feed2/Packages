@@ -1,0 +1,74 @@
+﻿
+Architecture: windows_x64
+CompatibilityVersion: 240000
+Depends: ni-labview-aspt-toolkit-lic (>=24.1.0), ni-mdfsupport (>=24.0.0), ni-metauninstaller (>=24.0.0), ni-labview (>=24.0.0),
+Description: The LabVIEW Advanced Signal Processing Toolkit is a set of software tools that you can use to perform time frequency, time series, and wavelet analysis.
+  The LabVIEW Advanced Signal Processing Toolkit is add-on software for LabVIEW that includes tools for the analysis of time frequency, time series, and wavelets. This add-on includes the LabVIEW Digital Filter Design Toolkit, which is also available separately. To extract the underlying information of a signal effectively, you need to choose an appropriate analysis tool. You can use the time frequency analysis tools for evolutionary signals with slowly varying spectral content, the time series analysis tools for stationary signals, and the wavelet analysis tools for both evolutionary signals and transient signals describing short-time events. You can also deploy your analysis code to NI real-time embedded hardware.
+Description-de: Das LabVIEW Advanced Signal Processing Toolkit umfasst eine Reihe von Software-Tools, mit denen Sie Zeit-Frequenz-, Zeitreihen- und Wavelet-Analysen durchführen können.
+  Das LabVIEW Advanced Signal Processing Toolkit ist eine Zusatzsoftware für LabVIEW, die Tools für Zeit-Frequenz-, Zeitreihen- und Wavelet-Analysen enthält. Dieses Zusatzpaket schließt das LabVIEW Digital Filter Design Toolkit ein, das auch separat erhältlich ist. Ein Signal kann nur aussagekräftig ausgewertet werden, wenn dazu das passende Analysewerkzeug ausgewählt wird. Das Toolkit umfasst Werkzeuge für Zeitfrequenzanalysen nicht stationärer Signale mit langsam variierendem Spektralgehalt, für Zeitreihenanalysen stationärer Signale sowie für Wavelet-Analysen transienter und nicht stationärer Signale. Der erzeugte Analysecode kann auch auf Real-Time-Embedded-Hardware von NI übertragen werden.
+Description-fr: LabVIEW Advanced Signal Processing Toolkit est un ensemble d'outils logiciels que vous pouvez utiliser pour effectuer des analyses temps-fréquence, en séries temporelles et en ondelettes.
+  LabVIEW Advanced Signal Processing Toolkit est un complément logiciel de LabVIEW qui comprend des outils d'analyse temps-fréquence, en séries temporelles et en ondelettes. Il inclut aussi une version complète de LabVIEW Digital Filter Design Toolkit, également disponible séparément. Pour extraire efficacement les informations d'un signal, vous devez choisir un outil d'analyse approprié. Vous pouvez utiliser les outils d'analyse temps-fréquence pour les signaux évolutifs dont le contenu spectral varie lentement, les outils d'analyse de série temporelle pour les signaux stationnaires et les outils d'analyse en ondelettes pour les signaux évolutifs et les signaux transitoires décrivant des événements de courte durée. Vous pouvez également déployer votre code d'analyse sur du matériel embarqué temps réel NI.
+Description-ja: LabVIEW Advanced Signal Processing Toolkitは、時間/周波数、時系列、およびウェーブレット解析を実行するために使用できるソフトウェアツールのセットです。
+  LabVIEW Advanced Signal Processing Toolkitは、時間/周波数、時系列、およびウェーブレット解析用のツールが含まれたLabVIEW用のアドオンソフトウェアです。このアドオンには、LabVIEW Digital Filter Design Toolkitも含まれています (別個としても利用可能)。信号の潜在的な情報を効率的に取得するには、適切な解析ツールを選択する必要があります。スペクトル成分が低速で変化する進化信号には時間/周波数解析ツール、定常信号には時系列解析ツール、および短時間イベントを表す進化信号と過渡信号の両方にはウェーブレット解析ツールを使用できます。解析コードをNIリアルタイム組込ハードウェアにデプロイすることもできます。
+Description-ko: LabVIEW Advanced Signal Processing Toolkit은 시간 주파수, 시계열 및 웨이블릿 분석 수행을 위해 사용할 수 있는 소프트웨어 도구 세트입니다.
+  LabVIEW Advanced Signal Processing Toolkit은 시간 주파수, 시계열, 웨이블릿의 분석을 위한 도구를 포함하는 LabVIEW용 애드온 소프트웨어입니다. 이 애드온에는 LabVIEW Digital Filter Design Toolkit이 포함되며, 이는 또한 별도로 사용 가능합니다. 신호의 기본 정보를 효과적으로 추출하려면, 적절한 분석 도구를 선택해야 합니다. 스펙트럼 콘텐츠가 느리게 변하는 진화적 신호의 경우 시간 주파수 분석 도구를, 고정 신호의 경우 시계열 분석 도구를, 진화적 신호와 단시간 이벤트를 나타내는 과도 신호의 경우 웨이블릿 분석 도구를 사용할 수 있습니다. 또한 분석 코드를 NI 리얼타임 임베디드 하드웨어에 배포할 수 있습니다.
+Description-zh-CN: LabVIEW Advanced Signal Processing工具包是一组用于执行时间频率、时间序列和小波分析的软件工具。
+  LabVIEW Advanced Signal Processing工具包是LabVIEW的附加软件，其中包含用于时间频率、时间序列和小波分析的工具。此附加软件中包含LabVIEW Digital Filter Design工具包，该工具包亦可单独获取。如需有效地提取信号中的隐含信息，需选择合适的分析工具。时间频率分析工具适用于频谱成分变化缓慢的进化信号，时间序列分析工具适用于平稳信号，小波分析工具适用于描述短时事件的进化信号和瞬态信号。用户还可以将分析代码部署至NI实时嵌入式硬件。
+DisplayName: NI LabVIEW Advanced Signal Processing Toolkit
+DisplayName-de: NI LabVIEW Advanced Signal Processing Toolkit
+DisplayName-fr: NI LabVIEW Advanced Signal Processing Toolkit
+DisplayName-ja: NI LabVIEW Advanced Signal Processing Toolkit
+DisplayName-ko: NI LabVIEW Advanced Signal Processing Toolkit
+DisplayName-zh-CN: NI LabVIEW Advanced Signal Processing工具包
+DisplayVersion: 2024 Q1
+Eula: eula-ni-standard
+Filename: ../../pool/ni-aspt-labview-support_24.1.0.49446-0+f294_windows_x64.nipkg
+Homepage: https://www.ni.com
+MD5sum: ab5103adc0e0a520bad2932c276b436c
+Maintainer: National Instruments <support@ni.com>
+OsRequires: >= 10.0.14393
+OsSupport: WINDOWS_11 WINDOWS_SERVER_2022 WINDOWS_10_64BIT WINDOWS_SERVER_2016_64BIT WINDOWS_SERVER_2019_64BIT
+Package: ni-aspt-labview-support
+Plugin: wininst
+Priority: standard
+ReleaseNotes: 
+  Refer to the NI website at www.ni.com/r/lvasptrn for installation instructions, known issues, bug fixes, compatibility information, and other important notices about this product.
+ReleaseNotes-de: 
+  Auf der NI-Website www.ni.com/r/lvasptrn finden Sie wichtige Hinweise zu diesem Produkt, darunter Informationen zur Installation, zu bekannten Problemen, zu Fehlerkorrekturen und zur Kompatibilität.
+ReleaseNotes-fr: 
+  Reportez-vous au site Web de NI à l'adresse www.ni.com/r/lvasptrn pour obtenir les instructions d'installation, des informations sur les problèmes connus, les corrections de bugs, la compatibilité ainsi que d'autres informations importantes concernant ce produit.
+ReleaseNotes-ja: 
+  インストール手順、既知の問題、バグ修正、互換性情報、およびこの製品に関するその他の重要な注意事項については、NI Webサイト (www.ni.com/r/lvasptrn) を参照してください。
+ReleaseNotes-ko: 
+  이 제품에 대한 설치 방법, 알려진 유의사항, 버그 수정, 호환성 정보, 기타 중요한 알림사항은 NI 웹사이트(www.ni.com/r/lvasptrn)를 참조하십시오.
+ReleaseNotes-zh-CN: 
+  关于安装说明、已知问题、错误修正、兼容信息以及本产品的其他重要说明，请参阅NI网站上的www.ni.com/r/lvasptrn。
+Section: Add-Ons
+Size: 160763902
+StoreProduct: yes
+Supplements: ni-labview (>=24.0.0)
+UserVisible: yes
+Version: 24.1.0.49446-0+f294
+
+Architecture: windows_x64
+CompatibilityVersion: 240000
+Conflicts: da880f8e-3c33-4279-9be7-394090b42263 (<<16.0.16384)
+Depends: ni-assistant-framework-ui-assemblies (>=24.1.0), ni-mdfsupport (>=24.0.0), ni-metauninstaller (>=24.0.0), ni-msdotnet4x (>=23.8.0)
+Description: NI Assistant Framework Custom UI contains the custom UI files of Assistant Framework.
+DisplayName: NI Assistant Framework Custom UI
+DisplayVersion: 2024 Q1.1
+Eula: eula-ni-standard
+Filename: ../../pool/ni-assistant-framework-custom-ui-tool_24.1.0.49440-0+f288_windows_x64.nipkg
+Homepage: https://www.ni.com
+MD5sum: f30f71af32ae82797f7a803f93dd6f97
+Maintainer: National Instruments <support@ni.com>
+OsRequires: >= 10.0.14393
+OsSupport: WINDOWS_11 WINDOWS_SERVER_2022 WINDOWS_10_64BIT WINDOWS_SERVER_2016_64BIT WINDOWS_SERVER_2019_64BIT
+Package: ni-assistant-framework-custom-ui-tool
+Plugin: wininst
+Priority: standard
+Provides: da880f8e-3c33-4279-9be7-394090b42263 (=24.10.49440), e0a6dcc7-a603-4163-a0f3-f1ef503089b7 (=24.10.49440)
+Replaces: da880f8e-3c33-4279-9be7-394090b42263 (<<16.0.16384)
+Section: Infrastructure
+Size: 1753748
+Version: 24.1.0.49440-0+f288
