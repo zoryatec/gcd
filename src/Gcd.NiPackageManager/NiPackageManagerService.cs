@@ -26,7 +26,9 @@ public class NiPackageManagerService(IProcessService _processService)  : INiPack
         if( request.Simulate) { arguments.Add("--simulate"); }
         if( request.ForceLocked) { arguments.Add("--force-locked"); }
 
-        return await RunCommand(arguments.ToArray());
+        var result = await RunCommand(arguments.ToArray());
+        var value = result.Value;
+        return await new OutputParser().ParseGeneric(value); 
     }
 
     public async Task<Result<InfoInstalledResponse>> InfoInstalledAsync(InfoInstalledRequest request)

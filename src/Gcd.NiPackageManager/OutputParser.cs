@@ -6,6 +6,16 @@ namespace Gcd.NiPackageManager;
 
 public class OutputParser
 {
+
+    public async Task<Result<string>> ParseGeneric(NiPackageManagerOutput output)
+    {
+        if (output.ExitCode != 0)
+        {
+            return Result.Failure<string>( output.Output +output.Error );
+        }
+        return Result.Success("Command executed successfully");
+    }
+
     public async Task<Result<InfoInstalledResponse>> ParseInfoInstalledAsync(NiPackageManagerOutput output)
     {
         if (output.ExitCode != 0)  { return Result.Failure<InfoInstalledResponse>(output.Error); }
@@ -148,4 +158,5 @@ public class OutputParser
 
         return Result.Success(parsedPackages);
     }
+    
 }

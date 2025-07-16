@@ -13,25 +13,27 @@ namespace Gcd.Handlers.Nipkg.InstallFromInstallerDirectory;
 
 public record InstallFromInstallerDirectoryResponse();
 public record InstallFromInstallerDirectoryRequest(
-    LocalDirPath InstallerDirectoryPath
+    LocalDirPath InstallerDirectoryPath, Maybe<string> PackageMatchPattern
 ) : IRequest<Result>;
 
 
-public class InstallFromInstallerDirectoryHandler(IMediator _mediator, INiPackageManagerService _nipkgService, 
-    SnapshotService snapshotService)
+public class InstallFromInstallerDirectoryHandler(IMediator _mediator, INiPackageManagerService _nipkgService)
     : IRequestHandler<InstallFromInstallerDirectoryRequest, Result>
 {
     public async Task<Result> Handle(InstallFromInstallerDirectoryRequest request, CancellationToken cancellationToken)
     {
         var snapshotResult = await _mediator.Send(new CreateSnapshotFromInstallerRequest(request.InstallerDirectoryPath), cancellationToken);
         var snapshot = snapshotResult.Value.Snapshot;
-        await InstallFeeds(snapshot);
-        await InstallPackages(snapshot);
-        var snapshotSerializer = new SnapshotSerializerJson();
-        var snapshotFilePath = request.InstallerDirectoryPath;
-        
+        // await InstallFeeds(snapshot);
+        if (request.PackageMatchPattern.HasValue)
+        {
+            snapshot = snapshot.WherePackagesMatchPattern(request.PackageMatchPattern.Value);
+        }
+        var result = await InstallPackages(snapshot);
 
-        return Result.Success();
+
+
+        return result;
     }
     
     
@@ -54,11 +56,24 @@ public class InstallFromInstallerDirectoryHandler(IMediator _mediator, INiPackag
 
         var request = new InstallRequest(packageToInstalls,true,
             true, true, true, false, true);
-        await _nipkgService.Install(request);
-        return Result.Success();
+        var result = await _nipkgService.Install(request);
+        return result;
     }
-    
-    
+}
+
+public static class SnapshotExtensions
+{
+    public static global::Snapshot.Abstractions.Snapshot WherePackagesMatchPattern(
+        this global::Snapshot.Abstractions.Snapshot snapshot, string pattern)
+    {
+        var packages = snapshot.Packages
+            .Where(p => p.Package.Contains(pattern, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        
+        snapshot = snapshot with { Packages = packages };
+        return snapshot;
+    }
+
 }
 
 public static class MediatorExtensions
@@ -66,7 +81,8 @@ public static class MediatorExtensions
     public static async Task<Result> InstallFromInstallerDirectoryRequest(
         this IMediator mediator,
         LocalDirPath installerDirectoryPath,
+        Maybe<string> packageMatchPattern,
         CancellationToken cancellationToken = default
     )
-        => await mediator.Send(new InstallFromInstallerDirectoryRequest(installerDirectoryPath), cancellationToken);
+        => await mediator.Send(new InstallFromInstallerDirectoryRequest(installerDirectoryPath, packageMatchPattern), cancellationToken);
 }

@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\Gcd.SystemProcess\Gcd.SystemProcess.csproj" />
       <ProjectReference Include="..\Gcd.Tests.Fixture\Gcd.Tests.Fixture.csproj" />
     </ItemGroup>
 
