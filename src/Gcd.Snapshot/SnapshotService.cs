@@ -5,7 +5,7 @@ using PackageDefinition = Gcd.NiPackageManager.Abstractions.PackageDefinition;
 
 namespace Gcd.Snapshot;
 
-public class InstallPackagesFromSnapshotService(INiPackageManagerService _niPackageManagerService) : IInstallPackagesFromSnapshotService
+public class SnapshotService(INiPackageManagerService _niPackageManagerService) : IInstallPackagesFromSnapshotService
 {
     public Task<Result<string>> InstallPackagesFromSnapshotAsync(global::Snapshot.Abstractions.Snapshot snapshot)
     {
