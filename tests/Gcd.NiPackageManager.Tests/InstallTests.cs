@@ -19,7 +19,7 @@ public class InstallTests
         packageToInstals.Add(new PackageToInstall("TestPackage", "24.3.0.49385-0+f233"));
 
         var request = new InstallRequest(packageToInstals.AsReadOnly());
-        var result = await service.Install(request);
+        var result = await service.InstallAsync(request);
         
         result.IsSuccess.Should().BeTrue();
     }

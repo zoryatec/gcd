@@ -4,6 +4,7 @@ using Gcd.Handlers.Nipkg.Snapshot;
 using Gcd.Handlers.Shared;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager;
+using Gcd.NiPackageManager.Abstractions;
 using Gcd.Services;
 using Gcd.Snapshot;
 using Gcd.SystemProcess;
@@ -17,6 +18,7 @@ public class InstallPackagesFromInstallerDirectoryTests
     [Fact]
     public async Task SucessCase()
     {
+        var simulation = false;
         var mediator = new Mock<IMediator>();
         // mediator
         //     .Setup(m => m.Send(It.IsAny<CreateSnapshotFromInstallerRequest>(), It.IsAny<CancellationToken>()))
@@ -41,13 +43,23 @@ public class InstallPackagesFromInstallerDirectoryTests
         string matchPattern = "mycompany-myproduct";
         var installerDirectory = LocalDirPath.Of(testInstallerPath);
         var outputFilePath = LocalFilePath.Of(ouptutFilePathRaw);
-        var request = new InstallFromInstallerDirectoryRequest(installerDirectory.Value,matchPattern);
+        var request = new InstallFromInstallerDirectoryRequest(installerDirectory.Value,matchPattern, simulation);
         var handler = new InstallFromInstallerDirectoryHandler(mediator.Object,nipkgService);
         var result = await handler.Handle(request, CancellationToken.None);
         
         
+        var packagesToRemove = new List<PackageToInstall>
+        {
+            new PackageToInstall("mycompany-myproduct", "1.0.0.3"),
+        };
+        var removeRequest = new RemoveRequest(packagesToRemove, true, simulation, true, false, false);
+        await nipkgService.RemoveAsync(removeRequest);
 
-        Assert.True(result.IsSuccess, result.Error);
+        if (result.IsFailure)
+        {
+            throw new Exception(result.Error);
+        }
+        Assert.True(result.IsSuccess);
 
     }
 }

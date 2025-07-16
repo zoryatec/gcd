@@ -18,22 +18,30 @@ public record PackageToInstall(string Package, string Version);
 
 public enum ExitCode
 {
-    
+ FailedToUpateOneOrMoreFeeds = -125951 ,
+ PluginrReturnedOneOrMoreErrorsAtTheBeginningOfTransaction =-125090
 }
 
 public record InstallRequest( IReadOnlyList<PackageToInstall> PackagesToInstalls, bool AcceptEulas = false, 
     bool AssumeYes = false, bool Simulate = false, bool ForceLocked = false, bool SuppressIncompatibilityErrros = false,
     bool Verbose = false );
 
+public record RemoveRequest( IReadOnlyList<PackageToInstall> PackagesToRemove,
+    bool AssumeYes = false, bool Simulate = false, bool ForceLocked = false, bool SuppressIncompatibilityErrros = false,
+    bool Verbose = false );
+
 public interface INiPackageManagerService
 {
-    public Task<Result> Install(InstallRequest request);
+    public Task<Result> InstallAsync(InstallRequest request);
+    public Task<Result> RemoveAsync(RemoveRequest request);
     
     public Task<Result<InfoInstalledResponse>> InfoInstalledAsync(InfoInstalledRequest request);
     
-    public Task<Result<AddFeedResponse>> AddFeedAsync(AddFeedRequest request);
+    public Task<Result<string>> AddFeedAsync(AddFeedRequest request);
     
-    public Task<Result<RemoveFeedsResponse>> RemoveFeedAsync(RemoveFeedsRequest request);
+    public Task<Result<string>> UpdateAsync();
+    
+    public Task<Result<string>> RemoveFeedAsync(RemoveFeedsRequest request);
     public Task<Result> VersionAsync();
     
 }

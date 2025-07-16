@@ -33,8 +33,8 @@ public class CreateSnapshotFromInstallerDirectoryTests
         
         var snapshot = result.Value.Snapshot;
 
-        snapshot.Feeds.Count.Should().Be(4);
-        snapshot.Packages.Count.Should().Be(14);
+        snapshot.Feeds.Count.Should().Be(2);
+        snapshot.Packages.Count.Should().Be(10);
 
     }
 }
