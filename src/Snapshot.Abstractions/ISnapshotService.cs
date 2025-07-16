@@ -2,7 +2,7 @@ using CSharpFunctionalExtensions;
 
 namespace Snapshot.Abstractions;
 
-public interface IInstallPackagesFromSnapshotService
+public interface ISnapshotService
 {
     public Task<Result<string>> InstallPackagesFromSnapshotAsync(Snapshot snapshot);
 }
