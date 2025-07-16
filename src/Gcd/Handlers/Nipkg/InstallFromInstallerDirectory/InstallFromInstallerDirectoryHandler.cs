@@ -24,85 +24,17 @@ public class InstallFromInstallerDirectoryHandler(IMediator _mediator, INiPackag
     public async Task<Result> Handle(InstallFromInstallerDirectoryRequest request, CancellationToken cancellationToken)
     {
         var snapshotResult = await _mediator.Send(new CreateSnapshotFromInstallerRequest(request.InstallerDirectoryPath), cancellationToken);
+        if (snapshotResult.IsFailure)
+        {
+            return Result.Failure(snapshotResult.Error);
+        }
         var snapshot = snapshotResult.Value.Snapshot;
         
         return await _mediator.InstallFromSnapshotAsync(snapshot,
             request.PackageMatchPattern,
             request.SimulateInstallation,
             cancellationToken);
-        // var resultFeed = await InstallFeeds(snapshot);
-        // if (resultFeed.IsFailure) { return Result.Failure(resultFeed.Error); }
-        //
-        // if (request.PackageMatchPattern.HasValue)
-        // {
-        //     snapshot = snapshot.WherePackagesMatchPattern(request.PackageMatchPattern.Value);
-        // }
-        // var result = await InstallPackages(snapshot,request.SimulateInstallation); 
-        //
-        // var resultRemove = await RemoveFeeds(snapshot);
-        //
-        //
-        // return Result.Combine(resultRemove,result);
     }
-    
-    
-    private async Task<Result> InstallFeeds(global::Snapshot.Abstractions.Snapshot snapshot)
-    {
-        var results = new List<Result>();
-        foreach (var feed  in snapshot.Feeds)
-        {
-            var feedDefinition = new FeedDefinition(feed.Name, feed.Uri);
-            var request = new AddFeedRequest(feedDefinition);
-            var result  = await _nipkgService.AddFeedAsync(request);
-            results.Add(result);
-        }
-
-        var resultc = Result.Combine(results);
-        
-        if(resultc.IsFailure) { return resultc;}
-        var resultUpdate = await _nipkgService.UpdateAsync();
-        return resultUpdate;
-    }
-    
-    private async Task<Result> RemoveFeeds(global::Snapshot.Abstractions.Snapshot snapshot)
-    {
-        var results = new List<Result>();
-        foreach (var feed  in snapshot.Feeds)
-        {
-            var feedDefinition = new FeedDefinition(feed.Name, feed.Uri);
-            var request = new RemoveFeedsRequest(feedDefinition);
-            var result  = await _nipkgService.RemoveFeedAsync(request);
-            results.Add(result);
-        }
-        return Result.Combine(results);
-    }
-    
-    private async Task<Result> InstallPackages(global::Snapshot.Abstractions.Snapshot snapshot, bool simulateInstallation)
-    {
-
-        var packageToInstalls = snapshot.Packages.Select(x =>
-            new PackageToInstall(x.Package, x.Version)).ToList();
-
-        var request = new InstallRequest(packageToInstalls,true,
-            true, simulateInstallation, true, false, true);
-        var result = await _nipkgService.InstallAsync(request);
-        return result;
-    }
-}
-
-public static class SnapshotExtensions
-{
-    public static global::Snapshot.Abstractions.Snapshot WherePackagesMatchPattern(
-        this global::Snapshot.Abstractions.Snapshot snapshot, string pattern)
-    {
-        var packages = snapshot.Packages
-            .Where(p => p.Package.Contains(pattern, StringComparison.OrdinalIgnoreCase))
-            .ToList();
-        
-        snapshot = snapshot with { Packages = packages };
-        return snapshot;
-    }
-
 }
 
 public static class MediatorExtensions
