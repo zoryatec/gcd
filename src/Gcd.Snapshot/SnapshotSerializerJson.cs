@@ -47,7 +47,10 @@ public class SnapshotSerializerJson : ISnapshotSerializer
         return new PackageDefinition(dto.Package,
             dto.Version,
             dto.Description,
-            dto.Depends);
+            dto.Depends,
+            dto.StoreProduct,
+            dto.UserVisible,
+            dto.Section);
     }
 
     private IReadOnlyList<PackageDefinition> MapToPackageDefinition(IReadOnlyList<PackageDefinitionDto> dto) =>

@@ -9,7 +9,8 @@ public record AddFeedResponse(FeedDefinition AddedFeed);
 public record RemoveFeedsRequest(FeedDefinition FeedToRemove);
 public record RemoveFeedsResponse(FeedDefinition RemovedFeed);
 
-public record PackageDefinition(string Package, string Version, string Description, string Depends);
+public record PackageDefinition(string Package, string Version, string Description, string Depends, string StoreProduct,
+    string UserVisible, string Section);
 
 public record InfoInstalledRequest(string Pattern);
 public record InfoInstalledResponse(IReadOnlyList<PackageDefinition> Packages);

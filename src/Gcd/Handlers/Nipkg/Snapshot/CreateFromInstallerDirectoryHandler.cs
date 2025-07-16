@@ -55,7 +55,10 @@ public class CreateFromInstallerDirectoryHandler(IMediator _mediator)
                 package.ContainsKey("Package") ? package["Package"] : string.Empty,
                 package.ContainsKey("Version") ? package["Version"] : string.Empty,
                 package.ContainsKey("Description") ? package["Description"] : string.Empty,
-                package.ContainsKey("Depends") ? package["Depends"] : string.Empty
+                package.ContainsKey("Depends") ? package["Depends"] : string.Empty,
+                package.ContainsKey("StoreProduct") ? package["StoreProduct"] : string.Empty,
+                package.ContainsKey("UserVisible") ? package["UserVisible"] : string.Empty,
+                package.ContainsKey("Section") ? package["Section"] : string.Empty
             );
             packageDefinitions.Add(packageDefinition);
         }
