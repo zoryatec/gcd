@@ -54,6 +54,7 @@
       <ProjectReference Include="..\Gcd.RemoteFileSystem.Rclone\Gcd.RemoteFileSystem.Rclone.csproj" />
       <ProjectReference Include="..\Gcd.RemoteFileSystem.Smb\Gcd.RemoteFileSystem.Smb.csproj" />
       <ProjectReference Include="..\Gcd.Snapshot\Gcd.Snapshot.csproj" />
+      <ProjectReference Include="..\Gcd.SystemProcess\Gcd.SystemProcess.csproj" />
     </ItemGroup>
 
     <ItemGroup>

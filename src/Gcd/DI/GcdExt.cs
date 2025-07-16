@@ -12,7 +12,13 @@ using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Gcd.NiPackageManager;
+using Gcd.NiPackageManager.Abstractions;
 using Gcd.RemoteFileSystem.Rclone.DI;
+using Gcd.Snapshot;
+using Gcd.SystemProcess;
+using Gcd.SystemProcess.Abstractions;
+using Snapshot.Abstractions;
 
 namespace Gcd.DI;
 
@@ -32,6 +38,9 @@ public static class GcdExt
                 .RegisterConfiguration()
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
+                .AddScoped<INiPackageManagerService, NiPackageManagerService>()
+                .AddScoped<IProcessService, ProcessService>()
+                .AddScoped<ISnapshotSerializer, SnapshotSerializerJson>()
                 .AddSingleton<IConsole>(console)
                 .AddMediatR(config =>
                 {

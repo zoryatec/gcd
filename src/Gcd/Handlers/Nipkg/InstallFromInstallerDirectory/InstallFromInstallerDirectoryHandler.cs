@@ -101,7 +101,7 @@ public static class SnapshotExtensions
 
 public static class MediatorExtensions
 {
-    public static async Task<Result> InstallFromInstallerDirectoryRequest(
+    public static async Task<Result> InstallFromInstallerDirectoryAsync(
         this IMediator mediator,
         LocalDirPath installerDirectoryPath,
         Maybe<string> packageMatchPattern,
