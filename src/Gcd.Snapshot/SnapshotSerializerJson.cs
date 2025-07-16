@@ -8,7 +8,7 @@ namespace Gcd.Snapshot;
 
 public class SnapshotSerializerJson : ISnapshotSerializer
 {
-    public Task<Result<string>> SerializeAsync(global::Snapshot.Abstractions.Snapshot snapshot)
+    public Task<Result<string>> SerializeAsync(global::Snapshot.Abstractions.Snapshot snapshot, string path)
     {
         throw new NotImplementedException();
     }

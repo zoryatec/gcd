@@ -7,7 +7,7 @@ using MediatR;
 namespace Gcd.Handlers.Nipkg.CreateSnapshotFromInstallerDirectory;
 
 
-public record CreateSnapshotFromInstallerResponse(LocalDirPath InstallerDirectory);
+public record CreateSnapshotFromInstallerResponse(global::Snapshot.Abstractions.Snapshot Snapshot);
 public record CreateSnapshotFromInstallerRequest(
     LocalDirPath InstallerDirectory
 ) : IRequest<Result<CreateSnapshotFromInstallerResponse>>;
@@ -22,7 +22,16 @@ public class CreateSnapshotFromInstallerDirectoryHandler(IMediator _mediator)
         var installerDir = new InstallerDirectory(installerDirectoryPath);
         var directories = GetMainFeedsDirectories(installerDir);;
         var feedDefinitions = GetFeedDefinitions(directories.Value);
-        var packagesFilePaths = GetPackageFilePath(directories.Value);
+        var packageDefinitions = GetPackageDefinitions(directories.Value);
+        
+        var snapshot = new global::Snapshot.Abstractions.Snapshot(packageDefinitions.Value, feedDefinitions.Value);
+        
+        return Result.Success(new CreateSnapshotFromInstallerResponse(snapshot));
+    }
+
+    private Result<IReadOnlyList<PackageDefinition>> GetPackageDefinitions(IReadOnlyList<LocalDirPath> directories)
+    {
+        var packagesFilePaths = GetPackageFilePath(directories);
 
         var packageDefinitions = new List<PackageDefinition>();
         foreach (var path in packagesFilePaths.Value)
@@ -31,8 +40,7 @@ public class CreateSnapshotFromInstallerDirectoryHandler(IMediator _mediator)
             var definitions = GetPackageDefinitions(content.Value);
             packageDefinitions.AddRange(definitions.Value);
         }
-        
-        return Result.Success(new CreateSnapshotFromInstallerResponse(request.InstallerDirectory));
+        return Result.Success<IReadOnlyList<PackageDefinition>>(packageDefinitions); 
     }
     
     private Result<IReadOnlyList<PackageDefinition>> GetPackageDefinitions(string content)
