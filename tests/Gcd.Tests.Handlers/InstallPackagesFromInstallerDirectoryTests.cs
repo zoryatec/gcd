@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Gcd.Handlers.Nipkg.InstallFromInstallerDirectory;
+using Gcd.Handlers.Nipkg.InstallFromSnapshot;
 using Gcd.Handlers.Nipkg.Snapshot;
 using Gcd.Handlers.Shared;
 using Gcd.LocalFileSystem.Abstractions;
@@ -20,22 +21,25 @@ public class InstallPackagesFromInstallerDirectoryTests
     {
         var simulation = false;
         var mediator = new Mock<IMediator>();
-        // mediator
-        //     .Setup(m => m.Send(It.IsAny<CreateSnapshotFromInstallerRequest>(), It.IsAny<CancellationToken>()))
-        //     .Returns((IRequest request, CancellationToken token) => {
-        //         var handler = new CreateFromInstallerDirectoryHandler(mediator.Object);
-        //         return handler.Handle((CreateSnapshotFromInstallerRequest)request, token);
-        //     });
+        var systemProcess = new ProcessService();
+        var nipkgService = new NiPackageManagerService(systemProcess);
         mediator
             .Setup(m => m.Send(It.IsAny<CreateSnapshotFromInstallerRequest>(), It.IsAny<CancellationToken>()))
             .Returns((CreateSnapshotFromInstallerRequest req, CancellationToken token) => {
                 var handler = new CreateFromInstallerDirectoryHandler(mediator.Object);
                 return handler.Handle(req, token);
             });
+        
+        mediator
+            .Setup(m => m.Send(It.IsAny<InstallFromSnapshotRequest>(), It.IsAny<CancellationToken>()))
+            .Returns((InstallFromSnapshotRequest req, CancellationToken token) => {
+                var handler = new InstallFromSnapshotHandler(mediator.Object,nipkgService);
+                return handler.Handle(req, token);
+            });
+        
         var serializer = new Mock<SnapshotSerializerJson>();
 
-        var systemProcess = new ProcessService();
-        var nipkgService = new NiPackageManagerService(systemProcess);
+
         mediator.Setup(m => m.Send(It.IsAny<IRequest>(), It.IsAny<CancellationToken>()));
         
         var testInstallerPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestData", "TestInstaller");
@@ -50,10 +54,10 @@ public class InstallPackagesFromInstallerDirectoryTests
         
         var packagesToRemove = new List<PackageToInstall>
         {
-            new PackageToInstall("mycompany-myproduct", "1.0.0.3"),
+            new PackageToInstall("mycompany-myproduct", ""),
         };
-        var removeRequest = new RemoveRequest(packagesToRemove, true, simulation, true, false, false);
-        await nipkgService.RemoveAsync(removeRequest);
+        var removeRequest = new RemoveRequest(packagesToRemove, true, simulation, true, false, true);
+        var resultRemove = await nipkgService.RemoveAsync(removeRequest);
 
         if (result.IsFailure)
         {

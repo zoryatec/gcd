@@ -25,6 +25,10 @@ public class NiPackageManagerService(IProcessService _processService)  : INiPack
         if( request.AssumeYes) { arguments.Add("--assume-yes"); }
         if( request.Simulate) { arguments.Add("--simulate"); }
         if( request.ForceLocked) { arguments.Add("--force-locked"); }
+        if( request.AllowDowngrade) { arguments.Add("--allow-downgrade"); }
+        if( request.AllowUninstall) { arguments.Add("--allow-uninstall"); }
+        if( request.InstallAlsoUpgrades) { arguments.Add("--install-also-upgrades"); }
+        if( request.IncludeRecommended) { arguments.Add("--include-recommended"); }
 
         var result = await RunCommand(arguments.ToArray());
         var value = result.Value;
@@ -37,7 +41,9 @@ public class NiPackageManagerService(IProcessService _processService)  : INiPack
         var fullSpecPackages = new List<string>();
         foreach (var packageToInstall in request.PackagesToRemove)
         {
-            fullSpecPackages.Add($"{packageToInstall.Package}={packageToInstall.Version}");
+            var fullspec = $"{packageToInstall.Package}={packageToInstall.Version}";
+            if(string.IsNullOrWhiteSpace(packageToInstall.Version)) {fullspec = packageToInstall.Package;}
+            fullSpecPackages.Add(fullspec);
         }
         // var packages = string.Join(" ", fullSpecPackages);
         

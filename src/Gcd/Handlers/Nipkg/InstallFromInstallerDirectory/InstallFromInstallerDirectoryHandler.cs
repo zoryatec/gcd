@@ -3,6 +3,7 @@
 
 
 using CSharpFunctionalExtensions;
+using Gcd.Handlers.Nipkg.InstallFromSnapshot;
 using Gcd.Handlers.Nipkg.Snapshot;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager.Abstractions;
@@ -24,19 +25,24 @@ public class InstallFromInstallerDirectoryHandler(IMediator _mediator, INiPackag
     {
         var snapshotResult = await _mediator.Send(new CreateSnapshotFromInstallerRequest(request.InstallerDirectoryPath), cancellationToken);
         var snapshot = snapshotResult.Value.Snapshot;
-        var resultFeed = await InstallFeeds(snapshot);
-        if (resultFeed.IsFailure) { return Result.Failure(resultFeed.Error); }
         
-        if (request.PackageMatchPattern.HasValue)
-        {
-            snapshot = snapshot.WherePackagesMatchPattern(request.PackageMatchPattern.Value);
-        }
-        var result = await InstallPackages(snapshot,request.SimulateInstallation); 
-
-        var resultRemove = await RemoveFeeds(snapshot);
-
-        
-        return Result.Combine(resultRemove,result);
+        return await _mediator.InstallFromSnapshotAsync(snapshot,
+            request.PackageMatchPattern,
+            request.SimulateInstallation,
+            cancellationToken);
+        // var resultFeed = await InstallFeeds(snapshot);
+        // if (resultFeed.IsFailure) { return Result.Failure(resultFeed.Error); }
+        //
+        // if (request.PackageMatchPattern.HasValue)
+        // {
+        //     snapshot = snapshot.WherePackagesMatchPattern(request.PackageMatchPattern.Value);
+        // }
+        // var result = await InstallPackages(snapshot,request.SimulateInstallation); 
+        //
+        // var resultRemove = await RemoveFeeds(snapshot);
+        //
+        //
+        // return Result.Combine(resultRemove,result);
     }
     
     

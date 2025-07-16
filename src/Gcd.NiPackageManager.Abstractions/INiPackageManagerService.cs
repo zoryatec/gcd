@@ -24,8 +24,9 @@ public enum ExitCode
 }
 
 public record InstallRequest( IReadOnlyList<PackageToInstall> PackagesToInstalls, bool AcceptEulas = false, 
-    bool AssumeYes = false, bool Simulate = false, bool ForceLocked = false, bool SuppressIncompatibilityErrros = false,
-    bool Verbose = false );
+    bool AssumeYes = false, bool Simulate = false, bool ForceLocked = true, bool SuppressIncompatibilityErrros = false,
+    bool Verbose = true, bool AllowDowngrade = true, bool AllowUninstall = true, bool InstallAlsoUpgrades = true,
+    bool IncludeRecommended = false);
 
 public record RemoveRequest( IReadOnlyList<PackageToInstall> PackagesToRemove,
     bool AssumeYes = false, bool Simulate = false, bool ForceLocked = false, bool SuppressIncompatibilityErrros = false,
