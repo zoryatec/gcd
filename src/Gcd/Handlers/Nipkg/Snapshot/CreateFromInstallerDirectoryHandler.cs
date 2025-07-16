@@ -1,10 +1,10 @@
 using CSharpFunctionalExtensions;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager;
-using Snapshot.Abstractions;
 using MediatR;
+using Snapshot.Abstractions;
 
-namespace Gcd.Handlers.Nipkg.CreateSnapshotFromInstallerDirectory;
+namespace Gcd.Handlers.Nipkg.Snapshot;
 
 
 public record CreateSnapshotFromInstallerResponse(global::Snapshot.Abstractions.Snapshot Snapshot);
@@ -13,7 +13,7 @@ public record CreateSnapshotFromInstallerRequest(
 ) : IRequest<Result<CreateSnapshotFromInstallerResponse>>;
 
 
-public class CreateSnapshotFromInstallerDirectoryHandler(IMediator _mediator)
+public class CreateFromInstallerDirectoryHandler(IMediator _mediator)
     : IRequestHandler<CreateSnapshotFromInstallerRequest, Result<CreateSnapshotFromInstallerResponse>>
 {
     public async Task<Result<CreateSnapshotFromInstallerResponse>> Handle(CreateSnapshotFromInstallerRequest request, CancellationToken cancellationToken)

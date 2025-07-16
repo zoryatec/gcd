@@ -1,5 +1,5 @@
 using FluentAssertions;
-using Gcd.Handlers.Nipkg.CreateSnapshotFromInstallerDirectory;
+using Gcd.Handlers.Nipkg.Snapshot;
 using Gcd.Handlers.Shared;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Services;
@@ -24,7 +24,7 @@ public class CreateSnapshotFromInstallerDirectoryTests
         var installerDirectory = LocalDirPath.Of(testInstallerPath);
         var outputFilePath = LocalFilePath.Of(ouptutFilePathRaw);
         var request = new CreateSnapshotFromInstallerRequest(installerDirectory.Value);
-        var handler = new CreateSnapshotFromInstallerDirectoryHandler(mediator.Object);
+        var handler = new CreateFromInstallerDirectoryHandler(mediator.Object);
         var result = await handler.Handle(request, CancellationToken.None);
         
         
@@ -33,8 +33,8 @@ public class CreateSnapshotFromInstallerDirectoryTests
         
         var snapshot = result.Value.Snapshot;
 
-        snapshot.Feeds.Count.Should().Be(2);
-        snapshot.Packages.Count.Should().Be(4);
+        snapshot.Feeds.Count.Should().Be(4);
+        snapshot.Packages.Count.Should().Be(14);
 
     }
 }
