@@ -13,82 +13,16 @@ namespace Gcd.Handlers.Tools;
 public record SetInifFileParameterRequest(LocalFilePath IniFilePath, string Section, string Key,
     string Value, bool CreateIfNotExists = true) : IRequest<UnitResult<Error>>;
 
-public class SetIniFileParameterHandler()
+public class SetIniFileParameterHandler(IMediator mediator)
     : IRequestHandler<SetInifFileParameterRequest, UnitResult<Error>>
 {
     public async Task<UnitResult<Error>> Handle(SetInifFileParameterRequest request, CancellationToken cancellationToken)
     {
         var (iniFilePath,  section,  key,  createIfNotExists, value) = request;
-        
-        SetConfigValue(iniFilePath.Value, section, key, createIfNotExists);
-        return UnitResult.Success<Error>();
+        return await SetConfigValue(iniFilePath.Value, section, key, createIfNotExists);
     }
     
-    // Content transformation logic for unit testing
-    public static List<string> ModifyConfigContent(
-        List<string> lines,
-        string section,
-        string key,
-        string value)
-    {
-        bool sectionFound = false;
-        bool keyFound = false;
-        var newLines = new List<string>();
-        var sectionHeader = $"[{section}]";
-        var keyPattern = $"^{Regex.Escape(key)}=";
-        var sectionPattern = $"^\\[{Regex.Escape(section)}\\]$";
-        var anySectionPattern = @"^\[.+\]$";
-
-        for (int i = 0; i < lines.Count; i++)
-        {
-            var line = lines[i];
-
-            if (Regex.IsMatch(line, sectionPattern))
-            {
-                sectionFound = true;
-                newLines.Add(line);
-                continue;
-            }
-
-            if (sectionFound && Regex.IsMatch(line, keyPattern))
-            {
-                keyFound = true;
-                newLines.Add($"{key}={value}");
-                continue;
-            }
-
-            if (sectionFound && Regex.IsMatch(line, anySectionPattern) && !Regex.IsMatch(line, sectionPattern))
-            {
-                if (!keyFound)
-                {
-                    newLines.Add($"{key}={value}");
-                    keyFound = true;
-                }
-                sectionFound = false;
-            }
-
-            newLines.Add(line);
-        }
-
-        if (sectionFound && !keyFound)
-        {
-            newLines.Add($"{key}={value}");
-            keyFound = true;
-        }
-
-        if (!sectionFound)
-        {
-            if (newLines.Count > 0 && !string.IsNullOrWhiteSpace(newLines[^1]))
-                newLines.Add("");
-            newLines.Add(sectionHeader);
-            newLines.Add($"{key}={value}");
-        }
-
-        return newLines;
-    }
-
-    // File I/O wrapper
-    public static void SetConfigValue(
+    public async Task<UnitResult<Error>> SetConfigValue(
         string configPath,
         string section,
         string key,
@@ -121,9 +55,14 @@ public class SetIniFileParameterHandler()
             ? new List<string>(File.ReadAllLines(configPath, Encoding.UTF8))
             : new List<string>();
 
-        var newLines = ModifyConfigContent(lines, section, key, value);
+        var result = await mediator.Send(new SetIniParameterRequest(lines, section, key, value, createIfNotExists));
+        if (result.IsFailure)
+        {
+            return UnitResult.Failure<Error>(new Error(result.Error));
+        }
 
-        File.WriteAllLines(configPath, newLines, Encoding.UTF8);
+        await File.WriteAllLinesAsync(configPath, result.Value, Encoding.UTF8);
+        return UnitResult.Success<Error>();
     }
 }
 
