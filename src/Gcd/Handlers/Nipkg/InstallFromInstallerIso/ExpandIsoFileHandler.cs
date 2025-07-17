@@ -22,31 +22,19 @@ public class ExpandIsoFileHandler(IMediator _mediator)
 {
     public async Task<Result> Handle(ExpandIsoFileRequest request, CancellationToken cancellationToken)
     {
-        using (var isoStream = File.OpenRead(request.IsoFilePath.Value))
+        await using (var isoStream = File.OpenRead(request.IsoFilePath.Value))
         {
             var cd = new DiscUtils.Iso9660.CDReader(isoStream, true, false); // useJoliet: true
-
-            foreach (var dirPath in cd.GetDirectories("\\", "*", SearchOption.AllDirectories))
+            foreach (var dirPath in cd.GetDirectories("\\", "*", SearchOption.AllDirectories).Prepend("\\"))
             {
                 var relativeDir = dirPath.TrimStart('\\');
                 var outDir = Path.Combine(request.ExpandDirectory.Value, relativeDir);
                 Directory.CreateDirectory(outDir);
-            }
 
-            var filePaths = cd.GetFiles("\\", ".*", SearchOption.AllDirectories);
-
-
-            foreach (var dirPath in cd.GetDirectories("\\", "*", SearchOption.AllDirectories).Prepend("\\"))
-            {
-                var files = cd.GetFiles(dirPath);
-                foreach (var filePath in files)
+                foreach (var filePath in cd.GetFiles(dirPath))
                 {
                     var relativePath = filePath.TrimStart('\\');
                     var outPath = Path.Combine(request.ExpandDirectory.Value, relativePath);
-
-                    var directory = Path.GetDirectoryName(outPath);
-                    if (directory != null)
-                        Directory.CreateDirectory(directory);
 
                     await using var fileStream = cd.OpenFile(filePath, FileMode.Open);
                     await using var outFile = File.Create(outPath);

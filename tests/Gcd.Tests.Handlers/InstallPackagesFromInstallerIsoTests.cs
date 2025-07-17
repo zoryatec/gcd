@@ -1,6 +1,7 @@
 using CSharpFunctionalExtensions;
 using FluentAssertions;
 using Gcd.Handlers.Nipkg.InstallFromInstallerDirectory;
+using Gcd.Handlers.Nipkg.InstallFromInstallerIso;
 using Gcd.Handlers.Nipkg.InstallFromSnapshot;
 using Gcd.Handlers.Nipkg.Snapshot;
 using Gcd.Handlers.Shared;
@@ -15,7 +16,7 @@ using Moq;
 
 namespace Gcd.Tests.Handlers;
 
-public class InstallPackagesFromInstallerDirectoryTests
+public class InstallPackagesFromInstallerIsoTests
 {
     [Fact]
     public async Task SucessCase()
@@ -38,32 +39,41 @@ public class InstallPackagesFromInstallerDirectoryTests
                 return handler.Handle(req, token);
             });
         
+        mediator
+            .Setup(m => m.Send(It.IsAny<InstallFromInstallerDirectoryRequest>(), It.IsAny<CancellationToken>()))
+            .Returns((InstallFromInstallerDirectoryRequest req, CancellationToken token) => {
+                var handler = new InstallFromInstallerDirectoryHandler(mediator.Object,nipkgService);
+                return handler.Handle(req, token);
+            });
+        
+        mediator
+            .Setup(m => m.Send(It.IsAny<ExpandIsoFileRequest>(), It.IsAny<CancellationToken>()))
+            .Returns((ExpandIsoFileRequest req, CancellationToken token) => {
+                var handler = new ExpandIsoFileHandler(mediator.Object);
+                return handler.Handle(req, token);
+            });
+        
         var serializer = new Mock<SnapshotSerializerJson>();
 
 
         mediator.Setup(m => m.Send(It.IsAny<IRequest>(), It.IsAny<CancellationToken>()));
         
-        var testInstallerPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestData", "TestInstaller");
-        var ouptutFilePathRaw = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "snapshot.json");
-        string matchPattern = "mycompany-myproduct";
-        var installerDirectory = LocalDirPath.Of(testInstallerPath);
-        var outputFilePath = LocalFilePath.Of(ouptutFilePathRaw);
-        var request = new InstallFromInstallerDirectoryRequest(installerDirectory.Value,Maybe.None, simulation);
-        var handler = new InstallFromInstallerDirectoryHandler(mediator.Object,nipkgService);
+        var relativeIsoPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..",
+            "..", "manual-docker", "installers-iso","ni-labview-2025-community-x86_25.1.3_offline.iso");
+        var fullIsoPath = Path.GetFullPath(relativeIsoPath);
+        
+        var outputIsoFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "TestIsoOutput");
+
+        var isFilePath = LocalFilePath.Of(fullIsoPath);
+        var expandDirectory = LocalDirPath.Of(outputIsoFolder);
+        
+        
+        var request = new InstallFromInstallerIsoRequest(isFilePath.Value,expandDirectory.Value, false,true,
+            Maybe.None, simulation);
+        var handler = new InstallFromInstallerIsoHandler(mediator.Object,nipkgService);
         var result = await handler.Handle(request, CancellationToken.None);
         
         
-        var packagesToRemove = new List<PackageToInstall>
-        {
-            new PackageToInstall("mycompany-myproduct", ""),
-        };
-        var removeRequest = new RemoveRequest(packagesToRemove, true, simulation, true, false, true);
-        var resultRemove = await nipkgService.RemoveAsync(removeRequest);
-
-        if (result.IsFailure)
-        {
-            throw new Exception(result.Error);
-        }
         Assert.True(result.IsSuccess);
 
     }

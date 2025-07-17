@@ -8,6 +8,7 @@ using Gcd.Commands.Nipkg.FeedLocal;
 using Gcd.Commands.Nipkg.FeedRclone;
 using Gcd.Commands.Nipkg.FeedSmb;
 using Gcd.Commands.Nipkg.InstallFromInstallerDirectory;
+using Gcd.Commands.Nipkg.InstallFromInstallerIso;
 using Gcd.Commands.Nipkg.InstallFromSnapshot;
 
 
@@ -39,6 +40,7 @@ public static class UseMenuNipkgExtension
             cmd.UseCmdBuild(serviceProvider);
             cmd.UseCmdInstallFromSnapshot(serviceProvider);
             cmd.UseCmdInstallFromInstallerDirectory(serviceProvider);
+            cmd.UseCmdInstallFromInstallerIso(serviceProvider);
             cmd.UseCmdExport(serviceProvider);
         });
         return app;
