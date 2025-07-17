@@ -29,6 +29,8 @@ public static class UseMenuToolsExt
             cmd.UseCmdDownloadArchive(serviceProvider);
             cmd.UseCmdSetupGit(serviceProvider);
             cmd.UseCmdSetupRclone(serviceProvider);
+            cmd.UseCmdSetIniFileParameter(serviceProvider);
+            cmd.UseCmdSetupSystemForCi(serviceProvider);
         });
         return app;
     }
