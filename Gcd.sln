@@ -61,8 +61,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gcd.Tests.Fixture", "tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gcd.Tests.Handlers", "tests\Gcd.Tests.Handlers\Gcd.Tests.Handlers.csproj", "{EFB58B90-94ED-4A6B-B510-8188A266F2B2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NiPackageManager", "NiPackageManager", "{844E3C49-70A9-423B-B7D2-29DA91C2E6C9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SystemProcess", "SystemProcess", "{2886B4B4-0A4B-443F-ADC7-8E4B84E74D25}"
