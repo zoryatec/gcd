@@ -4,6 +4,7 @@ using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager.Abstractions;
 using Gcd.Snapshot;
 using MediatR;
+using PackageDefinition = Snapshot.Abstractions.PackageDefinition;
 
 namespace Gcd.Handlers.Nipkg.InstallFromSnapshot;
 
@@ -23,10 +24,7 @@ public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerSe
         var resultFeed = await InstallFeeds(snapshot);
         if (resultFeed.IsFailure) { return Result.Failure(resultFeed.Error); }
         
-        if (request.PackageMatchPattern.HasValue)
-        {
-            snapshot = snapshot.WherePackagesMatchPattern(request.PackageMatchPattern.Value);
-        }
+        snapshot = snapshot.FilterPackages(request.PackageMatchPattern, true);
         var result = await InstallPackages(snapshot,request.SimulateInstallation); 
 
         var resultRemove = await RemoveFeeds(snapshot);
@@ -90,6 +88,30 @@ public static class SnapshotExtensions
             .ToList();
         
         snapshot = snapshot with { Packages = packages };
+        return snapshot;
+    }
+    
+    public static global::Snapshot.Abstractions.Snapshot FilterPackages(
+        this global::Snapshot.Abstractions.Snapshot snapshot, Maybe<string> packageMatchPattern, bool selectStoreProducts = false)
+    {
+        List<global::Snapshot.Abstractions.PackageDefinition> selectedPackages = [];
+        List<global::Snapshot.Abstractions.PackageDefinition> matchedPackages = [];
+        if (packageMatchPattern.HasValue)
+        {
+            matchedPackages = snapshot.Packages
+                .Where(p => p.Package.Contains(packageMatchPattern.Value, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            selectedPackages.AddRange(matchedPackages);
+        }
+    
+         List<PackageDefinition> storeProductsPackages = snapshot.Packages
+            .Where(p => p.StoreProduct == "yes").ToList();
+         
+         selectedPackages.AddRange(storeProductsPackages);
+
+         var distinct = selectedPackages.Distinct().ToList();
+
+         snapshot = snapshot with { Packages = distinct};
         return snapshot;
     }
 

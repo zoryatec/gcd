@@ -1,3 +1,4 @@
+using CSharpFunctionalExtensions;
 using FluentAssertions;
 using Gcd.Handlers.Nipkg.InstallFromInstallerDirectory;
 using Gcd.Handlers.Nipkg.InstallFromSnapshot;
@@ -47,7 +48,7 @@ public class InstallPackagesFromInstallerDirectoryTests
         string matchPattern = "mycompany-myproduct";
         var installerDirectory = LocalDirPath.Of(testInstallerPath);
         var outputFilePath = LocalFilePath.Of(ouptutFilePathRaw);
-        var request = new InstallFromInstallerDirectoryRequest(installerDirectory.Value,matchPattern, simulation);
+        var request = new InstallFromInstallerDirectoryRequest(installerDirectory.Value,Maybe.None, simulation);
         var handler = new InstallFromInstallerDirectoryHandler(mediator.Object,nipkgService);
         var result = await handler.Handle(request, CancellationToken.None);
         

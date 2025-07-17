@@ -77,6 +77,7 @@ public class NiPackageManagerService(IProcessService _processService)  : INiPack
             var arguments = new List<string>();
             arguments.Add("feed-add");
             arguments.Add($"--name={name}");
+            arguments.Add("--system");
             arguments.Add(uri);
             
             var response = await RunCommand(arguments.ToArray());

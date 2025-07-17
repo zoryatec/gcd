@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 using Gcd.SystemProcess.Abstractions;
 
 namespace Gcd.SystemProcess;
@@ -19,16 +20,35 @@ public class ProcessService : IProcessService
             CreateNoWindow = false
         };
 
-        using var process = System.Diagnostics.Process.Start(startInfo)
-                            ?? throw new ArgumentNullException("nameof(process)");
+        using var process = new Process { StartInfo = startInfo, EnableRaisingEvents = true };
+        var outputBuilder = new StringBuilder();
+        var errorBuilder = new StringBuilder();
 
-        var outputTask = process.StandardOutput.ReadToEndAsync(cancellationToken);
-        var errorTask = process.StandardError.ReadToEndAsync(cancellationToken);
+        process.OutputDataReceived += (s, e) =>
+        {
+            if (e.Data != null)
+            {
+                outputBuilder.AppendLine(e.Data);
+                Console.WriteLine(e.Data);
+            }
+        };
+        process.ErrorDataReceived += (s, e) =>
+        {
+            if (e.Data != null)
+            {
+                errorBuilder.AppendLine(e.Data);
+                Console.WriteLine(e.Data);
+            }
+        };
+
+        process.Start();
+        process.BeginOutputReadLine();
+        process.BeginErrorReadLine();
 
         await process.WaitForExitAsync(cancellationToken);
 
-        var output = await outputTask;
-        var errors = await errorTask;
+        var output = outputBuilder.ToString();
+        var errors = errorBuilder.ToString();
         var exitCode = process.ExitCode;
 
         return new ProcessResponse(exitCode, output, errors);
