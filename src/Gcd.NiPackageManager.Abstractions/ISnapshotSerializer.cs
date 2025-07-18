@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
 
-namespace Snapshot.Abstractions;
+namespace Gcd.NiPackageManager.Abstractions;
 
 public interface ISnapshotSerializer
 {

@@ -2,15 +2,13 @@ using CSharpFunctionalExtensions;
 
 namespace Gcd.NiPackageManager.Abstractions;
 
-
+public record PackageDefinition(string Package, string Version, string Description, string Depends,
+    string StoreProduct, string UserVisible, string Section);
 public record FeedDefinition(string Name, string Uri);
 public record AddFeedRequest(FeedDefinition FeedToAdd);
 public record AddFeedResponse(FeedDefinition AddedFeed);
 public record RemoveFeedsRequest(FeedDefinition FeedToRemove);
 public record RemoveFeedsResponse(FeedDefinition RemovedFeed);
-
-public record PackageDefinition(string Package, string Version, string Description, string Depends, string StoreProduct,
-    string UserVisible, string Section);
 
 public record InfoInstalledRequest(string Pattern);
 public record InfoInstalledResponse(IReadOnlyList<PackageDefinition> Packages);

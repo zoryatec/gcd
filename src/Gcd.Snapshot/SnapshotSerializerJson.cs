@@ -1,19 +1,19 @@
 using System.Diagnostics.Contracts;
 using System.Text;
-using Snapshot.Abstractions;
 using System.Text.Json;
 using CSharpFunctionalExtensions;
+using Gcd.NiPackageManager.Abstractions;
 
 namespace Gcd.Snapshot;
 
 public class SnapshotSerializerJson : ISnapshotSerializer
 {
-    public Task<Result<string>> SerializeAsync(global::Snapshot.Abstractions.Snapshot snapshot, string path)
+    public Task<Result<string>> SerializeAsync(global::Gcd.NiPackageManager.Abstractions.Snapshot snapshot, string path)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<Result<global::Snapshot.Abstractions.Snapshot>> DeserializeAsync(string snapshotJson)
+    public async Task<Result<global::Gcd.NiPackageManager.Abstractions.Snapshot>> DeserializeAsync(string snapshotJson)
     {
         // Deserialize to your record type
         using var stream = new MemoryStream(Encoding.UTF8.GetBytes(snapshotJson));
@@ -22,16 +22,16 @@ public class SnapshotSerializerJson : ISnapshotSerializer
         return MapToSnapshot(obj);
     }
 
-    private Result<global::Snapshot.Abstractions.Snapshot> MapToSnapshot(Maybe<SnapshotDto> dto)
+    private Result<global::Gcd.NiPackageManager.Abstractions.Snapshot> MapToSnapshot(Maybe<SnapshotDto> dto)
     {
         if (dto.HasNoValue)
         {
-            return Result.Failure<global::Snapshot.Abstractions.Snapshot>("Snapshot data is null");
+            return Result.Failure<global::Gcd.NiPackageManager.Abstractions.Snapshot>("Snapshot data is null");
         }
         
         var feedDefinitions = MapToFeedDefinition(dto.Value.Feeds);
         var packages = MapToPackageDefinition(dto.Value.Packages);
-        var snapshot = new global::Snapshot.Abstractions.Snapshot(packages, feedDefinitions);
+        var snapshot = new global::Gcd.NiPackageManager.Abstractions.Snapshot(packages, feedDefinitions);
         return Result.Success(snapshot);
     }
 

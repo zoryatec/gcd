@@ -1,13 +1,14 @@
 using CSharpFunctionalExtensions;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager;
+using Gcd.NiPackageManager.Abstractions;
 using MediatR;
 using Snapshot.Abstractions;
 
 namespace Gcd.Handlers.Nipkg.Snapshot;
 
 
-public record CreateSnapshotFromInstallerResponse(global::Snapshot.Abstractions.Snapshot Snapshot);
+public record CreateSnapshotFromInstallerResponse(global::Gcd.NiPackageManager.Abstractions.Snapshot Snapshot);
 public record CreateSnapshotFromInstallerRequest(
     LocalDirPath InstallerDirectory
 ) : IRequest<Result<CreateSnapshotFromInstallerResponse>>;
@@ -24,7 +25,7 @@ public class CreateFromInstallerDirectoryHandler(IMediator _mediator)
         var feedDefinitions = GetFeedDefinitions(directories.Value);
         var packageDefinitions = GetPackageDefinitions(directories.Value);
         
-        var snapshot = new global::Snapshot.Abstractions.Snapshot(packageDefinitions.Value, feedDefinitions.Value);
+        var snapshot = new global::Gcd.NiPackageManager.Abstractions.Snapshot(packageDefinitions.Value, feedDefinitions.Value);
         
         return Result.Success(new CreateSnapshotFromInstallerResponse(snapshot));
     }

@@ -11,18 +11,16 @@ public record InstallFromSnapshotFileRequest(
     ) : IRequest<Result>;
 
 
-public class InstallFromSnapshotFileHandler(IMediator _mediator, INiPackageManagerService _nipkgService, 
-    SnapshotService snapshotService)
+public class InstallFromSnapshotFileHandler(IMediator _mediator)
     : IRequestHandler<InstallFromSnapshotFileRequest, Result>
 {
-    public async Task<Result> Handle(InstallFromSnapshotFileRequest fileRequest, CancellationToken cancellationToken)
+    public async Task<Result> Handle(InstallFromSnapshotFileRequest request, CancellationToken cancellationToken)
     {
-
-        var snapshotSerializer = new SnapshotSerializerJson();
-        var snapshotFilePath = fileRequest.SnapshotFilePath;
-
-        var result =  await snapshotSerializer.DeserializeAsync(snapshotFilePath.Value)
-            .Bind(snapshotService.InstallPackagesFromSnapshotAsync);
+        var snapshotFilePath = request.SnapshotFilePath;
+        var result =  await new SnapshotSerializerJson().
+                DeserializeAsync(snapshotFilePath.Value)
+                .Bind(snapshot=> _mediator.InstallFromSnapshotAsync(snapshot,Maybe.None,
+                    true,cancellationToken));
 
         return result;
     }

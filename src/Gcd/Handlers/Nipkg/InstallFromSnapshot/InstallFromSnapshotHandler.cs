@@ -4,13 +4,12 @@ using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager.Abstractions;
 using Gcd.Snapshot;
 using MediatR;
-using PackageDefinition = Snapshot.Abstractions.PackageDefinition;
 
 namespace Gcd.Handlers.Nipkg.InstallFromSnapshot;
 
 public record InstallFromInstallerDirectoryResponse();
 public record InstallFromSnapshotRequest(
-    global::Snapshot.Abstractions.Snapshot Snapshot, Maybe<string> PackageMatchPattern, bool SimulateInstallation
+    global::Gcd.NiPackageManager.Abstractions.Snapshot Snapshot, Maybe<string> PackageMatchPattern, bool SimulateInstallation
 ) : IRequest<Result>;
 
 
@@ -34,7 +33,7 @@ public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerSe
     }
     
     
-    private async Task<Result> InstallFeeds(global::Snapshot.Abstractions.Snapshot snapshot)
+    private async Task<Result> InstallFeeds(global::Gcd.NiPackageManager.Abstractions.Snapshot snapshot)
     {
         var results = new List<Result>();
         foreach (var feed  in snapshot.Feeds)
@@ -52,7 +51,7 @@ public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerSe
         return resultUpdate;
     }
     
-    private async Task<Result> RemoveFeeds(global::Snapshot.Abstractions.Snapshot snapshot)
+    private async Task<Result> RemoveFeeds(global::Gcd.NiPackageManager.Abstractions.Snapshot snapshot)
     {
         var results = new List<Result>();
         foreach (var feed  in snapshot.Feeds)
@@ -65,7 +64,7 @@ public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerSe
         return Result.Combine(results);
     }
     
-    private async Task<Result> InstallPackages(global::Snapshot.Abstractions.Snapshot snapshot, bool simulateInstallation)
+    private async Task<Result> InstallPackages(global::Gcd.NiPackageManager.Abstractions.Snapshot snapshot, bool simulateInstallation)
     {
 
         var packageToInstalls = snapshot.Packages.Select(x =>
@@ -80,8 +79,8 @@ public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerSe
 
 public static class SnapshotExtensions
 {
-    public static global::Snapshot.Abstractions.Snapshot WherePackagesMatchPattern(
-        this global::Snapshot.Abstractions.Snapshot snapshot, string pattern)
+    public static global::Gcd.NiPackageManager.Abstractions.Snapshot WherePackagesMatchPattern(
+        this global::Gcd.NiPackageManager.Abstractions.Snapshot snapshot, string pattern)
     {
         var packages = snapshot.Packages
             .Where(p => p.Package.Contains(pattern, StringComparison.OrdinalIgnoreCase))
@@ -91,11 +90,11 @@ public static class SnapshotExtensions
         return snapshot;
     }
     
-    public static global::Snapshot.Abstractions.Snapshot FilterPackages(
-        this global::Snapshot.Abstractions.Snapshot snapshot, Maybe<string> packageMatchPattern, bool selectStoreProducts = false)
+    public static global::Gcd.NiPackageManager.Abstractions.Snapshot FilterPackages(
+        this global::Gcd.NiPackageManager.Abstractions.Snapshot snapshot, Maybe<string> packageMatchPattern, bool selectStoreProducts = false)
     {
-        List<global::Snapshot.Abstractions.PackageDefinition> selectedPackages = [];
-        List<global::Snapshot.Abstractions.PackageDefinition> matchedPackages = [];
+        List<PackageDefinition> selectedPackages = [];
+        List<PackageDefinition> matchedPackages = [];
         if (packageMatchPattern.HasValue)
         {
             matchedPackages = snapshot.Packages
@@ -121,7 +120,7 @@ public static class MediatorExtensions
 {
     public static async Task<Result> InstallFromSnapshotAsync(
         this IMediator mediator,
-        global::Snapshot.Abstractions.Snapshot  snapshot,
+        global::Gcd.NiPackageManager.Abstractions.Snapshot  snapshot,
         Maybe<string> packageMatchPattern,
         bool simulateInstallation = false,
         CancellationToken cancellationToken = default
