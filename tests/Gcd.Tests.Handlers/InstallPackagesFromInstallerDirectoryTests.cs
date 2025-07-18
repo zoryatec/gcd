@@ -16,8 +16,8 @@ namespace Gcd.Tests.Handlers;
 
 public class InstallPackagesFromInstallerDirectoryTests
 {
-    [Fact(Skip ="for now")]
-    // [Fact]
+    // [Fact(Skip ="for now")]
+    //[Fact]
     public async Task SucessCase()
     {
         var simulation = true;

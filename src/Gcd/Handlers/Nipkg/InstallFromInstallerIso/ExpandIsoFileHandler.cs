@@ -1,9 +1,6 @@
 
 using CSharpFunctionalExtensions;
-using DiscUtils.Iso9660;
-using Gcd.Handlers.Nipkg.InstallFromSnapshot;
 using Gcd.LocalFileSystem.Abstractions;
-using Gcd.NiPackageManager.Abstractions;
 using MediatR;
 
 namespace Gcd.Handlers.Nipkg.InstallFromInstallerIso;

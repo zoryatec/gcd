@@ -14,7 +14,7 @@ public record InstallFromInstallerIsoRequest(
 ) : IRequest<Result>;
 
 
-public class InstallFromInstallerIsoHandler(IMediator _mediator, INiPackageManagerService _nipkgService)
+public class InstallFromInstallerIsoHandler(IMediator _mediator, IFileSystem fileSystem)
     : IRequestHandler<InstallFromInstallerIsoRequest, Result>
 {
     public async Task<Result> Handle(InstallFromInstallerIsoRequest request, CancellationToken cancellationToken)
@@ -24,7 +24,7 @@ public class InstallFromInstallerIsoHandler(IMediator _mediator, INiPackageManag
         
         if (expandDirectory.HasNoValue)
         {
-            var tempDirResult = await GenerateTempDirectoryAsync();
+            var tempDirResult = await fileSystem.GenerateTempDirectoryAsync();
             if (tempDirResult.IsFailure)
                 return Result.Failure(tempDirResult.Error);
 
@@ -37,30 +37,6 @@ public class InstallFromInstallerIsoHandler(IMediator _mediator, INiPackageManag
         var result = await _mediator.InstallFromInstallerDirectoryAsync(expandDirectory.Value,packageMatchPattern,simulateInstallation,
             cancellationToken);
         return result;
-    }
-    
-    private string GenerateTempDirectory()
-    {
-        string temporaryDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
-
-        if (Directory.Exists(temporaryDirectory))
-            Directory.Delete(temporaryDirectory, true);
-
-        Directory.CreateDirectory(temporaryDirectory);
-        return temporaryDirectory;
-    }
-
-    private async Task<Result<LocalDirPath>> GenerateTempDirectoryAsync()
-    {
-        try
-        {
-            var path = GenerateTempDirectory();
-            return LocalDirPath.Of(path).MapError(er => er.Message);
-        }
-        catch (Exception ex)
-        {
-            return Result.Failure<LocalDirPath>((ex.Message));
-        }
     }
 }
 

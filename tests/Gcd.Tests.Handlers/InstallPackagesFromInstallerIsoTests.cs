@@ -9,6 +9,7 @@ using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager;
 using Gcd.NiPackageManager.Abstractions;
 using Gcd.Services;
+using Gcd.Services.FileSystem;
 using Gcd.SystemProcess;
 using MediatR;
 using Moq;
@@ -26,6 +27,7 @@ public class InstallPackagesFromInstallerIsoTests
         var systemProcess = new ProcessService();
         var nipkgService = new NiPackageManagerService(systemProcess);
         var nipkgExtendedService = new NiPackageManagerExtendedService(nipkgService);
+        var localFileSystem = new LocalFileService();
         mediator
             .Setup(m => m.Send(It.IsAny<CreateSnapshotFromInstallerRequest>(), It.IsAny<CancellationToken>()))
             .Returns((CreateSnapshotFromInstallerRequest req, CancellationToken token) => {
@@ -71,7 +73,7 @@ public class InstallPackagesFromInstallerIsoTests
         
         var request = new InstallFromInstallerIsoRequest(isFilePath.Value,expandDirectory.Value, false,true,
             Maybe.None, simulation);
-        var handler = new InstallFromInstallerIsoHandler(mediator.Object,nipkgService);
+        var handler = new InstallFromInstallerIsoHandler(mediator.Object,localFileSystem);
         var result = await handler.Handle(request, CancellationToken.None);
         
         

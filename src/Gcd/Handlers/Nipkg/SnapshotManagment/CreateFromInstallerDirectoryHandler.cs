@@ -7,7 +7,7 @@ using MediatR;
 namespace Gcd.Handlers.Nipkg.SnapshotManagment;
 
 
-public record CreateSnapshotFromInstallerResponse(global::Gcd.NiPackageManager.Abstractions.Snapshot Snapshot);
+public record CreateSnapshotFromInstallerResponse(Snapshot Snapshot);
 public record CreateSnapshotFromInstallerRequest(
     LocalDirPath InstallerDirectory
 ) : IRequest<Result<CreateSnapshotFromInstallerResponse>>;
@@ -20,13 +20,14 @@ public class CreateFromInstallerDirectoryHandler(IMediator _mediator)
     {
         var installerDirectoryPath = request.InstallerDirectory;
         var installerDir = new InstallerDirectory(installerDirectoryPath);
-        var directories = GetMainFeedsDirectories(installerDir);;
-        var feedDefinitions = GetFeedDefinitions(directories.Value);
-        var packageDefinitions = GetPackageDefinitions(directories.Value);
         
-        var snapshot = new global::Gcd.NiPackageManager.Abstractions.Snapshot(packageDefinitions.Value, feedDefinitions.Value);
+        var snapshot =
+            from directories in GetMainFeedsDirectories(installerDir)
+            from feedDefinitions in GetFeedDefinitions(directories)
+            from packageDefinitions in GetPackageDefinitions(directories)
+            select new Snapshot(packageDefinitions, feedDefinitions);
         
-        return Result.Success(new CreateSnapshotFromInstallerResponse(snapshot));
+        return snapshot.Map(x => new CreateSnapshotFromInstallerResponse(x));
     }
 
     private Result<IReadOnlyList<PackageDefinition>> GetPackageDefinitions(IReadOnlyList<LocalDirPath> directories)
