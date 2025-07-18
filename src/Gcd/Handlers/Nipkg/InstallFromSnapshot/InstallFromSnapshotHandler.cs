@@ -18,23 +18,22 @@ public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerSe
     {
 
         var snapshot = request.Snapshot;
-        var resultFeed = await InstallFeeds(snapshot);
-        if (resultFeed.IsFailure) { return Result.Failure(resultFeed.Error); }
-        
-        snapshot = snapshot.FilterPackages(request.PackageMatchPattern, true);
-        var result = await InstallPackages(snapshot,request.SimulateInstallation); 
+        var filterPackages = await InstallFeedAsync(snapshot.Feeds)
+            .Bind(() => snapshot.FilterPackages(request.PackageMatchPattern, true));
+        if (filterPackages.IsFailure) { return Result.Failure(filterPackages.Error); }
 
-        var resultRemove = await RemoveFeeds(snapshot);
+        snapshot = filterPackages.Value;
+        var result = await InstallPackageAsync(snapshot.Packages, request.SimulateInstallation);
 
-        
+        var resultRemove = await RemoveFeedAsync(snapshot.Feeds);
         return Result.Combine(resultRemove,result);
     }
     
     
-    private async Task<Result> InstallFeeds(Snapshot snapshot)
+    private async Task<Result> InstallFeedAsync(IReadOnlyList<FeedDefinition> feeds)
     {
         var results = new List<Result>();
-        foreach (var feed  in snapshot.Feeds)
+        foreach (var feed  in feeds)
         {
             var request = new AddFeedRequest(feed);
             var result  = await _nipkgService.AddFeedAsync(request);
@@ -48,10 +47,10 @@ public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerSe
         return resultUpdate;
     }
     
-    private async Task<Result> RemoveFeeds(Snapshot snapshot)
+    private async Task<Result> RemoveFeedAsync(IReadOnlyList<FeedDefinition> feeds)
     {
         var results = new List<Result>();
-        foreach (var feed  in snapshot.Feeds)
+        foreach (var feed  in feeds)
         {
             var feedDefinition = new FeedDefinition(feed.Name, feed.Uri);
             var request = new RemoveFeedsRequest(feedDefinition);
@@ -61,10 +60,9 @@ public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerSe
         return Result.Combine(results);
     }
     
-    private async Task<Result> InstallPackages(Snapshot snapshot, bool simulateInstallation)
+    private async Task<Result> InstallPackageAsync(IReadOnlyList<PackageDefinition> packages, bool simulateInstallation)
     {
-
-        var packageToInstalls = snapshot.Packages.Select(x =>
+        var packageToInstalls = packages.Select(x =>
             new PackageToInstall(x.Package, x.Version)).ToList();
 
         var request = new InstallRequest(packageToInstalls,true,

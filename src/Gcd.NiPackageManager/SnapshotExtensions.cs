@@ -16,7 +16,7 @@ public static class SnapshotExtensions
         return snapshot;
     }
     
-    public static Snapshot FilterPackages(
+    public static Result<Snapshot> FilterPackages(
         this Snapshot snapshot, Maybe<string> packageMatchPattern, bool selectStoreProducts = false)
     {
         List<PackageDefinition> selectedPackages = [];
@@ -37,6 +37,6 @@ public static class SnapshotExtensions
         var distinct = selectedPackages.Distinct().ToList();
 
         snapshot = snapshot with { Packages = distinct};
-        return snapshot;
+        return Result.Success(snapshot);
     }
 }
