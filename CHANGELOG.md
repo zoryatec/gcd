@@ -1,5 +1,12 @@
 
 
+<a name="0.23.15"></a>
+## [0.23.15](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.15) (2025-07-18)
+
+### Bug Fixes
+
+* installing packages from iso and directory, bootstrap ([#5](https://www.github.com/zoryatec/gcd/issues/5)) ([1c9bdb9](https://www.github.com/zoryatec/gcd/commit/1c9bdb999a78a1ceb2f99604befaab3b42dc4368))
+
 <a name="0.23.14"></a>
 ## [0.23.14](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.14) (2025-03-25)
 
