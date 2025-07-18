@@ -45,7 +45,7 @@ public sealed class IniFilePathOption() : CommandOption(NAME, CommandOptionType.
 
 public sealed class LabViewCliIniFilePathOption() : CommandOption(NAME, CommandOptionType.SingleValue)
 {
-    public const string NAME = "--labview--cli-ini-file-path";
+    public const string NAME = "--labview-cli-ini-file-path";
 
     public Result<LocalFilePath, Error> Map() =>
         LocalFilePath.Of(this.Value());
@@ -53,7 +53,7 @@ public sealed class LabViewCliIniFilePathOption() : CommandOption(NAME, CommandO
 
 public sealed class LabViewIniFilePathOption() : CommandOption(NAME, CommandOptionType.SingleValue)
 {
-    public const string NAME = "--labview--ini-file-path";
+    public const string NAME = "--labview-ini-file-path";
 
     public Result<LocalFilePath, Error> Map() =>
         LocalFilePath.Of(this.Value());
