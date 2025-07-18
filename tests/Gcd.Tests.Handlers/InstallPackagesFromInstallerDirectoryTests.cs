@@ -18,6 +18,7 @@ namespace Gcd.Tests.Handlers;
 public class InstallPackagesFromInstallerDirectoryTests
 {
     [Fact(Skip ="for now")]
+    // [Fact]
     public async Task SucessCase()
     {
         var simulation = true;
@@ -49,7 +50,7 @@ public class InstallPackagesFromInstallerDirectoryTests
         var installerDirectory = LocalDirPath.Of(testInstallerPath);
         var outputFilePath = LocalFilePath.Of(ouptutFilePathRaw);
         var request = new InstallFromInstallerDirectoryRequest(installerDirectory.Value,Maybe.None, simulation);
-        var handler = new InstallFromInstallerDirectoryHandler(mediator.Object,nipkgService);
+        var handler = new InstallFromInstallerDirectoryHandler(mediator.Object);
         var result = await handler.Handle(request, CancellationToken.None);
         
         

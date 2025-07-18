@@ -19,6 +19,7 @@ namespace Gcd.Tests.Handlers;
 public class InstallPackagesFromInstallerIsoTests
 {
     [Fact(Skip ="for now")]
+    // [Fact]
     public async Task SucessCase()
     {
         var simulation = true;
@@ -42,7 +43,7 @@ public class InstallPackagesFromInstallerIsoTests
         mediator
             .Setup(m => m.Send(It.IsAny<InstallFromInstallerDirectoryRequest>(), It.IsAny<CancellationToken>()))
             .Returns((InstallFromInstallerDirectoryRequest req, CancellationToken token) => {
-                var handler = new InstallFromInstallerDirectoryHandler(mediator.Object,nipkgService);
+                var handler = new InstallFromInstallerDirectoryHandler(mediator.Object);
                 return handler.Handle(req, token);
             });
         

@@ -29,30 +29,6 @@ $gcdBootstrapScriptPath = "$PSScriptRoot\GcdBootstrap.ps1"
 
 & $gcdCmdPath nipkg install-from-installer-iso --iso-local-path $installerIsoPath
 
-# $filterFunction = {  @($input) | Where-Object { $_.Package -eq 'ni-labview-2025-core-x86-en'}}
-
-# Install-PackagesFromInstallerIso  `
-#     -NipkgInstallerPath $nipkgInstallerPath `
-#     -IsoFilePath $installerIsoPath `
-#     -RemoveIsoFile `
-#     -RemoveTemporaryDirectory `
-#     -FilterFunction $filterFunction `
-#     -AcceptEulas `
-#     -SuppressIncompatibilityErrors
-
-
-# Set-LabViewForCi `
-#     -LabViewDirectory $labViewDirectory `
-#     -LabViewCliDirectory $labViewCliDirectory
-
-
-# Install-Gcd -NipkgCmdPath $nipkgCmdPath
-
-# & $gcdCmdPath tools add-to-system-path $gcdCmdContainingDir
-# & $gcdCmdPath tools add-to-system-path $niLicenseCmdDirectory
-# & $gcdCmdPath tools add-to-system-path $nipkgCmdContainingDir
-# & $gcdCmdPath tools add-to-system-path $labViewCliDirectory
-
 
 
 
