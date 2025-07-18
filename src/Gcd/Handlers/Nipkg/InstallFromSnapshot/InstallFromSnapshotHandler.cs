@@ -16,17 +16,11 @@ public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerSe
 {
     public async Task<Result> Handle(InstallFromSnapshotRequest request, CancellationToken cancellationToken)
     {
-
         var snapshot = request.Snapshot;
-        var filterPackages = await InstallFeedAsync(snapshot.Feeds)
-            .Bind(() => snapshot.FilterPackages(request.PackageMatchPattern, true));
-        if (filterPackages.IsFailure) { return Result.Failure(filterPackages.Error); }
-
-        snapshot = filterPackages.Value;
-        var result = await InstallPackageAsync(snapshot.Packages, request.SimulateInstallation);
-
-        var resultRemove = await RemoveFeedAsync(snapshot.Feeds);
-        return Result.Combine(resultRemove,result);
+        return  await InstallFeedAsync(snapshot.Feeds).Map(() => snapshot)
+            .Bind((snap) => snap.FilterPackages(request.PackageMatchPattern, true))
+            .Bind(snap => InstallPackageAsync(snap.Packages, request.SimulateInstallation).Map(() => snap))
+            .Finally(snap => RemoveFeedAsync(snapshot.Feeds));
     }
     
     
