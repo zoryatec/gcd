@@ -5,19 +5,18 @@ using MediatR;
 
 namespace Gcd.Handlers.Tools;
 
-public record BootstrapRequest(NipkgInstallerUri InstallerUri) : IRequest<Result>;
+public record BootstrapRequest(NipkgInstallerUri InstallerUri, string GcdFeed, string GcdPackageName) : IRequest<Result>;
 
 
 public class BootstrapHandler(IMediator mediator, INiPackageManagerExtendedService nipm)
     : IRequestHandler<BootstrapRequest, Result>
 {
-    private const string GcdFeed = "https://zoryatecartifacts.blob.core.windows.net/dev-feed";
     private const string NipmConainingDir = @"C:\Program Files\National Instruments\NI Package Manager";
     private const string GcdContainingDir = @"C:\Program Files\gcd";
     public async Task<Result> Handle(BootstrapRequest request, CancellationToken cancellationToken)
     {
-        var feed = new FeedDefinition("gcd-dev-feed",GcdFeed);
-        var package = new PackageDefinition("gcd-dev", "");
+        var feed = new FeedDefinition("gcd-feed",request.GcdFeed);
+        var package = new PackageDefinition(request.GcdPackageName, "");
 
         return await mediator.Send(new InstallNinpkgRequest(request.InstallerUri, NipkgCmdPath.Deafault),
                 cancellationToken)

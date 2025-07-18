@@ -23,8 +23,8 @@ $gcdBootstrapScriptPath = "$PSScriptRoot\GcdBootstrap.ps1"
 
 
 & $gcdBootstrapScriptPath -NipmInstallerUri $env:NIPM_INSTALLER_URI `
-    -GcdFeed "https://zoryatecartifacts.blob.core.windows.net/dev-feed" `
-    -GcdPackageName "gcd-dev"
+    -GcdFeed "https://raw.githubusercontent.com/zoryatec/gcd/refs/heads/main/feed"`
+    -GcdPackageName "gcd"
 
 
 & $gcdCmdPath nipkg install-from-installer-iso --iso-local-path $installerIsoPath
