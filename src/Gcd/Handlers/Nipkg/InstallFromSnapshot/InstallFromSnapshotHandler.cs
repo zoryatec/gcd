@@ -1,6 +1,5 @@
 using CSharpFunctionalExtensions;
-using Gcd.Handlers.Nipkg.Snapshot;
-using Gcd.LocalFileSystem.Abstractions;
+using Gcd.NiPackageManager;
 using Gcd.NiPackageManager.Abstractions;
 using MediatR;
 
@@ -8,7 +7,7 @@ namespace Gcd.Handlers.Nipkg.InstallFromSnapshot;
 
 public record InstallFromInstallerDirectoryResponse();
 public record InstallFromSnapshotRequest(
-    global::Gcd.NiPackageManager.Abstractions.Snapshot Snapshot, Maybe<string> PackageMatchPattern, bool SimulateInstallation
+    Snapshot Snapshot, Maybe<string> PackageMatchPattern, bool SimulateInstallation
 ) : IRequest<Result>;
 
 
@@ -32,13 +31,12 @@ public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerSe
     }
     
     
-    private async Task<Result> InstallFeeds(global::Gcd.NiPackageManager.Abstractions.Snapshot snapshot)
+    private async Task<Result> InstallFeeds(Snapshot snapshot)
     {
         var results = new List<Result>();
         foreach (var feed  in snapshot.Feeds)
         {
-            var feedDefinition = new FeedDefinition(feed.Name, feed.Uri);
-            var request = new AddFeedRequest(feedDefinition);
+            var request = new AddFeedRequest(feed);
             var result  = await _nipkgService.AddFeedAsync(request);
             results.Add(result);
         }
@@ -50,7 +48,7 @@ public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerSe
         return resultUpdate;
     }
     
-    private async Task<Result> RemoveFeeds(global::Gcd.NiPackageManager.Abstractions.Snapshot snapshot)
+    private async Task<Result> RemoveFeeds(Snapshot snapshot)
     {
         var results = new List<Result>();
         foreach (var feed  in snapshot.Feeds)
@@ -63,7 +61,7 @@ public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerSe
         return Result.Combine(results);
     }
     
-    private async Task<Result> InstallPackages(global::Gcd.NiPackageManager.Abstractions.Snapshot snapshot, bool simulateInstallation)
+    private async Task<Result> InstallPackages(Snapshot snapshot, bool simulateInstallation)
     {
 
         var packageToInstalls = snapshot.Packages.Select(x =>
@@ -76,50 +74,11 @@ public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerSe
     }
 }
 
-public static class SnapshotExtensions
-{
-    public static global::Gcd.NiPackageManager.Abstractions.Snapshot WherePackagesMatchPattern(
-        this global::Gcd.NiPackageManager.Abstractions.Snapshot snapshot, string pattern)
-    {
-        var packages = snapshot.Packages
-            .Where(p => p.Package.Contains(pattern, StringComparison.OrdinalIgnoreCase))
-            .ToList();
-        
-        snapshot = snapshot with { Packages = packages };
-        return snapshot;
-    }
-    
-    public static global::Gcd.NiPackageManager.Abstractions.Snapshot FilterPackages(
-        this global::Gcd.NiPackageManager.Abstractions.Snapshot snapshot, Maybe<string> packageMatchPattern, bool selectStoreProducts = false)
-    {
-        List<PackageDefinition> selectedPackages = [];
-        List<PackageDefinition> matchedPackages = [];
-        if (packageMatchPattern.HasValue)
-        {
-            matchedPackages = snapshot.Packages
-                .Where(p => p.Package.Contains(packageMatchPattern.Value, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-            selectedPackages.AddRange(matchedPackages);
-        }
-    
-         List<PackageDefinition> storeProductsPackages = snapshot.Packages
-            .Where(p => p.StoreProduct == "yes").ToList();
-         
-         selectedPackages.AddRange(storeProductsPackages);
-
-         var distinct = selectedPackages.Distinct().ToList();
-
-         snapshot = snapshot with { Packages = distinct};
-        return snapshot;
-    }
-
-}
-
 public static class MediatorExtensions
 {
     public static async Task<Result> InstallFromSnapshotAsync(
         this IMediator mediator,
-        global::Gcd.NiPackageManager.Abstractions.Snapshot  snapshot,
+        Snapshot  snapshot,
         Maybe<string> packageMatchPattern,
         bool simulateInstallation = false,
         CancellationToken cancellationToken = default

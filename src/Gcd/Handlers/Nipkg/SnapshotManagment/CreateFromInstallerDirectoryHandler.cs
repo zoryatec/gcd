@@ -4,7 +4,7 @@ using Gcd.NiPackageManager;
 using Gcd.NiPackageManager.Abstractions;
 using MediatR;
 
-namespace Gcd.Handlers.Nipkg.Snapshot;
+namespace Gcd.Handlers.Nipkg.SnapshotManagment;
 
 
 public record CreateSnapshotFromInstallerResponse(global::Gcd.NiPackageManager.Abstractions.Snapshot Snapshot);

@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
 using Gcd.Handlers.Nipkg.InstallFromSnapshot;
-using Gcd.Handlers.Nipkg.Snapshot;
+using Gcd.Handlers.Nipkg.SnapshotManagment;
 using Gcd.LocalFileSystem.Abstractions;
 using MediatR;
 

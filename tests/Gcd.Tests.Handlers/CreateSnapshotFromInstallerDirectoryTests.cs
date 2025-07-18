@@ -1,5 +1,5 @@
 using FluentAssertions;
-using Gcd.Handlers.Nipkg.Snapshot;
+using Gcd.Handlers.Nipkg.SnapshotManagment;
 using Gcd.Handlers.Shared;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager;

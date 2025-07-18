@@ -1,6 +1,5 @@
 using FluentAssertions;
 using Gcd.Handlers.Nipkg.InstallFromInstallerIso;
-using Gcd.Handlers.Nipkg.Snapshot;
 using Gcd.Handlers.Shared;
 using Gcd.Handlers.Tools;
 using Gcd.LocalFileSystem.Abstractions;
