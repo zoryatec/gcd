@@ -24,6 +24,7 @@ public class InstallPackagesFromInstallerDirectoryTests
         var mediator = new Mock<IMediator>();
         var systemProcess = new ProcessService();
         var nipkgService = new NiPackageManagerService(systemProcess);
+        var nipkgExtendedService = new NiPackageManagerExtendedService(nipkgService);
         mediator
             .Setup(m => m.Send(It.IsAny<CreateSnapshotFromInstallerRequest>(), It.IsAny<CancellationToken>()))
             .Returns((CreateSnapshotFromInstallerRequest req, CancellationToken token) => {
@@ -34,7 +35,7 @@ public class InstallPackagesFromInstallerDirectoryTests
         mediator
             .Setup(m => m.Send(It.IsAny<InstallFromSnapshotRequest>(), It.IsAny<CancellationToken>()))
             .Returns((InstallFromSnapshotRequest req, CancellationToken token) => {
-                var handler = new InstallFromSnapshotHandler(mediator.Object,nipkgService);
+                var handler = new InstallFromSnapshotHandler(mediator.Object,nipkgExtendedService);
                 return handler.Handle(req, token);
             });
         

@@ -11,58 +11,16 @@ public record InstallFromSnapshotRequest(
 ) : IRequest<Result>;
 
 
-public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerService _nipkgService)
+public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerExtendedService _nipkgService)
     : IRequestHandler<InstallFromSnapshotRequest, Result>
 {
     public async Task<Result> Handle(InstallFromSnapshotRequest request, CancellationToken cancellationToken)
     {
         var snapshot = request.Snapshot;
-        return  await InstallFeedAsync(snapshot.Feeds).Map(() => snapshot)
+        return  await _nipkgService.InstallFeedAsync(snapshot.Feeds).Map(() => snapshot)
             .Bind((snap) => snap.FilterPackages(request.PackageMatchPattern, true))
-            .Bind(snap => InstallPackageAsync(snap.Packages, request.SimulateInstallation).Map(() => snap))
-            .Finally(snap => RemoveFeedAsync(snapshot.Feeds));
-    }
-    
-    
-    private async Task<Result> InstallFeedAsync(IReadOnlyList<FeedDefinition> feeds)
-    {
-        var results = new List<Result>();
-        foreach (var feed  in feeds)
-        {
-            var request = new AddFeedRequest(feed);
-            var result  = await _nipkgService.AddFeedAsync(request);
-            results.Add(result);
-        }
-
-        var resultc = Result.Combine(results);
-        
-        if(resultc.IsFailure) { return resultc;}
-        var resultUpdate = await _nipkgService.UpdateAsync();
-        return resultUpdate;
-    }
-    
-    private async Task<Result> RemoveFeedAsync(IReadOnlyList<FeedDefinition> feeds)
-    {
-        var results = new List<Result>();
-        foreach (var feed  in feeds)
-        {
-            var feedDefinition = new FeedDefinition(feed.Name, feed.Uri);
-            var request = new RemoveFeedsRequest(feedDefinition);
-            var result  = await _nipkgService.RemoveFeedAsync(request);
-            results.Add(result);
-        }
-        return Result.Combine(results);
-    }
-    
-    private async Task<Result> InstallPackageAsync(IReadOnlyList<PackageDefinition> packages, bool simulateInstallation)
-    {
-        var packageToInstalls = packages.Select(x =>
-            new PackageToInstall(x.Package, x.Version)).ToList();
-
-        var request = new InstallRequest(packageToInstalls,true,
-            true, simulateInstallation, true, false, true);
-        var result = await _nipkgService.InstallAsync(request);
-        return result;
+            .Bind(snap => _nipkgService.InstallPackageAsync(snap.Packages, request.SimulateInstallation).Map(() => snap))
+            .Finally(snap => _nipkgService.RemoveFeedAsync(snapshot.Feeds));
     }
 }
 

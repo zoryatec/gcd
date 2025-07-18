@@ -37,6 +37,7 @@ public static class GcdExt
                 .AddScoped<IControlPropertyFactory, ControlPropertyFactory>()
                 .AddScoped<ILabViewProjectProvider, LabViewProjectProvider>()
                 .AddScoped<INiPackageManagerService, NiPackageManagerService>()
+                .AddScoped<INiPackageManagerExtendedService, NiPackageManagerExtendedService>()
                 .AddScoped<IProcessService, ProcessService>()
                 .AddScoped<ISnapshotSerializer, SnapshotSerializerJson>()
                 .AddSingleton<IConsole>(console)
