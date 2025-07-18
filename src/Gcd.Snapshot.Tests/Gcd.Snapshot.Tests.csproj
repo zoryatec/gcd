@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Gcd.Snapshot\Gcd.Snapshot.csproj" />
+      <ProjectReference Include="..\Gcd.NiPackageManager\Gcd.NiPackageManager.csproj" />
     </ItemGroup>
 
     <ItemGroup>

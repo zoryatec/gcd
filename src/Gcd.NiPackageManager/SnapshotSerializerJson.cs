@@ -4,7 +4,7 @@ using System.Text.Json;
 using CSharpFunctionalExtensions;
 using Gcd.NiPackageManager.Abstractions;
 
-namespace Gcd.Snapshot;
+namespace Gcd.NiPackageManager;
 
 public class SnapshotSerializerJson : ISnapshotSerializer
 {

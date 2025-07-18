@@ -1,3 +1,5 @@
+using Gcd.NiPackageManager;
+
 namespace Gcd.Snapshot.Tests;
 
 public class SnapshotSerializerJsonTests

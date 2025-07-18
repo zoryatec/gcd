@@ -1,4 +1,4 @@
-namespace Gcd.Snapshot;
+namespace Gcd.NiPackageManager;
 
 public record PackageDefinitionDto(string Package, string Version, string Description, string Depends,
     string StoreProduct, string UserVisible, string Section);

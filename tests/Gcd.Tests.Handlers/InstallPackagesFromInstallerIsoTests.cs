@@ -9,7 +9,6 @@ using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager;
 using Gcd.NiPackageManager.Abstractions;
 using Gcd.Services;
-using Gcd.Snapshot;
 using Gcd.SystemProcess;
 using MediatR;
 using Moq;

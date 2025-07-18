@@ -3,7 +3,6 @@ using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager;
 using Gcd.NiPackageManager.Abstractions;
 using MediatR;
-using Snapshot.Abstractions;
 
 namespace Gcd.Handlers.Nipkg.Snapshot;
 

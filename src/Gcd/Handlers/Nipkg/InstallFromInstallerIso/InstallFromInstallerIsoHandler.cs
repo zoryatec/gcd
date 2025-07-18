@@ -4,7 +4,6 @@ using Gcd.Handlers.Nipkg.Snapshot;
 using Gcd.Handlers.Nipkg.InstallFromInstallerDirectory;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager.Abstractions;
-using Gcd.Snapshot;
 using MediatR;
 
 namespace Gcd.Handlers.Nipkg.InstallFromInstallerIso;

@@ -15,10 +15,8 @@ using System.Reflection;
 using Gcd.NiPackageManager;
 using Gcd.NiPackageManager.Abstractions;
 using Gcd.RemoteFileSystem.Rclone.DI;
-using Gcd.Snapshot;
 using Gcd.SystemProcess;
 using Gcd.SystemProcess.Abstractions;
-using Snapshot.Abstractions;
 
 namespace Gcd.DI;
 

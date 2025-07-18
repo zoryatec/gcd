@@ -2,8 +2,8 @@ using FluentAssertions;
 using Gcd.Handlers.Nipkg.Snapshot;
 using Gcd.Handlers.Shared;
 using Gcd.LocalFileSystem.Abstractions;
+using Gcd.NiPackageManager;
 using Gcd.Services;
-using Gcd.Snapshot;
 using MediatR;
 using Moq;
 
