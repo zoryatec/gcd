@@ -20,15 +20,8 @@ Write-Host "!!!!!!!!!!!!!!!!!! DOWNLOAD ADN EXTRACT GCD !!!!!!!!!!!!!!!!!!!!"
 Invoke-WebRequest -Uri $zipUrl -OutFile $zipPath
 Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
 
-Write-Host "!!!!!!!!!!!!!!!!!! INSTALLING NIPKG !!!!!!!!!!!!!!!!!!!!"
-& $exePath tools install-nipkg --installer-source-uri $NipmInstallerUri
+Write-Host "!!!!!!!!!!!!!!!!!!  BOOTSTRAP  !!!!!!!!!!!!!!!!!!!!"
+& $exePath tools bootstrap --nipkg-installer-source-uri $NipmInstallerUri
 
-Write-Host "!!!!!!!!!!!!!!!!!! INSTALLING GCD !!!!!!!!!!!!!!!!!!!!"
-& $nipkgCmd feed-add $GcdFeed --name=gcd-feed --system
-& $nipkgCmd update
-& $nipkgCmd install $GcdPackageName -y
 
-Write-Host "!!!!!!!!!!!!!!!!!! ADDING NIPKG & GCD TO ENV PATH !!!!!!!!!!!!!!!!!!!!"
-& $gcdCmd tools add-to-path $niPackageManagerDir
-& $gcdCmd tools add-to-path $gcdDir
 
