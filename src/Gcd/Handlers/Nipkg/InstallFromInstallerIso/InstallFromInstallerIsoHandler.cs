@@ -1,8 +1,6 @@
 using CSharpFunctionalExtensions;
-using Gcd.Handlers.Nipkg.InstallFromSnapshot;
 using Gcd.Handlers.Nipkg.InstallFromInstallerDirectory;
 using Gcd.LocalFileSystem.Abstractions;
-using Gcd.NiPackageManager.Abstractions;
 using MediatR;
 
 namespace Gcd.Handlers.Nipkg.InstallFromInstallerIso;
@@ -22,21 +20,15 @@ public class InstallFromInstallerIsoHandler(IMediator _mediator, IFileSystem fil
         var (isoFilePath, expandDirectory, removeIsoFile, removeExpandedDirectory
             , packageMatchPattern,simulateInstallation) = request;
         
-        if (expandDirectory.HasNoValue)
-        {
-            var tempDirResult = await fileSystem.GenerateTempDirectoryAsync();
-            if (tempDirResult.IsFailure)
-                return Result.Failure(tempDirResult.Error);
-
-            expandDirectory = tempDirResult.Value;
-        }
-
-        var resultExpand = await _mediator.ExpandIsoFileAsync(isoFilePath, expandDirectory.Value, removeIsoFile, cancellationToken);
-        if(resultExpand.IsFailure) {return Result.Failure(resultExpand.Error);}
-
-        var result = await _mediator.InstallFromInstallerDirectoryAsync(expandDirectory.Value,packageMatchPattern,simulateInstallation,
-            cancellationToken);
-        return result;
+        return await (
+                expandDirectory.HasValue
+                    ? Task.FromResult(Result.Success(expandDirectory.Value))
+                    : fileSystem.GenerateTempDirectoryAsync()
+            )
+            .Bind(dir => _mediator.ExpandIsoFileAsync(isoFilePath, dir, removeIsoFile, cancellationToken)
+                .Map(() => dir))
+            .Bind(dir => _mediator.InstallFromInstallerDirectoryAsync(dir, packageMatchPattern, simulateInstallation,
+                cancellationToken));    
     }
 }
 

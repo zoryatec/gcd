@@ -18,6 +18,12 @@ public static class MediatorExtensions
     => await mediator.Send(new AddToPathRequest(pathToAdd, EnvironmentVariableTarget.User), cancellationToken);
     public static async Task<Result> AddToSystemPath(this IMediator mediator, string pathToAdd, CancellationToken cancellationToken = default)
         => await mediator.Send(new AddToPathRequest(pathToAdd, EnvironmentVariableTarget.Machine), cancellationToken);
+    
+    public static async Task<Result> AddToPathAsync(this IMediator mediator, string pathToAdd, CancellationToken cancellationToken = default)
+        => await mediator.Send(new AddToPathWithFallbackRequest(pathToAdd), cancellationToken);
+    
+    public static async Task<Result> BootstrapAsync(this IMediator mediator,NipkgInstallerUri nipkgInstallerUri, CancellationToken cancellationToken = default)
+        => await mediator.Send(new BootstrapRequest(nipkgInstallerUri), cancellationToken);
     public static async Task<UnitResult<Error>> KillProcessAsync(this IMediator mediator,ProcessName processName, CancellationToken cancellationToken = default)
         => await mediator.Send(new KillProcessRequest(processName), cancellationToken);
     public static async Task<UnitResult<Error>> SetIniFileParameteAsync(this IMediator mediator, LocalFilePath iniFilePath,

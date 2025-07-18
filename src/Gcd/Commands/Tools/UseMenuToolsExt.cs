@@ -25,6 +25,7 @@ public static class UseMenuToolsExt
             cmd.UseCmdAddToUserPath(serviceProvider);
             cmd.UseCmdAddToSystemPath(serviceProvider);
             cmd.UseCmdAddToPath(serviceProvider);
+            cmd.UseCmdBootstrap(serviceProvider);
             cmd.UseCmdInstallNipkg(serviceProvider);
             cmd.UseCmdDownloadNipkg(serviceProvider);
             cmd.UseCmdDownloadArchive(serviceProvider);

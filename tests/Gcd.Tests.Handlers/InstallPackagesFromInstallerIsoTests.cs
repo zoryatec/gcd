@@ -18,7 +18,6 @@ namespace Gcd.Tests.Handlers;
 
 public class InstallPackagesFromInstallerIsoTests
 {
-    [Fact(Skip ="for now")]
     // [Fact]
     public async Task SucessCase()
     {

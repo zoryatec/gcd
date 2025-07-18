@@ -2,8 +2,8 @@ using CSharpFunctionalExtensions;
 
 namespace Gcd.NiPackageManager.Abstractions;
 
-public record PackageDefinition(string Package, string Version, string Description, string Depends,
-    string StoreProduct, string UserVisible, string Section);
+public record PackageDefinition(string Package, string Version, string Description = "", string Depends = "",
+    string StoreProduct = "", string UserVisible = "", string Section = "");
 public record FeedDefinition(string Name, string Uri);
 public record AddFeedRequest(FeedDefinition FeedToAdd);
 public record AddFeedResponse(FeedDefinition AddedFeed);

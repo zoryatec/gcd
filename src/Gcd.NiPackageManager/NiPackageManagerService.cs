@@ -15,9 +15,11 @@ public class NiPackageManagerService(IProcessService _processService)  : INiPack
         var fullSpecPackages = new List<string>();
         foreach (var packageToInstall in request.PackagesToInstalls)
         {
-            fullSpecPackages.Add($"{packageToInstall.Package}={packageToInstall.Version}");
+            var fullspec = string.IsNullOrWhiteSpace(packageToInstall.Version) ?
+                packageToInstall.Package 
+                : $"{packageToInstall.Package}={packageToInstall.Version}";
+            fullSpecPackages.Add(fullspec);
         }
-        // var packages = string.Join(" ", fullSpecPackages);
         
         arguments.Add("install");
         arguments.AddRange(fullSpecPackages);

@@ -22,6 +22,22 @@ public class NiPackageManagerExtendedService(INiPackageManagerService _nipkgServ
         return resultUpdate;
     }
     
+    public async Task<Result> InstallFeedAsync(FeedDefinition feed)
+    {
+        var results = new List<Result>();
+
+        var request = new AddFeedRequest(feed);
+        var result  = await _nipkgService.AddFeedAsync(request);
+        results.Add(result);
+        
+
+        var resultc = Result.Combine(results);
+        
+        if(resultc.IsFailure) { return resultc;}
+        var resultUpdate = await _nipkgService.UpdateAsync();
+        return resultUpdate;
+    }
+    
     public async Task<Result> RemoveFeedAsync(IReadOnlyList<FeedDefinition> feeds)
     {
         var results = new List<Result>();
@@ -41,6 +57,16 @@ public class NiPackageManagerExtendedService(INiPackageManagerService _nipkgServ
             new PackageToInstall(x.Package, x.Version)).ToList();
 
         var request = new InstallRequest(packageToInstalls,true,
+            true, simulateInstallation, true, false, true);
+        var result = await _nipkgService.InstallAsync(request);
+        return result;
+    }
+    
+    public async Task<Result> InstallPackageAsync(PackageDefinition package, bool simulateInstallation)
+    {
+        var packageToInstall = new PackageToInstall(package.Package, package.Version);
+
+        var request = new InstallRequest(new List<PackageToInstall>{packageToInstall},true,
             true, simulateInstallation, true, false, true);
         var result = await _nipkgService.InstallAsync(request);
         return result;
