@@ -9,8 +9,9 @@ namespace Gcd.Model.Config;
 
 public record NipkgCmdPath : ConfigProperty
 {
-    public static NipkgCmdPath None = new NipkgCmdPath("unset");
-    public static NipkgCmdPath InPath = new NipkgCmdPath("nipkg");
+    public static readonly NipkgCmdPath None = new NipkgCmdPath("unset");
+    public static readonly NipkgCmdPath InPath = new NipkgCmdPath("nipkg");
+    public static readonly NipkgCmdPath Deafault = new NipkgCmdPath("nipkg");
 
     public static Result<NipkgCmdPath> Of(Maybe<string> maybeValue)
     {

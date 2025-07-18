@@ -35,6 +35,45 @@ public sealed class DownloadArchiveDestinationDirOption() : CommandOption(NAME, 
         LocalDirPath.Of(this.Value());
 }
 
+public sealed class IniFilePathOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public const string NAME = "--ini-file-path";
+
+    public Result<LocalFilePath, Error> Map() =>
+        LocalFilePath.Of(this.Value());
+}
+
+public sealed class LabViewCliIniFilePathOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public const string NAME = "--labview-cli-ini-file-path";
+
+    public Result<LocalFilePath, Error> Map() =>
+        LocalFilePath.Of(this.Value());
+}
+
+public sealed class LabViewIniFilePathOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public const string NAME = "--labview-ini-file-path";
+
+    public Result<LocalFilePath, Error> Map() =>
+        LocalFilePath.Of(this.Value());
+}
+
+public sealed class IniFileSectionOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public const string NAME = "--section";
+}
+
+public sealed class InifFileKeyOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public const string NAME = "--key";
+}
+
+public sealed class InifFileValueOption() : CommandOption(NAME, CommandOptionType.SingleValue)
+{
+    public const string NAME = "--value";
+}
+
 public sealed class DownloadArchiveRelativeDirOption() : CommandOption(NAME, CommandOptionType.SingleValue)
 {
     public static readonly string NAME = "--archive-relative-dir";

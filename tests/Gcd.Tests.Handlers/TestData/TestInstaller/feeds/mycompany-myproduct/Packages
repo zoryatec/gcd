@@ -1,0 +1,17 @@
+﻿Architecture: windows_x64
+Built-Using: nipkg
+CompatibilityVersion: 240500
+Description: mycompany-myproduct
+DisplayName: test-package
+Filename: ../../pool/mycompany-myproduct_1.0.0.4_windows_x64.nipkg
+MD5sum: c32c04b1d3b28445fe3ae69a6833de75
+Maintainer: MyCompany <email@mycompany.com>
+Package: mycompany-myproduct
+Plugin: file
+Section: Application Software
+Size: 658
+StoreProduct: yes
+UserVisible: yes
+Version: 1.0.0.4
+VisibleForRuntimeDeployment: no
+

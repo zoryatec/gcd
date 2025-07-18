@@ -23,3 +23,8 @@ pull-git-meta-dir
 /Gcd.sln.DotSettings.user
 /src/Gcd/Gcd.csproj.user
 /src/Gcd/Properties/PublishProfiles/FolderProfile.pubxml.user
+/tests/manual-docker/installers-iso
+/tests/manual-docker/installers
+
+!/tests/manual-docker/installers-iso/.gitkeep
+!/tests/manual-docker/installers/.gitkeep

@@ -1,0 +1,41 @@
+{
+  "packages": [
+    {
+      "Package": "ni-grpc-device",
+      "Version": "24.5.0.49225-0+f73",
+      "Depends": "ni-mdfsupport (>= 24.5.0),ni-metauninstaller (>= 24.5.0),ni-msvcrt-2015 (>= 24.5.0)",
+      "Description": "NI gRPC Device Server package",
+      "Section": "Drivers",
+      "UserVisible": "yes",
+      "StoreProduct": "no"
+    },
+    {
+      "Package": "ni-package-manager-released-feed",
+      "Version": "25.5.0.49263-0+f111",
+      "Depends": null,
+      "Description": "Provides NI Package Manager released packages.",
+      "Section": "Feed",
+      "UserVisible": null,
+      "StoreProduct": null
+    },
+    {
+      "Package": "ni-package-manager-upgrader",
+      "Version": "25.5.0.49263-0+f111",
+      "Depends": null,
+      "Description": "Application used to upgrade the package manager.",
+      "Section": "Infrastructure",
+      "UserVisible": null,
+      "StoreProduct": null
+    }
+  ],
+  "feeds": [
+    {
+      "name": "ni-package-manager-released",
+      "uri": "https://somerandomdomain.com/ni-package-manager/released"
+    },
+    {
+      "name": "ni-labview-2024-core-x86-en-2024 Q3-released",
+      "uri": "https://somerandomdomain.com/released"
+    }
+  ]
+}
