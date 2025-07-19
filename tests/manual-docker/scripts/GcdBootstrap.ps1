@@ -3,7 +3,7 @@ param
     [string]$NipmInstallerUri,
     [string]$GcdFeed = "https://raw.githubusercontent.com/zoryatec/gcd/refs/heads/main/feed",
     [string]$GcdPackageName = "gcd",
-    [string]$GcdVersion = "0.23.14"
+    [string]$GcdVersion = "0.23.15"
 )
 
 $zipUrl = "https://github.com/zoryatec/gcd/releases/download/$GcdVersion/gcd-bin.zip"
@@ -21,7 +21,7 @@ Invoke-WebRequest -Uri $zipUrl -OutFile $zipPath
 Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
 
 Write-Host "!!!!!!!!!!!!!!!!!!  BOOTSTRAP  !!!!!!!!!!!!!!!!!!!!"
-& $exePath tools bootstrap --nipkg-installer-source-uri $NipmInstallerUri
+& $exePath tools bootstrap --nipkg-installer-source-uri $NipmInstallerUri --gcd-feed $GcdFeed --gcd-package-name $GcdPackageName
 
 
 
