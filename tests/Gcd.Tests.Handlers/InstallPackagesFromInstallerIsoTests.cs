@@ -72,7 +72,8 @@ public class InstallPackagesFromInstallerIsoTests
         var expandDirectory = LocalDirPath.Of(outputIsoFolder);
         
         
-        var request = new InstallFromInstallerIsoRequest(isFilePath.Value,expandDirectory.Value, false,true,
+        var request = new InstallFromInstallerIsoRequest(isFilePath.Value,expandDirectory.Value, false,
+            false,
             Maybe.None, simulation);
         var handler = new InstallFromInstallerIsoHandler(mediator.Object,localFileSystem);
         var result = await handler.Handle(request, CancellationToken.None);

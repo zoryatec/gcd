@@ -25,12 +25,16 @@ public static class UseCmdInstallFromInstallerIsoExt
             var expandDirectoryOption = new ExpandDirectoryOption();
             var simulateInstallationOpt = new SimulateInstallationOption();
             var packagePatternOpt = new PackagePatternOption();
+            var removeIsoFileOpt = new RemoveIsoFileOption();
+            var removeExpandDirectoryOpt = new RemoveExpandDirectoryOption();
             
             cmd.AddOptions(
                 isoPathOpt.IsRequired(),
                 expandDirectoryOption,
                 simulateInstallationOpt,
-                packagePatternOpt
+                packagePatternOpt,
+                removeIsoFileOpt,
+                removeExpandDirectoryOpt
                 );
 
             cmd.OnExecuteAsync(async cancelationToken =>
@@ -42,10 +46,12 @@ public static class UseCmdInstallFromInstallerIsoExt
                 {
                     expandDir = pathToExpandDir.Value;
                 }
+                var removeIsoFile = removeIsoFileOpt.HasValue();
+                var removeExpandFile = removeExpandDirectoryOpt.HasValue();
 
                 return await Result.Success()
-                    .Bind(() => mediator.InstallFromInstallerIsoAsync(pathToIso.Value, expandDir, false,
-                        false, Maybe.None, simulateInstallationOpt.HasValue(),  cancelationToken))
+                    .Bind(() => mediator.InstallFromInstallerIsoAsync(pathToIso.Value, expandDir, removeIsoFile,
+                        removeExpandFile, Maybe.None, simulateInstallationOpt.HasValue(),  cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);
@@ -66,6 +72,24 @@ public sealed class ExpandDirectoryOption : CommandOption
     public static readonly string NAME = "--iso-expand-directory";
     public Result<LocalDirPath> ToLocalPath() =>
         LocalDirPath.Of(this.Value()).MapError(er => er.Message);
+}
+
+public sealed class RemoveIsoFileOption : CommandOption
+{
+    public RemoveIsoFileOption() : base(NAME, CommandOptionType.NoValue)
+    {
+        Description = "When set, removes iso file after expanding it.";
+    }
+    public static readonly string NAME = "--remove-iso-file";
+}
+
+public sealed class RemoveExpandDirectoryOption : CommandOption
+{
+    public RemoveExpandDirectoryOption() : base(NAME, CommandOptionType.NoValue)
+    {
+        Description = "When set, removes expand directory after installation.";
+    }
+    public static readonly string NAME = "--remove-expand-directory";
 }
 
 public sealed class IsoLocalFilePath : CommandOption

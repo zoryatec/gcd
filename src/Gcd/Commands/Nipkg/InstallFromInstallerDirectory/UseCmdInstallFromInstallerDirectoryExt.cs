@@ -35,7 +35,8 @@ public static class UseCmdInstallFromInstallerDirectoryExt
                 var pathToSnapshot = locPathOpt.ToLocalPath();
 
                 return await Result.Success()
-                    .Bind(() => mediator.InstallFromInstallerDirectoryAsync(pathToSnapshot.Value, packagePatternOpt.Value(),simulateInstallationOpt.HasValue(),  cancelationToken))
+                    .Bind(() => mediator.InstallFromInstallerDirectoryAsync(pathToSnapshot.Value, packagePatternOpt.Value(),
+                        simulateInstallationOpt.HasValue(), false,  cancelationToken))
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

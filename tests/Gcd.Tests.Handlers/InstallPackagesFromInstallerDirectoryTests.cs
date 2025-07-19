@@ -52,7 +52,8 @@ public class InstallPackagesFromInstallerDirectoryTests
         string matchPattern = "mycompany-myproduct";
         var installerDirectory = LocalDirPath.Of(testInstallerPath);
         var outputFilePath = LocalFilePath.Of(ouptutFilePathRaw);
-        var request = new InstallFromInstallerDirectoryRequest(installerDirectory.Value,Maybe.None, simulation);
+        var request = new InstallFromInstallerDirectoryRequest(installerDirectory.Value,Maybe.None, 
+            simulation,false);
         var handler = new InstallFromInstallerDirectoryHandler(mediator.Object);
         var result = await handler.Handle(request, CancellationToken.None);
         
@@ -61,7 +62,8 @@ public class InstallPackagesFromInstallerDirectoryTests
         {
             new PackageToInstall("mycompany-myproduct", ""),
         };
-        var removeRequest = new RemoveRequest(packagesToRemove, true, simulation, true, false, true);
+        var removeRequest = new RemoveRequest(packagesToRemove, true, simulation, true,
+            false, true);
         var resultRemove = await nipkgService.RemoveAsync(removeRequest);
 
         if (result.IsFailure)

@@ -37,6 +37,11 @@ public class ExpandIsoFileHandler(IMediator _mediator)
                 }
             }
         }
+
+        if (request.RemoveIsoFile)
+        {
+            File.Delete(request.IsoFilePath.Value);
+        }
         return Result.Success();
     }
 }
