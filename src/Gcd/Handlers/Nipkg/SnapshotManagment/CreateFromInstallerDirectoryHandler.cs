@@ -3,6 +3,7 @@ using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager;
 using Gcd.NiPackageManager.Abstractions;
 using MediatR;
+using Providers.Abstractions;
 
 namespace Gcd.Handlers.Nipkg.SnapshotManagment;
 
@@ -13,7 +14,7 @@ public record CreateSnapshotFromInstallerRequest(
 ) : IRequest<Result<CreateSnapshotFromInstallerResponse>>;
 
 
-public class CreateFromInstallerDirectoryHandler(IMediator _mediator)
+public class CreateFromInstallerDirectoryHandler(IMediator _mediator, IInstallerDirectoryProvider  installerDirectoryProvider)
     : IRequestHandler<CreateSnapshotFromInstallerRequest, Result<CreateSnapshotFromInstallerResponse>>
 {
     public async Task<Result<CreateSnapshotFromInstallerResponse>> Handle(CreateSnapshotFromInstallerRequest request, CancellationToken cancellationToken)
@@ -22,104 +23,12 @@ public class CreateFromInstallerDirectoryHandler(IMediator _mediator)
         var installerDir = new InstallerDirectory(installerDirectoryPath);
         
         var snapshot =
-            from directories in GetMainFeedsDirectories(installerDir)
-            from feedDefinitions in GetFeedDefinitions(directories)
-            from packageDefinitions in GetPackageDefinitions(directories)
+            from directories in installerDirectoryProvider.GetMainFeedsDirectories(installerDir)
+            from feedDefinitions in installerDirectoryProvider.GetFeedDefinitions(directories)
+            from packageDefinitions in installerDirectoryProvider.GetPackageDefinitions(directories)
             select new Snapshot(packageDefinitions, feedDefinitions);
         
         return snapshot.Map(x => new CreateSnapshotFromInstallerResponse(x));
-    }
-
-    private Result<IReadOnlyList<PackageDefinition>> GetPackageDefinitions(IReadOnlyList<LocalDirPath> directories)
-    {
-        var packagesFilePaths = GetPackageFilePath(directories);
-
-        var packageDefinitions = new List<PackageDefinition>();
-        foreach (var path in packagesFilePaths.Value)
-        {
-            var content = GetPackageFileContent(path);
-            var definitions = GetPackageDefinitions(content.Value);
-            packageDefinitions.AddRange(definitions.Value);
-        }
-        return Result.Success<IReadOnlyList<PackageDefinition>>(packageDefinitions); 
-    }
-    
-    private Result<IReadOnlyList<PackageDefinition>> GetPackageDefinitions(string content)
-    {
-        var dictionaries = new OutputParser().ParsePackagesIntoDictionary(content);
-        
-        var packageDefinitions = new List<PackageDefinition>();
-        foreach (var package in dictionaries.Value)
-        {
-            var packageDefinition = new PackageDefinition
-            (
-                package.ContainsKey("Package") ? package["Package"] : string.Empty,
-                package.ContainsKey("Version") ? package["Version"] : string.Empty,
-                package.ContainsKey("Description") ? package["Description"] : string.Empty,
-                package.ContainsKey("Depends") ? package["Depends"] : string.Empty,
-                package.ContainsKey("StoreProduct") ? package["StoreProduct"] : string.Empty,
-                package.ContainsKey("UserVisible") ? package["UserVisible"] : string.Empty,
-                package.ContainsKey("Section") ? package["Section"] : string.Empty
-            );
-            packageDefinitions.Add(packageDefinition);
-        }
-        
-        
-        return Result.Success<IReadOnlyList<PackageDefinition>>(packageDefinitions);;
-    }
-    
-    
-    private Result<IReadOnlyList<LocalFilePath>> GetPackageFilePath(IReadOnlyList<LocalDirPath> directories)
-    {
-        var paths = new List<LocalFilePath>();
-        foreach (var directory in directories)
-        {
-            paths.Add(GetPackageFilePath(directory).Value);
-        }
-
-        return Result.Success<IReadOnlyList<LocalFilePath>>(paths);
-    }
-    
-    
-    private Result<LocalFilePath> GetPackageFilePath(LocalDirPath feedDirPath)=>
-        LocalFilePath.Of($"{feedDirPath.Value}\\Packages").MapError(x => x.Message);
-
-    private Result<string> GetPackageFileContent(LocalFilePath packageFilePath)
-    {
-        string content = File.ReadAllText(packageFilePath.Value);
-
-        return Result.Success(content);;
-    }
-    
-    private Result<IReadOnlyList<FeedDefinition>> GetFeedDefinitions(IReadOnlyList<LocalDirPath> feedDirectories)
-    {
-        var feedDefinitions = new List<FeedDefinition>();
-
-        foreach (var directory in feedDirectories)
-        {
-            var dirName = directory.Value.Split('\\').Last();
-            var feedName = "local-feed-" + dirName;
-            var feedDefinition = new FeedDefinition(
-                Name: feedName,
-                Uri: directory.Value
-            );
-            feedDefinitions.Add(feedDefinition);
-        }
-        
-        return Result.Success<IReadOnlyList<FeedDefinition>>(feedDefinitions.AsReadOnly());
-    }
-
-    private Result<IReadOnlyList<LocalDirPath>> GetMainFeedsDirectories(InstallerDirectory installerDirectory)
-    {
-        var mainFeedDirectories = new List<LocalDirPath>();
-        var directories = Directory.GetDirectories(installerDirectory.MainFeedsDirectoryPath.Value);
-        foreach (var directory in directories)
-        {
-            var feedDirectory = LocalDirPath.Of(directory);
-            mainFeedDirectories.Add(feedDirectory.Value);
-        }
-        
-        return Result.Success<IReadOnlyList<LocalDirPath>>(mainFeedDirectories.AsReadOnly());
     }
 }
 
@@ -134,9 +43,9 @@ public static class MediatorExtensions
 }
 
 
-public record InstallerDirectory(LocalDirPath InstallerDirectoryPath)
-{
-
-    public LocalDirPath MainFeedsDirectoryPath => LocalDirPath.Of($"{InstallerDirectoryPath.Value}\\feeds").Value;
-    public LocalDirPath NiPackageManagerFeedsDirectoryPath = LocalDirPath.Of($"{InstallerDirectoryPath.Value}\\bin\\ni-package-manager-packages").Value;
-}
+// public record InstallerDirectory(LocalDirPath InstallerDirectoryPath)
+// {
+//
+//     public LocalDirPath MainFeedsDirectoryPath => LocalDirPath.Of($"{InstallerDirectoryPath.Value}\\feeds").Value;
+//     public LocalDirPath NiPackageManagerFeedsDirectoryPath = LocalDirPath.Of($"{InstallerDirectoryPath.Value}\\bin\\ni-package-manager-packages").Value;
+// }

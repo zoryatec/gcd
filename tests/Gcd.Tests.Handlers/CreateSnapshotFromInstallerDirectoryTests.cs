@@ -3,6 +3,7 @@ using Gcd.Handlers.Nipkg.SnapshotManagment;
 using Gcd.Handlers.Shared;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager;
+using Gcd.Providers;
 using Gcd.Services;
 using MediatR;
 using Moq;
@@ -14,6 +15,8 @@ public class CreateSnapshotFromInstallerDirectoryTests
     [Fact(Skip ="for now")]
     public async Task SucessCase()
     {
+
+        var installerDirectoryProvider = new InstallerDirectoryProvider();
         var mediator = new Mock<IMediator>();
         var serializer = new Mock<SnapshotSerializerJson>();
         mediator.Setup(m => m.Send(It.IsAny<IRequest>(), It.IsAny<CancellationToken>()));
@@ -24,7 +27,7 @@ public class CreateSnapshotFromInstallerDirectoryTests
         var installerDirectory = LocalDirPath.Of(testInstallerPath);
         var outputFilePath = LocalFilePath.Of(ouptutFilePathRaw);
         var request = new CreateSnapshotFromInstallerRequest(installerDirectory.Value);
-        var handler = new CreateFromInstallerDirectoryHandler(mediator.Object);
+        var handler = new CreateFromInstallerDirectoryHandler(mediator.Object,installerDirectoryProvider);
         var result = await handler.Handle(request, CancellationToken.None);
         
         

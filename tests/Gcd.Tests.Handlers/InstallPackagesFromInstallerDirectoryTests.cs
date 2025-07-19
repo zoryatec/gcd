@@ -7,6 +7,7 @@ using Gcd.Handlers.Shared;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager;
 using Gcd.NiPackageManager.Abstractions;
+using Gcd.Providers;
 using Gcd.Services;
 using Gcd.SystemProcess;
 using MediatR;
@@ -20,7 +21,9 @@ public class InstallPackagesFromInstallerDirectoryTests
     // [Fact]
     public async Task SucessCase()
     {
+        
         var simulation = true;
+        var installerDirectoryProvider = new InstallerDirectoryProvider();
         var mediator = new Mock<IMediator>();
         var systemProcess = new ProcessService();
         var nipkgService = new NiPackageManagerService(systemProcess);
@@ -28,7 +31,7 @@ public class InstallPackagesFromInstallerDirectoryTests
         mediator
             .Setup(m => m.Send(It.IsAny<CreateSnapshotFromInstallerRequest>(), It.IsAny<CancellationToken>()))
             .Returns((CreateSnapshotFromInstallerRequest req, CancellationToken token) => {
-                var handler = new CreateFromInstallerDirectoryHandler(mediator.Object);
+                var handler = new CreateFromInstallerDirectoryHandler(mediator.Object,installerDirectoryProvider);
                 return handler.Handle(req, token);
             });
         
