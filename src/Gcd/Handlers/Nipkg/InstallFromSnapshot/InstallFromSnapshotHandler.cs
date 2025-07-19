@@ -19,6 +19,7 @@ public class InstallFromSnapshotHandler(IMediator _mediator, INiPackageManagerEx
         var snapshot = request.Snapshot;
         return  await _nipkgService.InstallFeedAsync(snapshot.Feeds).Map(() => snapshot)
             .Bind((snap) => snap.FilterPackages(request.PackageMatchPattern, true))
+            .Bind((snap) => snap.RemoveDuplicatePackagesByHighestVersion())
             .Bind(snap => _nipkgService.InstallPackageAsync(snap.Packages, request.SimulateInstallation).Map(() => snap))
             .Finally(snap => _nipkgService.RemoveFeedAsync(snapshot.Feeds));
     }
