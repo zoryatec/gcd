@@ -7,6 +7,12 @@ namespace Gcd.Providers;
 
 public class InstallerDirectoryProvider : IInstallerDirectoryProvider
 {
+    public Result<IReadOnlyList<PackageDefinition>> GetAllPackages(InstallerDirectory installerDirectory) => 
+        GetMainFeedsDirectories(installerDirectory).Bind(GetPackageDefinitions);
+
+    public Result<IReadOnlyList<FeedDefinition>>  GetAllFeeds(InstallerDirectory installerDirectory) => 
+        GetMainFeedsDirectories(installerDirectory).Bind(GetFeedDefinitions);
+
     public Result<IReadOnlyList<PackageDefinition>> GetPackageDefinitions(IReadOnlyList<LocalDirPath> directories)
     {
         var packagesFilePaths = GetPackageFilePath(directories);

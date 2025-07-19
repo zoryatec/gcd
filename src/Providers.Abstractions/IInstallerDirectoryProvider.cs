@@ -14,6 +14,8 @@ public record InstallerDirectory(LocalDirPath InstallerDirectoryPath)
 
 public interface IInstallerDirectoryProvider
 {
+    Result<IReadOnlyList<PackageDefinition>> GetAllPackages(InstallerDirectory installerDirectory);
+    Result<IReadOnlyList<FeedDefinition>>  GetAllFeeds(InstallerDirectory installerDirect);
     Result<IReadOnlyList<PackageDefinition>> GetPackageDefinitions(IReadOnlyList<LocalDirPath> directories);
     Result<IReadOnlyList<PackageDefinition>> GetPackageDefinitions(string content);
     Result<IReadOnlyList<LocalFilePath>> GetPackageFilePath(IReadOnlyList<LocalDirPath> directories);

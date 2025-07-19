@@ -22,13 +22,12 @@ public class CreateFromInstallerDirectoryHandler(IMediator _mediator, IInstaller
         var installerDirectoryPath = request.InstallerDirectory;
         var installerDir = new InstallerDirectory(installerDirectoryPath);
         
-        var snapshot =
-            from directories in installerDirectoryProvider.GetMainFeedsDirectories(installerDir)
-            from feedDefinitions in installerDirectoryProvider.GetFeedDefinitions(directories)
-            from packageDefinitions in installerDirectoryProvider.GetPackageDefinitions(directories)
-            select new Snapshot(packageDefinitions, feedDefinitions);
-        
-        return snapshot.Map(x => new CreateSnapshotFromInstallerResponse(x));
+        return installerDirectoryProvider.GetAllFeeds(installerDir)
+            .Bind(feedDefinitions =>
+                installerDirectoryProvider.GetAllPackages(installerDir)
+                    .Map(packageDefinitions => new Snapshot(packageDefinitions, feedDefinitions))
+            )
+            .Map(snapshot => new CreateSnapshotFromInstallerResponse(snapshot));
     }
 }
 
