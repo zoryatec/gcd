@@ -19,7 +19,7 @@ $gcdCmdPath = "$gcdCmdContainingDir\\gcd.exe"
 
 $VerbosePreference = 'Continue'
 
-Invoke-Expression (Invoke-WebRequest -UseBasicParsing 'https://raw.githubusercontent.com/zoryatec/gcd/dev-snap2/Install-Gcd.ps1').Content
+Invoke-Expression (Invoke-WebRequest -UseBasicParsing 'https://raw.githubusercontent.com/zoryatec/gcd/main/Install-Gcd.ps1').Content
 Install-Gcd -NipmInstallerUri $env:NIPM_INSTALLER_URI -GcdFeed "https://raw.githubusercontent.com/zoryatec/gcd/refs/heads/main/feed" -GcdPackageName 'gcd' -GcdVersion '0.23.16'
 
 
