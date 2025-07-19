@@ -103,4 +103,29 @@ public class InstallerDirectoryProvider : IInstallerDirectoryProvider
         
         return Result.Success<IReadOnlyList<LocalDirPath>>(mainFeedDirectories.AsReadOnly());
     }
+    
+    public Result<IReadOnlyList<LocalDirPath>> GetDirectoriesWithPackagesFile(InstallerDirectory installerDirectory)
+    {
+        var result = new List<LocalDirPath>();
+
+        void Search(string directory)
+        {
+            var packagesFilePath = Path.Combine(directory, "Packages");
+            if (File.Exists(packagesFilePath))
+            {
+                var dirResult = LocalDirPath.Of(directory);
+                if (dirResult.IsSuccess)
+                    result.Add(dirResult.Value);
+            }
+
+            foreach (var subDir in Directory.GetDirectories(directory))
+            {
+                Search(subDir);
+            }
+        }
+
+        Search(installerDirectory.InstallerDirectoryPath.Value);
+
+        return Result.Success<IReadOnlyList<LocalDirPath>>(result.AsReadOnly());
+    }
 }
