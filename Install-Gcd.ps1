@@ -12,7 +12,7 @@ function Install-Gcd {
     $exeUrl = "https://github.com/zoryatec/gcd/releases/download/$GcdVersion/gcd.exe"
     $exePath = "$env:TEMP\gcd.exe"
 
-    Write-Host "!!!!!!!!!!!!!!!!!! BOOTSTRAP GCD !!!!!!!!!!!!!!!!!!!!"
+    Write-Host "!!!!!!!!!!!!!!!!!! STARTING GCD INSTALLATION !!!!!!!!!!!!!!!!!!!!"
     try {
         Invoke-WebRequest -Uri $exeUrl -OutFile $exePath
         & $exePath tools bootstrap --nipkg-installer-source-uri $NipmInstallerUri --gcd-feed $GcdFeed --gcd-package-name $GcdPackageName
@@ -25,6 +25,7 @@ function Install-Gcd {
             Remove-Item $exePath -Force
         }
     }
+    Write-Host "!!!!!!!!!!!!!!!!!! FINISHED GCD INSTALLATION !!!!!!!!!!!!!!!!!!!!"
 }
 
 
