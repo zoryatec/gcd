@@ -1,5 +1,12 @@
 
 
+<a name="0.23.16"></a>
+## [0.23.16](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.16) (2025-07-19)
+
+### Bug Fixes
+
+* deploying single file in release ([#6](https://www.github.com/zoryatec/gcd/issues/6)) ([ab1dbd9](https://www.github.com/zoryatec/gcd/commit/ab1dbd9d2bbe551cfb6406cf36df7c6f7c6b290e))
+
 <a name="0.23.15"></a>
 ## [0.23.15](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.15) (2025-07-18)
 
