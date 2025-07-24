@@ -11,15 +11,15 @@ using MediatR;
 namespace Gcd.Handlers.Tools;
 
 public record SetInifFileParameterRequest(LocalFilePath IniFilePath, string Section, string Key,
-    string Value, bool CreateIfNotExists = true) : IRequest<UnitResult<Error>>;
+    string Value, bool CreateParameterIfNotExists,  bool CreateFileIfNotExists) : IRequest<UnitResult<Error>>;
 
 public class SetIniFileParameterHandler(IMediator mediator)
     : IRequestHandler<SetInifFileParameterRequest, UnitResult<Error>>
 {
     public async Task<UnitResult<Error>> Handle(SetInifFileParameterRequest request, CancellationToken cancellationToken)
     {
-        var (iniFilePath,  section,  key,  createIfNotExists, value) = request;
-        return await SetConfigValue(iniFilePath.Value, section, key, createIfNotExists);
+        var (iniFilePath,  section,  key, value, createParameterIfNotExists, createFileIfNotExists) = request;
+        return await SetConfigValue(iniFilePath.Value, section, key, value, createParameterIfNotExists,createFileIfNotExists);
     }
     
     public async Task<UnitResult<Error>> SetConfigValue(
@@ -27,7 +27,8 @@ public class SetIniFileParameterHandler(IMediator mediator)
         string section,
         string key,
         string value,
-        bool createIfNotExists = false)
+        bool createParameterIfNotExists,
+        bool createFileIfNotExists)
     {
         if (string.IsNullOrEmpty(configPath))
             throw new ArgumentNullException(nameof(configPath));
@@ -38,7 +39,7 @@ public class SetIniFileParameterHandler(IMediator mediator)
 
         if (!File.Exists(configPath))
         {
-            if (createIfNotExists)
+            if (createFileIfNotExists)
             {
                 var directory = Path.GetDirectoryName(configPath);
                 if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
@@ -55,7 +56,7 @@ public class SetIniFileParameterHandler(IMediator mediator)
             ? new List<string>(File.ReadAllLines(configPath, Encoding.UTF8))
             : new List<string>();
 
-        var result = await mediator.Send(new SetIniParameterRequest(lines, section, key, value, createIfNotExists));
+        var result = await mediator.Send(new SetIniParameterRequest(lines, section, key, value, createParameterIfNotExists));
         if (result.IsFailure)
         {
             return UnitResult.Failure<Error>(new Error(result.Error));

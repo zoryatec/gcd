@@ -43,7 +43,7 @@ public static class UseCmdSetIniFileParameterExt
                 var iniFileValue = iniFileValueOption.Value() ?? throw new ArgumentException("Value cannot be null or empty");
                 
                 return await mediator.SetIniFileParameteAsync(iniFilePath.Value,section,
-                        iniFileKe, iniFileValue, true, cancelationToken)
+                        iniFileKe, iniFileValue, true, true, cancelationToken)
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

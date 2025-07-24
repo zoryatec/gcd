@@ -28,9 +28,9 @@ public static class MediatorExtensions
     public static async Task<UnitResult<Error>> KillProcessAsync(this IMediator mediator,ProcessName processName, CancellationToken cancellationToken = default)
         => await mediator.Send(new KillProcessRequest(processName), cancellationToken);
     public static async Task<UnitResult<Error>> SetIniFileParameteAsync(this IMediator mediator, LocalFilePath iniFilePath,
-        string section, string key, string value, bool createIfNotExists = true, 
+        string section, string key, string value, bool createParameterIfNotExists, bool createFileIfNotExists,
         CancellationToken cancellationToken = default)
-        => await mediator.Send(new SetInifFileParameterRequest(iniFilePath,section,key,value,createIfNotExists), cancellationToken);
+        => await mediator.Send(new SetInifFileParameterRequest(iniFilePath,section,key,value,createParameterIfNotExists,createFileIfNotExists), cancellationToken);
     public static async Task<UnitResult<Error>> SetupSystemForCi(this IMediator mediator, LocalFilePath labViewIniFilePath,
         LocalFilePath labViewCliFilePath, CancellationToken cancellationToken = default)
         => await mediator.Send(new SetupSystemForCiRequest(labViewIniFilePath,labViewCliFilePath), cancellationToken);
