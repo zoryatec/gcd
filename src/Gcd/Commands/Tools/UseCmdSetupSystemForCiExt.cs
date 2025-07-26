@@ -34,9 +34,9 @@ public static class UseCmdSetupSystemForCiExt
             cmd.OnExecuteAsync(async cancelationToken =>
             {
                 var labViewCliIniFilePath = LocalFilePath.Of(labViewCliIniFilePathOption.Value());
-                var labViewIniFilePath = LocalFilePath.Of(labViewCliIniFilePathOption.Value());
+                var labViewIniFilePath = LocalFilePath.Of(labViewIniFilePathOption.Value());
                 
-                return await mediator.SetupSystemForCi(labViewCliIniFilePath.Value,labViewIniFilePath.Value, cancelationToken)
+                return await mediator.SetupSystemForCi(labViewIniFilePath.Value,labViewCliIniFilePath.Value, cancelationToken)
                     .Tap(() => console.Write(SUCESS_MESSAGE))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);

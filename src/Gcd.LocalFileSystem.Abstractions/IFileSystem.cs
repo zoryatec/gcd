@@ -12,6 +12,9 @@ public interface IFileSystem
     public Task<Result> WriteAllLinesAsync(ILocalFilePath filePath, IEnumerable<string> content, Encoding encoding, CancellationToken cancellationToken = default);
 
     public Task<Result<string>> ReadTextFileAsync(ILocalFilePath filePath, CancellationToken cancellationToken = default);
+    
+    public Result<bool> FileExists(ILocalFilePath filePath);
+    public Result<bool> DirectoryExists(ILocalDirPath dirPath);
 
     public Task<Result> CreateDirectoryAsync(LocalDirPath path);
 

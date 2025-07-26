@@ -37,6 +37,7 @@ public class SetIniFileParameterHandler(IMediator mediator, IFileSystem fileSyst
         if (string.IsNullOrEmpty(key))
             throw new ArgumentNullException(nameof(key));
 
+        // fileSystem.FileExists(configPath);
         if (!File.Exists(configPath.Value))
         {
             if (createFileIfNotExists)

@@ -16,6 +16,12 @@ namespace Gcd.LocalFileSystem
         public async Task<Result<string>> ReadTextFileAsync(ILocalFilePath filePath, CancellationToken cancellationToken = default) =>
             ReadTextFile(filePath);
 
+        public Result<bool> FileExists(ILocalFilePath filePath) =>
+             Result.Try(() => File.Exists(filePath.Value));
+
+        public Result<bool> DirectoryExists(ILocalDirPath dirPath) => 
+            Result.Try(() => Directory.Exists(dirPath.Value));
+        
         private Result<string> ReadTextFile(ILocalFilePath filePath) =>
             Result.Try(() => File.ReadAllText(filePath.Value), ex => ex.Message);
 
