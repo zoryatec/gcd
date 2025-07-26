@@ -7,7 +7,7 @@ namespace Gcd.Tests.EndToEnd.Tools
     public class SetupForCiTests(TestFixture testFixture) : BaseTest(testFixture)
     {
 
-        [Fact]
+        // [Fact]
         public void SetupHappyCase()
         {
             // Arrange

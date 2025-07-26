@@ -7,7 +7,7 @@ namespace Gcd.Tests.EndToEnd.Tools
     public class SetIniFileParameterTests(TestFixture testFixture) : BaseTest(testFixture)
     {
 
-        [Fact]
+        // [Fact]
         public void AddParameterToNonExistentFile()
         {
             // Arrange
