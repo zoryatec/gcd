@@ -3,7 +3,6 @@ using Gcd.DI;
 using Gcd.Handlers.Shared;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.Services;
-using Gcd.Services.FileSystem;
 using Gcd.Tests.Fixture;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;

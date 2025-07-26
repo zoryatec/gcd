@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Text;
+using CSharpFunctionalExtensions;
 using Gcd.Common;
 
 namespace Gcd.LocalFileSystem.Abstractions;
@@ -8,6 +9,7 @@ public interface IFileSystem
     public Result<IReadOnlyList<ILocalFilePath>, Error> ListFiles(ILocalDirPath directoryPath,
         string searchPattern = "*.*", bool recursive = false);
     public Task<Result> WriteTextFileAsync(ILocalFilePath filePath, string content, CancellationToken cancellationToken = default);
+    public Task<Result> WriteAllLinesAsync(ILocalFilePath filePath, IEnumerable<string> content, Encoding encoding, CancellationToken cancellationToken = default);
 
     public Task<Result<string>> ReadTextFileAsync(ILocalFilePath filePath, CancellationToken cancellationToken = default);
 

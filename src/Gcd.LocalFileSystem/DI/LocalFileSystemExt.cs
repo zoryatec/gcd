@@ -1,5 +1,5 @@
-﻿using Gcd.LocalFileSystem.Abstractions;
-using Gcd.Services.FileSystem;
+﻿using Gcd.LocalFileSystem;
+using Gcd.LocalFileSystem.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Gcd.RemoteFileSystem.Git.DI;
