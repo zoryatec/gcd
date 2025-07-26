@@ -5,11 +5,12 @@ function Install-Gcd {
         [string]$GcdFeed = "https://raw.githubusercontent.com/zoryatec/gcd/refs/heads/main/feed",
         [string]$GcdPackageName = "gcd",
         [string]$GcdVersion = "0.23.16"
+        [string]$GcdBootStrapVersion = "0.23.16"
     )
 
     $ErrorActionPreference = 'Stop'
 
-    $exeUrl = "https://github.com/zoryatec/gcd/releases/download/$GcdVersion/gcd.exe"
+    $exeUrl = "https://github.com/zoryatec/gcd/releases/download/$GcdBootStrapVersion/gcd.exe"
     $exePath = "$env:TEMP\gcd.exe"
 
     Write-Host "!!!!!!!!!!!!!!!!!! STARTING GCD INSTALLATION !!!!!!!!!!!!!!!!!!!!"
