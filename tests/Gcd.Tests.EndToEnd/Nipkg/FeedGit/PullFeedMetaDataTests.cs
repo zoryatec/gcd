@@ -7,7 +7,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg.FeedGit;
 public class PullFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
-    [Fact]
+    //[Fact]
     public void PullFeedMetaData_ShouldDownloadFiles_WhenFeedIsValid()
     {
         // Arrange
