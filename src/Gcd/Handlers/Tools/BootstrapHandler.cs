@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Gcd.Handlers.Tools;
 
-public record BootstrapRequest(NipkgInstallerUri InstallerUri, string GcdFeed, string GcdPackageName) : IRequest<Result>;
+public record BootstrapRequest(NipkgInstallerUri InstallerUri, string GcdFeed, string GcdPackageName, string GcdPackageVersion) : IRequest<Result>;
 
 
 public class BootstrapHandler(IMediator mediator, INiPackageManagerExtendedService nipm)
@@ -16,12 +16,15 @@ public class BootstrapHandler(IMediator mediator, INiPackageManagerExtendedServi
     public async Task<Result> Handle(BootstrapRequest request, CancellationToken cancellationToken)
     {
         var feed = new FeedDefinition("gcd-feed",request.GcdFeed);
-        var package = new PackageDefinition(request.GcdPackageName, "");
+        var package = new PackageDefinition(request.GcdPackageName, request.GcdPackageVersion);
 
         return await mediator.Send(new InstallNinpkgRequest(request.InstallerUri, NipkgCmdPath.Deafault),
                 cancellationToken)
             .Bind(() => nipm.InstallFeedAsync(feed))
-            .Bind(() => nipm.InstallPackageAsync(package, false))
+            .Bind(() => nipm.InstallPackageAsync(package, 
+                true, true,false, true, 
+                false, true, true, 
+                true, true))
             .Bind(() => mediator.AddToPathAsync(NipmConainingDir, cancellationToken))
             .Bind(() => mediator.AddToPathAsync(GcdContainingDir, cancellationToken));
     }

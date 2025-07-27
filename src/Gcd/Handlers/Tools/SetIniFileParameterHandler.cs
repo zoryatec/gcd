@@ -1,49 +1,51 @@
-using System.Diagnostics;
 using System.Text;
-using System.Text.RegularExpressions;
 using CSharpFunctionalExtensions;
 using Gcd.Common;
 using Gcd.LocalFileSystem.Abstractions;
-using Gcd.Model.Config;
-using Gcd.Services;
 using MediatR;
 
 namespace Gcd.Handlers.Tools;
 
-public record SetInifFileParameterRequest(LocalFilePath IniFilePath, string Section, string Key,
-    string Value, bool CreateIfNotExists = true) : IRequest<UnitResult<Error>>;
+public record IniParmeterKey(string Value);
+public record IniParmeterValue(string Value);
+public record IniParameterSection(string Value);
 
-public class SetIniFileParameterHandler(IMediator mediator)
+public record SetInifFileParameterRequest(ILocalFilePath IniFilePath, string Section, string Key,
+    string Value, bool CreateParameterIfNotExists,  bool CreateFileIfNotExists) : IRequest<UnitResult<Error>>;
+
+public class SetIniFileParameterHandler(IMediator mediator, IFileSystem fileSystem)
     : IRequestHandler<SetInifFileParameterRequest, UnitResult<Error>>
 {
     public async Task<UnitResult<Error>> Handle(SetInifFileParameterRequest request, CancellationToken cancellationToken)
     {
-        var (iniFilePath,  section,  key,  createIfNotExists, value) = request;
-        return await SetConfigValue(iniFilePath.Value, section, key, createIfNotExists);
+        var (iniFilePath,  section,  key, value, createParameterIfNotExists, createFileIfNotExists) = request;
+        return await SetConfigValue(iniFilePath, section, key, value, createParameterIfNotExists,createFileIfNotExists);
     }
     
     public async Task<UnitResult<Error>> SetConfigValue(
-        string configPath,
+        ILocalFilePath configPath,
         string section,
         string key,
         string value,
-        bool createIfNotExists = false)
+        bool createParameterIfNotExists,
+        bool createFileIfNotExists)
     {
-        if (string.IsNullOrEmpty(configPath))
+        if (string.IsNullOrEmpty(configPath.Value))
             throw new ArgumentNullException(nameof(configPath));
         if (string.IsNullOrEmpty(section))
             throw new ArgumentNullException(nameof(section));
         if (string.IsNullOrEmpty(key))
             throw new ArgumentNullException(nameof(key));
 
-        if (!File.Exists(configPath))
+        // fileSystem.FileExists(configPath);
+        if (!File.Exists(configPath.Value))
         {
-            if (createIfNotExists)
+            if (createFileIfNotExists)
             {
-                var directory = Path.GetDirectoryName(configPath);
+                var directory = Path.GetDirectoryName(configPath.Value);
                 if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
                     Directory.CreateDirectory(directory);
-                File.WriteAllText(configPath, "", Encoding.UTF8);
+                File.WriteAllText(configPath.Value, "", Encoding.UTF8);
             }
             else
             {
@@ -51,17 +53,13 @@ public class SetIniFileParameterHandler(IMediator mediator)
             }
         }
 
-        var lines = File.Exists(configPath)
-            ? new List<string>(File.ReadAllLines(configPath, Encoding.UTF8))
+        var lines = File.Exists(configPath.Value)
+            ? new List<string>(File.ReadAllLines(configPath.Value, Encoding.UTF8))
             : new List<string>();
 
-        var result = await mediator.Send(new SetIniParameterRequest(lines, section, key, value, createIfNotExists));
-        if (result.IsFailure)
-        {
-            return UnitResult.Failure<Error>(new Error(result.Error));
-        }
-
-        await File.WriteAllLinesAsync(configPath, result.Value, Encoding.UTF8);
+        var result = await mediator.Send(new SetIniParameterRequest(lines, section, key, value, createParameterIfNotExists))
+            .Bind(content => fileSystem.WriteAllLinesAsync(configPath, content, Encoding.UTF8));
+        
         return UnitResult.Success<Error>();
     }
 }

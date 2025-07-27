@@ -62,12 +62,24 @@ public class NiPackageManagerExtendedService(INiPackageManagerService _nipkgServ
         return result;
     }
     
-    public async Task<Result> InstallPackageAsync(PackageDefinition package, bool simulateInstallation)
+    public async Task<Result> InstallPackageAsync(PackageDefinition package, bool acceptEulas = true, 
+        bool assumeYes = true, bool simulate = false, bool forceLocked = true, bool suppressIncompatibilityErrros = false,
+        bool verbose = true, bool allowDowngrade = true, bool allowUninstall = true, bool installAlsoUpgrades = true,
+        bool includeRecommended = false)
     {
         var packageToInstall = new PackageToInstall(package.Package, package.Version);
 
-        var request = new InstallRequest(new List<PackageToInstall>{packageToInstall},true,
-            true, simulateInstallation, true, false, true);
+        var request = new InstallRequest(new List<PackageToInstall>{packageToInstall},
+            AcceptEulas: acceptEulas, 
+            AssumeYes: assumeYes,
+            Simulate: simulate,
+            ForceLocked : forceLocked, 
+            SuppressIncompatibilityErrros: suppressIncompatibilityErrros,
+            Verbose: verbose,
+            AllowDowngrade: allowDowngrade, 
+            AllowUninstall: allowUninstall,
+            InstallAlsoUpgrades: installAlsoUpgrades,
+            IncludeRecommended: includeRecommended);
         var result = await _nipkgService.InstallAsync(request);
         return result;
     }

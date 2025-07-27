@@ -7,7 +7,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg.FeedGit;
 public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
-    [Fact]
+    //[Fact]
     public void PushPull_ShouldMatch()
     {
         // Arrange

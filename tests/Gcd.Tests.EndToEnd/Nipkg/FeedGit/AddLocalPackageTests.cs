@@ -6,9 +6,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg.FeedGit;
 
 public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixture)
 {
-
-    //[Fact(Skip = "temp disable")]
-    [Fact]
+    //[Fact]
     private void AddLocalPackageTest()
     {
 

@@ -18,11 +18,11 @@ public class SetupSystemForCiHandler(IMediator mediator)
     {
         var(labViewIniFilePath, labViewCliFilePath) = request;
         
-        return await mediator.SetIniFileParameteAsync(labViewIniFilePath, "LabVIEW", "server.tcp.enabled", "True",true,cancellationToken)
-            .Bind(() => mediator.SetIniFileParameteAsync(labViewIniFilePath, "LabVIEW", "server.tcp.port", "3363",true,cancellationToken))
-            .Bind(() => mediator.SetIniFileParameteAsync(labViewIniFilePath, "LabVIEW", "neverShowAddonLicensingStartup", "True",true,cancellationToken))
-            .Bind(() => mediator.SetIniFileParameteAsync(labViewIniFilePath, "LabVIEW", "neverShowLicensingStartupDialog", "True",true,cancellationToken))
-            .Bind(() => mediator.SetIniFileParameteAsync(labViewIniFilePath, "LabVIEW", "ShowWelcomeOnLaunch", "False",true,cancellationToken))
-            .Bind(() => mediator.SetIniFileParameteAsync(labViewCliFilePath, "LabVIEWCLI", "ValidateLabVIEWLicense", "FALSE",true,cancellationToken));
+        return await mediator.SetIniFileParameteAsync(labViewIniFilePath, "LabVIEW", "server.tcp.enabled", "True",true,true, cancellationToken)
+            .Bind(() => mediator.SetIniFileParameteAsync(labViewIniFilePath, "LabVIEW", "server.tcp.port", "3363",true,true, cancellationToken))
+            .Bind(() => mediator.SetIniFileParameteAsync(labViewIniFilePath, "LabVIEW", "neverShowAddonLicensingStartup", "True",true,true, cancellationToken))
+            .Bind(() => mediator.SetIniFileParameteAsync(labViewIniFilePath, "LabVIEW", "neverShowLicensingStartupDialog", "True",true,true, cancellationToken))
+            .Bind(() => mediator.SetIniFileParameteAsync(labViewIniFilePath, "LabVIEW", "ShowWelcomeOnLaunch", "False",true,true, cancellationToken))
+            .Bind(() => mediator.SetIniFileParameteAsync(labViewCliFilePath, "LabVIEWCLI", "ValidateLabVIEWLicense", "FALSE",true,true, cancellationToken));
     }
 }

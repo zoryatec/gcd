@@ -22,15 +22,15 @@ public static class MediatorExtensions
     public static async Task<Result> AddToPathAsync(this IMediator mediator, string pathToAdd, CancellationToken cancellationToken = default)
         => await mediator.Send(new AddToPathWithFallbackRequest(pathToAdd), cancellationToken);
     
-    public static async Task<Result> BootstrapAsync(this IMediator mediator,NipkgInstallerUri nipkgInstallerUri, string gcdFeed,string gcdPackageName,
+    public static async Task<Result> BootstrapAsync(this IMediator mediator,NipkgInstallerUri nipkgInstallerUri, string gcdFeed,string gcdPackageName, string gcdPackageVersion,
         CancellationToken cancellationToken = default)
-        => await mediator.Send(new BootstrapRequest(nipkgInstallerUri,gcdFeed, gcdPackageName), cancellationToken);
+        => await mediator.Send(new BootstrapRequest(nipkgInstallerUri,gcdFeed, gcdPackageName,gcdPackageVersion), cancellationToken);
     public static async Task<UnitResult<Error>> KillProcessAsync(this IMediator mediator,ProcessName processName, CancellationToken cancellationToken = default)
         => await mediator.Send(new KillProcessRequest(processName), cancellationToken);
     public static async Task<UnitResult<Error>> SetIniFileParameteAsync(this IMediator mediator, LocalFilePath iniFilePath,
-        string section, string key, string value, bool createIfNotExists = true, 
+        string section, string key, string value, bool createParameterIfNotExists, bool createFileIfNotExists,
         CancellationToken cancellationToken = default)
-        => await mediator.Send(new SetInifFileParameterRequest(iniFilePath,section,key,value,createIfNotExists), cancellationToken);
+        => await mediator.Send(new SetInifFileParameterRequest(iniFilePath,section,key,value,createParameterIfNotExists,createFileIfNotExists), cancellationToken);
     public static async Task<UnitResult<Error>> SetupSystemForCi(this IMediator mediator, LocalFilePath labViewIniFilePath,
         LocalFilePath labViewCliFilePath, CancellationToken cancellationToken = default)
         => await mediator.Send(new SetupSystemForCiRequest(labViewIniFilePath,labViewCliFilePath), cancellationToken);

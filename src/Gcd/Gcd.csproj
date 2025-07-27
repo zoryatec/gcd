@@ -32,6 +32,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="CSharpFunctionalExtensions.Analyzers" Version="1.4.1">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="DiscUtils.Iso9660" Version="0.16.13" />
       <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.1.1" />
       <PackageReference Include="MediatR" Version="12.4.1" />
@@ -50,6 +54,7 @@
       <ProjectReference Include="..\Gcd.NiPackageManager\Gcd.NiPackageManager.csproj" />
       <ProjectReference Include="..\Gcd.Nipkg.Instructions\Gcd.Nipkg.Instructions.csproj" />
       <ProjectReference Include="..\Gcd.Nipkg.Replication\Gcd.Nipkg.Replication.csproj" />
+      <ProjectReference Include="..\Gcd.Providers\Gcd.Providers.csproj" />
       <ProjectReference Include="..\Gcd.RemoteFileSystem.AzBlob\Gcd.RemoteFileSystem.AzBlob.csproj" />
       <ProjectReference Include="..\Gcd.RemoteFileSystem.Git\Gcd.RemoteFileSystem.Git.csproj" />
       <ProjectReference Include="..\Gcd.RemoteFileSystem.Rclone\Gcd.RemoteFileSystem.Rclone.csproj" />

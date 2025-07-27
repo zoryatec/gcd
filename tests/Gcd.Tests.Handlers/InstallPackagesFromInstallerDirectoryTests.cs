@@ -7,6 +7,7 @@ using Gcd.Handlers.Shared;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager;
 using Gcd.NiPackageManager.Abstractions;
+using Gcd.Providers;
 using Gcd.Services;
 using Gcd.SystemProcess;
 using MediatR;
@@ -17,10 +18,12 @@ namespace Gcd.Tests.Handlers;
 public class InstallPackagesFromInstallerDirectoryTests
 {
     // [Fact(Skip ="for now")]
-    //[Fact]
+    // [Fact]
     public async Task SucessCase()
     {
+        
         var simulation = true;
+        var installerDirectoryProvider = new InstallerDirectoryProvider();
         var mediator = new Mock<IMediator>();
         var systemProcess = new ProcessService();
         var nipkgService = new NiPackageManagerService(systemProcess);
@@ -28,7 +31,7 @@ public class InstallPackagesFromInstallerDirectoryTests
         mediator
             .Setup(m => m.Send(It.IsAny<CreateSnapshotFromInstallerRequest>(), It.IsAny<CancellationToken>()))
             .Returns((CreateSnapshotFromInstallerRequest req, CancellationToken token) => {
-                var handler = new CreateFromInstallerDirectoryHandler(mediator.Object);
+                var handler = new CreateFromInstallerDirectoryHandler(mediator.Object,installerDirectoryProvider);
                 return handler.Handle(req, token);
             });
         
@@ -49,7 +52,8 @@ public class InstallPackagesFromInstallerDirectoryTests
         string matchPattern = "mycompany-myproduct";
         var installerDirectory = LocalDirPath.Of(testInstallerPath);
         var outputFilePath = LocalFilePath.Of(ouptutFilePathRaw);
-        var request = new InstallFromInstallerDirectoryRequest(installerDirectory.Value,Maybe.None, simulation);
+        var request = new InstallFromInstallerDirectoryRequest(installerDirectory.Value,Maybe.None, 
+            simulation,false);
         var handler = new InstallFromInstallerDirectoryHandler(mediator.Object);
         var result = await handler.Handle(request, CancellationToken.None);
         
@@ -58,7 +62,8 @@ public class InstallPackagesFromInstallerDirectoryTests
         {
             new PackageToInstall("mycompany-myproduct", ""),
         };
-        var removeRequest = new RemoveRequest(packagesToRemove, true, simulation, true, false, true);
+        var removeRequest = new RemoveRequest(packagesToRemove, true, simulation, true,
+            false, true);
         var resultRemove = await nipkgService.RemoveAsync(removeRequest);
 
         if (result.IsFailure)

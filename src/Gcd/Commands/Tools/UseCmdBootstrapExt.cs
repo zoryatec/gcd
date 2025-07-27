@@ -26,20 +26,23 @@ public static class UseCmdBootstrapExt
             var installerSourceUrlOption = new NipkgInstallerSourceUrlOption();
             var gcdFeedOption = new GcdFeedOption();
             var gcdPackageNameOption = new GcdPackageNameOption();
+            var gcdPackageVersionOption = new GcdPackageVersionOption();
             cmd.AddOptions(
                 installerSourceUrlOption.IsRequired(),
                 gcdFeedOption,
-                gcdPackageNameOption
+                gcdPackageNameOption,
+                gcdPackageVersionOption
                 );
             
             cmd.OnExecuteAsync(async cancelationToken =>
             {
                 var gcdFeed = gcdFeedOption.Value() ?? "https://raw.githubusercontent.com/zoryatec/gcd/refs/heads/main/feed";
                 var gcdPackageName = gcdPackageNameOption.Value() ?? "gcd";
+                var gcdPackageVersion = gcdPackageVersionOption.Value() ?? "";
                 
                 
                 return await installerSourceUrlOption.Map()
-                    .Bind(x => mediator.BootstrapAsync(x,gcdFeed,gcdPackageName, cancelationToken))
+                    .Bind(x => mediator.BootstrapAsync(x,gcdFeed,gcdPackageName, gcdPackageVersion,cancelationToken))
                     .Tap(() => console.Write("Path added sucessfully"))
                     .TapError(error => console.Error.Write(error))
                     .Finally(x => x.IsFailure ? 1 : 0);
@@ -74,6 +77,15 @@ public static class UseCmdBootstrapExt
     {
         public static readonly string NAME = "--gcd-package-name";
         public GcdPackageNameOption() : base (NAME, CommandOptionType.SingleValue)
+        {
+            Description = DESCRIPTION;
+        }
+    }
+    
+    private sealed class GcdPackageVersionOption : CommandOption
+    {
+        public static readonly string NAME = "--gcd-package-version";
+        public GcdPackageVersionOption() : base (NAME, CommandOptionType.SingleValue)
         {
             Description = DESCRIPTION;
         }

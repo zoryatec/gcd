@@ -28,7 +28,7 @@ public class InstallFromInstallerIsoHandler(IMediator _mediator, IFileSystem fil
             .Bind(dir => _mediator.ExpandIsoFileAsync(isoFilePath, dir, removeIsoFile, cancellationToken)
                 .Map(() => dir))
             .Bind(dir => _mediator.InstallFromInstallerDirectoryAsync(dir, packageMatchPattern, simulateInstallation,
-                cancellationToken));    
+                removeExpandedDirectory, cancellationToken));    
     }
 }
 

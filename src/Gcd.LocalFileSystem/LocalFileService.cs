@@ -1,16 +1,27 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Text;
+using CSharpFunctionalExtensions;
 using Gcd.Common;
 using Gcd.LocalFileSystem.Abstractions;
-using System.IO;
 
-
-namespace Gcd.Services.FileSystem
+namespace Gcd.LocalFileSystem
 {
     public class LocalFileService : IFileSystem
     {
+        public async Task<Result> WriteAllLinesAsync(ILocalFilePath filePath, IEnumerable<string> content, Encoding encoding,
+            CancellationToken cancellationToken = default) =>
+            await Result.Try(() =>  File.WriteAllLinesAsync(filePath.Value, content, encoding, cancellationToken),
+                ex => ex.Message);
+        
+
         public async Task<Result<string>> ReadTextFileAsync(ILocalFilePath filePath, CancellationToken cancellationToken = default) =>
             ReadTextFile(filePath);
 
+        public Result<bool> FileExists(ILocalFilePath filePath) =>
+             Result.Try(() => File.Exists(filePath.Value));
+
+        public Result<bool> DirectoryExists(ILocalDirPath dirPath) => 
+            Result.Try(() => Directory.Exists(dirPath.Value));
+        
         private Result<string> ReadTextFile(ILocalFilePath filePath) =>
             Result.Try(() => File.ReadAllText(filePath.Value), ex => ex.Message);
 

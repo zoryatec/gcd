@@ -5,11 +5,12 @@ using Gcd.Handlers.Nipkg.InstallFromInstallerIso;
 using Gcd.Handlers.Nipkg.InstallFromSnapshot;
 using Gcd.Handlers.Nipkg.SnapshotManagment;
 using Gcd.Handlers.Shared;
+using Gcd.LocalFileSystem;
 using Gcd.LocalFileSystem.Abstractions;
 using Gcd.NiPackageManager;
 using Gcd.NiPackageManager.Abstractions;
+using Gcd.Providers;
 using Gcd.Services;
-using Gcd.Services.FileSystem;
 using Gcd.SystemProcess;
 using MediatR;
 using Moq;
@@ -24,13 +25,14 @@ public class InstallPackagesFromInstallerIsoTests
         var simulation = true;
         var mediator = new Mock<IMediator>();
         var systemProcess = new ProcessService();
+        var installerDirectoryProvider = new InstallerDirectoryProvider();
         var nipkgService = new NiPackageManagerService(systemProcess);
         var nipkgExtendedService = new NiPackageManagerExtendedService(nipkgService);
         var localFileSystem = new LocalFileService();
         mediator
             .Setup(m => m.Send(It.IsAny<CreateSnapshotFromInstallerRequest>(), It.IsAny<CancellationToken>()))
             .Returns((CreateSnapshotFromInstallerRequest req, CancellationToken token) => {
-                var handler = new CreateFromInstallerDirectoryHandler(mediator.Object);
+                var handler = new CreateFromInstallerDirectoryHandler(mediator.Object,installerDirectoryProvider);
                 return handler.Handle(req, token);
             });
         
@@ -70,7 +72,8 @@ public class InstallPackagesFromInstallerIsoTests
         var expandDirectory = LocalDirPath.Of(outputIsoFolder);
         
         
-        var request = new InstallFromInstallerIsoRequest(isFilePath.Value,expandDirectory.Value, false,true,
+        var request = new InstallFromInstallerIsoRequest(isFilePath.Value,expandDirectory.Value, false,
+            false,
             Maybe.None, simulation);
         var handler = new InstallFromInstallerIsoHandler(mediator.Object,localFileSystem);
         var result = await handler.Handle(request, CancellationToken.None);
