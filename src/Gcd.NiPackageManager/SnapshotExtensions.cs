@@ -20,19 +20,19 @@ public static class SnapshotExtensions
         this Snapshot snapshot, Maybe<string> packageMatchPattern, bool selectStoreProducts = false)
     {
         List<PackageDefinition> selectedPackages = [];
-        List<PackageDefinition> matchedPackages = [];
-        if (packageMatchPattern.HasValue)
-        {
-            matchedPackages = snapshot.Packages
-                .Where(p => p.Package.Contains(packageMatchPattern.Value, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-            selectedPackages.AddRange(matchedPackages);
-        }
-    
+        
         List<PackageDefinition> storeProductsPackages = snapshot.Packages
             .Where(p => p.StoreProduct == "yes").ToList();
          
         selectedPackages.AddRange(storeProductsPackages);
+        
+        if (packageMatchPattern.HasValue)
+        {
+            var matchedPackages = selectedPackages
+                .Where(p => p.Package.Contains(packageMatchPattern.Value, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            selectedPackages = matchedPackages;
+        }
 
         var distinct = selectedPackages.Distinct().ToList();
 
