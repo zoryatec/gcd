@@ -1,5 +1,12 @@
 
 
+<a name="0.23.18"></a>
+## [0.23.18](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.18) (2025-07-27)
+
+### Bug Fixes
+
+* bootstrap with specific version, filtering packages during install-from-snapshot ([#8](https://www.github.com/zoryatec/gcd/issues/8)) ([d4000de](https://www.github.com/zoryatec/gcd/commit/d4000de2903f3a5ca934e6894342689f5670761b))
+
 <a name="0.23.17"></a>
 ## [0.23.17](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.17) (2025-07-19)
 
