@@ -21,7 +21,10 @@ public class BootstrapHandler(IMediator mediator, INiPackageManagerExtendedServi
         return await mediator.Send(new InstallNinpkgRequest(request.InstallerUri, NipkgCmdPath.Deafault),
                 cancellationToken)
             .Bind(() => nipm.InstallFeedAsync(feed))
-            .Bind(() => nipm.InstallPackageAsync(package, false))
+            .Bind(() => nipm.InstallPackageAsync(package, 
+                true, true,false, true, 
+                false, true, true, 
+                true, true))
             .Bind(() => mediator.AddToPathAsync(NipmConainingDir, cancellationToken))
             .Bind(() => mediator.AddToPathAsync(GcdContainingDir, cancellationToken));
     }
