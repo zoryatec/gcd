@@ -5,7 +5,7 @@ function Install-Gcd {
         [string]$GcdFeed = "https://raw.githubusercontent.com/zoryatec/gcd/refs/heads/main/feed",
         [string]$GcdPackageName = "gcd",
         [string]$GcdVersion = "",
-        [string]$GcdBootStrapVersion = "0.23.17"
+        [string]$GcdBootStrapVersion = "0.23.18"
     )
 
     $ErrorActionPreference = 'Stop'
