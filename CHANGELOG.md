@@ -1,5 +1,12 @@
 
 
+<a name="0.23.19"></a>
+## [0.23.19](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.19) (2025-07-27)
+
+### Bug Fixes
+
+* wrong bootstrap release ([#9](https://www.github.com/zoryatec/gcd/issues/9)) ([2246b4a](https://www.github.com/zoryatec/gcd/commit/2246b4adfa6591a0f609219e57792a00493ee814))
+
 <a name="0.23.18"></a>
 ## [0.23.18](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.18) (2025-07-27)
 
