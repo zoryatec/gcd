@@ -1,5 +1,12 @@
 
 
+<a name="0.23.17"></a>
+## [0.23.17](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.17) (2025-07-19)
+
+### Bug Fixes
+
+* adding script for bootstrap installation ([#7](https://www.github.com/zoryatec/gcd/issues/7)) ([1269dbe](https://www.github.com/zoryatec/gcd/commit/1269dbe3aa70ea2eb124ae14b8fe8d7e4286783b))
+
 <a name="0.23.16"></a>
 ## [0.23.16](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.16) (2025-07-19)
 
