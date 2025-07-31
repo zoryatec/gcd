@@ -14,4 +14,4 @@ RUN dotnet restore gcd.sln
 RUN dotnet build gcd.sln --configuration Release
 
 # Run the end-to-end tests
-CMD ["dotnet", "test", "tests/Gcd.Tests.EndToEnd.LabView/LabView/Gcd.Tests.EndToEnd.LabView.LabView.csproj", "--filter", "FullyQualifiedName~BuildSpecBuildTests"]
+CMD ["dotnet", "test", "tests/Gcd.Tests.EndToEnd.LabView/Gcd.Tests.EndToEnd.LabView.csproj"]
