@@ -21,7 +21,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Pull Docker image
-        run: docker pull dawidwozny/labview:sdk_23.3.6_x86
+        run: docker pull dawidwozny/labview:23.3.6_x86
 
       - name: Build Docker image
         run: docker build -t gcd-e2e-labview-test .
