@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0-windowsservercore-ltsc2022
+FROM dawidwozny/labview:sdk_23.3.6_x86_net8
 
 WORKDIR /app
 
