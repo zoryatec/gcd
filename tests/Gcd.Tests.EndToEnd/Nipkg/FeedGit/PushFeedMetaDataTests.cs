@@ -7,13 +7,12 @@ namespace Gcd.Tests.EndToEnd.Nipkg.FeedGit;
 public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
-    //[Fact]
+    [Fact]
     public void PushPull_ShouldMatch()
     {
         // Arrange
         var feedSourceDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
         var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
-        var feedUri = _config.GetAzurePushPullTestFeedUri();
 
         var sourcePackageContent = Guid.NewGuid().ToString();
         var sourcePackageGzContent = Guid.NewGuid().ToString();
