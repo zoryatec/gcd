@@ -13,7 +13,8 @@ namespace Gcd.Tests.Fixture
             ArgumentNullException.ThrowIfNull(_config, nameof(_config));
         }
 
-        public string GetAzurePullTestFeedUri() =>  _config["AzurePullTestFeedUri"] ?? throw new ArgumentNullException("_config[\"AzurePullTestFeedUri\"]");
+        // public string GetAzurePullTestFeedUri() =>  _config["AzurePullTestFeedUri"] ?? throw new ArgumentNullException("_config[\"AzurePullTestFeedUri\"]");
+        public string GetAzurePullTestFeedUri() => "https://stztgcdtest.blob.core.windows.net/feed-test-pull";
         public string GetAzureAddPkgTestFeedUri() => _config["AzureAddPkgTestFeedUri"] ?? throw new ArgumentNullException("_config[\"AzureAddPkgTestFeedUri\"]");
         public string GetAzurePushPullTestFeedUri() => _config["AzurePushPullTestFeedUri"] ?? throw new ArgumentNullException("_config[\"AzurePushPullTestFeedUri\"]");
         public string GetGitRepoAddress() => _config["GitRepoAddress"] ?? throw new ArgumentNullException("_config[\"GitRepoAddress\"]");
