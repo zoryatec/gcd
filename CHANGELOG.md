@@ -1,5 +1,12 @@
 
 
+<a name="0.23.20"></a>
+## [0.23.20](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.20) (2025-08-05)
+
+### Bug Fixes
+
+* test for git actions ([#10](https://www.github.com/zoryatec/gcd/issues/10)) ([333d783](https://www.github.com/zoryatec/gcd/commit/333d7832c83c91200c190efb38ca306878692857))
+
 <a name="0.23.19"></a>
 ## [0.23.19](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.19) (2025-07-27)
 
