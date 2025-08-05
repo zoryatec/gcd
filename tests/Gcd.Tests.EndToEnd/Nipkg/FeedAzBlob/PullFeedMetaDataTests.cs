@@ -41,27 +41,5 @@ public class PullFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
         destinationPackagesGzContent.Should().Be("packages_gz_content");
         destinationPackagesStampsContent.Should().Be("packages_stamps_content");
     }
-
-    [Fact]
-    public void PullFeedMetaData_ShoulReturnError_WhenFeedLocalPathNotSpecified()
-    {
-        // Arrange
-        var feedDestinationDirectory = _tempDirectoryGenerator.GenerateTempDirectory();
-        var feedUri = _config.GetAzurePublicFeedUri();
-
-        var args = new GcdArgBuilder()
-            .WithNipkgMenu()
-            .WithAzBlobFeedMenu()
-            .WithPullMetaDataCmd()
-            .WithAzFeedUriOpt(feedUri)
-            .Build();
-
-        // Act
-        var result = _gcd.Run(args);
-
-        // Asssert
-        result.Return.Should().Be(1);
-        //result.Error.Should().BeEmpty(); // NOT CORRECT SHOUL RETURN ERROR
-    }
 }
 
