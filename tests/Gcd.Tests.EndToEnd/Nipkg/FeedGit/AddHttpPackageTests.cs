@@ -41,8 +41,7 @@ public class AddHttpPackageTests(TestFixture testFixture) : BaseTest(testFixture
         var result = _gcd.Run(args);
 
         // Asssert
-
-
+        
 
         result.Error.Should().BeEmpty();
         result.Return.Should().Be(0);
