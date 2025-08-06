@@ -42,6 +42,10 @@ jobs:
        Compress-Archive -Path gcd-bin/* -DestinationPath gcd-bin.zip
        Compress-Archive -Path gcd-test/* -DestinationPath gcd-test.zip
 
+    - name: copy gcd.exe
+      run: |
+       Copy-Item -Path gcd-bin/gcd.exe -Destination gcd.exe
+
     - name: create release
       id: create_release
       uses: softprops/action-gh-release@v1
@@ -52,6 +56,7 @@ jobs:
           gcd-test.zip
           gcd-nipkg/*.nipkg
           gcd-nuget/*.nupkg
+          gcd.exe
         body: "[Changelog](https://github.com/zoryatec/gcd/blob/main/CHANGELOG.md)"
         repository: zoryatec/gcd
       env:

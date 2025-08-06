@@ -46,3 +46,70 @@ StoreProduct: yes
 UserVisible: yes
 Version: 0.23.13
 
+Architecture: windows_x64
+CompatibilityVersion: 200003
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.14/gcd_0.23.14_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: 57636c4e50411ff9df28974c06b879b0
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+Section: Utilities
+Size: 32945056
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.14
+
+Architecture: windows_x64
+CompatibilityVersion: 200003
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.15/gcd_0.23.15_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: df94d9073127fe60cf288f126c126b0c
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+SHA256: c4ebf0de4f4be509c755e45e0ce7d008972bdf0daca4b7ac72489f7084859920
+Section: Utilities
+Size: 33178982
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.15
+
+Architecture: windows_x64
+CompatibilityVersion: 200003
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.16/gcd_0.23.16_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: b84c4a149327ae9b6e06bfcde0d259e9
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+SHA256: aa548b8c147f912a137205e84c20e144e8310c7da841365a2f0719ebf4252526
+Section: Utilities
+Size: 33178900
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.16
+
+Architecture: windows_x64
+CompatibilityVersion: 200003
+Depends: 
+Description: G CI/CD tool
+Filename: https://github.com/zoryatec/gcd/releases/download/0.23.18/gcd_0.23.18_windows_x64.nipkg
+Homepage: https://github.com/zoryatec/gcd
+MD5sum: 36301fb8a38d73377999d4f462651b66
+Maintainer: Zoryatec
+Package: gcd
+Plugin: file
+SHA256: 572e029a74567d737338fbb79796305b2cd69e3df5c63b56dae4d4725727ce02
+Section: Utilities
+Size: 33196346
+StoreProduct: yes
+UserVisible: yes
+Version: 0.23.18
+

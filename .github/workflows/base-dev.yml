@@ -32,6 +32,8 @@ on:
         required: true
       test-feed-push-pull:
         required: true
+      test-feed-pull:
+        required: true
       test-feed-generic:
         required: true
       test-git-repo:

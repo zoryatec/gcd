@@ -9,13 +9,13 @@ namespace Gcd.Tests.EndToEnd.Nipkg.FeedGit;
 public class AddHttpPackageTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
-    // [Fact]
+   // [Fact]
     private void AddHttpPackageTest()
     {
 
         var feedDir = _tempDirectoryGenerator.GenerateTempDirectory();
         // Arrange
-        string packageUri = "https://github.com/zoryatec/gcd/releases/download/0.23.11/gcd_0.23.11_windows_x64.nipkg";
+        string packageUri = "https://github.com/zoryatec/gcd/releases/download/0.23.13/gcd_0.23.13_windows_x64.nipkg";
         string repoAddress = _config.GetGitRepoAddress();
         string username = _config.GetGitUserName();
         string password = _config.GetGitPassword();
@@ -41,8 +41,7 @@ public class AddHttpPackageTests(TestFixture testFixture) : BaseTest(testFixture
         var result = _gcd.Run(args);
 
         // Asssert
-
-
+        
 
         result.Error.Should().BeEmpty();
         result.Return.Should().Be(0);
@@ -55,7 +54,7 @@ public class AddHttpPackageTests(TestFixture testFixture) : BaseTest(testFixture
 
         var feedDir = _tempDirectoryGenerator.GenerateTempDirectory();
         // Arrange
-        string packageUri = "https://github.com/zoryatec/gcd/releases/download/v0.13.0/gcd_0.13.0_windows_x64.nipkg";
+        string packageUri = "https://github.com/zoryatec/gcd/releases/download/0.23.13/gcd_0.23.13_windows_x64.nipkg";
         string repoAddress = _config.GetGitRepoAddress();
         string username = _config.GetGitUserName();
         string password = _config.GetGitPassword();
