@@ -5,6 +5,7 @@ namespace Gcd.LocalFileSystem.Abstractions;
 
 public record RelativeDirPath : IRelativeDirPath
 {
+    public static RelativeDirPath Root => None;
     public static RelativeDirPath None => new (string.Empty);
     public static Result<RelativeDirPath,Error> Of(Maybe<string> maybeValue) =>
         maybeValue.ToResult(ErorNullValue.Of(nameof(LocalDirPath)))
