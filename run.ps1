@@ -1,0 +1,1 @@
+docker run --rm gcd-e2e-labview-test
