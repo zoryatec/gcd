@@ -7,7 +7,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg.FeedGit;
 public class PullFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixture)
 {
 
-    //[Fact]
+    [Fact]
     public void PullFeedMetaData_ShouldDownloadFiles_WhenFeedIsValid()
     {
         // Arrange
@@ -48,7 +48,7 @@ public class PullFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
         var destinationPackagesStampsContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.stamps");
 
         destinationPackagesContent.Should().Contain("packages_content");
-        //destinationPackagesGzContent.Should().Be("packages_gz_content"); // it's binary, need to pull it to local dir and update
+        destinationPackagesGzContent.Should().Be("packages_gz_content"); // it's binary, need to pull it to local dir and update
         destinationPackagesStampsContent.Should().Contain("packages_stamps_content");
     }
 }

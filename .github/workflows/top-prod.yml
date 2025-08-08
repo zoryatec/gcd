@@ -67,6 +67,7 @@ jobs:
    
       test-feed-add-pkg: ${{ secrets.TEST_AZUREADDPKGTESTFEEDURI }}
       test-feed-push-pull: ${{ secrets.TEST_AZUREPUSHPULLTESTFEEDURI }}
+      test-feed-pull: ${{ secrets.TEST_AZUREPULLTESTFEEDURI }}
       test-feed-generic: ${{ secrets.TEST_AZUREFEEDURI }}
       
       test-git-repo: ${{ secrets.TEST_GIT_REPO }}

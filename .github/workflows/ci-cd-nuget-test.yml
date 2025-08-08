@@ -66,6 +66,7 @@ jobs:
           AZUREADDPKGTESTFEEDURI: ${{ secrets.test-feed-add-pkg }}
           AZUREFEEDURI: ${{ secrets.test-feed-generic }}
           AZUREPUSHPULLTESTFEEDURI: ${{ secrets.test-feed-push-pull }}
+          AZUREPULLTESTFEEDURI: ${{ secrets.test-feed-pull }}
           NipkgInstallerUri: ${{vars.NIPKGI_NSTALLER_DOWNLOAD_URI}}
           NipkgCmdPath: "${{vars.NIPKG_INSTALATION_DIR}}\\nipkg.exe"
           DevMode : false

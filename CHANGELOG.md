@@ -1,5 +1,19 @@
 
 
+<a name="0.24.0"></a>
+## [0.24.0](https://www.github.com/zoryatec/gcd/releases/tag/v0.24.0) (2025-08-08)
+
+### Features
+
+* git with sparse checkout ([#11](https://www.github.com/zoryatec/gcd/issues/11)) ([a9a66cb](https://www.github.com/zoryatec/gcd/commit/a9a66cbd70ef2dfbae3e1aef5920cebee43d21ca))
+
+<a name="0.23.20"></a>
+## [0.23.20](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.20) (2025-08-05)
+
+### Bug Fixes
+
+* test for git actions ([#10](https://www.github.com/zoryatec/gcd/issues/10)) ([333d783](https://www.github.com/zoryatec/gcd/commit/333d7832c83c91200c190efb38ca306878692857))
+
 <a name="0.23.19"></a>
 ## [0.23.19](https://www.github.com/zoryatec/gcd/releases/tag/v0.23.19) (2025-07-27)
 

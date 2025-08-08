@@ -7,7 +7,7 @@
         <Nullable>enable</Nullable>
 		<WarningsAsErrors>CS8600;CS8601;CS8602;CS8603;CS8604;CS8618;CS8629;CS8631;CS8669</WarningsAsErrors>
 		<RootNamespace>Gcd</RootNamespace>
-		<Version>0.23.19</Version>
+		<Version>0.24.0</Version>
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>gcd</ToolCommandName>
 		<Company>Zoryatec</Company>
@@ -60,10 +60,6 @@
       <ProjectReference Include="..\Gcd.RemoteFileSystem.Rclone\Gcd.RemoteFileSystem.Rclone.csproj" />
       <ProjectReference Include="..\Gcd.RemoteFileSystem.Smb\Gcd.RemoteFileSystem.Smb.csproj" />
       <ProjectReference Include="..\Gcd.SystemProcess\Gcd.SystemProcess.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Handlers\Nipkg\Builder\Model\" />
     </ItemGroup>
 
 </Project>

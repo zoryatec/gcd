@@ -46,15 +46,15 @@ public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixtur
         result.Error.Should().BeEmpty();
         result.Return.Should().Be(0);
 
-        //Pull(feedDestinationDirectory, branchName); // it wont work for now
+        Pull(feedDestinationDirectory, branchName); // it wont work for now
 
-        //var packageName = Path.GetFileName(packagePath);
-        //var destinationPackagesContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages");
-        //var destinationPackagesGzContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.gz");
-        //var destinationPackagesStampsContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.stamps");
+        var packageName = Path.GetFileName(packagePath);
+        var destinationPackagesContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages");
+        var destinationPackagesGzContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.gz");
+        var destinationPackagesStampsContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages.stamps");
 
-        //destinationPackagesContent.Should().Contain(packageName);
-        //destinationPackagesStampsContent.Should().Contain(packageName);
+        destinationPackagesContent.Should().Contain(packageName);
+        destinationPackagesStampsContent.Should().Contain(packageName);
 
     }
     public string BuildPackage()
