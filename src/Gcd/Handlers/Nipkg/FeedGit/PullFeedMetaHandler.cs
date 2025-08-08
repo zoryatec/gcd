@@ -16,8 +16,7 @@ public class PullFeedMetaHandler(IFileSystem _fs, IRemoteFileSystemGit rfs)
         CancellationToken cancellationToken)
     {
         var (remoteFeedDef, localFeedDef) = request;
-
-        // IRelativeFilePath dd = ;
+        
         var result1 = await _fs.CreateDirAsync(localFeedDef.Feed);
         if (result1.IsFailure) return result1;
         
