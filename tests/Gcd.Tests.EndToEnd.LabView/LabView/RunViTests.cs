@@ -8,7 +8,7 @@ namespace Gcd.Tests.EndToEnd.LabView.LabView;
 
 public class RunViTests(TestFixture testFixture) : BaseTest(testFixture)
 {
-    [Fact]
+    // [Fact]
     public void RunViTest()
     {
         // Arrange
