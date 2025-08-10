@@ -8,9 +8,9 @@ using MediatR;
 namespace Gcd.Handlers.Nipkg.FeedGitHub;
 
 public class PushFeedMetaHandler(IFileSystem _fs, IRemoteFileSystemGit rfs)
-    : IRequestHandler<PushFeedMetaRequest<FeedDefinitionGit>, Result>
+    : IRequestHandler<PushFeedMetaRequest<FeedDefinitionGitHub>, Result>
 {
-    public async Task<Result> Handle(PushFeedMetaRequest<FeedDefinitionGit> request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(PushFeedMetaRequest<FeedDefinitionGitHub> request, CancellationToken cancellationToken)
     {
         var (remoteFeedDef, localFeedDef) = request;
 

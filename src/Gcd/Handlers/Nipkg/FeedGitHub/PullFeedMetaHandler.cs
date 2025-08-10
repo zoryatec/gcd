@@ -9,9 +9,9 @@ namespace Gcd.Handlers.Nipkg.FeedGitHub;
 
 
 public class PullFeedMetaHandler(IFileSystem _fs, IRemoteFileSystemGit rfs)
-    : IRequestHandler<PullFeedMetaRequest<FeedDefinitionGit>, Result>
+    : IRequestHandler<PullFeedMetaRequest<FeedDefinitionGitHub>, Result>
 {
-    public async Task<Result> Handle(PullFeedMetaRequest<FeedDefinitionGit> request,
+    public async Task<Result> Handle(PullFeedMetaRequest<FeedDefinitionGitHub> request,
         CancellationToken cancellationToken)
     {
         var (remoteFeedDef, localFeedDef) = request;

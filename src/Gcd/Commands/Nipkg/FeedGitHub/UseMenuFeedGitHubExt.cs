@@ -10,20 +10,20 @@ public static class UseMenuFeedGitHublExt
     public static CommandLineApplication UseMenuFeedGitHub(this CommandLineApplication app, IServiceProvider serviceProvider)
     {
         var console = serviceProvider.GetRequiredService<IConsole>();
-        app.Command(NAME, cmd =>
+        app.Command(NAME, menu =>
         {
-            cmd.Description = DESCRIPTION;
-            cmd.OnExecute(() =>
+            menu.Description = DESCRIPTION;
+            menu.OnExecute(() =>
             {
                 console.WriteLine("Specify a subcommand");
-                cmd.ShowHelp();
+                menu.ShowHelp();
                 return 1;
             });
 
-            FeedGit.UUseAddLocalPackageCmdExtensions.UseCmdAddLocalPackage(cmd, serviceProvider);
-            FeedGit.UseCmdAddHttpPackageExt.UseCmdAddHttpPackage(cmd, serviceProvider);
-            FeedGit.UseCmdPullFeedMetaExt.UseCmdPullFeedMeta(cmd, serviceProvider);
-            FeedGit.UseCmdPushFeedMetaExt.UseCmdPushFeedMeta(cmd, serviceProvider);
+            menu.UseCmdAddLocalPackage(serviceProvider);
+            menu.UseCmdAddHttpPackage(serviceProvider);
+            menu.UseCmdPullFeedMeta(serviceProvider);
+            menu.UseCmdPushFeedMeta(serviceProvider);
         });
 
         return app;
