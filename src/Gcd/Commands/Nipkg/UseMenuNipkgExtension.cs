@@ -4,6 +4,7 @@ using Gcd.Commands.Nipkg.Build;
 using Gcd.Commands.Nipkg.FeedGit;
 using Gcd.Commands.Nipkg.Builder;
 using Gcd.Commands.Nipkg.FeedAzBlob;
+using Gcd.Commands.Nipkg.FeedGitHub;
 using Gcd.Commands.Nipkg.FeedLocal;
 using Gcd.Commands.Nipkg.FeedRclone;
 using Gcd.Commands.Nipkg.FeedSmb;
@@ -35,6 +36,7 @@ public static class UseMenuNipkgExtension
             cmd.UseMenuFeedAzBlob(serviceProvider);
             cmd.UseMenuFeedLocal(serviceProvider);
             cmd.UseMenuFeedGit(serviceProvider);
+            cmd.UseMenuFeedGitHub(serviceProvider);
             cmd.UseMenuFeedSmb(serviceProvider);
             cmd.UseMenuFeedRclone(serviceProvider);
             cmd.UseCmdBuild(serviceProvider);

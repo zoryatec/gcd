@@ -8,6 +8,7 @@ using Gcd.Commands.Nipkg;
 using Gcd.Commands.Nipkg.Builder;
 using Gcd.Commands.Nipkg.FeedAzBlob;
 using Gcd.Commands.Nipkg.FeedGit;
+using Gcd.Commands.Nipkg.FeedGitHub;
 using Gcd.Commands.Nipkg.FeedLocal;
 using Gcd.Commands.Nipkg.FeedRclone;
 using Gcd.Commands.Nipkg.FeedSmb;
@@ -30,6 +31,7 @@ public class GcdArgBuilder(Arguments arguments) :
     IVipmMenu,
     IBuilderMenu,
     IFeedGit,
+    IFeedGitHub,
     IFeedRclone,
     IToolsMenu,
     ILabViewMenu,
@@ -71,6 +73,9 @@ public class GcdArgBuilder(Arguments arguments) :
         (GcdArgBuilder) WithArg(UseMenuFeedAzBlobExt.NAME);
     public IFeedGit WithFeedGitdMenu() =>
         (GcdArgBuilder) WithArg(UseMenuFeedGitlExt.NAME);
+    
+    public IFeedGitHub WithFeedGitHubMenu() =>
+        (GcdArgBuilder) WithArg(UseMenuFeedGitHublExt.NAME);
     
     public IFeedRclone WithFeedRcloneMenu() =>
         (GcdArgBuilder) WithArg(UseMenuFeedRcloneExt.NAME);
@@ -137,6 +142,16 @@ public class GcdArgBuilder(Arguments arguments) :
     global::Gcd.CommandBuilder.Command.Nipkg.FeedGit.ArgBuilderPushMetaData IFeedGit.WithPushMetaDataCmd() =>
         new (_arguments);
     global::Gcd.CommandBuilder.Command.Nipkg.FeedGit.ArgBuilderAddHttpPackage IFeedGit.WithAddHttpPackageCmd() =>
+        new (_arguments);
+    
+    // github
+    global::Gcd.CommandBuilder.Command.Nipkg.FeedGitHub.ArgBuilderAddLocalPackage IFeedGitHub.WithAddLocalPackageCmd() =>
+        new (_arguments);
+    global::Gcd.CommandBuilder.Command.Nipkg.FeedGitHub.ArgBuilderPullMetaData IFeedGitHub.WithPullMetaDataCmd() =>
+        new (_arguments);
+    global::Gcd.CommandBuilder.Command.Nipkg.FeedGitHub.ArgBuilderPushMetaData IFeedGitHub.WithPushMetaDataCmd() =>
+        new (_arguments);
+    global::Gcd.CommandBuilder.Command.Nipkg.FeedGitHub.ArgBuilderAddHttpPackage IFeedGitHub.WithAddHttpPackageCmd() =>
         new (_arguments);
     
     // nipkg feed rclone

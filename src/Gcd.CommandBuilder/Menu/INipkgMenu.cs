@@ -8,6 +8,7 @@ public interface INipkgMenu
     public IFeedLocal WithFeedLocalMenu();
     public IFeedAzBlob WithAzBlobFeedMenu();
     public IFeedGit WithFeedGitdMenu();
+    public IFeedGitHub WithFeedGitHubMenu();
     public IFeedRclone WithFeedRcloneMenu();
     public IBuilderMenu WithBuilderMenu();
     public global::Gcd.CommandBuilder.Command.Nipkg.ArgBuilderBuild WithBuildCmd();
