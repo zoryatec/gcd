@@ -6,7 +6,8 @@ namespace Gcd.Tests.EndToEnd.Nipkg.FeedGitHub;
 
 public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixture)
 {
-
+    private string branchNameTest = "push-test-github";
+        
     [Fact]
     public void PushPull_ShouldMatch()
     {
@@ -23,8 +24,8 @@ public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
         File.WriteAllText($"{feedSourceDirectory}\\Packages.stamps", sourcePackageStampsContent);
 
 
-        Push(feedSourceDirectory);
-        Pull(feedDestinationDirectory); // wont work with current implementation of git fs
+        Push(feedSourceDirectory,branchNameTest);
+        Pull(feedDestinationDirectory,branchNameTest); // wont work with current implementation of git fs
 
 
         var destinationPackagesContent = File.ReadAllText($"{feedDestinationDirectory}\\Packages");
@@ -40,7 +41,7 @@ public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
 
     }
 
-    private void Pull(string feedDirectory, string branchName = "push-test")
+    private void Pull(string feedDirectory, string branchName )
     {
         // Arrange
 
@@ -72,7 +73,7 @@ public class PushFeedMetaDataTests(TestFixture testFixture) : BaseTest(testFixtu
         result.Return.Should().Be(0);
     }
 
-    private void Push(string feedDirectory, string branchName = "push-test")
+    private void Push(string feedDirectory, string branchName )
     {
         // Arrange
         string repoAddress = _config.GetGitRepoAddress();
