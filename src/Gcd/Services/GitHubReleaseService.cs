@@ -130,5 +130,43 @@ namespace Gcd.Services
             var now = DateTime.UtcNow;
             return $"{baseName}{now:yyyyMMdd-HHmmss}";
         }
+
+        public async Task DeleteTagAsync(string tagName)
+        {
+            // Delete the tag reference (refs/tags/{tagName})
+            await _client.Git.Reference.Delete(_owner, _repo, $"refs/tags/{tagName}");
+        }
+
+        public async Task DeleteReleaseAsync(long releaseId)
+        {
+            // Delete the release by its ID
+            await _client.Repository.Release.Delete(_owner, _repo, releaseId);
+        }
+
+        public async Task DeleteAllTagsAsync()
+        {
+            var tags = await _client.Repository.GetAllTags(_owner, _repo);
+            foreach (var tag in tags)
+            {
+                try
+                {
+                    await DeleteTagAsync(tag.Name);
+                }
+                catch (NotFoundException) { /* Tag might already be deleted, ignore */ }
+            }
+        }
+
+        public async Task DeleteAllReleasesAsync()
+        {
+            var releases = await _client.Repository.Release.GetAll(_owner, _repo);
+            foreach (var release in releases)
+            {
+                try
+                {
+                    await DeleteReleaseAsync(release.Id);
+                }
+                catch (NotFoundException) { /* Release might already be deleted, ignore */ }
+            }
+        }
     }
 }

@@ -62,7 +62,7 @@ public class AddPackageToGitHubFeedHandler(
         return await Result.Combine(localFeedDef)
             .Bind(() => _mediator.PullFeedMetaAsync(azFeedDef, localFeedDef.Value, cancellationToken))
             .Bind(() => _mediator.UploadPackageAsync(azFeedDef, insideFeedPkgPaths, cancellationToken))
-            .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value, uploadedPackagePaths, cmdPath, useAbs, createFeed,
+            .Bind(() => _mediator.AddToLocalFeedAsync(localFeedDef.Value, uploadedPackagePaths, cmdPath, UseAbsolutePath.Yes, createFeed,
                 cancellationToken))
             .Bind(() => _mediator.PushFeedMetaDataAsync(azFeedDef, localFeedDef.Value, cancellationToken));
 

@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Gcd.CommandBuilder.Menu;
+using Gcd.Services;
 using Gcd.Tests.Fixture;
 
 namespace Gcd.Tests.EndToEnd.Nipkg.FeedGitHub;
@@ -7,7 +8,7 @@ namespace Gcd.Tests.EndToEnd.Nipkg.FeedGitHub;
 public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixture)
 {
     [Fact]
-    private void AddLocalPackageTest()
+    private async Task AddLocalPackageTest()
     {
 
         var feedDir = _tempDirectoryGenerator.GenerateTempDirectory();
@@ -36,7 +37,10 @@ public class AddLocalPackageTests(TestFixture testFixture) : BaseTest(testFixtur
             .WithFeedCreateFlag()
             .Build();
 
-        // Act
+        // 
+        var ghService = new GitHubReleaseService(password, "zoryatec", "gcd-feed-test");
+        await ghService.DeleteAllReleasesAsync();
+        await ghService.DeleteAllTagsAsync();
         var result = _gcd.Run(args);
 
         // Asssert
