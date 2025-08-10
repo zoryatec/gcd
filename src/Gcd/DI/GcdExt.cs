@@ -52,6 +52,7 @@ public static class GcdExt
                 .AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionSmb>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionSmb>))
                 .AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionGit>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionGit>))
                 .AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionGitHub>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionGitHub>))
+                // .AddScoped(typeof(IRequestHandler<AddPackageToGitHubFeedRequest, Result>), typeof(AddPackageToRemoteFeedHandler<>))
                 .AddScoped(typeof(IRequestHandler<AddPackageToRemoteFeedRequest<FeedDefinitionRclone>, Result>), typeof(AddPackageToRemoteFeedHandler<FeedDefinitionRclone>))
                 .AddScoped(typeof(IRequestHandler<AddDirectoryToRemoteFeedRequest<FeedDefinitionAzBlob>, Result>), typeof(AddDirectoryToRemoteFeedHandler<FeedDefinitionAzBlob>))
                 .AddScoped(typeof(IRequestHandler<AddDirectoryToRemoteFeedRequest<FeedDefinitionSmb>, Result>), typeof(AddDirectoryToRemoteFeedHandler<FeedDefinitionSmb>))
